@@ -12,8 +12,13 @@ import {
 import Image from 'next/image'
 import CoverImage from '../../assets/cover.png'
 import Logo from '../../assets/logo.svg'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function Home() {
+  const session = useSession()
+
+  console.log(session)
+
   return (
     <HomeContainer>
       <CoverContainer>
@@ -40,11 +45,11 @@ export default function Home() {
           <p>Please, login or enter as a guest.</p>
         </Heading>
         <ButtonsContainer>
-          <ButtonAccess>
+          <ButtonAccess onClick={() => signIn()}>
             <Icon icon="flat-color-icons:google" />
             <p>Login with Google</p>
           </ButtonAccess>
-          <ButtonAccess>
+          <ButtonAccess onClick={() => signIn()}>
             <Icon icon="ant-design:github-outlined" color="white" />
             <p>Login with GitHub</p>
           </ButtonAccess>
