@@ -5,34 +5,42 @@ import {
   ButtonsContainer,
   CoverContainer,
   Heading,
-  HomeContainer,
+  Container,
   Separator,
   WelcomeContainer,
 } from './styles'
 import Image from 'next/image'
 import CoverImage from '../../assets/cover.png'
 import Logo from '../../assets/logo.svg'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
-export default function Home() {
-  const session = useSession()
+export default function Login() {
+  const router = useRouter()
 
-  console.log(session)
+  async function handleSignIn(provider: string) {
+    if (provider === 'google') {
+      await signIn('google', { callbackUrl: '/home' })
+    } else if (provider === 'github') {
+      await signIn('github', { callbackUrl: '/home' })
+    } else router.push('/home')
+  }
 
   return (
-    <HomeContainer>
+    <Container>
       <CoverContainer>
         <Image
           fetchPriority="high"
           src={Logo}
-          alt=""
+          alt="Application logo."
           width={210}
           quality={100}
           className="logo_image"
         />
         <Image
+          fetchPriority="high"
           src={CoverImage}
-          alt=""
+          alt="Application logo featuring a woman lying on a couch reading a book in the background."
           width={700}
           quality={100}
           className="cover_image"
@@ -45,11 +53,11 @@ export default function Home() {
           <p>Please, login or enter as a guest.</p>
         </Heading>
         <ButtonsContainer>
-          <ButtonAccess onClick={() => signIn()}>
+          <ButtonAccess onClick={() => handleSignIn('google')}>
             <Icon icon="flat-color-icons:google" />
             <p>Login with Google</p>
           </ButtonAccess>
-          <ButtonAccess onClick={() => signIn()}>
+          <ButtonAccess onClick={() => handleSignIn('github')}>
             <Icon icon="ant-design:github-outlined" color="white" />
             <p>Login with GitHub</p>
           </ButtonAccess>
@@ -59,6 +67,6 @@ export default function Home() {
           </ButtonAccess>
         </ButtonsContainer>
       </WelcomeContainer>
-    </HomeContainer>
+    </Container>
   )
 }

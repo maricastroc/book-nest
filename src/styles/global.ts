@@ -17,6 +17,24 @@ export const globalStyles = globalCss({
     color: '$gray100',
     '-webkit-font-smoothing': 'antialiased',
     minHeight: '100%',
+
+    '*::-webkit-scrollbar': {
+      width: 2,
+      height: 10,
+      borderRadius: 9999,
+    },
+
+    '*::-webkit-scrollbar-corner': {
+      backgroundColor: 'transparent',
+    },
+
+    '*::-webkit-scrollbar-thumb': {
+      width: 6,
+      backgroundColor: '$gray500',
+      borderRadius: 80,
+      boxShadow: 'inset 0 0 0px 6px $gray500',
+      border: '10px solid transparent',
+    },
   },
 
   'body, input, textarea, button': {

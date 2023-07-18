@@ -1,6 +1,3 @@
-// === Retorna o Perfil do Usuário em questão ===
-// /api/profile/4383f783-6ce1-4f92-b1dd-7a7a693c4aef
-
 import { prisma } from '@/lib/prisma'
 import { getMostFrequentString } from '@/utils/getMostFrequentString'
 import { NextApiRequest, NextApiResponse } from 'next'
