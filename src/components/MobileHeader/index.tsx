@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Container, HeaderContainer, ListContainer } from './styles'
-import Logo from '../../assets/logo.svg'
+import Logo from '../../../public/assets/logo.svg'
 import { List, X } from 'phosphor-react'
 import { useState } from 'react'
 import { MobileModal } from '../MobileModal'

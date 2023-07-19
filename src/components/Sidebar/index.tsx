@@ -60,9 +60,9 @@ export function Sidebar() {
               <AvatarContainer>
                 <AvatarDefault src={session.data?.user.avatar_url} />
               </AvatarContainer>
-              <SignOutContainer>
+              <SignOutContainer onClick={handleLogout}>
                 <p>{firstName}</p>
-                <SignOut onClick={handleLogout} />
+                <SignOut />
               </SignOutContainer>
             </ProfileContainer>
           )}

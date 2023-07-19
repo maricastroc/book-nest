@@ -103,6 +103,7 @@ export const ProfileContainer = styled('div', {
 })
 
 export const SignOutContainer = styled('div', {
+  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

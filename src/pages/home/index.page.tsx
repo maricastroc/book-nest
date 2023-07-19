@@ -9,6 +9,7 @@ import {
   PopularBooksCardsContainer,
   PopularBooksCardsContent,
   PopularBooksTitle,
+  RecentAndLastRead,
   RecentCardsContainer,
   RecentCardsContent,
   RecentCardsTitle,
@@ -99,34 +100,36 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
             <h2>Home</h2>
           </Heading>
           <HomeContent>
-            {session.data?.user && (
-              <LastReadContainer>
-                {userLastRating ? (
-                  <>
-                    <LastReadTitle>Your last reading</LastReadTitle>
-                    <LastReadCard
-                      key={userLastRating.id}
-                      rating={userLastRating}
-                      book={userLastRating.book}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <LastReadTitle>Your last reading</LastReadTitle>
-                    <EmptyContainer />
-                  </>
-                )}
-              </LastReadContainer>
-            )}
-            <RecentCardsContainer>
-              <RecentCardsTitle>Last Ratings</RecentCardsTitle>
-              <RecentCardsContent>
-                {ratings.length > 0 &&
-                  ratings.map((rating) => (
-                    <ReviewCard key={rating.id} rating={rating} />
-                  ))}
-              </RecentCardsContent>
-            </RecentCardsContainer>
+            <RecentAndLastRead>
+              {session.data?.user && (
+                <LastReadContainer>
+                  {userLastRating ? (
+                    <>
+                      <LastReadTitle>Your last reading</LastReadTitle>
+                      <LastReadCard
+                        key={userLastRating.id}
+                        rating={userLastRating}
+                        book={userLastRating.book}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <LastReadTitle>Your last reading</LastReadTitle>
+                      <EmptyContainer />
+                    </>
+                  )}
+                </LastReadContainer>
+              )}
+              <RecentCardsContainer>
+                <RecentCardsTitle>Last Ratings</RecentCardsTitle>
+                <RecentCardsContent>
+                  {ratings.length > 0 &&
+                    ratings.map((rating) => (
+                      <ReviewCard key={rating.id} rating={rating} />
+                    ))}
+                </RecentCardsContent>
+              </RecentCardsContainer>
+            </RecentAndLastRead>
             <PopularBooksCardsContainer>
               <PopularBooksTitle>
                 <p>Popular Books</p>

@@ -16,6 +16,9 @@ export function MobileModal() {
   const router = useRouter()
   const session = useSession()
 
+  const fullName = session.data?.user.name
+  const firstName = fullName?.split(' ')[0] ?? ''
+
   async function handleLogout() {
     signOut({ callbackUrl: '/' })
   }
@@ -43,7 +46,7 @@ export function MobileModal() {
             <AvatarDefault src={session.data?.user.avatar_url} />
           </AvatarContainer>
           <SignOutContainer>
-            <p>{session.data?.user.name}</p>
+            <p>{firstName}</p>
             <SignOut onClick={handleLogout} />
           </SignOutContainer>
         </ProfileContainer>

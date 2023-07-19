@@ -63,6 +63,12 @@ export const BookContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+
+  '@media (min-width: 980px)': {
+    flexDirection: 'row',
+    gap: '1.5rem',
+    alignItems: 'stretch',
+  },
 })
 
 export const BookCover = styled('img', {
@@ -79,6 +85,10 @@ export const BookDetails = styled('div', {
   justifyContent: 'center',
   gap: '1rem',
   marginTop: '1.5rem',
+
+  '@media (min-width: 980px)': {
+    alignItems: 'flex-start',
+  },
 })
 
 export const BookInfo = styled('div', {
@@ -95,6 +105,10 @@ export const BookInfo = styled('div', {
   p: {
     color: '$gray400',
     fontSize: '$sm',
+  },
+
+  '@media (min-width: 980px)': {
+    alignItems: 'flex-start',
   },
 })
 
@@ -117,6 +131,10 @@ export const Separator = styled('span', {
   height: 0.5,
   backgroundColor: '$gray400',
   opacity: 0.4,
+
+  '@media (min-width: 980px)': {
+    display: 'none',
+  },
 })
 
 export const ReadNotice = styled('div', {
