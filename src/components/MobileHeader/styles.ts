@@ -29,7 +29,14 @@ export const HeaderContainer = styled('header', {
   },
 })
 
-export const ListContainer = styled('div', {
+export const ListContainer = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  backgroundColor: 'transparent',
+  border: 'none',
+
   svg: {
     color: '$white',
     fontSize: '1.8rem',

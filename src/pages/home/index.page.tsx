@@ -1,4 +1,4 @@
-import { MobileHeader } from '@/components/Header'
+import { MobileHeader } from '@/components/MobileHeader'
 import {
   Container,
   Heading,

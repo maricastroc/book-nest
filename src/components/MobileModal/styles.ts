@@ -50,17 +50,6 @@ export const Item = styled('div', {
     color: '$gray400',
   },
 
-  '&.active': {
-    p: {
-      color: '$gray100',
-      fontWeight: 'bold',
-    },
-
-    svg: {
-      color: '$gray100',
-    },
-  },
-
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -73,7 +62,72 @@ export const Item = styled('div', {
     borderRadius: 8,
   },
 
-  '&.active::after': {
-    display: 'block',
+  variants: {
+    active: {
+      true: {
+        p: {
+          color: '$gray100',
+          fontWeight: 'bold',
+        },
+
+        svg: {
+          color: '$gray100',
+        },
+
+        '&.active::after': {
+          display: 'block',
+        },
+      },
+    },
   },
+})
+
+export const ProfileContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.8rem',
+})
+
+export const SignOutContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.7rem',
+
+  svg: {
+    color: '#F75A68',
+    fontSize: '1.2rem',
+  },
+
+  p: {
+    fontSize: '0.95rem',
+    color: '$gray100',
+  },
+})
+
+export const AvatarContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 36,
+  height: 36,
+  borderRadius: '50%',
+  background: '$gradient-vertical',
+})
+
+export const AvatarDefault = styled('img', {
+  overflow: 'hidden',
+  objectFit: 'cover',
+  borderRadius: '50%',
+  width: 34,
+  aspectRatio: 'auto 34 / 34',
+  height: 34,
+})
+
+export const Separator = styled('span', {
+  width: '100%',
+  height: 0.5,
+  backgroundColor: '$gray600',
+  margin: '1.5rem 0',
 })
