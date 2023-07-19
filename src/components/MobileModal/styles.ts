@@ -1,0 +1,79 @@
+import { keyframes } from '@stitches/react'
+import { styled } from '../../styles'
+
+const entranceAnimation = keyframes({
+  from: {
+    opacity: 0,
+  },
+  to: {
+    opacity: 1,
+  },
+})
+
+export const Container = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '$gray700',
+  border: 'solid 2px $gray600',
+  width: '100%',
+  marginTop: '1rem',
+  padding: '1.5rem',
+  borderRadius: 8,
+
+  transition: '200ms',
+  animation: `${entranceAnimation} 1s`,
+})
+
+export const ItemsContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
+  gap: '1.2rem',
+})
+
+export const Item = styled('div', {
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.8rem',
+
+  p: {
+    color: '$gray400',
+    fontSize: '1rem',
+  },
+
+  svg: {
+    fontSize: '1.5rem',
+    color: '$gray400',
+  },
+
+  '&.active': {
+    p: {
+      color: '$gray100',
+      fontWeight: 'bold',
+    },
+
+    svg: {
+      color: '$gray100',
+    },
+  },
+
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: '-1rem',
+    width: '4px',
+    background: '$gradient-vertical',
+    display: 'none',
+    borderRadius: 8,
+  },
+
+  '&.active::after': {
+    display: 'block',
+  },
+})

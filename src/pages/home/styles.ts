@@ -50,6 +50,7 @@ export const Heading = styled('div', {
 export const LastReadContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
+  marginBottom: '3rem',
   width: '100%',
   gap: '1rem',
 })
@@ -61,7 +62,6 @@ export const LastReadTitle = styled('p', {
 export const RecentCardsContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  marginTop: '3rem',
   gap: '1rem',
 })
 

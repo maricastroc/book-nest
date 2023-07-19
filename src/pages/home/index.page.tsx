@@ -1,4 +1,4 @@
-import { Header } from '@/components/Header'
+import { MobileHeader } from '@/components/Header'
 import {
   Container,
   Heading,
@@ -76,29 +76,31 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
 
   return (
     <Container>
-      <Header />
+      <MobileHeader />
       <HomeContainer>
         <Heading>
           <ChartLineUp />
           <h2>Home</h2>
         </Heading>
-        <LastReadContainer>
-          {userLastRating ? (
-            <>
-              <LastReadTitle>Your last reading</LastReadTitle>
-              <LastReadCard
-                key={userLastRating.id}
-                rating={userLastRating}
-                book={userLastRating.book}
-              />
-            </>
-          ) : (
-            <>
-              <LastReadTitle>Your last reading</LastReadTitle>
-              <EmptyContainer />
-            </>
-          )}
-        </LastReadContainer>
+        {session.data?.user && (
+          <LastReadContainer>
+            {userLastRating ? (
+              <>
+                <LastReadTitle>Your last reading</LastReadTitle>
+                <LastReadCard
+                  key={userLastRating.id}
+                  rating={userLastRating}
+                  book={userLastRating.book}
+                />
+              </>
+            ) : (
+              <>
+                <LastReadTitle>Your last reading</LastReadTitle>
+                <EmptyContainer />
+              </>
+            )}
+          </LastReadContainer>
+        )}
         <RecentCardsContainer>
           <RecentCardsTitle>Last Ratings</RecentCardsTitle>
           <RecentCardsContent>
