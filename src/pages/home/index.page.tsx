@@ -23,6 +23,7 @@ import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { PopularBookCard } from '@/components/PopularBookCard'
 import { LastReadCard } from '@/components/LastReadCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
+import { NextSeo } from 'next-seo'
 
 interface BookProps {
   author: string
@@ -75,65 +76,68 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const session = useSession()
 
   return (
-    <Container>
-      <MobileHeader />
-      <HomeContainer>
-        <Heading>
-          <ChartLineUp />
-          <h2>Home</h2>
-        </Heading>
-        {session.data?.user && (
-          <LastReadContainer>
-            {userLastRating ? (
-              <>
-                <LastReadTitle>Your last reading</LastReadTitle>
-                <LastReadCard
-                  key={userLastRating.id}
-                  rating={userLastRating}
-                  book={userLastRating.book}
-                />
-              </>
-            ) : (
-              <>
-                <LastReadTitle>Your last reading</LastReadTitle>
-                <EmptyContainer />
-              </>
-            )}
-          </LastReadContainer>
-        )}
-        <RecentCardsContainer>
-          <RecentCardsTitle>Last Ratings</RecentCardsTitle>
-          <RecentCardsContent>
-            {ratings.length > 0 &&
-              ratings.map((rating) => (
-                <ReviewCard key={rating.id} rating={rating} />
-              ))}
-          </RecentCardsContent>
-        </RecentCardsContainer>
-        <PopularBooksCardsContainer>
-          <PopularBooksTitle>
-            <p>Popular Books</p>
-            <span>
-              View All
-              <CaretRight />
-            </span>
-          </PopularBooksTitle>
-          <PopularBooksCardsContent>
-            {books.length > 0 &&
-              books.map((book) => (
-                <PopularBookCard
-                  key={book.id}
-                  cover_url={book.cover_url}
-                  name={book.name}
-                  author={book.author}
-                  rating={book.rating}
-                  alreadyRead={book.alreadyRead}
-                />
-              ))}
-          </PopularBooksCardsContent>
-        </PopularBooksCardsContainer>
-      </HomeContainer>
-    </Container>
+    <>
+      <NextSeo title="Home | Book Wise" />
+      <Container>
+        <MobileHeader />
+        <HomeContainer>
+          <Heading>
+            <ChartLineUp />
+            <h2>Home</h2>
+          </Heading>
+          {session.data?.user && (
+            <LastReadContainer>
+              {userLastRating ? (
+                <>
+                  <LastReadTitle>Your last reading</LastReadTitle>
+                  <LastReadCard
+                    key={userLastRating.id}
+                    rating={userLastRating}
+                    book={userLastRating.book}
+                  />
+                </>
+              ) : (
+                <>
+                  <LastReadTitle>Your last reading</LastReadTitle>
+                  <EmptyContainer />
+                </>
+              )}
+            </LastReadContainer>
+          )}
+          <RecentCardsContainer>
+            <RecentCardsTitle>Last Ratings</RecentCardsTitle>
+            <RecentCardsContent>
+              {ratings.length > 0 &&
+                ratings.map((rating) => (
+                  <ReviewCard key={rating.id} rating={rating} />
+                ))}
+            </RecentCardsContent>
+          </RecentCardsContainer>
+          <PopularBooksCardsContainer>
+            <PopularBooksTitle>
+              <p>Popular Books</p>
+              <span>
+                View All
+                <CaretRight />
+              </span>
+            </PopularBooksTitle>
+            <PopularBooksCardsContent>
+              {books.length > 0 &&
+                books.map((book) => (
+                  <PopularBookCard
+                    key={book.id}
+                    cover_url={book.cover_url}
+                    name={book.name}
+                    author={book.author}
+                    rating={book.rating}
+                    alreadyRead={book.alreadyRead}
+                  />
+                ))}
+            </PopularBooksCardsContent>
+          </PopularBooksCardsContainer>
+        </HomeContainer>
+      </Container>
+    </>
   )
 }
 
