@@ -367,4 +367,38 @@ export const books = [
       },
     ],
   },
+  {
+    id: '90rt0f34-6g5h-4492-b640-9c020fcae6r2',
+    name: 'Pachinko',
+    author: 'Min Jin Lee',
+    summary:
+      'Pachinko follows one Korean family through the generations, beginning in early 1900s Korea with Sunja, the prized daughter of a poor yet proud family, whose unplanned pregnancy threatens to shame them all. Deserted by her lover, Sunja is saved when a young tubercular minister offers to marry and bring her to Japan.',
+    cover_url: '/images/books/pachinko.jpg',
+    total_pages: 528,
+    categories: [
+      {
+        name: 'Fiction',
+        id: 'f1a50507-0aa7-4245-8a5c-0d0de14e9d6d',
+      },
+    ],
+  },
+  {
+    id: '55gg5f44-3l40-4492-b640-9c020fcae6r2',
+    name: 'War and Peace',
+    author: 'Leo Tolstoy',
+    summary:
+      'War and Peace broadly focuses on Napoleon’s invasion of Russia in 1812 and follows three of the most well-known characters in literature: Pierre Bezukhov, the illegitimate son of a count who is fighting for his inheritance and yearning for spiritual fulfillment; Prince Andrei Bolkonsky, who leaves his family behind to fight in the war against Napoleon; and Natasha Rostov, the beautiful young daughter of a nobleman who intrigues both men.',
+    cover_url: '/images/books/war-and-peace.jpg',
+    total_pages: 1440,
+    categories: [
+      {
+        name: 'Classic',
+        id: 'd4c23017-4378-4e24-84a1-7e37f343dfc2',
+      },
+      {
+        name: 'Fiction',
+        id: 'f1a50507-0aa7-4245-8a5c-0d0de14e9d6d',
+      },
+    ],
+  },
 ]

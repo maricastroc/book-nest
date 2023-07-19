@@ -1,5 +1,15 @@
 import { Header } from '@/components/Header'
-import { Container, RecentCardsContainer } from './styles'
+import {
+  Container,
+  Heading,
+  HomeContainer,
+  PopularBooksCardsContainer,
+  PopularBooksCardsContent,
+  PopularBooksTitle,
+  RecentCardsContainer,
+  RecentCardsContent,
+  RecentCardsTitle,
+} from './styles'
 import { ReviewCard } from '@/components/ReviewCard'
 import { prisma } from '@/lib/prisma'
 import { GetServerSideProps } from 'next'
@@ -7,6 +17,8 @@ import { buildNextAuthOptions } from '../api/auth/[...nextauth].api'
 import { getServerSession } from 'next-auth'
 import { Book, Category, Rating, User } from '@prisma/client'
 import { useSession } from 'next-auth/react'
+import { CaretRight, ChartLineUp } from 'phosphor-react'
+import { PopularBookCard } from '@/components/PopularBookCard'
 
 interface BookProps {
   author: string
@@ -61,12 +73,43 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
   return (
     <Container>
       <Header />
-      <RecentCardsContainer>
-        {ratings.length > 0 &&
-          ratings.map((rating) => (
-            <ReviewCard key={rating.id} rating={rating} />
-          ))}
-      </RecentCardsContainer>
+      <HomeContainer>
+        <Heading>
+          <ChartLineUp />
+          <h2>Home</h2>
+        </Heading>
+        <RecentCardsContainer>
+          <RecentCardsTitle>Last Ratings</RecentCardsTitle>
+          <RecentCardsContent>
+            {ratings.length > 0 &&
+              ratings.map((rating) => (
+                <ReviewCard key={rating.id} rating={rating} />
+              ))}
+          </RecentCardsContent>
+        </RecentCardsContainer>
+        <PopularBooksCardsContainer>
+          <PopularBooksTitle>
+            <p>Popular Books</p>
+            <span>
+              View All
+              <CaretRight />
+            </span>
+          </PopularBooksTitle>
+          <PopularBooksCardsContent>
+            {books.length > 0 &&
+              books.map((book) => (
+                <PopularBookCard
+                  key={book.id}
+                  cover_url={book.cover_url}
+                  name={book.name}
+                  author={book.author}
+                  rating={book.rating}
+                  alreadyRead={book.alreadyRead}
+                />
+              ))}
+          </PopularBooksCardsContent>
+        </PopularBooksCardsContainer>
+      </HomeContainer>
     </Container>
   )
 }
@@ -97,6 +140,37 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     })
   }
 
+  // Searching and filtering the 4 most popular books
+  const books = await prisma.book.findMany({
+    include: {
+      ratings: {
+        select: {
+          rate: true,
+        },
+      },
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
+
+    take: 4,
+    orderBy: {
+      ratings: {
+        _count: 'desc',
+      },
+    },
+  })
+
+  // Returning books with "fixed" category
+  const booksWithCategory = books.map((book) => {
+    return {
+      ...book,
+      categories: book.categories.map((category) => category.category),
+    }
+  })
+
   // Verifying if a book was read by logged user
   let userBooksIds: string[] = []
 
@@ -113,6 +187,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     userBooksIds = userBooks?.map((x) => x?.id)
   }
+
+  // Returning books with category, average rating and user reading status
+  const booksWithRating = booksWithCategory.map((book) => {
+    const avgRate =
+      book.ratings.reduce((sum, rateObj) => {
+        return sum + rateObj.rate
+      }, 0) / book.ratings.length
+
+    return {
+      ...book,
+      rating: avgRate,
+      alreadyRead: userBooksIds.includes(book.id),
+    }
+  })
 
   // Searching for 4 latest ratings - excluding user ratings
   const ratings = await prisma.rating.findMany({
@@ -142,6 +230,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     props: {
       ratings: JSON.parse(JSON.stringify(ratingWithReadStatus)),
       userLastRating: JSON.parse(JSON.stringify(userLastRating)),
+      books: JSON.parse(JSON.stringify(booksWithRating)),
     },
   }
 }

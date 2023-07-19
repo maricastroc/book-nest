@@ -9,7 +9,7 @@ export const Container = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   width: '100%',
-  maxWidth: '35rem',
+  position: 'relative',
 })
 
 export const Header = styled('div', {
@@ -48,7 +48,7 @@ export const NameAndDate = styled('div', {
   justifyContent: 'center',
   gap: '0.1rem',
 
-  span: {
+  time: {
     color: '$gray400',
     fontSize: '$sm',
   },
@@ -117,4 +117,16 @@ export const Separator = styled('span', {
   height: 0.5,
   backgroundColor: '$gray400',
   opacity: 0.4,
+})
+
+export const ReadNotice = styled('div', {
+  display: 'flex',
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  padding: '0.2rem 0.5rem',
+  fontSize: '$xs',
+  borderRadius: '0 8px 0 8px',
+  backgroundColor: '$green300',
+  color: '$green100',
 })

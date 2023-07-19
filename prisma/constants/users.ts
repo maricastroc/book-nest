@@ -53,6 +53,13 @@ export const users = [
     name: 'Petter Daniels',
     email: 'petter@gmail.com',
     avatar_url:
-      'https://images.unsplash.com/photo-1482961674540-0b0e8363a005?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&&w=1471&q=80',
+      'https://images.unsplash.com/photo-1482961674540-0b0e8363a005?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80',
+  },
+  {
+    id: '349vrtq1-ef32-4f3c-3o7l-67d8c40fa158',
+    name: 'Daniel Stone',
+    email: 'daniels@gmail.com',
+    avatar_url:
+      'https://images.unsplash.com/photo-1562159278-1253a58da141?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80',
   },
 ]

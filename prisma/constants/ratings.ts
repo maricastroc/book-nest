@@ -95,7 +95,7 @@ export const ratings = [
     description:
       "Holden Caulfield takes us to bourgeois America in the 1950s, from his college, where he just has been dismissed, to New York Central Station. Scrolling through friends, families, and acquaintances, and delivering us, by freeing ourselves, his wounds and joys, his loves and dislikes of people and things, of life, of his teenage life. But enough talk - 'Digression'!! (you will understand by reading it) - read on.",
     book_id: 'e688c24f-d14d-4607-a12e-90e6e367398d', // The Catcher in the Rye
-    user_id: 'vadsdeq1-ef47-4f3c-1c7e-39d8c40fa158', // Jack
+    user_id: '349vrtq1-ef32-4f3c-3o7l-67d8c40fa158', // Daniel
   },
   {
     id: uuidv4(),
@@ -190,7 +190,7 @@ export const ratings = [
     rate: 4,
     description:
       'One thing that you can believe is, when your elders say that you don’t stay the same, they are correct. They mean that you change the way you think, the way you do things, the way that you look upon the world. I’ve heard this said so many times that I can dream about it. In other words, I used to adore this book. And I thought Ponyboy was adorable. Of course, I was twelve-years old and had different standards for adoration (maybe). I have to confess, though, I wasn’t confused like him. I thought that he should snitch.',
-    book_id: '4fd2b389-b211-40b5-9797-f78cbb985645', // The Outsiders
+    book_id: '1d5cdbdc-b90f-40d5-8fe9-d4923ae12dbd', // The Outsiders
     user_id: 'c296c6c0-5c59-40dd-aa8a-ef2b015b7502', // Brandon
   },
   {
@@ -207,7 +207,7 @@ export const ratings = [
     description:
       'So glad I reread this! I loved it even more this time and it just reaffirmed that this is my favorite series!',
     book_id: '4fd2b389-b211-40b5-9797-f78cbb985645', // A Game of Thrones
-    user_id: '6624df61-5947-4f8c-9c7e-39c8c40fa158', // Jaylon
+    user_id: '349vrtq1-ef32-4f3c-3o7l-67d8c40fa158', // Daniel
   },
   {
     id: uuidv4(),
@@ -227,7 +227,7 @@ export const ratings = [
   },
   {
     id: uuidv4(),
-    rate: 5,
+    rate: 4,
     description:
       "I don't even think I can truly convey how much I loved this book other than to say it was entirely life changing and I'm so upset it took me this long to read it.",
     book_id: '43de0g44-1e50-7891-e640-9v340fwdr6f2', // The Perks of Being a Wallflower
@@ -243,7 +243,7 @@ export const ratings = [
   },
   {
     id: uuidv4(),
-    rate: 5,
+    rate: 4,
     description:
       'Take My Hand is a gem of a read! It reminds us just how important it is for these stories to be told, for them to be heard, to be acknowledged and remembered and to care; that feels crucial right now. This is why I read the books I do!',
     book_id: '67cb0f47-9e50-4492-b640-9c020fcae6f2', // Take my Hand
@@ -275,11 +275,11 @@ export const ratings = [
   },
   {
     id: uuidv4(),
-    rate: 5,
+    rate: 4,
     description:
       "I understand why many people hate this book. Catherine and Heathcliff are monstrous. Monstrous. You won't like them because they are unlikable. They are irrational, self-absorbed, malicious and pretty much any negative quality you can think a person is capable of possessing without imploding. They seek and destroy and act with no thought to consequence. And I find it fascinating that Emily Bronte chose them to be her central protagonists.",
     book_id: '21cb0f47-3l40-4492-b640-9c020fcae6r2', // Wuthering Heights
-    user_id: '456adeq1-ef32-4f3c-1c7e-39d8c40fa158', // Rute
+    user_id: '349vrtq1-ef32-4f3c-3o7l-67d8c40fa158', // Daniel
   },
   {
     id: uuidv4(),
@@ -288,5 +288,21 @@ export const ratings = [
       'Inside me, there are two wolves. (I am saying there are two wolves in order to reference the meme, but what would be more accurate is to say that inside of me there are two boring and nonviolent creatures. Like a pigeon. Or an accountant.)',
     book_id: '21cb0f47-3l40-4492-b640-9c020fcae6r2', // Wuthering Heights
     user_id: '319vtbq1-ef32-4f3c-1c7e-39d8c40fa158', // Petter
+  },
+  {
+    id: uuidv4(),
+    rate: 4,
+    description:
+      "This is one of those books that can be life-changing. I read this as a teenager and I remember exactly where I was (sitting on my bed, in my grandmother's house, in southern Germany) when I finished it. I must have spent an hour just staring out the window, in awe of the lives I'd just led, the experiences I'd just had.",
+    book_id: '55gg5f44-3l40-4492-b640-9c020fcae6r2', // War and Peace
+    user_id: '349vrtq1-ef32-4f3c-3o7l-67d8c40fa158', // Daniel
+  },
+  {
+    id: uuidv4(),
+    rate: 5,
+    description:
+      "A fantastic novel I would recommend to everyone. As a second generation Vietnamese American living in the United States, I have felt so inspired by Lee's book to think about my family's many sacrifices coming to the United States, as well as the ways I have coped with and adapted to various forms of racism and colonization. I am excited to see what other reads 2018 brings, and I already know Pachinko will stand as one of my favorites.",
+    book_id: '90rt0f34-6g5h-4492-b640-9c020fcae6r2', // Pachinko
+    user_id: '456adeq1-ef32-4f3c-1c7e-39d8c40fa158', // Rute
   },
 ]

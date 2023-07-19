@@ -6,6 +6,7 @@ interface StarsRatingProps {
 }
 
 export function StarsRating({ rating }: StarsRatingProps) {
+  console.log(rating)
   return (
     <Rating>
       {Array.from({ length: 5 }).map((_, i) => {

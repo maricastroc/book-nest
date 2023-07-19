@@ -10,25 +10,37 @@ import {
   NameAndDate,
   Separator,
   UserInfo,
+  ReadNotice,
 } from './styles'
 import { RatingWithUserAndBook } from '@/pages/home/index.page'
 import { StarsRating } from '../StarsRating'
+import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 
 interface ReviewCardProps {
   rating: RatingWithUserAndBook
 }
 
 export function ReviewCard({ rating }: ReviewCardProps) {
+  const { dateFormatted, dateRelativeToNow, dateString } =
+    getDateFormattedAndRelative(rating.created_at)
+
   const avatarUrl = rating.user.avatar_url || 'https://github/octocat.png'
 
   return (
     <Container>
+      {rating.alreadyRead && (
+        <ReadNotice>
+          <p>READ</p>
+        </ReadNotice>
+      )}
       <Header>
         <UserInfo>
           <Avatar avatarUrl={avatarUrl} />
           <NameAndDate>
             <p>{rating.user.name}</p>
-            <span>Today</span>
+            <time title={dateFormatted} dateTime={dateString}>
+              {dateRelativeToNow}
+            </time>
           </NameAndDate>
         </UserInfo>
         <StarsRating rating={rating.rate} />
