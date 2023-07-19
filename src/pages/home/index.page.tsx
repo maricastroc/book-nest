@@ -3,6 +3,8 @@ import {
   Container,
   Heading,
   HomeContainer,
+  LastReadContainer,
+  LastReadTitle,
   PopularBooksCardsContainer,
   PopularBooksCardsContent,
   PopularBooksTitle,
@@ -19,6 +21,8 @@ import { Book, Category, Rating, User } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { PopularBookCard } from '@/components/PopularBookCard'
+import { LastReadCard } from '@/components/LastReadCard'
+import { EmptyContainer } from '@/components/EmptyContainer'
 
 interface BookProps {
   author: string
@@ -78,6 +82,23 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
           <ChartLineUp />
           <h2>Home</h2>
         </Heading>
+        <LastReadContainer>
+          {userLastRating ? (
+            <>
+              <LastReadTitle>Your last reading</LastReadTitle>
+              <LastReadCard
+                key={userLastRating.id}
+                rating={userLastRating}
+                book={userLastRating.book}
+              />
+            </>
+          ) : (
+            <>
+              <LastReadTitle>Your last reading</LastReadTitle>
+              <EmptyContainer />
+            </>
+          )}
+        </LastReadContainer>
         <RecentCardsContainer>
           <RecentCardsTitle>Last Ratings</RecentCardsTitle>
           <RecentCardsContent>

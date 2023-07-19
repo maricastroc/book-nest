@@ -20,7 +20,7 @@ export const globalStyles = globalCss({
 
     '*::-webkit-scrollbar': {
       width: 2,
-      height: 10,
+      height: 2,
       borderRadius: 9999,
     },
 

@@ -3,7 +3,7 @@ import { styled } from '../../styles'
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '2rem 2rem 1rem',
+  padding: '2rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'center',
