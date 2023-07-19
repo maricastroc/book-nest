@@ -3,6 +3,7 @@ import {
   Container,
   Heading,
   HomeContainer,
+  HomeContent,
   LastReadContainer,
   LastReadTitle,
   PopularBooksCardsContainer,
@@ -24,6 +25,8 @@ import { PopularBookCard } from '@/components/PopularBookCard'
 import { LastReadCard } from '@/components/LastReadCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
 import { NextSeo } from 'next-seo'
+import { useEffect, useState } from 'react'
+import { Sidebar } from '@/components/Sidebar'
 
 interface BookProps {
   author: string
@@ -74,67 +77,79 @@ interface HomeProps {
 
 export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const session = useSession()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <>
       <NextSeo title="Home | Book Wise" />
       <Container>
-        <MobileHeader />
+        {isMobile ? <MobileHeader /> : <Sidebar />}
         <HomeContainer>
           <Heading>
             <ChartLineUp />
             <h2>Home</h2>
           </Heading>
-          {session.data?.user && (
-            <LastReadContainer>
-              {userLastRating ? (
-                <>
-                  <LastReadTitle>Your last reading</LastReadTitle>
-                  <LastReadCard
-                    key={userLastRating.id}
-                    rating={userLastRating}
-                    book={userLastRating.book}
-                  />
-                </>
-              ) : (
-                <>
-                  <LastReadTitle>Your last reading</LastReadTitle>
-                  <EmptyContainer />
-                </>
-              )}
-            </LastReadContainer>
-          )}
-          <RecentCardsContainer>
-            <RecentCardsTitle>Last Ratings</RecentCardsTitle>
-            <RecentCardsContent>
-              {ratings.length > 0 &&
-                ratings.map((rating) => (
-                  <ReviewCard key={rating.id} rating={rating} />
-                ))}
-            </RecentCardsContent>
-          </RecentCardsContainer>
-          <PopularBooksCardsContainer>
-            <PopularBooksTitle>
-              <p>Popular Books</p>
-              <span>
-                View All
-                <CaretRight />
-              </span>
-            </PopularBooksTitle>
-            <PopularBooksCardsContent>
-              {books.length > 0 &&
-                books.map((book) => (
-                  <PopularBookCard
-                    key={book.id}
-                    cover_url={book.cover_url}
-                    name={book.name}
-                    author={book.author}
-                    rating={book.rating}
-                    alreadyRead={book.alreadyRead}
-                  />
-                ))}
-            </PopularBooksCardsContent>
-          </PopularBooksCardsContainer>
+          <HomeContent>
+            {session.data?.user && (
+              <LastReadContainer>
+                {userLastRating ? (
+                  <>
+                    <LastReadTitle>Your last reading</LastReadTitle>
+                    <LastReadCard
+                      key={userLastRating.id}
+                      rating={userLastRating}
+                      book={userLastRating.book}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <LastReadTitle>Your last reading</LastReadTitle>
+                    <EmptyContainer />
+                  </>
+                )}
+              </LastReadContainer>
+            )}
+            <RecentCardsContainer>
+              <RecentCardsTitle>Last Ratings</RecentCardsTitle>
+              <RecentCardsContent>
+                {ratings.length > 0 &&
+                  ratings.map((rating) => (
+                    <ReviewCard key={rating.id} rating={rating} />
+                  ))}
+              </RecentCardsContent>
+            </RecentCardsContainer>
+            <PopularBooksCardsContainer>
+              <PopularBooksTitle>
+                <p>Popular Books</p>
+                <span>
+                  View All
+                  <CaretRight />
+                </span>
+              </PopularBooksTitle>
+              <PopularBooksCardsContent>
+                {books.length > 0 &&
+                  books.map((book) => (
+                    <PopularBookCard
+                      key={book.id}
+                      cover_url={book.cover_url}
+                      name={book.name}
+                      author={book.author}
+                      rating={book.rating}
+                      alreadyRead={book.alreadyRead}
+                    />
+                  ))}
+              </PopularBooksCardsContent>
+            </PopularBooksCardsContainer>
+          </HomeContent>
         </HomeContainer>
       </Container>
     </>

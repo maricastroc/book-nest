@@ -10,8 +10,8 @@ import {
   WelcomeContainer,
 } from './styles'
 import Image from 'next/image'
-import CoverImage from '../../assets/cover.png'
-import Logo from '../../assets/logo.svg'
+import CoverImage from '../../../public/assets/cover.png'
+import Logo from '../../../public/assets/logo.svg'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'

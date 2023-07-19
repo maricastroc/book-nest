@@ -50,18 +50,6 @@ export const Item = styled('div', {
     color: '$gray400',
   },
 
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: '-1rem',
-    width: '4px',
-    background: '$gradient-vertical',
-    display: 'none',
-    borderRadius: 8,
-  },
-
   variants: {
     active: {
       true: {
@@ -74,8 +62,15 @@ export const Item = styled('div', {
           color: '$gray100',
         },
 
-        '&.active::after': {
-          display: 'block',
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: '-1rem',
+          width: '4px',
+          background: '$gradient-vertical',
+          borderRadius: 8,
         },
       },
     },

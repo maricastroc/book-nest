@@ -11,6 +11,13 @@ export const Container = styled('div', {
   '@media (min-width: 480px)': {
     padding: '0 2rem',
   },
+
+  '@media (min-width: 768px)': {
+    flexDirection: 'row',
+    height: '97vh',
+    alignItems: 'stretch',
+    padding: '0 2rem 0 1rem',
+  },
 })
 
 export const HomeContainer = styled('div', {
@@ -26,6 +33,24 @@ export const HomeContainer = styled('div', {
   '@media (min-width: 480px)': {
     padding: '0 2rem',
   },
+
+  '@media (min-width: 768px)': {
+    alignItems: 'flex-start',
+    padding: '0 0 0 2rem',
+  },
+})
+
+export const HomeContent = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  '@media (min-width: 768px)': {
+    justifyContent: 'flex-start',
+    overflow: 'scroll',
+  },
 })
 
 export const Heading = styled('div', {
@@ -36,6 +61,7 @@ export const Heading = styled('div', {
   gap: '0.8rem',
   textAlign: 'left',
   marginBottom: '2.5rem',
+  width: '100%',
 
   h2: {
     fontSize: '1.5rem',
