@@ -4,6 +4,8 @@ export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   height: '12rem',
+  padding: '2rem',
+  textAlign: 'center',
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: '$gray600',
