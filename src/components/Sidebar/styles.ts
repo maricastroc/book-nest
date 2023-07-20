@@ -50,6 +50,7 @@ export const ItemsContainer = styled('div', {
 })
 
 export const Item = styled('button', {
+  cursor: 'pointer',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
@@ -68,9 +69,25 @@ export const Item = styled('button', {
     color: '$gray400',
   },
 
+  '&:focus': {
+    boxShadow: 'none',
+  },
+
+  '&:hover': {
+    p: {
+      color: '$gray100',
+    },
+
+    svg: {
+      color: '$gray100',
+    },
+  },
+
   variants: {
     active: {
       true: {
+        cursor: 'not-allowed',
+
         p: {
           color: '$gray100',
           fontWeight: 'bold',

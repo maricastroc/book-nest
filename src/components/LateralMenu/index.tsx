@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react'
 import { api } from '@/lib/axios'
 import { Rating as RatingInfo, User as UserPrisma } from '@prisma/client'
 import { RatingCard } from './components/RatingCard'
+import { useSession } from 'next-auth/react'
+import { ReviewCardForm } from './components/ReviewCardForm'
 
 interface BookReviewsSidebarProps {
   book: BookWithRatingAndCategories | null
@@ -28,6 +30,9 @@ interface RatingProps extends RatingInfo {
 
 export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
   const [ratings, setRatings] = useState<RatingProps[]>([])
+  const [openReviewForm, setOpenReviewForm] = useState(false)
+
+  const session = useSession()
 
   useEffect(() => {
     async function loadRatings() {
@@ -58,8 +63,17 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
         <RatingsContainer>
           <RatingsContentTitle>
             <p>Ratings</p>
-            <span>Review</span>
+            {session.data?.user && (
+              <span onClick={() => setOpenReviewForm(true)}>Review</span>
+            )}
           </RatingsContentTitle>
+          {session.data?.user && openReviewForm && (
+            <ReviewCardForm
+              avatar_url={session.data?.user.avatar_url!}
+              name={session.data?.user.name!}
+              onClose={() => setOpenReviewForm(false)}
+            />
+          )}
           <RatingsContent>
             {ratings?.map((rating) => (
               <RatingCard

@@ -41,15 +41,24 @@ export function Sidebar() {
               quality={100}
             />
             <ItemsContainer>
-              <Item active={router.pathname === '/home'}>
+              <Item
+                active={router.pathname === '/home'}
+                onClick={() => router.push('/home')}
+              >
                 <ChartLineUp />
                 <p>Home</p>
               </Item>
-              <Item active={router.pathname === '/explore'}>
+              <Item
+                active={router.pathname === '/explore'}
+                onClick={() => router.push('/explore')}
+              >
                 <Binoculars />
                 <p>Explore</p>
               </Item>
-              <Item active={router.pathname === '/profile'}>
+              <Item
+                active={router.pathname === '/profile'}
+                onClick={() => router.push('/home')}
+              >
                 <User />
                 <p>Profile</p>
               </Item>

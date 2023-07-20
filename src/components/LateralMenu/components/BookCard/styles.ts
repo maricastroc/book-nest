@@ -29,6 +29,7 @@ export const BookData = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  textAlign: 'center',
 
   h2: {
     fontSize: '1rem',

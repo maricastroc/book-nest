@@ -26,30 +26,41 @@ export function MobileModal() {
   return (
     <Container>
       <ItemsContainer>
-        <Item active={router.pathname === '/home'}>
+        <Item
+          active={router.pathname === '/home'}
+          onClick={() => router.push('/home')}
+        >
           <ChartLineUp />
           <p>Home</p>
         </Item>
-        <Item active={router.pathname === '/explore'}>
+        <Item
+          active={router.pathname === '/explore'}
+          onClick={() => router.push('/explore')}
+        >
           <Binoculars />
           <p>Explore</p>
         </Item>
-        <Item active={router.pathname === '/profile'}>
+        <Item
+          active={router.pathname === '/profile'}
+          onClick={() => router.push('/home')}
+        >
           <User />
           <p>Profile</p>
         </Item>
       </ItemsContainer>
-      <Separator />
       {session.data?.user && (
-        <ProfileContainer>
-          <AvatarContainer>
-            <AvatarDefault src={session.data?.user.avatar_url} />
-          </AvatarContainer>
-          <SignOutContainer>
-            <p>{firstName}</p>
-            <SignOut onClick={handleLogout} />
-          </SignOutContainer>
-        </ProfileContainer>
+        <>
+          <Separator />
+          <ProfileContainer>
+            <AvatarContainer>
+              <AvatarDefault src={session.data?.user.avatar_url} />
+            </AvatarContainer>
+            <SignOutContainer>
+              <p>{firstName}</p>
+              <SignOut onClick={handleLogout} />
+            </SignOutContainer>
+          </ProfileContainer>
+        </>
       )}
     </Container>
   )
