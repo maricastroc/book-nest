@@ -23,6 +23,7 @@ interface BookCardProps {
   cover_url: string
   rating: number
   total_pages: number
+  ratings_number: number
   categories: Category[]
 }
 
@@ -33,6 +34,7 @@ export function BookCard({
   rating,
   categories,
   total_pages,
+  ratings_number,
 }: BookCardProps) {
   const categoryNames = categories.map((category) => category.name)
 
@@ -47,7 +49,7 @@ export function BookCard({
         <RatingContainer>
           <StarsRating rating={rating} />
           <p>
-            <span>{rating}</span> ratings
+            <span>{ratings_number}</span> ratings
           </p>
         </RatingContainer>
       </BookInfo>

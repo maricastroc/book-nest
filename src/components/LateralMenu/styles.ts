@@ -66,3 +66,36 @@ export const CloseButton = styled('div', {
     color: '$gray400',
   },
 })
+
+export const RatingsContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '0.5rem',
+  marginTop: '3rem',
+})
+
+export const RatingsContentTitle = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+
+  p: {
+    fontSize: '$sm',
+    color: '$gray200',
+  },
+
+  span: {
+    fontSize: '0.95rem',
+    color: '$purple100',
+    fontWeight: 'bold',
+  },
+})
+
+export const RatingsContent = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '1.5rem',
+})
