@@ -22,7 +22,6 @@ export const CoverContainer = styled('div', {
   display: 'flex',
   padding: '1.25rem',
   position: 'relative',
-  background: 'url(../../assets/cover.png) center center / cover no-repeat',
 
   '.cover_image': {
     display: 'none',

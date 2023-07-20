@@ -64,7 +64,7 @@ export default function Login() {
               <Icon icon="ant-design:github-outlined" color="white" />
               <p>Login with GitHub</p>
             </ButtonAccess>
-            <ButtonAccess>
+            <ButtonAccess onClick={() => handleSignIn('visitor')}>
               <RocketLaunch size={32} className="rocket-icon" />
               <p>Access as a guest</p>
             </ButtonAccess>
