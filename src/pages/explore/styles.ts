@@ -6,7 +6,7 @@ export const Container = styled('div', {
   padding: '0 1rem',
   width: '100%',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   height: '100vh',
 })
 
@@ -113,4 +113,5 @@ export const BooksContainer = styled('div', {
   gap: '1.5rem',
   marginTop: '2rem',
   width: '100%',
+  marginBottom: '2rem',
 })

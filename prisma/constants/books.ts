@@ -316,7 +316,7 @@ export const books = [
     author: 'Dolen Perkins-Valdez',
     summary:
       'Inspired by true events that rocked the nation, a profoundly moving novel about a Black nurse in post-segregation Alabama who blows the whistle on a terrible wrong done to her patients, from the New York Times bestselling author of Wench. Montgomery, Alabama, 1973.',
-    cover_url: '/images/books/psycho.jpg',
+    cover_url: '/images/books/take-my-hand.jpg',
     total_pages: 176,
     categories: [
       {
@@ -335,7 +335,7 @@ export const books = [
     author: 'Patrick Rothfuss',
     summary:
       'The tale of Kvothe, from his childhood in a troupe of traveling players, to years spent as a near-feral orphan in a crime-riddled city, to his daringly brazen yet successful bid to enter a difficult and dangerous school of magic.',
-    cover_url: '/images/books/psycho.jpg',
+    cover_url: '/images/books/the-name-of-the-wind.jpg',
     total_pages: 722,
     categories: [
       {
