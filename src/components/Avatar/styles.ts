@@ -1,6 +1,7 @@
 import { styled } from '../../styles'
 
 export const AvatarContainer = styled('a', {
+  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

@@ -6,7 +6,7 @@ export function EmptyContainer() {
     <Container>
       <Warning />
       <p>Ooooops!</p>
-      <span>You haven&apos;t reviewed any books yet.</span>
+      <span>We could not find any reviewed books yet.</span>
     </Container>
   )
 }

@@ -15,6 +15,7 @@ import {
 import { RatingWithUserAndBook } from '@/pages/home/index.page'
 import { StarsRating } from '../StarsRating'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
+import { useRouter } from 'next/router'
 
 interface ReviewCardProps {
   rating: RatingWithUserAndBook
@@ -26,6 +27,8 @@ export function ReviewCard({ rating }: ReviewCardProps) {
 
   const avatarUrl = rating.user.avatar_url || 'https://github/octocat.png'
 
+  const router = useRouter()
+
   return (
     <Container>
       {rating.alreadyRead && (
@@ -35,7 +38,12 @@ export function ReviewCard({ rating }: ReviewCardProps) {
       )}
       <Header>
         <UserInfo>
-          <Avatar avatarUrl={avatarUrl} />
+          <Avatar
+            avatarUrl={avatarUrl}
+            onClick={() => {
+              router.push(`/profile/${rating.user.id}`)
+            }}
+          />
           <NameAndDate>
             <p>{rating.user.name}</p>
             <time title={dateFormatted} dateTime={dateString}>

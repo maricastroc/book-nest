@@ -1,6 +1,13 @@
 import { styled } from '../../styles'
 import Link from 'next/link'
 
+export const Wrapper = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '0.8rem',
+})
+
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
@@ -13,17 +20,13 @@ export const Container = styled('div', {
   position: 'relative',
 })
 
-export const Header = styled('div', {
+export const Heading = styled('div', {
   display: 'flex',
-  flexDirection: 'column',
-  gap: '1.2rem',
-  width: '100%',
-  marginBottom: '1.5rem',
+  alignItems: 'flex-start',
 
-  '@media (min-width: 580px)': {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+  time: {
+    color: '$gray400',
+    fontSize: '$sm',
   },
 })
 
@@ -39,23 +42,6 @@ export const UserInfo = styled('div', {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-  },
-})
-
-export const NameAndDate = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '0.1rem',
-
-  time: {
-    color: '$gray400',
-    fontSize: '$sm',
-  },
-
-  '@media (min-width: 580px)': {
-    alignItems: 'flex-start',
   },
 })
 
@@ -76,7 +62,6 @@ export const BookCover = styled('img', {
   width: '6.75rem',
   height: 'auto',
   borderRadius: 8,
-  marginTop: '2rem',
 })
 
 export const BookDetails = styled('div', {
@@ -97,6 +82,14 @@ export const BookInfo = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  gap: '0.8rem',
+})
+
+export const BookInfoText = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
   gap: '0.2rem',
 
   h2: {
@@ -106,10 +99,6 @@ export const BookInfo = styled('div', {
   p: {
     color: '$gray400',
     fontSize: '$sm',
-  },
-
-  '@media (min-width: 980px)': {
-    alignItems: 'flex-start',
   },
 })
 
@@ -138,18 +127,6 @@ export const Separator = styled('span', {
   },
 })
 
-export const ReadNotice = styled('div', {
-  display: 'flex',
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  padding: '0.2rem 0.5rem',
-  fontSize: '$xs',
-  borderRadius: '0 8px 0 8px',
-  backgroundColor: '$green300',
-  color: '$green100',
-})
-
 export const ImageWrapper = styled(Link, {
   display: 'flex',
   alignItems: 'center',
@@ -160,4 +137,16 @@ export const ImageWrapper = styled(Link, {
 
   borderRadius: '$full',
   background: '$gradient-vertical',
+})
+
+export const ReadNotice = styled('div', {
+  display: 'flex',
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  padding: '0.2rem 0.5rem',
+  fontSize: '$xs',
+  borderRadius: '0 8px 0 8px',
+  backgroundColor: '$green300',
+  color: '$green100',
 })

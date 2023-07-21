@@ -56,8 +56,8 @@ export function Sidebar() {
                 <p>Explore</p>
               </Item>
               <Item
-                active={router.pathname === '/profile'}
-                onClick={() => router.push('/home')}
+                active={router.pathname === `profile/${session.data?.user.id}`}
+                onClick={() => router.push(`profile/${session.data?.user.id}`)}
               >
                 <User />
                 <p>Profile</p>

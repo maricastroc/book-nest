@@ -14,11 +14,19 @@ export const Container = styled('div', {
 
   p: {
     fontSize: '1.3rem',
-    marginBottom: '0.2rem',
+    marginBottom: '0.4rem',
+  },
+
+  span: {
+    lineHeight: '140%',
   },
 
   svg: {
     fontSize: '3rem',
     marginBottom: '0.8rem',
+  },
+
+  '@media (min-width: 480px)': {
+    height: '13rem',
   },
 })
