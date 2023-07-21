@@ -17,6 +17,11 @@ export const Header = styled('div', {
   width: '100%',
   alignItems: 'flex-start',
   gap: '1rem',
+
+  '@media (min-width: 580px)': {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 })
 
 export const UserData = styled('div', {

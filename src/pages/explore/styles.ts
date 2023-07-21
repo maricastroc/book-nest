@@ -9,6 +9,18 @@ export const Container = styled('div', {
   alignItems: 'center',
   justifyContent: 'flex-start',
   height: '100vh',
+
+  '@media (min-width: 768px)': {
+    flexDirection: 'row',
+    height: '97vh',
+    alignItems: 'stretch',
+    padding: '0 2rem 0 1rem',
+    gap: '5rem',
+  },
+
+  '@media (min-width: 1024px)': {
+    paddingRight: '5rem',
+  },
 })
 
 export const ExploreContainer = styled('div', {
@@ -20,17 +32,41 @@ export const ExploreContainer = styled('div', {
   justifyContent: 'center',
   maxWidth: '35rem',
   marginTop: '2rem',
+
+  '@media (min-width: 768px)': {
+    alignItems: 'flex-start',
+    padding: '0 0 0 2rem',
+    maxWidth: '45rem',
+  },
+
+  '@media (min-width: 1200px)': {
+    maxWidth: '100%',
+  },
 })
 
 export const Heading = styled('div', {
   display: 'flex',
-  alignItems: 'center',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
   justifyContent: 'flex-start',
   alignSelf: 'start',
   gap: '0.8rem',
   textAlign: 'left',
   marginBottom: '1rem',
   width: '100%',
+
+  '@media (min-width: 1024px)': {
+    marginTop: '1.5rem',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+})
+
+export const HeadingTitle = styled('div', {
+  display: 'flex',
+  alignItems: 'flex-start',
+  gap: '0.8rem',
 
   h2: {
     fontSize: '1.5rem',
@@ -39,6 +75,19 @@ export const Heading = styled('div', {
   svg: {
     fontSize: '2rem',
     color: '$green100',
+  },
+})
+
+export const ExploreContent = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  '@media (min-width: 768px)': {
+    justifyContent: 'flex-start',
+    overflowY: 'scroll',
   },
 })
 
@@ -76,6 +125,11 @@ export const SearchBar = styled('div', {
     svg: {
       color: '$green200',
     },
+  },
+
+  '@media (min-width: 1024px)': {
+    width: '60%',
+    maxWidth: '25rem',
   },
 })
 
@@ -115,4 +169,13 @@ export const BooksContainer = styled('div', {
   marginTop: '2rem',
   width: '100%',
   marginBottom: '2rem',
+
+  '@media (min-width: 980px)': {
+    gridTemplateColumns: '1fr 1fr',
+    paddingRight: '1rem',
+  },
+
+  '@media (min-width: 1400px)': {
+    gridTemplateColumns: '1fr 1fr 1fr',
+  },
 })

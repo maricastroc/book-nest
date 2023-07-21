@@ -1,6 +1,7 @@
 import { StarsRating } from '@/components/StarsRating'
 import {
   BookContainer,
+  BookContent,
   BookCover,
   BookData,
   BookInfo,
@@ -40,19 +41,22 @@ export function BookCard({
 
   return (
     <BookContainer>
-      <BookCover alt="" src={cover_url} />
-      <BookInfo>
-        <BookData>
-          <h2>{name}</h2>
-          <p>{author}</p>
-        </BookData>
-        <RatingContainer>
-          <StarsRating rating={rating} />
-          <p>
-            <span>{ratings_number}</span> ratings
-          </p>
-        </RatingContainer>
-      </BookInfo>
+      <BookContent>
+        <BookCover alt="" src={cover_url} />
+        <BookInfo>
+          <BookData>
+            <h2>{name}</h2>
+            <p>{author}</p>
+          </BookData>
+          <RatingContainer>
+            <StarsRating rating={rating} />
+            <p>
+              <span>{ratings_number}</span> {''}
+              {ratings_number === 1 ? 'rating' : 'ratings'}
+            </p>
+          </RatingContainer>
+        </BookInfo>
+      </BookContent>
       <Separator />
       <Footer>
         <FooterItem>

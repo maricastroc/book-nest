@@ -13,10 +13,12 @@ const entranceAnimation = keyframes({
 export const Container = styled('section', {
   position: 'fixed',
   top: '0',
-  left: '0',
+  right: '0',
   display: 'flex',
+  justifyContent: 'flex-end',
   zIndex: 998,
   overflow: 'scroll',
+  maxWidth: '41.5rem',
 })
 
 export const ContainerOverlay = styled('div', {
@@ -37,7 +39,7 @@ export const LateralMenuContainer = styled('div', {
   height: '100vh',
   overflow: 'scroll',
   width: '100%',
-  padding: '3rem',
+  padding: '4.5rem 3rem 3rem',
   borderRadius: 8,
   animation: `${entranceAnimation} 0.4s`,
 })
@@ -55,6 +57,7 @@ export const RatingContainer = styled('div', {
 })
 
 export const CloseButton = styled('div', {
+  cursor: 'pointer',
   position: 'absolute',
   zIndex: 999,
   top: '6%',
@@ -64,6 +67,11 @@ export const CloseButton = styled('div', {
   svg: {
     fontSize: '1.4rem',
     color: '$gray400',
+  },
+
+  '@media (min-width: 580px)': {
+    top: '6%',
+    left: '92%',
   },
 })
 
@@ -87,9 +95,15 @@ export const RatingsContentTitle = styled('div', {
   },
 
   span: {
+    cursor: 'pointer',
     fontSize: '0.95rem',
     color: '$purple100',
     fontWeight: 'bold',
+
+    '&:hover': {
+      filter: 'brightness(1.3)',
+      transition: '200ms all ease-in-out',
+    },
   },
 })
 

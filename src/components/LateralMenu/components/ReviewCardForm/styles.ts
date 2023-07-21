@@ -17,6 +17,13 @@ export const ReviewFormHeader = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '1rem',
+
+  '@media (min-width: 580px)': {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
 })
 
 export const UserData = styled('div', {
@@ -51,9 +58,11 @@ export const AvatarDefault = styled('img', {
 
 export const ReviewFormContainer = styled('div', {
   position: 'relative',
+  width: '100%',
 })
 
 export const ReviewForm = styled('textarea', {
+  width: '100%',
   marginTop: '1rem',
   backgroundColor: '$gray800',
   padding: '0.875rem 0.875rem 1.25rem',
@@ -70,7 +79,11 @@ export const CharacterCounter = styled('span', {
   fontSize: '0.75rem',
   color: '$gray400',
   top: '85%',
-  right: '6%',
+  right: '3vw',
+
+  '@media (min-width: 580px)': {
+    right: '2vw',
+  },
 })
 
 export const ButtonsContainer = styled('div', {
@@ -83,6 +96,7 @@ export const ButtonsContainer = styled('div', {
 })
 
 export const ActionButton = styled('button', {
+  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
