@@ -9,6 +9,10 @@ export const RatingContainer = styled('div', {
   padding: '1.5rem',
   borderRadius: 8,
   width: '100%',
+
+  '&.from_user': {
+    backgroundColor: '$gray600',
+  },
 })
 
 export const Header = styled('div', {

@@ -109,7 +109,7 @@ export const RatingsContentTitle = styled('div', {
 
 export const RatingsContent = styled('div', {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column-reverse',
   width: '100%',
   gap: '1.5rem',
 })
