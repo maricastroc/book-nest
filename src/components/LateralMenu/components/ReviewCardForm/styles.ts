@@ -1,6 +1,6 @@
 import { styled } from '../../../../styles'
 
-export const Container = styled('div', {
+export const Container = styled('form', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -98,5 +98,25 @@ export const ActionButton = styled('button', {
   '&:hover': {
     backgroundColor: '$gray500',
     transition: 'all 0.5s ease-in-out',
+  },
+
+  variants: {
+    disabled: {
+      true: {
+        cursor: 'not-allowed',
+      },
+    },
+  },
+})
+
+export const FormErrors = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '0.4rem',
+
+  span: {
+    color: '#F75A68',
+    fontSize: '0.8rem',
   },
 })

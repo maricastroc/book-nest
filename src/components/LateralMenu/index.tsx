@@ -72,6 +72,9 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
               avatar_url={session.data?.user.avatar_url!}
               name={session.data?.user.name!}
               onClose={() => setOpenReviewForm(false)}
+              onCloseLateralMenu={() => onClose()}
+              bookId={book?.id!}
+              userId={session.data?.user.id}
             />
           )}
           <RatingsContent>

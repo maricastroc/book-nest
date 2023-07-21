@@ -1,6 +1,7 @@
 import { styled } from '../../styles'
 
 export const Container = styled('div', {
+  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
