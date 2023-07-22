@@ -11,6 +11,7 @@ export const Container = styled('div', {
   backgroundColor: '$gray600',
   borderRadius: 8,
   width: '100%',
+  marginBottom: '1.5rem',
 
   p: {
     fontSize: '1.3rem',
