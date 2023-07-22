@@ -29,5 +29,6 @@ export const Container = styled('div', {
 
   '@media (min-width: 480px)': {
     height: '13rem',
+    marginBottom: '1.5rem',
   },
 })
