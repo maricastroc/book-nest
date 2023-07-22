@@ -119,6 +119,7 @@ export const ButtonAccess = styled('button', {
   borderRadius: 8,
   padding: '1.25rem 1.5rem',
   width: '16rem',
+  fontSize: '0.95rem',
 
   svg: {
     fontSize: 32,
@@ -138,11 +139,11 @@ export const ButtonAccess = styled('button', {
   },
 
   '@media (min-width: 350px)': {
-    fontSize: '$lg',
     width: '18rem',
   },
 
   '@media (min-width: 480px)': {
+    fontSize: '1.1rem',
     width: '23.25rem',
   },
 

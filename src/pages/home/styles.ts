@@ -8,7 +8,6 @@ export const Container = styled('div', {
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
-  overflow: 'hidden',
 
   '@media (min-width: 480px)': {
     padding: '0 2rem',
@@ -22,9 +21,14 @@ export const Container = styled('div', {
   },
 
   '@media (min-width: 1024px)': {
-    gap: '5rem',
+    gap: '3rem',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    paddingRight: '3rem',
+  },
+
+  '@media (min-width: 1440px)': {
+    gap: '5rem',
     paddingRight: '5rem',
   },
 })
@@ -38,6 +42,7 @@ export const HomeContainer = styled('div', {
   justifyContent: 'center',
   maxWidth: '35rem',
   marginTop: '2rem',
+  overflowY: 'scroll',
 
   '@media (min-width: 480px)': {
     padding: '0 2rem',
@@ -49,12 +54,16 @@ export const HomeContainer = styled('div', {
     maxWidth: '40rem',
   },
 
+  '@media (min-width: 1024px)': {
+    overflowY: 'scroll',
+    paddingBottom: '1rem',
+  },
+
   '@media (min-width: 1200px)': {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     padding: '0 0 0 2rem',
     maxWidth: '100%',
-    overflowY: 'scroll',
   },
 })
 
@@ -70,12 +79,22 @@ export const HomeContent = styled('div', {
     overflowY: 'scroll',
   },
 
+  '@media (min-width: 1024px)': {
+    overflow: 'scroll',
+    height: '82vh',
+  },
+
   '@media (min-width: 1200px)': {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    gap: '4rem',
+    overflow: 'scroll',
+    gap: '2.5rem',
     height: '82vh',
+  },
+
+  '@media (min-width: 1440px)': {
+    gap: '4rem',
   },
 })
 
@@ -127,14 +146,18 @@ export const LastReadTitle = styled('p', {
 export const RecentCardsContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  marginTop: '2.5rem',
   gap: '1rem',
+  overflow: 'scroll',
+
+  '@media (min-width: 768px)': {
+    paddingRight: '1rem',
+  },
 })
 
 export const RecentCardsContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  gap: '2rem',
+  gap: '1rem',
 })
 
 export const RecentCardsTitle = styled('p', {
@@ -150,7 +173,7 @@ export const PopularBooksCardsContainer = styled('div', {
 
   '@media (min-width: 1200px)': {
     marginTop: 0,
-    width: '25rem',
+    width: '35rem',
     overflowY: 'scroll',
     paddingRight: '1rem',
   },

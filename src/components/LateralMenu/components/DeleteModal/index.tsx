@@ -19,7 +19,7 @@ export function DeleteModal({ onConfirm }: DeleteModalProps) {
       <Overlay className="DialogOverlay" />
       <Content className="DialogContent">
         <CloseButton>
-          <X size={18} alt="Delete Post" />
+          <X size={18} alt="Delete Review" />
         </CloseButton>
         <Title className="DialogTitle">{`Delete this review?`}</Title>
         <Description className="DialogDescription">

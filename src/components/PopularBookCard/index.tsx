@@ -7,6 +7,7 @@ interface PopularBookCardProps {
   author: string
   rating: number
   alreadyRead: boolean
+  onClick: () => void
 }
 
 export function PopularBookCard({
@@ -15,9 +16,10 @@ export function PopularBookCard({
   author,
   rating,
   alreadyRead,
+  ...rest
 }: PopularBookCardProps) {
   return (
-    <Container>
+    <Container {...rest}>
       <BookCover src={cover_url} />
       <BookInfo>
         {alreadyRead && (

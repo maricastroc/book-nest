@@ -58,6 +58,8 @@ export const ProfileContent = styled('div', {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: '2.5rem',
+    maxHeight: '100vh',
+    overflow: 'hidden',
   },
 })
 
@@ -171,6 +173,5 @@ export const UserDetailsContainer = styled('div', {
     borderLeft: '2px solid $gray700',
     width: '45%',
     height: '100vh',
-    overflow: 'scroll',
   },
 })

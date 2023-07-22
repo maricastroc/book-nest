@@ -5,6 +5,8 @@ export const Wrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  width: '100%',
   gap: '0.8rem',
 })
 
@@ -14,7 +16,7 @@ export const Container = styled('div', {
   padding: '2rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
   width: '100%',
   position: 'relative',

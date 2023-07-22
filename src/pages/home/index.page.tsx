@@ -28,6 +28,7 @@ import { EmptyContainer } from '@/components/EmptyContainer'
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/Sidebar'
+import { LateralMenu } from '@/components/LateralMenu'
 
 interface BookProps {
   author: string
@@ -80,6 +81,17 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const session = useSession()
   const [isMobile, setIsMobile] = useState(false)
 
+  const [selectedBook, setSelectedBook] =
+    useState<BookWithRatingAndCategories | null>(null)
+
+  const [openLateralMenu, setOpenLateralMenu] = useState(false)
+
+  function setSelectedBookFromRatingBookId(ratingBookId: string) {
+    const foundBook = books.find((book) => book.id === ratingBookId)
+    console.log(foundBook)
+    setSelectedBook(foundBook || null)
+  }
+
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth <= 768)
@@ -89,10 +101,17 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  function handleCloseLateralMenu() {
+    setOpenLateralMenu(false)
+  }
+
   return (
     <>
       <NextSeo title="Home | Book Wise" />
       <Container>
+        {openLateralMenu && (
+          <LateralMenu book={selectedBook} onClose={handleCloseLateralMenu} />
+        )}
         {isMobile ? <MobileHeader /> : <Sidebar />}
         <HomeContainer>
           <Heading>
@@ -125,7 +144,14 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
                 <RecentCardsContent>
                   {ratings.length > 0 &&
                     ratings.map((rating) => (
-                      <ReviewCard key={rating.id} rating={rating} />
+                      <ReviewCard
+                        key={rating.id}
+                        rating={rating}
+                        onClick={() => {
+                          setSelectedBookFromRatingBookId(rating.book.id)
+                          setOpenLateralMenu(true)
+                        }}
+                      />
                     ))}
                 </RecentCardsContent>
               </RecentCardsContainer>
@@ -148,6 +174,10 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
                       author={book.author}
                       rating={book.rating}
                       alreadyRead={book.alreadyRead}
+                      onClick={() => {
+                        setSelectedBook(book)
+                        setOpenLateralMenu(true)
+                      }}
                     />
                   ))}
               </PopularBooksCardsContent>

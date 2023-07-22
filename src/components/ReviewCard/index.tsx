@@ -19,9 +19,10 @@ import { useRouter } from 'next/router'
 
 interface ReviewCardProps {
   rating: RatingWithUserAndBook
+  onClick: () => void
 }
 
-export function ReviewCard({ rating }: ReviewCardProps) {
+export function ReviewCard({ rating, ...rest }: ReviewCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.created_at)
 
@@ -54,7 +55,7 @@ export function ReviewCard({ rating }: ReviewCardProps) {
         <StarsRating rating={rating.rate} />
       </Header>
       <Separator />
-      <BookContainer>
+      <BookContainer {...rest}>
         <BookCover src={rating.book.cover_url} alt="" />
         <BookDetails>
           <BookInfo>

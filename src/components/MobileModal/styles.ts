@@ -126,3 +126,34 @@ export const Separator = styled('span', {
   backgroundColor: '$gray600',
   margin: '1.5rem 0',
 })
+
+export const LoginContainer = styled('div', {
+  marginTop: '1.5rem',
+  cursor: 'pointer',
+  display: 'flex',
+  justifySelf: 'flex-end',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.8rem',
+})
+
+export const LoginButton = styled('button', {
+  display: 'flex',
+  cursor: 'pointer',
+  border: 'none',
+  backgroundColor: 'transparent',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '$white',
+  gap: '0.8rem',
+
+  svg: {
+    color: '$green100',
+    fontSize: '1.3rem',
+  },
+
+  p: {
+    fontSize: '1rem',
+    color: '$gray100',
+  },
+})

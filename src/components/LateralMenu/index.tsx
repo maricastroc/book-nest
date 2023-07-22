@@ -18,6 +18,8 @@ import { Rating as RatingInfo, User as UserPrisma } from '@prisma/client'
 import { RatingCard } from './components/RatingCard'
 import { useSession } from 'next-auth/react'
 import { ReviewCardForm } from './components/ReviewCardForm'
+import * as Dialog from '@radix-ui/react-dialog'
+import { LoginModal } from '../LoginModal'
 
 interface BookReviewsSidebarProps {
   book: BookWithRatingAndCategories | null
@@ -49,7 +51,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
       <CloseButton onClick={() => onClose()}>
         <X />
       </CloseButton>
-      <ContainerOverlay />
+      <ContainerOverlay onClick={() => onClose()} />
       <LateralMenuContainer>
         <BookCard
           name={book?.name!}
@@ -65,6 +67,14 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
             <p>Ratings</p>
             {session.data?.user && (
               <span onClick={() => setOpenReviewForm(true)}>Review</span>
+            )}
+            {!session.data?.user && (
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <span>Review</span>
+                </Dialog.Trigger>
+                <LoginModal />
+              </Dialog.Root>
             )}
           </RatingsContentTitle>
           {session.data?.user && openReviewForm && (

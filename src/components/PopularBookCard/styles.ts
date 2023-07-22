@@ -1,6 +1,7 @@
 import { styled } from '../../styles'
 
 export const Container = styled('div', {
+  cursor: 'pointer',
   display: 'flex',
   padding: '2rem 1.5rem 1.5rem',
   backgroundColor: '$gray700',
@@ -12,6 +13,11 @@ export const Container = styled('div', {
 
   '@media (min-width: 1200px)': {
     padding: '1.5rem',
+  },
+
+  '&:hover': {
+    backgroundColor: '$gray600',
+    transition: '200ms ease-in-out',
   },
 })
 

@@ -153,3 +153,33 @@ export const AvatarDefault = styled('img', {
   aspectRatio: 'auto 34 / 34',
   height: 34,
 })
+
+export const LoginContainer = styled('div', {
+  cursor: 'pointer',
+  display: 'flex',
+  justifySelf: 'flex-end',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.8rem',
+})
+
+export const LoginButton = styled('button', {
+  display: 'flex',
+  cursor: 'pointer',
+  border: 'none',
+  backgroundColor: 'transparent',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '$white',
+  gap: '0.8rem',
+
+  svg: {
+    color: '$green100',
+    fontSize: '1.3rem',
+  },
+
+  p: {
+    fontSize: '0.9rem',
+    color: '$gray100',
+  },
+})

@@ -10,6 +10,11 @@ export const Container = styled('div', {
   alignItems: 'stretch',
   width: '100%',
   gap: '1rem',
+
+  '&:hover': {
+    backgroundColor: '$gray600',
+    transition: '200ms ease-in-out',
+  },
 })
 
 export const BookCover = styled('img', {

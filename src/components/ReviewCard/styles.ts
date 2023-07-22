@@ -2,6 +2,7 @@ import { styled } from '../../styles'
 import Link from 'next/link'
 
 export const Container = styled('div', {
+  cursor: 'pointer',
   display: 'flex',
   flexDirection: 'column',
   padding: '2rem',
@@ -11,6 +12,11 @@ export const Container = styled('div', {
   justifyContent: 'center',
   width: '100%',
   position: 'relative',
+
+  '&:hover': {
+    backgroundColor: '$gray600',
+    transition: '200ms ease-in-out',
+  },
 })
 
 export const Header = styled('div', {
@@ -89,6 +95,7 @@ export const BookDetails = styled('div', {
 
   '@media (min-width: 980px)': {
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
 })
 
