@@ -56,8 +56,12 @@ export function Sidebar() {
                 <p>Explore</p>
               </Item>
               <Item
-                active={router.pathname === `profile/${session.data?.user.id}`}
-                onClick={() => router.push(`profile/${session.data?.user.id}`)}
+                active={router.pathname.includes('profile')}
+                onClick={() => {
+                  router.pathname.includes('profile')
+                    ? router.push(`../profile/${session.data?.user.id}`)
+                    : router.push(`profile/${session.data?.user.id}`)
+                }}
               >
                 <User />
                 <p>Profile</p>

@@ -81,12 +81,14 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
             {ratings?.map((rating) => (
               <RatingCard
                 key={rating.id}
+                id={rating.id}
                 avatar_url={rating.user.avatar_url}
                 name={rating.user.name}
                 created_at={rating.created_at}
                 rating={rating.rate}
                 description={rating.description}
                 user={rating.user_id}
+                onCloseLateralMenu={() => onClose()}
               />
             ))}
           </RatingsContent>

@@ -47,6 +47,7 @@ export const BookInfo = styled('div', {
   '@media (min-width: 580px)': {
     flexDirection: 'flex-start',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
     height: '100%',
     marginTop: 0,
   },

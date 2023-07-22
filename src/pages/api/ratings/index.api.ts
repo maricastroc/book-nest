@@ -8,43 +8,55 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method !== 'GET') return res.status(405).end()
-
-  const ratings = await prisma.rating.findMany({
-    include: {
-      book: {
-        select: {
-          cover_url: true,
-          name: true,
-          author: true,
+  if (req.method === 'GET') {
+    const ratings = await prisma.rating.findMany({
+      include: {
+        book: {
+          select: {
+            cover_url: true,
+            name: true,
+            author: true,
+          },
         },
+        user: {
+          select: {
+            id: true,
+            avatar_url: true,
+            name: true,
+          },
+        },
+      },
+    })
+
+    const ratingsOutput = ratings.map((rating) => ({
+      id: rating.id,
+      createdAt: rating.created_at,
+      rate: rating.rate,
+      description: rating.description,
+      book: {
+        coverURL: rating.book.cover_url,
+        name: rating.book.name,
+        author: rating.book.author,
       },
       user: {
-        select: {
-          id: true,
-          avatar_url: true,
-          name: true,
-        },
+        id: rating.user.id,
+        avatarURL: rating.user.avatar_url,
+        name: rating.user.name,
       },
-    },
-  })
+    }))
 
-  const ratingsOutput = ratings.map((rating) => ({
-    id: rating.id,
-    createdAt: rating.created_at,
-    rate: rating.rate,
-    description: rating.description,
-    book: {
-      coverURL: rating.book.cover_url,
-      name: rating.book.name,
-      author: rating.book.author,
-    },
-    user: {
-      id: rating.user.id,
-      avatarURL: rating.user.avatar_url,
-      name: rating.user.name,
-    },
-  }))
+    return res.status(200).json(ratingsOutput)
+  } else if (req.method === 'DELETE') {
+    const { id } = req.body
 
-  return res.status(200).json(ratingsOutput)
+    await prisma.rating.delete({
+      where: {
+        id,
+      },
+    })
+
+    return res.status(200).json({ message: 'Review successfully deleted!' })
+  } else {
+    return res.status(405).end()
+  }
 }

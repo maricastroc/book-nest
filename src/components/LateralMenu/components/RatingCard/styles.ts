@@ -5,6 +5,13 @@ export const RatingContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
+})
+
+export const RatingContent = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
   backgroundColor: '$gray700',
   padding: '1.5rem',
   borderRadius: 8,
@@ -68,6 +75,30 @@ export const AvatarDefault = styled('img', {
   width: 37,
   aspectRatio: 'auto 37 / 37',
   height: 37,
+})
+
+export const DeleteAndEdit = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  paddingRight: '1rem',
+  width: '100%',
+  gap: '0.4rem',
+  marginTop: '0.5rem',
+  borderRadius: 8,
+
+  svg: {
+    fontSize: '1.2rem',
+    color: '$gray400',
+
+    '&.edit_icon': {
+      color: '$green100',
+    },
+
+    '&.delete_icon': {
+      color: '#C6616D',
+    },
+  },
 })
 
 export const BookDescription = styled('div', {

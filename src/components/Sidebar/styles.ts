@@ -86,8 +86,6 @@ export const Item = styled('button', {
   variants: {
     active: {
       true: {
-        cursor: 'not-allowed',
-
         p: {
           color: '$gray100',
           fontWeight: 'bold',

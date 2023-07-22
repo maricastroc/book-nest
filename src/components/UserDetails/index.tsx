@@ -41,7 +41,7 @@ export function UserDetails({
         </AvatarContainer>
         <h2>{name}</h2>
         <time title={dateFormatted} dateTime={dateString}>
-          member {dateRelativeToNow}
+          joined {dateRelativeToNow}
         </time>
       </UserInfo>
       <Separator />
