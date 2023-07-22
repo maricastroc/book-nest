@@ -70,10 +70,20 @@ export const BookDetails = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '1rem',
-  marginTop: '1.5rem',
+})
 
-  '@media (min-width: 980px)': {
-    alignItems: 'flex-start',
+export const BookData = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '1rem',
+
+  '@media (min-width: 580px)': {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: '100%',
+    alignItems: 'stretch',
   },
 })
 
@@ -83,6 +93,12 @@ export const BookInfo = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '0.8rem',
+
+  '@media (min-width: 580px)': {
+    justifyContent: 'space-between',
+    minHeight: '100%',
+    alignItems: 'flex-start',
+  },
 })
 
 export const BookInfoText = styled('div', {
@@ -99,6 +115,10 @@ export const BookInfoText = styled('div', {
   p: {
     color: '$gray400',
     fontSize: '$sm',
+  },
+
+  '@media (min-width: 580px)': {
+    alignItems: 'flex-start',
   },
 })
 

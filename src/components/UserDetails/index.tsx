@@ -9,15 +9,15 @@ import {
   UserInfoContainer,
   UserInfoItem,
 } from './styles'
-import { BookOpen } from 'phosphor-react'
+import { BookOpen, BookmarkSimple, Books, UserList } from 'phosphor-react'
 
 interface UserDetailsProps {
   avatar_url: string
   name: string
   created_at: Date
   total_pages: number
-  rated_books: number
-  read_authors: number
+  books_rated: number
+  authors_read: number
   most_read_category: string
 }
 
@@ -26,8 +26,8 @@ export function UserDetails({
   name,
   created_at,
   total_pages,
-  rated_books,
-  read_authors,
+  books_rated,
+  authors_read,
   most_read_category,
 }: UserDetailsProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
@@ -50,25 +50,25 @@ export function UserDetails({
           <BookOpen />
           <ItemText>
             <h2>{total_pages}</h2>
-            <p>Read pages</p>
+            <p>Pages read</p>
           </ItemText>
         </UserInfoItem>
         <UserInfoItem>
-          <BookOpen />
+          <Books />
           <ItemText>
-            <h2>{rated_books}</h2>
+            <h2>{books_rated}</h2>
             <p>Rated books</p>
           </ItemText>
         </UserInfoItem>
         <UserInfoItem>
-          <BookOpen />
+          <UserList />
           <ItemText>
-            <h2>{read_authors}</h2>
-            <p>Read authors</p>
+            <h2>{authors_read}</h2>
+            <p>Authors read</p>
           </ItemText>
         </UserInfoItem>
         <UserInfoItem>
-          <BookOpen />
+          <BookmarkSimple />
           <ItemText>
             <h2>{most_read_category}</h2>
             <p>Most read category</p>

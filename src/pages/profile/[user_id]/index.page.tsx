@@ -7,10 +7,12 @@ import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/Sidebar'
 import {
   BooksContainer,
+  BooksSection,
   Container,
   Heading,
   HeadingTitle,
   ProfileContainer,
+  ProfileContent,
   SearchBar,
   UserDetailsContainer,
 } from './styles'
@@ -95,43 +97,47 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
               <User />
               <h2>Profile</h2>
             </HeadingTitle>
-            <SearchBar>
-              <input
-                type="text"
-                placeholder="Search for author or title"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                spellCheck={false}
-              />
-              <MagnifyingGlass />
-            </SearchBar>
           </Heading>
-          <BooksContainer>
-            {filteredBooks.length > 0 ? (
-              filteredBooks.map((rating) => {
-                return (
-                  <ProfileCard
-                    key={rating.id}
-                    book={rating.book}
-                    rating={rating}
-                  />
-                )
-              })
-            ) : (
-              <EmptyContainer />
-            )}
-          </BooksContainer>
-          <UserDetailsContainer>
-            <UserDetails
-              avatar_url={user?.avatar_url!}
-              created_at={user?.created_at!}
-              name={user?.name!}
-              total_pages={infos?.pages!}
-              rated_books={infos?.booksCount!}
-              read_authors={infos?.authorsCount!}
-              most_read_category={infos?.bestGenre.name}
-            />
-          </UserDetailsContainer>
+          <ProfileContent>
+            <BooksSection>
+              <SearchBar>
+                <input
+                  type="text"
+                  placeholder="Search for author or title"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  spellCheck={false}
+                />
+                <MagnifyingGlass />
+              </SearchBar>
+              <BooksContainer>
+                {filteredBooks.length > 0 ? (
+                  filteredBooks.map((rating) => {
+                    return (
+                      <ProfileCard
+                        key={rating.id}
+                        book={rating.book}
+                        rating={rating}
+                      />
+                    )
+                  })
+                ) : (
+                  <EmptyContainer />
+                )}
+              </BooksContainer>
+            </BooksSection>
+            <UserDetailsContainer>
+              <UserDetails
+                avatar_url={user?.avatar_url!}
+                created_at={user?.created_at!}
+                name={user?.name!}
+                total_pages={infos?.pages!}
+                books_rated={infos?.booksCount!}
+                authors_read={infos?.authorsCount!}
+                most_read_category={infos?.bestGenre?.name ?? '-'}
+              />
+            </UserDetailsContainer>
+          </ProfileContent>
         </ProfileContainer>
       </Container>
     </>

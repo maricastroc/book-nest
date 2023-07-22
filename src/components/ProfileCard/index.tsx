@@ -10,6 +10,7 @@ import {
   Heading,
   Wrapper,
   BookInfoText,
+  BookData,
 } from './styles'
 import { Book } from '@prisma/client'
 import { RatingWithUserAndBook } from '@/pages/home/index.page'
@@ -39,15 +40,17 @@ export function ProfileCard({ book, rating }: ProfileCardProps) {
           </ReadNotice>
         )}
         <BookContainer>
-          <BookCover src={book.cover_url} alt="" />
           <BookDetails>
-            <BookInfo>
-              <BookInfoText>
-                <h2>{book.name}</h2>
-                <p>{book.author}</p>
-              </BookInfoText>
-              <StarsRating rating={rating.rate} />
-            </BookInfo>
+            <BookData>
+              <BookCover src={book.cover_url} alt="" />
+              <BookInfo>
+                <BookInfoText>
+                  <h2>{book.name}</h2>
+                  <p>{book.author}</p>
+                </BookInfoText>
+                <StarsRating rating={rating.rate} />
+              </BookInfo>
+            </BookData>
             <Separator />
             <BookDescription>
               <p>{rating.description}</p>

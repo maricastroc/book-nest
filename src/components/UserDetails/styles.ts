@@ -1,6 +1,7 @@
 import { styled } from '../../styles'
 
 export const Container = styled('div', {
+  marginTop: '3rem',
   display: 'flex',
   backgroundColor: 'gray800',
   padding: '1.5rem',
@@ -8,30 +9,35 @@ export const Container = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+
+  '@media (min-width: 1200px)': {
+    marginTop: '1.5rem',
+  },
 })
 
 export const UserInfo = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  gap: '0.3rem',
+  alignItems: 'center',
+  justifyContent: 'center',
 
   h2: {
-    fontSize: '1.1rem',
+    fontSize: '1.25rem',
     color: '$white',
   },
 
-  p: {
+  time: {
     fontSize: '0.85rem',
     color: '$gray400',
   },
 })
 
 export const Separator = styled('span', {
-  width: 4,
-  background: '$gradient-vertical',
+  width: 30,
+  background: '$gradient-horizontal',
   borderRadius: 8,
-  height: 2,
-  margin: '3rem 0',
+  height: 4,
+  margin: '2.8rem 0',
 })
 
 export const UserInfoContainer = styled('div', {
@@ -40,6 +46,7 @@ export const UserInfoContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
+  gap: '2.5rem',
 })
 
 export const UserInfoItem = styled('div', {
@@ -48,13 +55,13 @@ export const UserInfoItem = styled('div', {
   gap: '1rem',
 
   svg: {
-    fontSize: '1.5rem',
+    fontSize: '2rem',
     color: '$green100',
   },
 
   '@media (min-width: 580px)': {
     svg: {
-      fontSize: '1.7rem',
+      fontSize: '2.1rem',
     },
   },
 })
@@ -62,16 +69,16 @@ export const UserInfoItem = styled('div', {
 export const ItemText = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  gap: '0.2rem',
   alignItems: 'flex-start',
+  gap: '0.1rem',
 
   p: {
-    fontSize: '$sm',
+    fontSize: '0.875rem',
     color: '$gray300',
   },
 
   h2: {
-    fontSize: '0.95rem',
+    fontSize: '1rem',
     color: '$white',
   },
 
@@ -87,8 +94,8 @@ export const AvatarContainer = styled('a', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 42,
-  height: 42,
+  width: 70,
+  height: 70,
   borderRadius: '50%',
   background: '$gradient-vertical',
   marginBottom: '1.5rem',
@@ -98,7 +105,7 @@ export const AvatarDefault = styled('img', {
   overflow: 'hidden',
   objectFit: 'cover',
   borderRadius: '50%',
-  width: 40,
-  aspectRatio: 'auto 40 / 40',
-  height: 40,
+  width: 66,
+  aspectRatio: 'auto 68 / 68',
+  height: 66,
 })
