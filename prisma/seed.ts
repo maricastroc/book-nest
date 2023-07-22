@@ -6,13 +6,7 @@ import { users } from './constants/users'
 
 const prisma = new PrismaClient()
 
-async function main() {
-  await prisma.rating.deleteMany()
-  await prisma.user.deleteMany()
-  await prisma.categoriesOnBooks.deleteMany()
-  await prisma.category.deleteMany()
-  await prisma.book.deleteMany()
-
+async function seedUsers() {
   const usersSeed = users.map((user) => {
     return prisma.user.create({
       data: {
@@ -24,6 +18,10 @@ async function main() {
     })
   })
 
+  await Promise.all(usersSeed)
+}
+
+async function seedCategories() {
   const categoriesSeed = categories.map((category) => {
     return prisma.category.create({
       data: {
@@ -33,32 +31,46 @@ async function main() {
     })
   })
 
-  const booksSeed = books.map((book) => {
-    return prisma.book.create({
-      data: {
-        id: book.id,
-        name: book.name,
-        author: book.author,
-        summary: book.summary,
-        cover_url: book.cover_url,
-        total_pages: book.total_pages,
-        categories: {
-          create: [
-            ...book.categories.map((category) => {
-              return {
-                category: {
-                  connect: {
-                    id: category.id,
-                  },
-                },
-              }
-            }),
-          ],
-        },
-      },
-    })
-  })
+  await Promise.all(categoriesSeed)
+}
 
+async function seedBooks() {
+  const chunkSize = 50
+  const totalChunks = Math.ceil(books.length / chunkSize)
+
+  for (let i = 0; i < totalChunks; i++) {
+    const chunk = books.slice(i * chunkSize, (i + 1) * chunkSize)
+    const booksSeed = chunk.map((book) => {
+      return prisma.book.create({
+        data: {
+          id: book.id,
+          name: book.name,
+          author: book.author,
+          summary: book.summary,
+          cover_url: book.cover_url,
+          total_pages: book.total_pages,
+          categories: {
+            create: [
+              ...book.categories.map((category) => {
+                return {
+                  category: {
+                    connect: {
+                      id: category.id,
+                    },
+                  },
+                }
+              }),
+            ],
+          },
+        },
+      })
+    })
+
+    await Promise.all(booksSeed)
+  }
+}
+
+async function seedRatings() {
   const ratingsSeed = ratings.map((rating) => {
     return prisma.rating.create({
       data: {
@@ -75,12 +87,20 @@ async function main() {
     })
   })
 
-  await prisma.$transaction([
-    ...categoriesSeed,
-    ...booksSeed,
-    ...usersSeed,
-    ...ratingsSeed,
-  ])
+  await Promise.all(ratingsSeed)
+}
+
+async function main() {
+  await prisma.rating.deleteMany()
+  await prisma.user.deleteMany()
+  await prisma.categoriesOnBooks.deleteMany()
+  await prisma.category.deleteMany()
+  await prisma.book.deleteMany()
+
+  await seedUsers()
+  await seedCategories()
+  await seedBooks()
+  await seedRatings()
 }
 
 main()
