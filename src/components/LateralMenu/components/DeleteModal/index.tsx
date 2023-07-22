@@ -9,7 +9,11 @@ import {
 } from './styles'
 import { X } from 'phosphor-react'
 
-export function DeleteModal() {
+interface DeleteModalProps {
+  onConfirm: () => void
+}
+
+export function DeleteModal({ onConfirm }: DeleteModalProps) {
   return (
     <Dialog.Portal>
       <Overlay className="DialogOverlay" />
@@ -22,7 +26,9 @@ export function DeleteModal() {
           Are you sure you want to delete this review? This action cannot be
           reversed.
         </Description>
-        <ConfirmButton>Confirm & Delete</ConfirmButton>
+        <ConfirmButton onClick={() => onConfirm()}>
+          Confirm & Delete
+        </ConfirmButton>
       </Content>
     </Dialog.Portal>
   )

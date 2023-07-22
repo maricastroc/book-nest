@@ -1,14 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import {
+  ActionButton,
   AvatarContainer,
   AvatarDefault,
   BookDescription,
+  ButtonsContainer,
+  CharacterCounter,
   DeleteAndEdit,
+  FormErrors,
   Header,
   NameAndDate,
   RatingContainer,
   RatingContent,
+  ReviewForm,
+  ReviewFormContainer,
   UserData,
 } from './styles'
 import { StarsRating } from '@/components/StarsRating'
@@ -18,6 +24,11 @@ import { DeleteModal } from '../DeleteModal'
 import * as Dialog from '@radix-ui/react-dialog'
 import { toast } from 'react-toastify'
 import { api } from '@/lib/axios'
+import { useState } from 'react'
+
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 interface RatingCardProps {
   id: string
@@ -30,6 +41,14 @@ interface RatingCardProps {
   onCloseLateralMenu: () => void
 }
 
+const editReviewCardFormSchema = z.object({
+  description: z
+    .string()
+    .min(3, { message: 'Please, write your review before submit.' }),
+})
+
+type EditReviewCardFormData = z.infer<typeof editReviewCardFormSchema>
+
 export function RatingCard({
   id,
   avatar_url,
@@ -40,8 +59,24 @@ export function RatingCard({
   user,
   onCloseLateralMenu,
 }: RatingCardProps) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { isSubmitting, errors },
+  } = useForm<EditReviewCardFormData>({
+    resolver: zodResolver(editReviewCardFormSchema),
+    defaultValues: {
+      description: description || '',
+    },
+  })
+
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(created_at!)
+
+  const [openEditReviewBox, setOpenEditReviewBox] = useState(false)
+
+  const characterCount = watch('description')?.split('').length || 0
 
   const session = useSession()
 
@@ -56,6 +91,21 @@ export function RatingCard({
     }
     onCloseLateralMenu()
     toast.success('Review successfully deleted!')
+  }
+
+  async function handleEditReview(data: EditReviewCardFormData) {
+    const description = String(data.description)
+    try {
+      const payload = {
+        id,
+        description,
+      }
+      await api.put('/ratings', payload)
+    } catch (err) {
+      console.log(err)
+    }
+    onCloseLateralMenu()
+    toast.success('Review successfully edited!')
   }
 
   return (
@@ -77,23 +127,59 @@ export function RatingCard({
           </UserData>
           <StarsRating rating={rating!} />
         </Header>
-        <BookDescription>
-          <p>{description}</p>
-        </BookDescription>
+        {openEditReviewBox ? (
+          <ReviewFormContainer onSubmit={handleSubmit(handleEditReview)}>
+            <ReviewForm
+              placeholder="Write your review here"
+              maxLength={450}
+              spellCheck={false}
+              {...register('description')}
+            />
+            {errors.description && (
+              <FormErrors>
+                <span>{errors.description.message}</span>
+              </FormErrors>
+            )}
+            <CharacterCounter>
+              <span>{characterCount}</span>/450
+            </CharacterCounter>
+            <ButtonsContainer>
+              <ActionButton
+                className="edit_btn"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Edit
+              </ActionButton>
+              <ActionButton
+                className="cancel_btn"
+                onClick={() => setOpenEditReviewBox(false)}
+                type="button"
+                disabled={isSubmitting}
+              >
+                Cancel
+              </ActionButton>
+            </ButtonsContainer>
+          </ReviewFormContainer>
+        ) : (
+          <BookDescription>
+            <p>{description}</p>
+          </BookDescription>
+        )}
       </RatingContent>
       {user === session.data?.user.id && (
         <>
           <DeleteAndEdit>
             <Dialog.Root>
               <Dialog.Trigger asChild>
-                <Trash
-                  className="delete_icon"
-                  onClick={() => handleDeleteReview(id)}
-                />
+                <Trash className="delete_icon" />
               </Dialog.Trigger>
-              <DeleteModal />
+              <DeleteModal onConfirm={() => handleDeleteReview(id)} />
             </Dialog.Root>
-            <Pencil className="edit_icon" />
+            <Pencil
+              className="edit_icon"
+              onClick={() => setOpenEditReviewBox(!openEditReviewBox)}
+            />
           </DeleteAndEdit>
         </>
       )}

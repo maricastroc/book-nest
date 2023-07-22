@@ -84,6 +84,10 @@ export const CharacterCounter = styled('span', {
   '@media (min-width: 580px)': {
     right: '2vw',
   },
+
+  '@media (min-width: 1024px)': {
+    right: '2%',
+  },
 })
 
 export const ButtonsContainer = styled('div', {
