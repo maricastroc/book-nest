@@ -9,6 +9,7 @@ export const Container = styled('div', {
   gap: '1.25rem',
   width: '100%',
   position: 'relative',
+  marginBottom: '1.5rem',
 })
 
 export const BookInfo = styled('div', {
