@@ -1,38 +1,73 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Book Wise
+![book-wise](https://github.com/maricastroc/book-wise/assets/121824373/57a7d61b-dd04-4727-9e77-e5e7197d276c)
 
-## Getting Started
 
-First, run the development server:
+## 📚 Project Description
+
+This is my first personal full-stack project, consisting of an application that simulates a small-scale social network. 
+It allows users to register directly within the application or access it as a guest. The application includes a page for creating,
+reading, updating, and deleting posts and comments, as well as a profile editing section for logged-in users.
+
+
+
+## 📌 What did I learn?
+
+The most challenging part of this project was creating routes and endpoints for interacting with the database. Since the registered data had many relationships among themselves, and there were some data that needed to be calculated in the request body, it required a well-thought-out logic to obtain them at times.
+
+I leveraged Next.js's server-side rendering feature, using `getServerSideProps`, to render database information on the server-side. Additionally, I used a seed.ts file to populate the database. NextAuth.js library was employed to implement social user authentication.
+
+## 🔍 Links
+[Preview Site](https://book-wise-puce.vercel.app/)
+
+## 💻 My Process
+### Built with:
+
+- [React](https://reactjs.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Next.Js](https://nextjs.org/)
+- [Prisma](https://www.prisma.io/)
+- [Next Auth](https://next-auth.js.org/)
+- [Stitches](https://stitches.dev/)
+- [axios](https://axios-http.com/docs/intro)
+- [date-fns](https://date-fns.org/)
+- [font-awesome](https://fontawesome.com/)
+- [nookies](https://npm.io/package/nookies)
+- [zod](https://zod.dev/)
+- [react-hook-form](https://react-hook-form.com/)
+- [phosphor-react](https://phosphoricons.com/)
+- [radix-ui](https://www.radix-ui.com/)
+- [react-simple-star-rating](https://www.npmjs.com/package/react-simple-star-rating)
+- [react-toastify](https://fkhadra.github.io/react-toastify/introduction)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+<br/>
+
+## ℹ️ How to run the application?
+
+> Clone the repository:
+
+```bash
+git clone https://github.com/maricastroc/blogger
+```
+
+> Install the dependencies:
+
+```bash
+npm install
+```
+
+> Switch to the commit that contains the local SQLite server:
+
+```bash
+git checkout f7b5aa42e70e25077697366192171bcec89dc3ab
+```
+
+> Rename the .env.example file to .env and add the necessary information to it.
+
+> Start the service:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> ⏩ Access [http://localhost:3000](http://localhost:3000) to view the web application.
