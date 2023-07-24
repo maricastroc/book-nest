@@ -4,9 +4,7 @@
 
 ## 📚 Project Description
 
-This is my first personal full-stack project, consisting of an application that simulates a small-scale social network. 
-It allows users to register directly within the application or access it as a guest. The application includes a page for creating,
-reading, updating, and deleting posts and comments, as well as a profile editing section for logged-in users.
+The application consists of a book rating platform, where the reader can see recommendations from other readers and also make their own ratings of the books they have already read. Additionally, users can search for books by categories and check data about their reading history, such as the total number of pages and authors they have read. The app also features social authentication through a Google or GitHub account.
 
 
 
