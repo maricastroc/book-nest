@@ -22,6 +22,7 @@ import { Category } from '@prisma/client'
 import { ExploreCard } from '@/components/ExploreCard'
 import { api } from '@/lib/axios'
 import { LateralMenu } from '@/components/LateralMenu'
+import { NextSeo } from 'next-seo'
 
 export interface ExploreProps {
   categories: Category[]
@@ -77,71 +78,74 @@ export default function Explore({ categories, books }: ExploreProps) {
   }
 
   return (
-    <Container>
-      {openLateralMenu && (
-        <LateralMenu book={selectedBook} onClose={handleCloseLateralMenu} />
-      )}
-      {isMobile ? <MobileHeader /> : <Sidebar />}
-      <ExploreContainer>
-        <Heading>
-          <HeadingTitle>
-            <Binoculars />
-            <h2>Explore</h2>
-          </HeadingTitle>
-          <SearchBar>
-            <input
-              type="text"
-              placeholder="Search for author or title"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              spellCheck={false}
-            />
-            <MagnifyingGlass />
-          </SearchBar>
-        </Heading>
-        <ExploreContent>
-          <Categories>
-            <ButtonFilter
-              selected={!categorySelected}
-              onClick={() => selectCategory(null)}
-            >
-              All
-            </ButtonFilter>
-            {categories.length > 0 &&
-              categories.map((category) => {
-                return (
-                  <ButtonFilter
-                    selected={categorySelected === category.id}
-                    key={category.id}
-                    onClick={() => selectCategory(category.id)}
-                  >
-                    {category.name}
-                  </ButtonFilter>
-                )
-              })}
-          </Categories>
-          <BooksContainer>
-            {filteredBooks.length > 0 &&
-              filteredBooks.map((book) => {
-                return (
-                  <ExploreCard
-                    key={book.id}
-                    cover_url={book.cover_url}
-                    author={book.author}
-                    name={book.name}
-                    rating={book.rating}
-                    alreadyRead={book.alreadyRead}
-                    onClick={() => {
-                      setSelectedBook(book)
-                      setOpenLateralMenu(true)
-                    }}
-                  />
-                )
-              })}
-          </BooksContainer>
-        </ExploreContent>
-      </ExploreContainer>
-    </Container>
+    <>
+      <NextSeo title="Explore | Book Wise" />
+      <Container>
+        {openLateralMenu && (
+          <LateralMenu book={selectedBook} onClose={handleCloseLateralMenu} />
+        )}
+        {isMobile ? <MobileHeader /> : <Sidebar />}
+        <ExploreContainer>
+          <Heading>
+            <HeadingTitle>
+              <Binoculars />
+              <h2>Explore</h2>
+            </HeadingTitle>
+            <SearchBar>
+              <input
+                type="text"
+                placeholder="Search for author or title"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                spellCheck={false}
+              />
+              <MagnifyingGlass />
+            </SearchBar>
+          </Heading>
+          <ExploreContent>
+            <Categories>
+              <ButtonFilter
+                selected={!categorySelected}
+                onClick={() => selectCategory(null)}
+              >
+                All
+              </ButtonFilter>
+              {categories.length > 0 &&
+                categories.map((category) => {
+                  return (
+                    <ButtonFilter
+                      selected={categorySelected === category.id}
+                      key={category.id}
+                      onClick={() => selectCategory(category.id)}
+                    >
+                      {category.name}
+                    </ButtonFilter>
+                  )
+                })}
+            </Categories>
+            <BooksContainer>
+              {filteredBooks.length > 0 &&
+                filteredBooks.map((book) => {
+                  return (
+                    <ExploreCard
+                      key={book.id}
+                      cover_url={book.cover_url}
+                      author={book.author}
+                      name={book.name}
+                      rating={book.rating}
+                      alreadyRead={book.alreadyRead}
+                      onClick={() => {
+                        setSelectedBook(book)
+                        setOpenLateralMenu(true)
+                      }}
+                    />
+                  )
+                })}
+            </BooksContainer>
+          </ExploreContent>
+        </ExploreContainer>
+      </Container>
+    </>
   )
 }
 
