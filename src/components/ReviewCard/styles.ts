@@ -70,11 +70,14 @@ export const BookContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  width: '100%',
 
   '@media (min-width: 980px)': {
     flexDirection: 'row',
     gap: '1.5rem',
-    alignItems: 'stretch',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '100%',
   },
 })
 

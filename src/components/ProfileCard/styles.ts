@@ -52,11 +52,17 @@ export const BookContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  width: '100%',
+
+  '@media (min-width: 580px)': {
+    alignItems: 'flex-start',
+    width: 'auto',
+    justifyContent: 'flex-start',
+  },
 
   '@media (min-width: 980px)': {
     flexDirection: 'row',
     gap: '1.5rem',
-    alignItems: 'stretch',
   },
 })
 
@@ -69,7 +75,7 @@ export const BookCover = styled('img', {
 export const BookDetails = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
   gap: '1rem',
 })
@@ -79,6 +85,7 @@ export const BookData = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  textAlign: 'center',
   gap: '1rem',
 
   '@media (min-width: 580px)': {
@@ -86,6 +93,7 @@ export const BookData = styled('div', {
     justifyContent: 'flex-start',
     width: '100%',
     alignItems: 'stretch',
+    textAlign: 'left',
   },
 })
 
@@ -128,6 +136,9 @@ export const BookDescription = styled('div', {
   maxHeight: '6.5rem',
   position: 'relative',
   overflow: 'scroll',
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
 
   p: {
     color: '$gray300',
@@ -143,10 +154,6 @@ export const Separator = styled('span', {
   height: 0.5,
   backgroundColor: '$gray400',
   opacity: 0.4,
-
-  '@media (min-width: 980px)': {
-    display: 'none',
-  },
 })
 
 export const ImageWrapper = styled(Link, {

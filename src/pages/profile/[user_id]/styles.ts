@@ -59,7 +59,7 @@ export const ProfileContent = styled('div', {
     alignItems: 'flex-start',
     gap: '2.5rem',
     maxHeight: '100vh',
-    overflow: 'hidden',
+    overflow: 'scroll',
   },
 })
 
@@ -159,6 +159,7 @@ export const BooksContainer = styled('div', {
   },
 
   '@media (min-width: 1200px)': {
+    justifyContent: 'flex-start',
     overflow: 'scroll',
     height: '100vh',
   },
@@ -171,7 +172,8 @@ export const UserDetailsContainer = styled('div', {
 
   '@media (min-width: 1200px)': {
     borderLeft: '2px solid $gray700',
-    width: '45%',
+    width: '50%',
     height: '100vh',
+    overflow: 'scroll',
   },
 })
