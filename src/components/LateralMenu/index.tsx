@@ -98,6 +98,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
                 rating={rating.rate}
                 description={rating.description}
                 user={rating.user_id}
+                userId={rating.user.id}
                 onCloseLateralMenu={() => onClose()}
               />
             ))}

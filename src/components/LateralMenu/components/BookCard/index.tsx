@@ -37,7 +37,7 @@ export function BookCard({
   total_pages,
   ratings_number,
 }: BookCardProps) {
-  const categoryNames = categories.map((category) => category.name)
+  const categoryNames = categories?.map((category) => category?.name)
 
   return (
     <BookContainer>
@@ -61,10 +61,12 @@ export function BookCard({
       <Footer>
         <FooterItem>
           <BookmarkSimple />
-          <ItemText>
-            <p>Category</p>
-            <h2>{categoryNames.join(', ')}</h2>
-          </ItemText>
+          {categories && (
+            <ItemText>
+              <p>Category</p>
+              <h2>{categoryNames.join(', ')}</h2>
+            </ItemText>
+          )}
         </FooterItem>
         <FooterItem>
           <BookOpen />

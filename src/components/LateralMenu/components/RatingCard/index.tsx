@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import {
@@ -29,6 +30,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
 
 interface RatingCardProps {
   id: string
@@ -38,6 +40,7 @@ interface RatingCardProps {
   description: string | null
   rating: number | null
   user: string | null
+  userId: string | null
   onCloseLateralMenu: () => void
 }
 
@@ -57,6 +60,7 @@ export function RatingCard({
   created_at,
   description,
   user,
+  userId,
   onCloseLateralMenu,
 }: RatingCardProps) {
   const {
@@ -70,6 +74,8 @@ export function RatingCard({
       description: description || '',
     },
   })
+
+  const router = useRouter()
 
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(created_at!)
@@ -115,7 +121,11 @@ export function RatingCard({
       >
         <Header>
           <UserData>
-            <AvatarContainer>
+            <AvatarContainer
+              onClick={() => {
+                router.push(`/profile/${userId}`)
+              }}
+            >
               <AvatarDefault alt="" src={avatar_url!} />
             </AvatarContainer>
             <NameAndDate>

@@ -88,8 +88,11 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
 
   function setSelectedBookFromRatingBookId(ratingBookId: string) {
     const foundBook = books.find((book) => book.id === ratingBookId)
-    console.log(foundBook)
-    setSelectedBook(foundBook || null)
+    if (!foundBook) {
+      return
+    }
+    setSelectedBook(foundBook)
+    setOpenLateralMenu(true)
   }
 
   useEffect(() => {
@@ -149,7 +152,6 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
                         rating={rating}
                         onClick={() => {
                           setSelectedBookFromRatingBookId(rating.book.id)
-                          setOpenLateralMenu(true)
                         }}
                       />
                     ))}
