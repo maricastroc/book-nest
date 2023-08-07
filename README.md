@@ -45,7 +45,7 @@ I leveraged Next.js's server-side rendering feature, using `getServerSideProps`,
 > Clone the repository:
 
 ```bash
-git clone https://github.com/maricastroc/blogger
+git clone https://github.com/maricastroc/book-wise
 ```
 
 > Install the dependencies:
