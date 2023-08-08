@@ -12,7 +12,7 @@ The application consists of a book rating platform, where the reader can see rec
 
 The most challenging part of this project was creating routes and endpoints for interacting with the database. Since the registered data had many relationships among themselves, and there were some data that needed to be calculated in the request body, it required a well-thought-out logic to obtain them at times.
 
-I leveraged Next.js's server-side rendering feature, using `getServerSideProps`, to render database information on the server-side. Additionally, I used a seed.ts file to populate the database. NextAuth.js library was employed to implement social user authentication.
+I leveraged Next.js's server-side rendering feature, using `getServerSideProps`, to render database information on the server-side. NextAuth.js library was employed to implement social user authentication.
 
 ## 🔍 Links
 [Preview Site](https://book-wise-puce.vercel.app/)
