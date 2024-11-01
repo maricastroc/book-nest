@@ -38,7 +38,7 @@ interface ProfileProps {
     bestGenre: Category
   }
   user: UserPrisma & {
-    ratings: (RatingProps & {
+    allRatings: (RatingProps & {
       book: Book & {
         categories: (CategoriesOnBooks & {
           category: Category
@@ -46,7 +46,7 @@ interface ProfileProps {
       }
     })[]
   }
-  ratings: (Rating & {
+  allRatings: (Rating & {
     alreadyRead: boolean
     user: UserPrisma
     book: Book & {
@@ -57,8 +57,10 @@ interface ProfileProps {
   })[]
 }
 
-export default function Profile({ user, ratings, infos }: ProfileProps) {
+export default function Profile({ user, allRatings, infos }: ProfileProps) {
   const [isMobile, setIsMobile] = useState(false)
+
+  const [ratings, setRatings] = useState(allRatings)
 
   const [search, setSearch] = useState('')
 
@@ -71,16 +73,18 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const filteredBooks = ratings?.filter((rating) => {
-    return (
-      rating.book.name
-        .toLowerCase()
-        .includes(search.toLowerCase().replace(/( )+/g, ' ')) ||
-      rating.book.author
-        .toLowerCase()
-        .includes(search.toLowerCase().replace(/( )+/g, ' '))
-    )
-  })
+  useEffect(() => {
+    if (search) {
+      const filteredRatings = allRatings.filter(
+        (rating) =>
+          rating.book.name.toLowerCase().includes(search.toLowerCase()) ||
+          rating.book.author.toLowerCase().includes(search.toLowerCase()),
+      )
+      setRatings(filteredRatings)
+    } else {
+      setRatings(allRatings)
+    }
+  }, [search, allRatings])
 
   return (
     <>
@@ -111,8 +115,8 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
                 )}
               </SearchBar>
               <UserRatings>
-                {filteredBooks.length > 0 ? (
-                  filteredBooks.map((rating) => {
+                {ratings?.length > 0 ? (
+                  ratings.map((rating: RatingProps) => {
                     return (
                       <ProfileCard
                         key={rating.id}
@@ -147,29 +151,27 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  query,
+}) => {
   const userId = String(params?.userId)
+  const search = query.search?.toString().toLowerCase() || ''
 
   try {
     const user = await prisma.user.findFirstOrThrow({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
       include: {
         ratings: {
-          orderBy: {
-            createdAt: 'desc',
+          where: {
+            OR: [
+              { book: { name: { contains: search, mode: 'insensitive' } } },
+              { book: { author: { contains: search, mode: 'insensitive' } } },
+            ],
           },
+          orderBy: { createdAt: 'desc' },
           include: {
-            book: {
-              include: {
-                categories: {
-                  include: {
-                    category: true,
-                  },
-                },
-              },
-            },
+            book: { include: { categories: { include: { category: true } } } },
           },
         },
       },
@@ -226,7 +228,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
     return {
       props: {
-        ratings: JSON.parse(JSON.stringify(user.ratings)),
+        allRatings: JSON.parse(JSON.stringify(user.ratings)),
         user: JSON.parse(JSON.stringify(user)),
         infos,
       },

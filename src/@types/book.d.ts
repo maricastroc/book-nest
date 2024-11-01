@@ -1,6 +1,7 @@
 import { RatingProps } from './rating'
 import { UserProps } from './user'
 import { CategoryProps } from './category'
+import { CategoriesOnBooks } from '@prisma/client'
 
 export interface BookProps {
   id: string
@@ -14,8 +15,8 @@ export interface BookProps {
   userId?: string | null
   user?: UserProps | null | undefined
 
-  categories?: CategoryProps[]
-  rate: number
+  categories?: CategoryProps[] | CategoriesOnBooks[]
+  rate?: number
   alreadyRead?: boolean
   ratings?: RatingProps[]
 }

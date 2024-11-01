@@ -127,10 +127,10 @@ export default function Explore({ categories, books }: ExploreProps) {
                   return (
                     <ExploreCard
                       key={book.id}
-                      cover_url={book.coverUrl}
+                      coverUrl={book.coverUrl}
                       author={book.author}
                       name={book.name}
-                      rating={book.rate}
+                      rating={book.rate ?? 0}
                       alreadyRead={book.alreadyRead ?? false}
                       onClick={() => {
                         setSelectedBook(book)
@@ -202,7 +202,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     return {
       ...book,
-      rating: avgRate,
+      rate: avgRate,
       alreadyRead: userBooksIds.includes(book.id),
     }
   })

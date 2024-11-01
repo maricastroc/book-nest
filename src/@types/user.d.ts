@@ -8,8 +8,7 @@ export interface UserProps {
   name: string
   avatarUrl?: string | null | undefined
   createdAt: Date
-  emailVerified?: Date
-  password?: string
+  password?: string | null
 
   accounts?: AccountProps[] | null | undefined
   sessions?: SessionProps[] | null | undefined

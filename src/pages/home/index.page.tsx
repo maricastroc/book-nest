@@ -49,6 +49,7 @@ interface HomeProps {
 
 export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const session = useSession()
+
   const [isMobile, setIsMobile] = useState(false)
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
@@ -63,7 +64,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
     setSelectedBook(foundBook)
     setOpenLateralMenu(true)
   }
-  console.log(session)
+
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth <= 768)

@@ -42,7 +42,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
         try {
           const response = await api.get(`/books/${book.id}`)
           if (response.data) {
-            setRatings(response.data)
+            setRatings(response.data.book.ratings)
           }
         } catch (err) {
           console.error(err)
@@ -65,7 +65,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
             name={book.name}
             author={book.author}
             coverUrl={book.coverUrl}
-            rating={book.rate}
+            rating={book.rate ?? 0}
             ratingsNumber={book?.ratings?.length ?? 0}
             totalPages={book.totalPages}
             categories={book.categories as CategoryProps[]}

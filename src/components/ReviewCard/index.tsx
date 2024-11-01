@@ -29,7 +29,7 @@ export function ReviewCard({ rating, ...rest }: ReviewCardProps) {
   const avatarUrl = rating.user.avatarUrl || 'https://github/octocat.png'
 
   const router = useRouter()
-  console.log(rating.user.id)
+
   return (
     <Container>
       {rating?.book.alreadyRead && (

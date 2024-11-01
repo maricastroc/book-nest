@@ -21,7 +21,7 @@ export function PopularBookCard({ book, onOpenDetails }: PopularBookCardProps) {
           <h2>{book.name}</h2>
           <p>{book.author}</p>
         </BookData>
-        <StarsRating rating={book.rate} />
+        <StarsRating rating={book.rate ?? 0} />
       </BookInfo>
     </Container>
   )

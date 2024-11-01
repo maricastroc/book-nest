@@ -12,13 +12,13 @@ import {
   BookInfoText,
   BookData,
 } from './styles'
-import { Book } from '@prisma/client'
 import { StarsRating } from '../StarsRating'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { RatingProps } from '@/@types/rating'
+import { BookProps } from '@/@types/book'
 
 interface ProfileCardProps {
-  book: Book
+  book: BookProps
   rating: RatingProps
 }
 
@@ -42,7 +42,7 @@ export function ProfileCard({ book, rating }: ProfileCardProps) {
         <BookContainer>
           <BookDetails>
             <BookData>
-              <BookCover src={book.cover_url} alt="" />
+              <BookCover src={book.coverUrl} alt="" />
               <BookInfo>
                 <BookInfoText>
                   <h2>{book.name}</h2>
