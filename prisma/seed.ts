@@ -12,7 +12,7 @@ async function seedUsers() {
       data: {
         id: user.id,
         name: user.name,
-        avatar_url: user.avatar_url,
+        avatarUrl: user.avatarUrl,
         email: user.email,
       },
     })
@@ -47,8 +47,8 @@ async function seedBooks() {
           name: book.name,
           author: book.author,
           summary: book.summary,
-          cover_url: book.cover_url,
-          total_pages: book.total_pages,
+          coverUrl: book.coverUrl,
+          totalPages: book.totalPages,
           categories: {
             create: [
               ...book.categories.map((category) => {
@@ -78,10 +78,10 @@ async function seedRatings() {
         rate: rating.rate,
         description: rating.description,
         user: {
-          connect: { id: rating.user_id },
+          connect: { id: rating.userId },
         },
         book: {
-          connect: { id: rating.book_id },
+          connect: { id: rating.bookId },
         },
       },
     })

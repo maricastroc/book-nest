@@ -1,7 +1,7 @@
 import { Binoculars, MagnifyingGlass } from 'phosphor-react'
 import {
   Categories,
-  ButtonFilter,
+  CategoryBtn,
   Container,
   ExploreContainer,
   Heading,
@@ -17,30 +17,31 @@ import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../api/auth/[...nextauth].api'
 import { prisma } from '@/lib/prisma'
-import { BookWithRatingAndCategories } from '../home/index.page'
 import { Category } from '@prisma/client'
 import { ExploreCard } from '@/components/ExploreCard'
 import { api } from '@/lib/axios'
 import { LateralMenu } from '@/components/LateralMenu'
 import { NextSeo } from 'next-seo'
+import { CategoryProps } from '@/@types/category'
+import { BookProps } from '@/@types/book'
 
 export interface ExploreProps {
-  categories: Category[]
-  books: BookWithRatingAndCategories[]
+  categories: CategoryProps[]
+  books: BookProps[]
 }
 
 export default function Explore({ categories, books }: ExploreProps) {
   const [isMobile, setIsMobile] = useState(false)
 
   const [booksList, setBooksList] =
-    useState<BookWithRatingAndCategories[]>(books)
+    useState<BookProps[]>(books)
 
   const [categorySelected, setCategorySelected] = useState<string | null>(null)
 
   const [search, setSearch] = useState('')
 
   const [selectedBook, setSelectedBook] =
-    useState<BookWithRatingAndCategories | null>(null)
+    useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
@@ -104,22 +105,22 @@ export default function Explore({ categories, books }: ExploreProps) {
           </Heading>
           <ExploreContent>
             <Categories>
-              <ButtonFilter
+              <CategoryBtn
                 selected={!categorySelected}
                 onClick={() => selectCategory(null)}
               >
                 All
-              </ButtonFilter>
+              </CategoryBtn>
               {categories.length > 0 &&
                 categories.map((category) => {
                   return (
-                    <ButtonFilter
+                    <CategoryBtn
                       selected={categorySelected === category.id}
                       key={category.id}
                       onClick={() => selectCategory(category.id)}
                     >
                       {category.name}
-                    </ButtonFilter>
+                    </CategoryBtn>
                   )
                 })}
             </Categories>
@@ -129,11 +130,11 @@ export default function Explore({ categories, books }: ExploreProps) {
                   return (
                     <ExploreCard
                       key={book.id}
-                      cover_url={book.cover_url}
+                      cover_url={book.coverUrl}
                       author={book.author}
                       name={book.name}
-                      rating={book.rating}
-                      alreadyRead={book.alreadyRead}
+                      rating={book.rate}
+                      alreadyRead={book.alreadyRead ?? false}
                       onClick={() => {
                         setSelectedBook(book)
                         setOpenLateralMenu(true)
@@ -191,7 +192,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       where: {
         ratings: {
           some: {
-            user_id: String(session?.user?.id),
+            userId: String(session?.user?.id),
           },
         },
       },

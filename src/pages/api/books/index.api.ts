@@ -60,7 +60,7 @@ export default async function handler(
       where: {
         ratings: {
           some: {
-            user_id: String(session?.user?.id),
+            userId: String(session?.user?.id),
           },
         },
       },
@@ -87,7 +87,7 @@ export default async function handler(
 
     return {
       ...book,
-      rating: avgRate,
+      rate: avgRate,
       alreadyRead,
     }
   })

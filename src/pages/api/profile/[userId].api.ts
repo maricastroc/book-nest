@@ -27,7 +27,7 @@ export default async function handler(
           },
         },
         orderBy: {
-          created_at: 'desc',
+          createdAt: 'desc',
         },
       },
     },
@@ -39,7 +39,7 @@ export default async function handler(
 
   if (profile) {
     const readPages = profile.ratings.reduce(
-      (acc, rating) => acc + rating.book.total_pages,
+      (acc, rating) => acc + rating.book.totalPages,
       0,
     )
     const ratedBooks = profile.ratings.length
@@ -60,9 +60,9 @@ export default async function handler(
 
     const profileData = {
       user: {
-        avatar_url: profile.avatar_url,
+        avatar_url: profile.avatarUrl,
         name: profile.name,
-        createdAt: profile.created_at,
+        createdAt: profile.createdAt,
       },
       ratings: profile.ratings,
       readPages,

@@ -11,14 +11,16 @@ datasource db {
 model User {
   id            String    @id @default(uuid())
   name          String
-  avatar_url    String?
-  created_at    DateTime  @default(now())
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
   email         String?   @unique
   emailVerified DateTime?
+  password      String?
 
-  accounts Account[]
-  sessions Session[]
-  ratings  Rating[]
+  accounts      Account[]
+  sessions      Session[]
+  ratings       Rating[]
+  books         Book[] // Adicionando o campo de relação
 
   @@map("users")
 }
@@ -28,9 +30,12 @@ model Book {
   name        String
   author      String
   summary     String   @db.Text
-  cover_url   String
-  total_pages Int
-  created_at  DateTime @default(now())
+  coverUrl    String
+  totalPages  Int
+  createdAt   DateTime @default(now())
+  
+  userId      String? // Adicionando o campo userId
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   categories CategoriesOnBooks[]
   ratings    Rating[]
@@ -48,14 +53,14 @@ model Category {
 }
 
 model CategoriesOnBooks {
-  book_id    String
+  bookId    String
   categoryId String
 
-  book     Book     @relation(fields: [book_id], references: [id])
+  book     Book     @relation(fields: [bookId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
 
-  @@id([book_id, categoryId])
-  @@index([book_id])
+  @@id([bookId, categoryId])
+  @@index([bookId])
   @@index([categoryId])
 }
 
@@ -63,46 +68,46 @@ model Rating {
   id          String   @id @default(uuid())
   rate        Int
   description String   @db.Text
-  created_at  DateTime @default(now())
+  createdAt   DateTime @default(now())
 
-  book    Book   @relation(fields: [book_id], references: [id])
-  book_id String
+  book    Book   @relation(fields: [bookId], references: [id])
+  bookId  String
 
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
 
-  @@index([book_id])
-  @@index([user_id])
+  @@index([bookId])
+  @@index([userId])
   @@map("ratings")
 }
 
 model Account {
   id                  String  @id @default(cuid())
-  user_id             String
+  userId              String
   type                String
   provider            String
-  provider_account_id String
-  refresh_token       String? @db.Text
-  access_token        String? @db.Text
-  expires_at          Int?
-  token_type          String?
+  providerAccountId   String
+  refreshToken        String? @db.Text
+  accessToken         String? @db.Text
+  expiresAt           Int?
+  tokenType           String?
   scope               String?
-  id_token            String? @db.Text
-  session_state       String?
-  user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  idToken             String? @db.Text
+  sessionState        String?
+  user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, provider_account_id])
-  @@index([user_id])
+  @@unique([provider, providerAccountId])
+  @@index([userId])
   @@map("accounts")
 }
 
 model Session {
   id            String   @id @default(cuid())
-  session_token String   @unique
-  user_id       String
+  sessionToken  String   @unique
+  userId        String
   expires       DateTime
-  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
+  @@index([userId])
   @@map("sessions")
 }

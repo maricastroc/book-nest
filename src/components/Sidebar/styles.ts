@@ -1,8 +1,10 @@
-import { styled } from '../../styles'
+import { styled } from '@/styles'
 
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
+  position: 'fixed',
+  left: '1.5rem',
 })
 
 export const BackgroundContainer = styled('div', {
@@ -49,28 +51,39 @@ export const ItemsContainer = styled('div', {
   marginTop: '4rem',
 })
 
-export const Item = styled('button', {
+export const Item = styled('div', {
   cursor: 'pointer',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
   gap: '0.8rem',
-  paddingLeft: '1.5rem',
   backgroundColor: 'transparent',
   border: 'none',
 
+  '&:focus': {
+    outline: 'none',
+    boxShadow: 'none',
+  },
+})
+
+export const PageBtn = styled('button', {
+  cursor: 'pointer',
+  position: 'relative',
+  paddingLeft: '1.5rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.8rem',
+  backgroundColor: 'transparent',
+  color: '$gray400',
+  border: 'none',
+
   p: {
-    color: '$gray400',
     fontSize: '1rem',
   },
 
   svg: {
     fontSize: '1.5rem',
     color: '$gray400',
-  },
-
-  '&:focus': {
-    boxShadow: 'none',
   },
 
   '&:hover': {
@@ -126,7 +139,7 @@ export const SignOutContainer = styled('div', {
 
   svg: {
     color: '#F75A68',
-    fontSize: '1.2rem',
+    fontSize: '1.8rem',
   },
 
   p: {

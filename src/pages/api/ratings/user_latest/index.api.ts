@@ -25,10 +25,10 @@ export default async function handler(
 
   const userLastRating = await prisma.rating.findFirst({
     where: {
-      user_id: String(session?.user?.id),
+      userId: String(session?.user?.id),
     },
     orderBy: {
-      created_at: 'desc',
+      createdAt: 'desc',
     },
     include: {
       book: true,

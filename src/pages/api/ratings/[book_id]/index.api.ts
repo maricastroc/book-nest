@@ -25,7 +25,7 @@ export default async function handler(
     return res.status(401).end()
   }
 
-  const bookId = String(req.query.book_id)
+  const bookId = String(req.query.bookId)
 
   const book = await prisma.book.findUnique({
     where: {
@@ -39,22 +39,22 @@ export default async function handler(
 
   const createRatingbody = z.object({
     description: z.string(),
-    book_id: z.string(),
-    user_id: z.string(),
+    bookId: z.string(),
+    userId: z.string(),
     rate: z.number(),
   })
 
-  const { description, book_id, user_id, rate } = createRatingbody.parse({
-    book_id: bookId,
-    user_id: session.user?.id,
+  const { description, userId, rate } = createRatingbody.parse({
+    bookId: bookId,
+    userId: session.user?.id,
     ...req.body,
   })
 
   const rating = await prisma.rating.create({
     data: {
       description,
-      book_id,
-      user_id,
+      bookId,
+      userId,
       rate,
     },
     include: {

@@ -4,22 +4,21 @@ import {
   Heading,
   HomeContainer,
   HomeContent,
+  LastRatingsContainer,
+  LastRatingsContent,
+  LastRatingsTitle,
+  LastRatingsWrapper,
   LastReadContainer,
   LastReadTitle,
   PopularBooksCardsContainer,
   PopularBooksCardsContent,
   PopularBooksTitle,
-  RecentAndLastRead,
-  RecentCardsContainer,
-  RecentCardsContent,
-  RecentCardsTitle,
 } from './styles'
 import { ReviewCard } from '@/components/ReviewCard'
 import { prisma } from '@/lib/prisma'
 import { GetServerSideProps } from 'next'
 import { buildNextAuthOptions } from '../api/auth/[...nextauth].api'
 import { getServerSession } from 'next-auth'
-import { Book, Category, Rating, User } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { PopularBookCard } from '@/components/PopularBookCard'
@@ -29,25 +28,9 @@ import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/Sidebar'
 import { LateralMenu } from '@/components/LateralMenu'
-
-interface BookProps {
-  author: string
-  cover_url: string
-  created_at: string
-  id: string
-  name: string
-  summary: string
-  totalPages: number
-}
-
-interface UserProps {
-  avatar_url: string
-  created_at: string
-  email: string
-  emailVerified: string | null
-  id: string
-  name: string
-}
+import { BookProps } from '@/@types/book'
+import { UserProps } from '@/@types/user'
+import { RatingProps } from '@/@types/rating'
 
 export interface RecentReadCardProps {
   book: BookProps
@@ -58,23 +41,10 @@ export interface RecentReadCardProps {
   user: UserProps
 }
 
-export interface BookWithRatingAndCategories extends Book {
-  categories: Category[]
-  rating: number
-  alreadyRead: boolean
-  ratings: Rating[]
-}
-
-export interface RatingWithUserAndBook extends Rating {
-  user: User
-  book: Book
-  alreadyRead: boolean
-}
-
 interface HomeProps {
-  ratings: RatingWithUserAndBook[]
-  books: BookWithRatingAndCategories[]
-  userLastRating: RatingWithUserAndBook
+  ratings: RatingProps[]
+  books: BookProps[]
+  userLastRating: RatingProps
 }
 
 export default function Home({ ratings, books, userLastRating }: HomeProps) {
@@ -82,11 +52,11 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const [isMobile, setIsMobile] = useState(false)
 
   const [selectedBook, setSelectedBook] =
-    useState<BookWithRatingAndCategories | null>(null)
+    useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  function setSelectedBookFromRatingBookId(ratingBookId: string) {
+  function handleSetSelectedBook(ratingBookId: string) {
     const foundBook = books.find((book) => book.id === ratingBookId)
     if (!foundBook) {
       return
@@ -122,7 +92,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
             <h2>Home</h2>
           </Heading>
           <HomeContent>
-            <RecentAndLastRead>
+            <LastRatingsWrapper>
               {session.data?.user && (
                 <LastReadContainer>
                   {userLastRating ? (
@@ -142,22 +112,23 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
                   )}
                 </LastReadContainer>
               )}
-              <RecentCardsContainer>
-                <RecentCardsTitle>Last Ratings</RecentCardsTitle>
-                <RecentCardsContent>
+              <LastRatingsContainer>
+                <LastRatingsTitle>Last Ratings</LastRatingsTitle>
+                <LastRatingsContent>
                   {ratings.length > 0 &&
                     ratings.map((rating) => (
                       <ReviewCard
                         key={rating.id}
                         rating={rating}
                         onClick={() => {
-                          setSelectedBookFromRatingBookId(rating.book.id)
+                          handleSetSelectedBook(rating.book.id)
                         }}
                       />
                     ))}
-                </RecentCardsContent>
-              </RecentCardsContainer>
-            </RecentAndLastRead>
+                </LastRatingsContent>
+              </LastRatingsContainer>
+            </LastRatingsWrapper>
+
             <PopularBooksCardsContainer>
               <PopularBooksTitle>
                 <p>Popular Books</p>
@@ -167,16 +138,12 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
                 </span>
               </PopularBooksTitle>
               <PopularBooksCardsContent>
-                {books.length > 0 &&
+                {books?.length > 0 &&
                   books.map((book) => (
                     <PopularBookCard
                       key={book.id}
-                      cover_url={book.cover_url}
-                      name={book.name}
-                      author={book.author}
-                      rating={book.rating}
-                      alreadyRead={book.alreadyRead}
-                      onClick={() => {
+                      book={book}
+                      onOpenDetails={() => {
                         setSelectedBook(book)
                         setOpenLateralMenu(true)
                       }}
@@ -192,32 +159,29 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  // Capturing session data
   const session = await getServerSession(
     req,
     res,
     buildNextAuthOptions(req, res),
   )
 
-  // Searching for last user review
   let userLastRating = null
 
   if (session?.user) {
     userLastRating = await prisma.rating.findFirst({
       where: {
-        user_id: String(session?.user?.id),
+        userId: String(session?.user?.id),
       },
       include: {
         user: true,
         book: true,
       },
       orderBy: {
-        created_at: 'desc',
+        createdAt: 'desc',
       },
     })
   }
 
-  // Searching and filtering the 4 most popular books
   const books = await prisma.book.findMany({
     include: {
       ratings: {
@@ -240,7 +204,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
   })
 
-  // Returning books with "fixed" category
   const booksWithCategory = books.map((book) => {
     return {
       ...book,
@@ -248,7 +211,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   })
 
-  // Verifying if a book was read by logged user
   let userBooksIds: string[] = []
 
   if (session) {
@@ -256,7 +218,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       where: {
         ratings: {
           some: {
-            user_id: String(session?.user?.id),
+            userId: String(session?.user?.id),
           },
         },
       },
@@ -274,12 +236,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     return {
       ...book,
-      rating: avgRate,
-      alreadyRead: userBooksIds.includes(book.id),
+      rate: avgRate,
+      already_read: userBooksIds.includes(book.id),
     }
   })
 
-  // Searching for 4 latest ratings - excluding user ratings
   const ratings = await prisma.rating.findMany({
     where: {
       NOT: {
@@ -292,14 +253,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
     take: 4,
     orderBy: {
-      created_at: 'desc',
+      createdAt: 'desc',
     },
   })
 
   const ratingWithReadStatus = ratings.map((rating) => {
     return {
       ...rating,
-      alreadyRead: userBooksIds.includes(rating.book.id),
+      already_read: userBooksIds.includes(rating.book.id),
     }
   })
 

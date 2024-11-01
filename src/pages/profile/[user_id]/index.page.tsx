@@ -1,20 +1,18 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MobileHeader } from '@/components/MobileHeader'
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/Sidebar'
 import {
-  BooksContainer,
-  BooksSection,
+  UserRatings,
+  UserRatingsContainer,
   Container,
   Heading,
   HeadingTitle,
   ProfileContainer,
-  ProfileContent,
   SearchBar,
   UserDetailsContainer,
+  ProfileWrapper,
+  Divider,
 } from './styles'
 import { prisma } from '@/lib/prisma'
 import { GetServerSideProps } from 'next'
@@ -25,12 +23,12 @@ import {
   Rating,
   User as UserPrisma,
 } from '@prisma/client'
-import { RatingWithUserAndBook } from '@/pages/home/index.page'
-import { MagnifyingGlass, User } from 'phosphor-react'
+import { MagnifyingGlass, User, X } from 'phosphor-react'
 import { ProfileCard } from '@/components/ProfileCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
 import { useSession } from 'next-auth/react'
 import { UserDetails } from '@/components/UserDetails'
+import { RatingProps } from '@/@types/rating'
 
 interface ProfileProps {
   infos: {
@@ -40,7 +38,7 @@ interface ProfileProps {
     bestGenre: Category
   }
   user: UserPrisma & {
-    ratings: (RatingWithUserAndBook & {
+    ratings: (RatingProps & {
       book: Book & {
         categories: (CategoriesOnBooks & {
           category: Category
@@ -61,10 +59,10 @@ interface ProfileProps {
 
 export default function Profile({ user, ratings, infos }: ProfileProps) {
   const [isMobile, setIsMobile] = useState(false)
-  const [search, setSearch] = useState('')
-  const session = useSession()
 
-  console.log(session.data?.user.id === user.id)
+  const [search, setSearch] = useState('')
+
+  const session = useSession()
 
   useEffect(() => {
     function handleResize() {
@@ -91,15 +89,15 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
       <NextSeo title="Profile | Book Wise" />
       <Container>
         {isMobile ? <MobileHeader /> : <Sidebar />}
-        <ProfileContainer>
-          <Heading>
-            <HeadingTitle>
-              <User />
-              <h2>Profile</h2>
-            </HeadingTitle>
-          </Heading>
-          <ProfileContent>
-            <BooksSection>
+        <ProfileWrapper>
+          <ProfileContainer>
+            <Heading>
+              <HeadingTitle>
+                <User />
+                <h2>Profile</h2>
+              </HeadingTitle>
+            </Heading>
+            <UserRatingsContainer>
               <SearchBar>
                 <input
                   type="text"
@@ -108,9 +106,13 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
                   onChange={(e) => setSearch(e.target.value)}
                   spellCheck={false}
                 />
-                <MagnifyingGlass />
+                {search === '' ? (
+                  <MagnifyingGlass />
+                ) : (
+                  <X onClick={() => setSearch('')} />
+                )}
               </SearchBar>
-              <BooksContainer>
+              <UserRatings>
                 {filteredBooks.length > 0 ? (
                   filteredBooks.map((rating) => {
                     return (
@@ -124,21 +126,24 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
                 ) : (
                   <EmptyContainer />
                 )}
-              </BooksContainer>
-            </BooksSection>
-            <UserDetailsContainer>
+              </UserRatings>
+            </UserRatingsContainer>
+          </ProfileContainer>
+          <Divider />
+          <UserDetailsContainer>
+            {user && (
               <UserDetails
-                avatar_url={user?.avatar_url!}
-                created_at={user?.created_at!}
-                name={user?.name!}
-                total_pages={infos?.pages!}
-                books_rated={infos?.booksCount!}
-                authors_read={infos?.authorsCount!}
-                most_read_category={infos?.bestGenre?.name ?? '-'}
+                avatarUrl={user?.avatarUrl ?? ''}
+                createdAt={user?.createdAt}
+                name={user?.name}
+                totalPages={infos?.pages}
+                booksRated={infos?.booksCount}
+                authorsRead={infos?.authorsCount}
+                bestGenre={infos?.bestGenre?.name ?? '-'}
               />
-            </UserDetailsContainer>
-          </ProfileContent>
-        </ProfileContainer>
+            )}
+          </UserDetailsContainer>
+        </ProfileWrapper>
       </Container>
     </>
   )
@@ -154,7 +159,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       include: {
         ratings: {
           orderBy: {
-            created_at: 'desc',
+            createdAt: 'desc',
           },
           include: {
             book: {
@@ -172,7 +177,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     })
 
     const pages = user.ratings.reduce((acc, rating) => {
-      return (acc += rating.book.total_pages)
+      return (acc += rating.book.totalPages)
     }, 0)
 
     const books = user.ratings.map((rating) => rating.book)

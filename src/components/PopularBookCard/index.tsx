@@ -1,37 +1,31 @@
+import { BookProps } from '@/@types/book'
 import { StarsRating } from '../StarsRating'
 import { BookCover, BookData, BookInfo, Container, ReadNotice } from './styles'
 
+
 interface PopularBookCardProps {
-  cover_url: string
-  name: string
-  author: string
-  rating: number
-  alreadyRead: boolean
-  onClick: () => void
+  book: BookProps
+  onOpenDetails: () => void
 }
 
 export function PopularBookCard({
-  cover_url,
-  name,
-  author,
-  rating,
-  alreadyRead,
-  ...rest
+  book,
+  onOpenDetails
 }: PopularBookCardProps) {
   return (
-    <Container {...rest}>
-      <BookCover src={cover_url} />
+    <Container onClick={() => onOpenDetails()}>
+      <BookCover src={book.coverUrl} />
       <BookInfo>
-        {alreadyRead && (
+        {book.alreadyRead && (
           <ReadNotice>
             <p>READ</p>
           </ReadNotice>
         )}
         <BookData>
-          <h2>{name}</h2>
-          <p>{author}</p>
+          <h2>{book.name}</h2>
+          <p>{book.author}</p>
         </BookData>
-        <StarsRating rating={rating} />
+        <StarsRating rating={book.rate} />
       </BookInfo>
     </Container>
   )

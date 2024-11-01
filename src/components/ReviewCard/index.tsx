@@ -3,7 +3,7 @@ import {
   BookContainer,
   BookCover,
   BookDetails,
-  BookDescription,
+  ReviewContainer,
   BookInfo,
   Container,
   Header,
@@ -12,27 +12,27 @@ import {
   UserInfo,
   ReadNotice,
 } from './styles'
-import { RatingWithUserAndBook } from '@/pages/home/index.page'
 import { StarsRating } from '../StarsRating'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useRouter } from 'next/router'
+import { RatingProps } from '@/@types/rating'
 
 interface ReviewCardProps {
-  rating: RatingWithUserAndBook
+  rating: RatingProps
   onClick: () => void
 }
 
 export function ReviewCard({ rating, ...rest }: ReviewCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
-    getDateFormattedAndRelative(rating.created_at)
+    getDateFormattedAndRelative(rating.createdAt)
 
-  const avatarUrl = rating.user.avatar_url || 'https://github/octocat.png'
+  const avatarUrl = rating.user.avatarUrl || 'https://github/octocat.png'
 
   const router = useRouter()
-
+  console.log(rating.user.id)
   return (
     <Container>
-      {rating.alreadyRead && (
+      {rating?.book.alreadyRead && (
         <ReadNotice>
           <p>READ</p>
         </ReadNotice>
@@ -56,16 +56,16 @@ export function ReviewCard({ rating, ...rest }: ReviewCardProps) {
       </Header>
       <Separator />
       <BookContainer {...rest}>
-        <BookCover src={rating.book.cover_url} alt="" />
+        <BookCover src={rating.book.coverUrl} alt="" />
         <BookDetails>
           <BookInfo>
             <h2>{rating.book.name}</h2>
             <p>{rating.book.author}</p>
           </BookInfo>
           <Separator />
-          <BookDescription>
+          <ReviewContainer>
             <p>{rating.description}</p>
-          </BookDescription>
+          </ReviewContainer>
         </BookDetails>
       </BookContainer>
     </Container>

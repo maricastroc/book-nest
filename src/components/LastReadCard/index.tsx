@@ -9,20 +9,21 @@ import {
   Container,
   TimeAndRating,
 } from './styles'
-import { Book, Rating } from '@prisma/client'
+import { BookProps } from '@/@types/book'
+import { RatingProps } from '@/@types/rating'
 
 interface LastReadCardProps {
-  book: Book
-  rating: Rating
+  book: BookProps
+  rating: RatingProps
 }
 
 export function LastReadCard({ book, rating }: LastReadCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
-    getDateFormattedAndRelative(rating.created_at)
+    getDateFormattedAndRelative(rating.createdAt)
 
   return (
     <Container>
-      <BookCover src={book.cover_url} />
+      <BookCover src={book.coverUrl} />
       <BookInfo>
         <BookData>
           <BookTitle>

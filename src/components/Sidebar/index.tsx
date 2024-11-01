@@ -7,6 +7,7 @@ import {
   ItemsContainer,
   LoginButton,
   LoginContainer,
+  PageBtn,
   ProfileContainer,
   SidebarContent,
   SidebarMain,
@@ -45,31 +46,37 @@ export function Sidebar() {
               quality={100}
             />
             <ItemsContainer>
-              <Item
-                active={router.pathname === '/home'}
-                onClick={() => router.push('/home')}
-              >
-                <ChartLineUp />
-                <p>Home</p>
+              <Item>
+                <PageBtn
+                  onClick={() => router.push('/home')}
+                  active={router.pathname === '/home'}
+                >
+                  <ChartLineUp />
+                  <p>Explore</p>
+                </PageBtn>
               </Item>
-              <Item
-                active={router.pathname === '/explore'}
-                onClick={() => router.push('/explore')}
-              >
-                <Binoculars />
-                <p>Explore</p>
+              <Item>
+                <PageBtn
+                  onClick={() => router.push('/explore')}
+                  active={router.pathname === '/explore'}
+                >
+                  <Binoculars />
+                  <p>Explore</p>
+                </PageBtn>
               </Item>
               {session.data?.user && (
-                <Item
-                  active={router.pathname.includes('profile')}
-                  onClick={() => {
-                    router.pathname.includes('profile')
-                      ? router.push(`../profile/${session.data?.user.id}`)
-                      : router.push(`profile/${session.data?.user.id}`)
-                  }}
-                >
-                  <User />
-                  <p>Profile</p>
+                <Item>
+                  <PageBtn
+                    active={router.pathname.includes('profile')}
+                    onClick={() => {
+                      router.pathname.includes('profile')
+                        ? router.push(`../profile/${session.data?.user.id}`)
+                        : router.push(`profile/${session.data?.user.id}`)
+                    }}
+                  >
+                    <Binoculars />
+                    <p>Profile</p>
+                  </PageBtn>
                 </Item>
               )}
             </ItemsContainer>
@@ -77,7 +84,7 @@ export function Sidebar() {
           {session.data?.user ? (
             <ProfileContainer>
               <AvatarContainer>
-                <AvatarDefault src={session.data?.user.avatar_url} />
+                <AvatarDefault src={session.data?.user.avatarUrl} />
               </AvatarContainer>
               <SignOutContainer onClick={handleLogout}>
                 <p>{firstName}</p>

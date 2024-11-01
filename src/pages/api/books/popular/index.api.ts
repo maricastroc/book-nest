@@ -22,9 +22,9 @@ export default async function handler(
   })
 
   const booksAvgRating = await prisma.rating.groupBy({
-    by: ['book_id'],
+    by: ['bookId'],
     where: {
-      book_id: {
+      bookId: {
         in: books.map((book) => book.id),
       },
     },
@@ -46,7 +46,7 @@ export default async function handler(
       where: {
         ratings: {
           some: {
-            user_id: String(session.user.id),
+            userId: String(session.user.id),
           },
         },
       },
@@ -57,12 +57,12 @@ export default async function handler(
 
   const booksWithAvgRating = books.map((book) => {
     const bookAvgRating = booksAvgRating.find(
-      (avgRating) => avgRating.book_id === book.id,
+      (avgRating) => avgRating.bookId === book.id,
     )
     const { ...bookInfo } = book
     return {
       ...bookInfo,
-      avgRating: bookAvgRating?._avg.rate,
+      rate: bookAvgRating?._avg.rate,
       alreadyRead: userBooksId.includes(book.id),
     }
   })

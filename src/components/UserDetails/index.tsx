@@ -12,32 +12,32 @@ import {
 import { BookOpen, BookmarkSimple, Books, UserList } from 'phosphor-react'
 
 interface UserDetailsProps {
-  avatar_url: string
+  avatarUrl: string
   name: string
-  created_at: Date
-  total_pages: number
-  books_rated: number
-  authors_read: number
-  most_read_category: string
+  createdAt: Date
+  totalPages: number
+  booksRated: number
+  authorsRead: number
+  bestGenre: string
 }
 
 export function UserDetails({
-  avatar_url,
+  avatarUrl,
   name,
-  created_at,
-  total_pages,
-  books_rated,
-  authors_read,
-  most_read_category,
+  createdAt,
+  totalPages,
+  booksRated,
+  authorsRead,
+  bestGenre,
 }: UserDetailsProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
-    getDateFormattedAndRelative(created_at)
+    getDateFormattedAndRelative(createdAt)
 
   return (
     <Container>
       <UserInfo>
         <AvatarContainer>
-          <AvatarDefault alt="" src={avatar_url} />
+          <AvatarDefault alt="" src={avatarUrl} />
         </AvatarContainer>
         <h2>{name}</h2>
         <time title={dateFormatted} dateTime={dateString}>
@@ -49,28 +49,28 @@ export function UserDetails({
         <UserInfoItem>
           <BookOpen />
           <ItemText>
-            <h2>{total_pages}</h2>
+            <h2>{totalPages}</h2>
             <p>Pages read</p>
           </ItemText>
         </UserInfoItem>
         <UserInfoItem>
           <Books />
           <ItemText>
-            <h2>{books_rated}</h2>
+            <h2>{booksRated}</h2>
             <p>Rated books</p>
           </ItemText>
         </UserInfoItem>
         <UserInfoItem>
           <UserList />
           <ItemText>
-            <h2>{authors_read}</h2>
+            <h2>{authorsRead}</h2>
             <p>Authors read</p>
           </ItemText>
         </UserInfoItem>
         <UserInfoItem>
           <BookmarkSimple />
           <ItemText>
-            <h2>{most_read_category}</h2>
+            <h2>{bestGenre}</h2>
             <p>Most read category</p>
           </ItemText>
         </UserInfoItem>

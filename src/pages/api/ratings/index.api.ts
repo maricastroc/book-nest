@@ -13,7 +13,7 @@ export default async function handler(
       include: {
         book: {
           select: {
-            cover_url: true,
+            coverUrl: true,
             name: true,
             author: true,
           },
@@ -21,7 +21,7 @@ export default async function handler(
         user: {
           select: {
             id: true,
-            avatar_url: true,
+            avatarUrl: true,
             name: true,
           },
         },
@@ -30,17 +30,17 @@ export default async function handler(
 
     const ratingsOutput = ratings.map((rating) => ({
       id: rating.id,
-      createdAt: rating.created_at,
+      createdAt: rating.createdAt,
       rate: rating.rate,
       description: rating.description,
       book: {
-        coverURL: rating.book.cover_url,
+        coverURL: rating.book.coverUrl,
         name: rating.book.name,
         author: rating.book.author,
       },
       user: {
         id: rating.user.id,
-        avatarURL: rating.user.avatar_url,
+        avatarURL: rating.user.avatarUrl,
         name: rating.user.name,
       },
     }))

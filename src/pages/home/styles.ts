@@ -5,9 +5,11 @@ export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
-  width: '100%',
+  minWidth: '100vw',
   alignItems: 'center',
   justifyContent: 'center',
+  maxWidth: '100vw',
+  overflowX: 'hidden',
 
   '@media (min-width: 480px)': {
     padding: '0 2rem',
@@ -25,6 +27,7 @@ export const Container = styled('div', {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     paddingRight: '3rem',
+    height: '100%',
   },
 
   '@media (min-width: 1440px)': {
@@ -42,7 +45,7 @@ export const HomeContainer = styled('div', {
   justifyContent: 'center',
   maxWidth: '35rem',
   marginTop: '2rem',
-  overflowY: 'scroll',
+  overflowY: 'hidden',
 
   '@media (min-width: 480px)': {
     padding: '0 2rem',
@@ -51,11 +54,12 @@ export const HomeContainer = styled('div', {
   '@media (min-width: 768px)': {
     alignItems: 'flex-start',
     padding: '0 0 0 2rem',
-    maxWidth: '40rem',
+    maxWidth: '100%',
+    paddingLeft: '18rem',
   },
 
   '@media (min-width: 1024px)': {
-    overflowY: 'scroll',
+    overflowY: 'hidden',
     paddingBottom: '1rem',
   },
 
@@ -64,6 +68,11 @@ export const HomeContainer = styled('div', {
     justifyContent: 'flex-start',
     padding: '0 0 0 2rem',
     maxWidth: '100%',
+    paddingLeft: '18rem',
+  },
+
+  '@media (min-width: 1400px)': {
+    paddingLeft: '21rem',
   },
 })
 
@@ -80,35 +89,20 @@ export const HomeContent = styled('div', {
   },
 
   '@media (min-width: 1024px)': {
-    overflow: 'scroll',
     height: '82vh',
   },
 
   '@media (min-width: 1200px)': {
+    overflowY: 'hidden',
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    overflow: 'scroll',
     gap: '2.5rem',
     height: '82vh',
   },
 
   '@media (min-width: 1440px)': {
     gap: '4rem',
-  },
-})
-
-export const RecentAndLastRead = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  alignItems: 'flex-start',
-  justifyContent: 'flex-start',
-
-  '@media (min-width: 1200px)': {
-    overflowY: 'scroll',
-    maxHeight: '100vh',
-    paddingRight: '1rem',
   },
 })
 
@@ -137,30 +131,60 @@ export const LastReadContainer = styled('div', {
   flexDirection: 'column',
   width: '100%',
   gap: '1rem',
-})
-
-export const LastReadTitle = styled('p', {
-  fontSize: '$sm',
-})
-
-export const RecentCardsContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  overflow: 'scroll',
 
   '@media (min-width: 768px)': {
     paddingRight: '1rem',
   },
 })
 
-export const RecentCardsContent = styled('div', {
+export const LastReadTitle = styled('p', {
+  fontSize: '$sm',
+})
+
+export const LastRatingsWrapper = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+
+  '@media (min-width: 1200px)': {
+    overflowY: 'scroll',
+    height: '100%',
+  },
+})
+
+export const LastRatingsContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
+  overflow: 'scroll',
+  minWidth: '100%',
+
+  '@media (min-width: 768px)': {
+    paddingRight: '1rem',
+  },
+
+  '@media (min-width: 1200px)': {
+    overflowY: 'scroll',
+    height: '100%',
+  },
 })
 
-export const RecentCardsTitle = styled('p', {
+export const LastRatingsContent = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+  width: '100%',
+
+  '@media (min-width: 1200px)': {
+    overflowY: 'scroll',
+    height: '100%',
+    paddingRight: '1rem',
+  },
+})
+
+export const LastRatingsTitle = styled('p', {
   fontSize: '$sm',
 })
 
@@ -168,14 +192,17 @@ export const PopularBooksCardsContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   marginTop: '5rem',
+  marginBottom: '2rem',
   width: '100%',
   gap: '1rem',
 
   '@media (min-width: 1200px)': {
     marginTop: 0,
+    marginBottom: 0,
     width: '35rem',
-    overflowY: 'scroll',
     paddingRight: '1rem',
+    overflowY: 'scroll',
+    height: '100%',
   },
 })
 
@@ -211,6 +238,8 @@ export const PopularBooksCardsContent = styled('div', {
 
   '@media (min-width: 1200px)': {
     overflowY: 'scroll',
+    height: '100%',
+    paddingRight: '1rem',
   },
 })
 
@@ -220,6 +249,7 @@ export const StyledToastContainer = styled(ToastContainer, {
     color: '$gray200',
     borderRadius: 4,
     fontFamily: 'Nunito, sans-serif',
+    fontSize: '0.95rem',
   },
 
   '& .Toastify__close-button': {

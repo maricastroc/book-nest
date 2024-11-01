@@ -12,7 +12,7 @@ export default async function handler(
 
   const ratings = await prisma.rating.findMany({
     orderBy: {
-      created_at: 'desc',
+      createdAt: 'desc',
     },
     include: {
       book: true,
