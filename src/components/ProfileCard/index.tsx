@@ -13,18 +13,18 @@ import {
   BookData,
 } from './styles'
 import { Book } from '@prisma/client'
-import { RatingWithUserAndBook } from '@/pages/home/index.page'
 import { StarsRating } from '../StarsRating'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
+import { RatingProps } from '@/@types/rating'
 
 interface ProfileCardProps {
   book: Book
-  rating: RatingWithUserAndBook
+  rating: RatingProps
 }
 
 export function ProfileCard({ book, rating }: ProfileCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
-    getDateFormattedAndRelative(rating.created_at)
+    getDateFormattedAndRelative(rating.createdAt)
 
   return (
     <Wrapper>
