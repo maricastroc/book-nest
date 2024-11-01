@@ -34,7 +34,7 @@ export function ProfileCard({ book, rating }: ProfileCardProps) {
         </time>
       </Heading>
       <Container>
-        {rating.alreadyRead && (
+        {rating.book.alreadyRead && (
           <ReadNotice>
             <p>READ</p>
           </ReadNotice>
