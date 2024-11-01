@@ -51,8 +51,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const session = useSession()
   const [isMobile, setIsMobile] = useState(false)
 
-  const [selectedBook, setSelectedBook] =
-    useState<BookProps | null>(null)
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
@@ -227,7 +226,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     userBooksIds = userBooks?.map((x) => x?.id)
   }
 
-  // Returning books with category, average rating and user reading status
   const booksWithRating = booksWithCategory.map((book) => {
     const avgRate =
       book.ratings.reduce((sum, rateObj) => {

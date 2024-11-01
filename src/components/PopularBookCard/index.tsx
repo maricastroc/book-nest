@@ -2,16 +2,12 @@ import { BookProps } from '@/@types/book'
 import { StarsRating } from '../StarsRating'
 import { BookCover, BookData, BookInfo, Container, ReadNotice } from './styles'
 
-
 interface PopularBookCardProps {
   book: BookProps
   onOpenDetails: () => void
 }
 
-export function PopularBookCard({
-  book,
-  onOpenDetails
-}: PopularBookCardProps) {
+export function PopularBookCard({ book, onOpenDetails }: PopularBookCardProps) {
   return (
     <Container onClick={() => onOpenDetails()}>
       <BookCover src={book.coverUrl} />

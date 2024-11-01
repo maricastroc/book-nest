@@ -17,7 +17,6 @@ import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../api/auth/[...nextauth].api'
 import { prisma } from '@/lib/prisma'
-import { Category } from '@prisma/client'
 import { ExploreCard } from '@/components/ExploreCard'
 import { api } from '@/lib/axios'
 import { LateralMenu } from '@/components/LateralMenu'
@@ -33,15 +32,13 @@ export interface ExploreProps {
 export default function Explore({ categories, books }: ExploreProps) {
   const [isMobile, setIsMobile] = useState(false)
 
-  const [booksList, setBooksList] =
-    useState<BookProps[]>(books)
+  const [booksList, setBooksList] = useState<BookProps[]>(books)
 
   const [categorySelected, setCategorySelected] = useState<string | null>(null)
 
   const [search, setSearch] = useState('')
 
-  const [selectedBook, setSelectedBook] =
-    useState<BookProps | null>(null)
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
@@ -151,7 +148,6 @@ export default function Explore({ categories, books }: ExploreProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  // Capturing session data
   const session = await getServerSession(
     req,
     res,
@@ -160,7 +156,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const categories = await prisma.category.findMany()
 
-  // Searching for all books (w/ category)
   const books = await prisma.book.findMany({
     include: {
       ratings: {
@@ -176,7 +171,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
   })
 
-  // Fixing category relationship
   const booksFixedRelationWithCategory = books.map((book) => {
     return {
       ...book,
@@ -184,7 +178,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   })
 
-  // Verifying if a book was read by logged user
   let userBooksIds: string[] = []
 
   if (session) {
@@ -201,7 +194,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     userBooksIds = userBooks?.map((x) => x?.id)
   }
 
-  // Returning books with category, average rating and user reading status
   const booksWithRating = booksFixedRelationWithCategory.map((book) => {
     const avgRate =
       book.ratings.reduce((sum, rateObj) => {

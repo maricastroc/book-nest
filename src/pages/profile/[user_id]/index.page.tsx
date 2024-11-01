@@ -26,9 +26,9 @@ import {
 import { MagnifyingGlass, User, X } from 'phosphor-react'
 import { ProfileCard } from '@/components/ProfileCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
-import { useSession } from 'next-auth/react'
 import { UserDetails } from '@/components/UserDetails'
 import { RatingProps } from '@/@types/rating'
+import { CategoryProps } from '@/@types/category'
 
 interface ProfileProps {
   infos: {
@@ -61,8 +61,6 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
   const [isMobile, setIsMobile] = useState(false)
 
   const [search, setSearch] = useState('')
-
-  const session = useSession()
 
   useEffect(() => {
     function handleResize() {
@@ -196,9 +194,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       .map((book) => book.categories.map((category) => category.category))
       .flat()
 
+    interface CategoryWithCount extends CategoryProps {
+      qtd: number
+    }
+
     const genreNumbers = genres
-      .reduce((acc: any, genre) => {
-        const qtd = genres.filter((i: any) => i.id === genre.id).length
+      .reduce((acc: CategoryWithCount[], genre) => {
+        const qtd = genres.filter(
+          (i: CategoryProps) => i.id === genre.id,
+        ).length
         return [
           ...acc,
           {
@@ -207,7 +211,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           },
         ]
       }, [])
-      .sort((a: any, b: any) => b.qtd - a.qtd)
+      .sort(
+        (a: CategoryWithCount, b: CategoryWithCount) =>
+          (b.qtd || 0) - (a.qtd || 0),
+      )
 
     const infos = {
       pages,

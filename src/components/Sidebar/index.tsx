@@ -16,7 +16,7 @@ import {
 import Image from 'next/image'
 import SidebarBackground from '../../../public/assets/sidebar.svg'
 import Logo from '../../../public/assets/logo.svg'
-import { Binoculars, ChartLineUp, SignIn, SignOut, User } from 'phosphor-react'
+import { Binoculars, ChartLineUp, SignIn, SignOut } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -52,7 +52,7 @@ export function Sidebar() {
                   active={router.pathname === '/home'}
                 >
                   <ChartLineUp />
-                  <p>Explore</p>
+                  <p>Home</p>
                 </PageBtn>
               </Item>
               <Item>

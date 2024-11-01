@@ -45,7 +45,7 @@ export default async function handler(
   })
 
   const { description, userId, rate } = createRatingbody.parse({
-    bookId: bookId,
+    bookId,
     userId: session.user?.id,
     ...req.body,
   })
