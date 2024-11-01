@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { BookWithRatingAndCategories } from '@/pages/home/index.page'
 import {
   CloseButton,
   Container,
@@ -20,9 +17,10 @@ import { useSession } from 'next-auth/react'
 import { ReviewCardForm } from './components/ReviewCardForm'
 import * as Dialog from '@radix-ui/react-dialog'
 import { LoginModal } from '../LoginModal'
+import { BookProps } from '@/@types/book'
 
 interface BookReviewsSidebarProps {
-  book: BookWithRatingAndCategories | null
+  book: BookProps | null
   onClose: () => void
 }
 
@@ -32,19 +30,27 @@ interface RatingProps extends RatingInfo {
 
 export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
   const [ratings, setRatings] = useState<RatingProps[]>([])
+
   const [openReviewForm, setOpenReviewForm] = useState(false)
 
   const session = useSession()
 
-  useEffect(() => {
-    async function loadRatings() {
-      const response = await api.get(`/books/${book?.id!}`)
-      if (response.data) {
-        setRatings(response.data.book.ratings)
+  const loadRatings = async () => {
+    if (book) {
+      try {
+        const response = await api.get(`/books/${book.id}`);
+        if (response.data) {
+          console.log(response.data);
+        }
+      } catch (err) {
+        console.error(err);
       }
     }
+  };
+
+  useEffect(() => {
     loadRatings()
-  }, [book?.id])
+  }, [book])
 
   return (
     <Container>
@@ -53,34 +59,35 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
       </CloseButton>
       <ContainerOverlay onClick={() => onClose()} />
       <LateralMenuContainer>
-        <BookCard
-          name={book?.name!}
-          author={book?.author!}
-          cover_url={book?.cover_url!}
-          rating={book?.rating!}
-          ratings_number={book?.ratings.length!}
-          total_pages={book?.total_pages!}
-          categories={book?.categories!}
-        />
+        {book && (
+          <BookCard
+            name={book.name}
+            author={book.author}
+            coverUrl={book.coverUrl}
+            rating={book.rate}
+            ratingsNumber={book?.ratings?.length ?? 0}
+            totalPages={book.totalPages}
+            categories={book.categories}
+          />
+        )}
         <RatingsContainer>
           <RatingsContentTitle>
             <p>Ratings</p>
-            {session.data?.user && (
-              <span onClick={() => setOpenReviewForm(true)}>Review</span>
-            )}
-            {!session.data?.user && (
+            {session.data?.user ? (
+                            <span onClick={() => setOpenReviewForm(true)}>Review</span>
+            ) : (
               <Dialog.Root>
-                <Dialog.Trigger asChild>
-                  <span>Review</span>
-                </Dialog.Trigger>
-                <LoginModal />
-              </Dialog.Root>
+              <Dialog.Trigger asChild>
+                <span>Review</span>
+              </Dialog.Trigger>
+              <LoginModal />
+            </Dialog.Root>
             )}
           </RatingsContentTitle>
           {session.data?.user && openReviewForm && (
             <ReviewCardForm
-              avatar_url={session.data?.user.avatar_url!}
-              name={session.data?.user.name!}
+              avatarUrl={session.data?.user?.avatarUrl ?? ''}
+              name={session.data?.user.name}
               onClose={() => setOpenReviewForm(false)}
               onCloseLateralMenu={() => onClose()}
               bookId={book?.id!}
@@ -92,12 +99,12 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
               <RatingCard
                 key={rating.id}
                 id={rating.id}
-                avatar_url={rating.user.avatar_url}
+                avatarUrl={rating.user.avatarUrl}
                 name={rating.user.name}
-                created_at={rating.created_at}
+                created_at={rating.createdAt}
                 rating={rating.rate}
                 description={rating.description}
-                user={rating.user_id}
+                user={rating.userId}
                 userId={rating.user.id}
                 onCloseLateralMenu={() => onClose()}
               />

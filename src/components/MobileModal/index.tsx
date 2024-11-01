@@ -75,7 +75,7 @@ export function MobileModal() {
           <Separator />
           <ProfileContainer>
             <AvatarContainer>
-              <AvatarDefault src={session.data?.user.avatar_url} />
+              <AvatarDefault src={session.data?.user.avatarUrl} />
             </AvatarContainer>
             <SignOutContainer>
               <p>{firstName}</p>

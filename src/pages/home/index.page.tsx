@@ -63,7 +63,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
     setSelectedBook(foundBook)
     setOpenLateralMenu(true)
   }
-
+console.log(session)
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth <= 768)

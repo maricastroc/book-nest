@@ -60,7 +60,7 @@ export default async function handler(
 
     const profileData = {
       user: {
-        avatar_url: profile.avatarUrl,
+        avatarUrl: profile.avatarUrl,
         name: profile.name,
         createdAt: profile.createdAt,
       },

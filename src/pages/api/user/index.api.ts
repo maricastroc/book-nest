@@ -34,7 +34,7 @@ export default async function handler(
           const existingUser = await prisma.user.findUnique({
             where: { email },
           })
-          return !existingUser // Retorna true se o email não existir
+          return !existingUser
         },
         { message: 'Email already exists.' },
       ),

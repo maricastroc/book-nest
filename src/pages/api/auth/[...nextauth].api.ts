@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import GithubProvider, { GithubProfile } from 'next-auth/providers/github'
@@ -24,13 +23,14 @@ export function buildNextAuthOptions(
           },
         },
         profile(profile: GoogleProfile) {
+          console.log("Google Profile:", profile); // Adicione este log
           return {
             id: profile.sub,
             name: profile.name,
             email: profile.email,
-            avatar_url: profile.picture,
-          }
-        },
+            image: profile.picture,
+          };
+        }
       }),
       GithubProvider({
         allowDangerousEmailAccountLinking: true,
@@ -38,10 +38,10 @@ export function buildNextAuthOptions(
         clientSecret: process.env.GITHUB_SECRET ?? '',
         profile(profile: GithubProfile) {
           return {
-            id: profile.id,
+            id: profile.id.toString(),
             name: profile.name!,
             email: profile.email!,
-            avatar_url: profile.avatar_url,
+            avatarUrl: profile.avatarUrl,
           }
         },
       }),

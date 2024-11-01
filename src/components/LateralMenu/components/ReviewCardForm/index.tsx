@@ -24,7 +24,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useState } from 'react'
 
 interface ReviewCardFormProps {
-  avatar_url: string
+  avatarUrl: string
   name: string
   bookId: string
   userId: string | number | undefined
@@ -45,7 +45,7 @@ const reviewCardFormSchema = z.object({
 type ReviewCardFormData = z.infer<typeof reviewCardFormSchema>
 
 export function ReviewCardForm({
-  avatar_url,
+  avatarUrl,
   name,
   bookId,
   userId,
@@ -90,7 +90,7 @@ export function ReviewCardForm({
       <ReviewFormHeader>
         <UserData>
           <AvatarContainer>
-            <AvatarDefault src={avatar_url} />
+            <AvatarDefault src={avatarUrl} />
           </AvatarContainer>
           <p>{name}</p>
         </UserData>

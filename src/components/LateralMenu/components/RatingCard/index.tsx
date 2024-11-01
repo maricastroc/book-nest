@@ -34,9 +34,9 @@ import { useRouter } from 'next/router'
 
 interface RatingCardProps {
   id: string
-  avatar_url: string | null
+  avatarUrl: string | null
   name: string | null
-  created_at: Date | null
+  createdAt: Date | null
   description: string | null
   rating: number | null
   user: string | null
@@ -54,10 +54,10 @@ type EditReviewCardFormData = z.infer<typeof editReviewCardFormSchema>
 
 export function RatingCard({
   id,
-  avatar_url,
+  avatarUrl,
   name,
   rating,
-  created_at,
+  createdAt,
   description,
   user,
   userId,
@@ -78,7 +78,7 @@ export function RatingCard({
   const router = useRouter()
 
   const { dateFormatted, dateRelativeToNow, dateString } =
-    getDateFormattedAndRelative(created_at!)
+    getDateFormattedAndRelative(createdAt!)
 
   const [openEditReviewBox, setOpenEditReviewBox] = useState(false)
 
@@ -126,7 +126,7 @@ export function RatingCard({
                 router.push(`/profile/${userId}`)
               }}
             >
-              <AvatarDefault alt="" src={avatar_url!} />
+              <AvatarDefault alt="" src={avatarUrl!} />
             </AvatarContainer>
             <NameAndDate>
               <p>{name}</p>

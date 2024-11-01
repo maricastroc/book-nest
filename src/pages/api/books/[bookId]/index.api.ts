@@ -20,5 +20,9 @@ export default async function handler(
     },
   })
 
+  if (!book) {
+    return res.status(400).json({ message: 'Book does not exist.' })
+  }
+
   return res.json({ book })
 }
