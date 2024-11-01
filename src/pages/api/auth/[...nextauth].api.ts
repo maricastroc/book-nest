@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import GithubProvider, { GithubProfile } from 'next-auth/providers/github'
@@ -29,8 +30,8 @@ export function buildNextAuthOptions(
             email: profile.email,
             emailVerified: profile.email_verified,
             avatarUrl: profile.picture,
-          };
-        }
+          }
+        },
       }),
       GithubProvider({
         allowDangerousEmailAccountLinking: true,

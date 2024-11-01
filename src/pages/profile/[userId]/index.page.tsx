@@ -149,7 +149,7 @@ export default function Profile({ user, ratings, infos }: ProfileProps) {
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const userId = String(params?.userId)
-  
+
   try {
     const user = await prisma.user.findFirstOrThrow({
       where: {

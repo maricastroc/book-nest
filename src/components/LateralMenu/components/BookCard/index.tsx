@@ -21,7 +21,7 @@ interface BookCardProps {
   rating: number
   totalPages: number
   ratingsNumber: number
-  categories?: CategoryProps[] | undefined
+  categories: CategoryProps[] | null
 }
 
 export function BookCard({
@@ -57,7 +57,7 @@ export function BookCard({
       <Footer>
         <FooterItem>
           <BookmarkSimple />
-          {(categories && categoryNames) && (
+          {categories && categoryNames && (
             <ItemText>
               <p>Category</p>
               <h2>{categoryNames.join(', ')}</h2>

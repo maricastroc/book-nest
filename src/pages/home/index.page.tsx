@@ -63,7 +63,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
     setSelectedBook(foundBook)
     setOpenLateralMenu(true)
   }
-console.log(session)
+  console.log(session)
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth <= 768)
@@ -235,7 +235,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       ...book,
       rate: avgRate,
-      already_read: userBooksIds.includes(book.id),
+      alreadyRead: userBooksIds.includes(book.id),
     }
   })
 
@@ -258,7 +258,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const ratingWithReadStatus = ratings.map((rating) => {
     return {
       ...rating,
-      already_read: userBooksIds.includes(rating.book.id),
+      alreadyRead: userBooksIds.includes(rating.book.id),
     }
   })
 

@@ -72,7 +72,7 @@ export function PrismaAdapter(
         where: {
           provider_providerAccountId: {
             provider,
-            providerAccountId: providerAccountId,
+            providerAccountId,
           },
         },
         include: {
@@ -137,8 +137,8 @@ export function PrismaAdapter(
     async createSession({ sessionToken, userId, expires }) {
       await prisma.session.create({
         data: {
-          sessionToken: sessionToken,
-          userId: userId,
+          sessionToken,
+          userId,
           expires,
         },
       })
@@ -153,7 +153,7 @@ export function PrismaAdapter(
     async getSessionAndUser(sessionToken) {
       const prismaSession = await prisma.session.findUnique({
         where: {
-          sessionToken: sessionToken,
+          sessionToken,
         },
         include: {
           user: true,
@@ -184,11 +184,11 @@ export function PrismaAdapter(
     async updateSession({ sessionToken, userId, expires }) {
       const updatedSession = await prisma.session.update({
         where: {
-          sessionToken: sessionToken,
+          sessionToken,
         },
         data: {
           expires,
-          userId: userId,
+          userId,
         },
       })
 
@@ -202,7 +202,7 @@ export function PrismaAdapter(
     async deleteSession(sessionToken) {
       await prisma.session.delete({
         where: {
-          sessionToken: sessionToken,
+          sessionToken,
         },
       })
     },
