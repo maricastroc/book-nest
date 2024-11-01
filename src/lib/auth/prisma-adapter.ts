@@ -1,28 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
-import { Adapter } from 'next-auth/adapters'
+import { Adapter, AdapterUser } from 'next-auth/adapters'
 import { prisma } from '@/lib/prisma'
+
+interface CustomUser extends AdapterUser {
+  avatarUrl?: string | null
+}
 
 export function PrismaAdapter(
   req: NextApiRequest | NextPageContext['req'],
   res: NextApiResponse | NextPageContext['res'],
 ): Adapter {
   return {
-    async createUser(user) {
+    async createUser(user: Omit<CustomUser, 'id'>) {
       const createdUser = await prisma.user.create({
         data: {
           name: user.name!,
           email: user.email,
-          avatarUrl: user.image,
+          avatarUrl: user.avatarUrl,
         },
       })
+
+      console.log('Created User:', createdUser)
 
       return {
         id: createdUser.id,
         name: createdUser.name,
         email: createdUser.email!,
-        avatarUrl: createdUser.avatarUrl!,
+        avatarUrl: createdUser.avatarUrl,
         emailVerified: null,
       }
     },

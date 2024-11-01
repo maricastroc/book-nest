@@ -21,6 +21,7 @@ export function buildNextAuthOptions(
             prompt: 'consent',
             access_type: 'offline',
             response_type: 'code',
+            scope: 'profile email',
           },
         },
         profile(profile: GoogleProfile) {
