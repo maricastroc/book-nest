@@ -29,6 +29,7 @@ import { EmptyContainer } from '@/components/EmptyContainer'
 import { UserDetails } from '@/components/UserDetails'
 import { RatingProps } from '@/@types/rating'
 import { CategoryProps } from '@/@types/category'
+import { useScreenSize } from '@/utils/useScreenSize'
 
 interface ProfileProps {
   infos: {
@@ -58,20 +59,11 @@ interface ProfileProps {
 }
 
 export default function Profile({ user, allRatings, infos }: ProfileProps) {
-  const [isMobile, setIsMobile] = useState(false)
-
   const [ratings, setRatings] = useState(allRatings)
 
   const [search, setSearch] = useState('')
 
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth <= 768)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  const isMobile = useScreenSize(768)
 
   useEffect(() => {
     if (search) {
@@ -117,13 +109,17 @@ export default function Profile({ user, allRatings, infos }: ProfileProps) {
               <UserRatings>
                 {ratings?.length > 0 ? (
                   ratings.map((rating: RatingProps) => {
-                    return (
-                      <ProfileCard
-                        key={rating.id}
-                        book={rating.book}
-                        rating={rating}
-                      />
-                    )
+                    if (rating?.book) {
+                      return (
+                        <ProfileCard
+                          key={rating.id}
+                          book={rating.book}
+                          rating={rating}
+                        />
+                      )
+                    }
+
+                    return null
                   })
                 ) : (
                   <EmptyContainer />

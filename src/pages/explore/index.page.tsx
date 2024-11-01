@@ -10,7 +10,7 @@ import {
   ExploreContent,
   HeadingTitle,
 } from './styles'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { MobileHeader } from '@/components/MobileHeader'
 import { Sidebar } from '@/components/Sidebar'
 import { GetServerSideProps } from 'next'
@@ -23,6 +23,7 @@ import { LateralMenu } from '@/components/LateralMenu'
 import { NextSeo } from 'next-seo'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
+import { useScreenSize } from '@/utils/useScreenSize'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -30,8 +31,6 @@ export interface ExploreProps {
 }
 
 export default function Explore({ categories, books }: ExploreProps) {
-  const [isMobile, setIsMobile] = useState(false)
-
   const [booksList, setBooksList] = useState<BookProps[]>(books)
 
   const [categorySelected, setCategorySelected] = useState<string | null>(null)
@@ -41,6 +40,8 @@ export default function Explore({ categories, books }: ExploreProps) {
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
+
+  const isMobile = useScreenSize(768)
 
   const filteredBooks = booksList?.filter((book) => {
     return (
@@ -61,15 +62,6 @@ export default function Explore({ categories, books }: ExploreProps) {
     }
     setCategorySelected(categoryId)
   }
-
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth <= 768)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)

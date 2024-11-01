@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import {
   ActionButton,
@@ -31,54 +29,41 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
+import { RatingProps } from '@/@types/rating'
 
-interface RatingCardProps {
-  id: string
-  avatarUrl: string | null
-  name: string | null
-  createdAt: Date | null
-  description: string | null
-  rating: number | null
-  user: string | null
-  userId: string | null
+interface LateralRatingCardProps {
+  rating: RatingProps
   onCloseLateralMenu: () => void
 }
 
-const editReviewCardFormSchema = z.object({
+const editRatingCardFormSchema = z.object({
   description: z
     .string()
     .min(3, { message: 'Please, write your review before submit.' }),
 })
 
-type EditReviewCardFormData = z.infer<typeof editReviewCardFormSchema>
+type EditRatingCardFormData = z.infer<typeof editRatingCardFormSchema>
 
-export function RatingCard({
-  id,
-  avatarUrl,
-  name,
+export function LateralRatingCard({
   rating,
-  createdAt,
-  description,
-  user,
-  userId,
   onCloseLateralMenu,
-}: RatingCardProps) {
+}: LateralRatingCardProps) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { isSubmitting, errors },
-  } = useForm<EditReviewCardFormData>({
-    resolver: zodResolver(editReviewCardFormSchema),
+  } = useForm<EditRatingCardFormData>({
+    resolver: zodResolver(editRatingCardFormSchema),
     defaultValues: {
-      description: description || '',
+      description: rating.description || '',
     },
   })
 
   const router = useRouter()
 
   const { dateFormatted, dateRelativeToNow, dateString } =
-    getDateFormattedAndRelative(createdAt!)
+    getDateFormattedAndRelative(rating.createdAt)
 
   const [openEditReviewBox, setOpenEditReviewBox] = useState(false)
 
@@ -96,14 +81,15 @@ export function RatingCard({
       console.log(err)
     }
     onCloseLateralMenu()
-    toast.success('Review successfully deleted!')
+    toast.success('Rating successfully deleted!')
   }
 
-  async function handleEditReview(data: EditReviewCardFormData) {
+  async function handleEditRating(data: EditRatingCardFormData) {
     const description = String(data.description)
+
     try {
       const payload = {
-        id,
+        id: rating.id,
         description,
       }
       await api.put('/ratings', payload)
@@ -117,28 +103,28 @@ export function RatingCard({
   return (
     <RatingContainer>
       <RatingContent
-        className={user === session.data?.user.id ? 'from_user' : ''}
+        className={rating.userId === session.data?.user.id ? 'from_user' : ''}
       >
         <Header>
           <UserData>
             <AvatarContainer
               onClick={() => {
-                router.push(`/profile/${userId}`)
+                router.push(`/profile/${rating.userId}`)
               }}
             >
-              <AvatarDefault alt="" src={avatarUrl!} />
+              <AvatarDefault alt="" src={rating.user?.avatarUrl ?? ''} />
             </AvatarContainer>
             <NameAndDate>
-              <p>{name}</p>
+              <p>{rating.user.name}</p>
               <time title={dateFormatted} dateTime={dateString}>
                 {dateRelativeToNow}
               </time>
             </NameAndDate>
           </UserData>
-          <StarsRating rating={rating!} />
+          <StarsRating rating={rating.rate} />
         </Header>
         {openEditReviewBox ? (
-          <ReviewFormContainer onSubmit={handleSubmit(handleEditReview)}>
+          <ReviewFormContainer onSubmit={handleSubmit(handleEditRating)}>
             <ReviewForm
               placeholder="Write your review here"
               maxLength={450}
@@ -173,18 +159,18 @@ export function RatingCard({
           </ReviewFormContainer>
         ) : (
           <BookDescription>
-            <p>{description}</p>
+            <p>{rating.description}</p>
           </BookDescription>
         )}
       </RatingContent>
-      {user === session.data?.user.id && (
+      {rating.userId === session.data?.user.id && (
         <>
           <DeleteAndEdit>
             <Dialog.Root>
               <Dialog.Trigger asChild>
                 <Trash className="delete_icon" />
               </Dialog.Trigger>
-              <DeleteModal onConfirm={() => handleDeleteReview(id)} />
+              <DeleteModal onConfirm={() => handleDeleteReview(rating.id)} />
             </Dialog.Root>
             <Pencil
               className="edit_icon"

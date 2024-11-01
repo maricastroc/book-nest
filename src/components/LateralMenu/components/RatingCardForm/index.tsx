@@ -23,7 +23,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useState } from 'react'
 
-interface ReviewCardFormProps {
+interface RatingCardFormProps {
   avatarUrl: string
   name: string
   bookId: string
@@ -32,7 +32,7 @@ interface ReviewCardFormProps {
   onCloseLateralMenu: () => void
 }
 
-const reviewCardFormSchema = z.object({
+const ratingCardFormSchema = z.object({
   description: z
     .string()
     .min(3, { message: 'Please, write your review before submit.' }),
@@ -42,16 +42,16 @@ const reviewCardFormSchema = z.object({
     .max(5),
 })
 
-type ReviewCardFormData = z.infer<typeof reviewCardFormSchema>
+type RatingCardFormData = z.infer<typeof ratingCardFormSchema>
 
-export function ReviewCardForm({
+export function RatingCardForm({
   avatarUrl,
   name,
   bookId,
   userId,
   onClose,
   onCloseLateralMenu,
-}: ReviewCardFormProps) {
+}: RatingCardFormProps) {
   const [rating, setRating] = useState(0)
 
   const {
@@ -60,8 +60,8 @@ export function ReviewCardForm({
     watch,
     setValue,
     formState: { isSubmitting, errors },
-  } = useForm<ReviewCardFormData>({
-    resolver: zodResolver(reviewCardFormSchema),
+  } = useForm<RatingCardFormData>({
+    resolver: zodResolver(ratingCardFormSchema),
     defaultValues: {
       rating,
     },
@@ -74,7 +74,7 @@ export function ReviewCardForm({
 
   const characterCount = watch('description')?.split('').length || 0
 
-  async function handleSubmitNewReview(data: ReviewCardFormData) {
+  async function handleSubmitNewReview(data: RatingCardFormData) {
     await api.post(`/ratings/${bookId}`, {
       rate: data.rating,
       description: data.description,

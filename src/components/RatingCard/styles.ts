@@ -117,7 +117,7 @@ export const BookInfo = styled('div', {
   },
 })
 
-export const ReviewContainer = styled('div', {
+export const RatingContainer = styled('div', {
   maxHeight: '6.5rem',
   position: 'relative',
   overflow: 'scroll',

@@ -3,7 +3,7 @@ import {
   BookContainer,
   BookCover,
   BookDetails,
-  ReviewContainer,
+  RatingContainer,
   BookInfo,
   Container,
   Header,
@@ -17,12 +17,12 @@ import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
 
-interface ReviewCardProps {
+interface RatingCardProps {
   rating: RatingProps
   onClick: () => void
 }
 
-export function ReviewCard({ rating, ...rest }: ReviewCardProps) {
+export function RatingCard({ rating, ...rest }: RatingCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
 
@@ -32,7 +32,7 @@ export function ReviewCard({ rating, ...rest }: ReviewCardProps) {
 
   return (
     <Container>
-      {rating?.book.alreadyRead && (
+      {rating?.book && rating?.book.alreadyRead && (
         <ReadNotice>
           <p>READ</p>
         </ReadNotice>
@@ -55,19 +55,21 @@ export function ReviewCard({ rating, ...rest }: ReviewCardProps) {
         <StarsRating rating={rating.rate} />
       </Header>
       <Separator />
-      <BookContainer {...rest}>
-        <BookCover src={rating.book.coverUrl} alt="" />
-        <BookDetails>
-          <BookInfo>
-            <h2>{rating.book.name}</h2>
-            <p>{rating.book.author}</p>
-          </BookInfo>
-          <Separator />
-          <ReviewContainer>
-            <p>{rating.description}</p>
-          </ReviewContainer>
-        </BookDetails>
-      </BookContainer>
+      {rating?.book && (
+        <BookContainer {...rest}>
+          <BookCover src={rating.book.coverUrl} alt="" />
+          <BookDetails>
+            <BookInfo>
+              <h2>{rating.book.name}</h2>
+              <p>{rating.book.author}</p>
+            </BookInfo>
+            <Separator />
+            <RatingContainer>
+              <p>{rating.description}</p>
+            </RatingContainer>
+          </BookDetails>
+        </BookContainer>
+      )}
     </Container>
   )
 }

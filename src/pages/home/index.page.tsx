@@ -14,7 +14,7 @@ import {
   PopularBooksCardsContent,
   PopularBooksTitle,
 } from './styles'
-import { ReviewCard } from '@/components/ReviewCard'
+import { RatingCard } from '@/components/RatingCard'
 import { prisma } from '@/lib/prisma'
 import { GetServerSideProps } from 'next'
 import { buildNextAuthOptions } from '../api/auth/[...nextauth].api'
@@ -25,12 +25,13 @@ import { PopularBookCard } from '@/components/PopularBookCard'
 import { LastReadCard } from '@/components/LastReadCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
 import { NextSeo } from 'next-seo'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Sidebar } from '@/components/Sidebar'
 import { LateralMenu } from '@/components/LateralMenu'
 import { BookProps } from '@/@types/book'
 import { UserProps } from '@/@types/user'
 import { RatingProps } from '@/@types/rating'
+import { useScreenSize } from '@/utils/useScreenSize'
 
 export interface RecentReadCardProps {
   book: BookProps
@@ -50,29 +51,25 @@ interface HomeProps {
 export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const session = useSession()
 
-  const [isMobile, setIsMobile] = useState(false)
-
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  function handleSetSelectedBook(ratingBookId: string) {
+  const isMobile = useScreenSize(768)
+
+  function handleSetSelectedBook(ratingBookId: string | undefined) {
+    if (!ratingBookId) {
+      return
+    }
+
     const foundBook = books.find((book) => book.id === ratingBookId)
     if (!foundBook) {
       return
     }
+
     setSelectedBook(foundBook)
     setOpenLateralMenu(true)
   }
-
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth <= 768)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
@@ -95,7 +92,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
             <LastRatingsWrapper>
               {session.data?.user && (
                 <LastReadContainer>
-                  {userLastRating ? (
+                  {userLastRating && userLastRating?.book ? (
                     <>
                       <LastReadTitle>Your last reading</LastReadTitle>
                       <LastReadCard
@@ -117,11 +114,11 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
                 <LastRatingsContent>
                   {ratings.length > 0 &&
                     ratings.map((rating) => (
-                      <ReviewCard
+                      <RatingCard
                         key={rating.id}
                         rating={rating}
                         onClick={() => {
-                          handleSetSelectedBook(rating.book.id)
+                          handleSetSelectedBook(rating?.book?.id)
                         }}
                       />
                     ))}

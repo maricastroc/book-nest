@@ -12,9 +12,9 @@ import { X } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/lib/axios'
 import { Rating as RatingInfo, User as UserPrisma } from '@prisma/client'
-import { RatingCard } from './components/RatingCard'
+import { LateralRatingCard } from './components/LateralRatingCard'
 import { useSession } from 'next-auth/react'
-import { ReviewCardForm } from './components/ReviewCardForm'
+import { RatingCardForm } from './components/RatingCardForm'
 import * as Dialog from '@radix-ui/react-dialog'
 import { LoginModal } from '../LoginModal'
 import { BookProps } from '@/@types/book'
@@ -86,7 +86,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
             )}
           </RatingsContentTitle>
           {session.data?.user && openReviewForm && book && (
-            <ReviewCardForm
+            <RatingCardForm
               avatarUrl={session.data?.user?.avatarUrl ?? ''}
               name={session.data?.user.name}
               onClose={() => setOpenReviewForm(false)}
@@ -97,16 +97,9 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
           )}
           <RatingsContent>
             {ratings?.map((rating) => (
-              <RatingCard
+              <LateralRatingCard
                 key={rating.id}
-                id={rating.id}
-                avatarUrl={rating.user.avatarUrl}
-                name={rating.user.name}
-                createdAt={rating.createdAt}
-                rating={rating.rate}
-                description={rating.description}
-                user={rating.userId}
-                userId={rating.user.id}
+                rating={rating}
                 onCloseLateralMenu={() => onClose()}
               />
             ))}

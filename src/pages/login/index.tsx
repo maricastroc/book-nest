@@ -1,23 +1,63 @@
+import { useState } from 'react'
 import { Icon } from '@iconify/react'
-import { RocketLaunch } from 'phosphor-react'
+import { RocketLaunch, SignIn } from 'phosphor-react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
+import * as Dialog from '@radix-ui/react-dialog'
+import { z } from 'zod'
+import { signIn } from 'next-auth/react'
+
+import { SignUpModal } from '@/components/SignUpModal'
+import { CustomLabel } from '@/components/shared/Label'
+import { InputContainer } from '@/components/shared/InputContainer'
+import { FormErrors } from '@/components/shared/FormErrors'
+import { CustomButton } from '@/components/shared/Button'
+
 import {
-  ButtonAccess,
-  ButtonsContainer,
   CoverContainer,
   Heading,
+  Input,
+  SignUpBtn,
   Container,
   Separator,
   WelcomeContainer,
+  FormContainer,
+  WelcomeContent,
+  Divider,
+  AuthContainer,
+  AuthOptions,
+  AuthItem,
+  HorizontalDivider,
 } from './styles'
+
 import Image from 'next/image'
 import CoverImage from '../../../public/assets/cover.png'
 import Logo from '../../../public/assets/logo.svg'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
+import { useScreenSize } from '@/utils/useScreenSize'
+
+const loginFormSchema = z.object({
+  email: z.string().min(3, { message: 'E-mail is required.' }),
+  password: z.string().min(3, { message: 'Password is required' }),
+})
+
+type LoginFormData = z.infer<typeof loginFormSchema>
 
 export default function Login() {
+  const {
+    register,
+    formState: { isSubmitting, errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: { email: '', password: '' },
+  })
+
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false)
+
   const router = useRouter()
+
+  const isMobile = useScreenSize(480)
 
   async function handleSignIn(provider: string) {
     if (provider === 'google') {
@@ -51,24 +91,77 @@ export default function Login() {
         </CoverContainer>
         <Separator />
         <WelcomeContainer>
-          <Heading>
-            <h2>Welcome!</h2>
-            <p>Please, login or enter as a guest.</p>
-          </Heading>
-          <ButtonsContainer>
-            <ButtonAccess onClick={() => handleSignIn('google')}>
-              <Icon icon="flat-color-icons:google" />
-              <p>Login with Google</p>
-            </ButtonAccess>
-            <ButtonAccess onClick={() => handleSignIn('github')}>
-              <Icon icon="ant-design:github-outlined" color="white" />
-              <p>Login with GitHub</p>
-            </ButtonAccess>
-            <ButtonAccess onClick={() => handleSignIn('visitor')}>
-              <RocketLaunch size={32} className="rocket-icon" />
-              <p>Access as a guest</p>
-            </ButtonAccess>
-          </ButtonsContainer>
+          <WelcomeContent>
+            <Heading>
+              <h2>Welcome!</h2>
+              <p>Please, login or enter as a guest.</p>
+            </Heading>
+            <FormContainer>
+              <InputContainer>
+                <CustomLabel>Your e-mail here:</CustomLabel>
+                <Input placeholder="myuser@email.com" {...register('email')} />
+                {errors.email && <FormErrors error={errors.email.message} />}
+              </InputContainer>
+
+              <InputContainer>
+                <CustomLabel>Your password here:</CustomLabel>
+                <Input
+                  type="password"
+                  placeholder="password"
+                  {...register('password')}
+                />
+                {errors.password && (
+                  <FormErrors error={errors.password.message} />
+                )}
+              </InputContainer>
+
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <SignUpBtn
+                    type="button"
+                    onClick={() => setIsSignUpModalOpen(true)}
+                  >
+                    Still don&apos;t have an account? Click here to sign up!
+                  </SignUpBtn>
+                </Dialog.Trigger>
+                {isSignUpModalOpen && (
+                  <SignUpModal onClose={() => setIsSignUpModalOpen(false)} />
+                )}
+              </Dialog.Root>
+
+              <CustomButton
+                type="submit"
+                content="Sign in"
+                icon={<SignIn size={24} />}
+                disabled={isSubmitting}
+              />
+              <Divider />
+
+              <AuthContainer>
+                <p>Or Login with:</p>
+                <AuthOptions>
+                  <AuthItem onClick={() => handleSignIn('google')}>
+                    <Icon icon="flat-color-icons:google" fontSize={24} />
+                    <p>Google</p>
+                  </AuthItem>
+                  {!isMobile && <HorizontalDivider />}
+                  <AuthItem onClick={() => handleSignIn('github')}>
+                    <Icon
+                      icon="ant-design:github-outlined"
+                      color="white"
+                      fontSize={24}
+                    />
+                    <p>Github</p>
+                  </AuthItem>
+                  {!isMobile && <HorizontalDivider />}
+                  <AuthItem onClick={() => router.push('/home')}>
+                    {<RocketLaunch size={24} />}
+                    <p>Guest</p>
+                  </AuthItem>
+                </AuthOptions>
+              </AuthContainer>
+            </FormContainer>
+          </WelcomeContent>
         </WelcomeContainer>
       </Container>
     </>

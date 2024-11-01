@@ -1,27 +1,39 @@
-import { styled } from '../../styles'
+import { styled } from '@/styles'
 
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  width: '100%',
+  width: '100vw',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '6rem 1.5rem 3rem',
-  height: '100%',
+  padding: '3rem 1.5rem 3rem',
   maxWidth: 'clamp(80rem, 85%, 40rem)',
+  zIndex: '0',
 
-  '@media (min-width: 820px)': {
-    padding: 0,
+  '@media (min-width: 980px)': {
+    display: 'grid',
+    gridTemplateColumns: '3fr 1fr',
     alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    padding: '0 1.5rem',
+    margin: '0 auto',
+    maxWidth: '100%',
+  },
+
+  '@media (min-width: 1200px)': {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    maxWidth: '90rem',
+    margin: '0 auto',
   },
 })
 
 export const CoverContainer = styled('div', {
   display: 'flex',
-  padding: '1.25rem',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '1.7rem 1.25rem',
   position: 'relative',
+  width: '100%',
 
   '.cover_image': {
     display: 'none',
@@ -34,15 +46,11 @@ export const CoverContainer = styled('div', {
     height: 'auto',
   },
 
-  '@media (min-width: 820px)': {
-    minHeight: '100vh',
-    height: '100%',
-
+  '@media (min-width: 980px)': {
     '.cover_image': {
       display: 'flex',
-      width: '50vw',
-      height: 'auto',
       borderRadius: '12px',
+      width: '100%',
     },
 
     '.logo_image': {
@@ -54,33 +62,47 @@ export const CoverContainer = styled('div', {
       height: 'auto',
     },
   },
-
-  '@media (min-width: 1150px)': {
-    '.cover_image': {
-      minWidth: '100%',
-    },
-  },
 })
+
 export const Separator = styled('span', {
   width: '100%',
   height: 0.7,
   backgroundColor: '$gray700',
-  margin: '0.5rem 0 4rem',
+  margin: '0.5rem 0 2.5rem',
 
-  '@media (min-width: 820px)': {
+  '@media (min-width: 980px)': {
     display: 'none',
+  },
+})
+
+export const WelcomeContent = styled('div', {
+  display: 'flex',
+  padding: '0 1.25rem',
+  gap: '3.8rem',
+  flexDirection: 'column',
+  width: '100%',
+  maxWidth: '30rem',
+
+  '@media (min-width: 980px)': {
+    padding: '3.5rem 1.25rem',
+    minWidth: '25rem',
+    gap: '3rem',
+  },
+
+  '@media (min-width: 1200px)': {
+    maxWidth: '30rem',
   },
 })
 
 export const WelcomeContainer = styled('div', {
   display: 'flex',
-  padding: '1.25rem',
+  width: '100%',
   gap: '3.8rem',
-  flexDirection: 'column',
   alignItems: 'center',
+  justifyContent: 'center',
 
   '@media (min-width: 480px)': {
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
 })
 
@@ -98,60 +120,119 @@ export const Heading = styled('div', {
     color: '$gray200',
   },
 
-  '@media (min-width: 480px)': {
+  '@media (min-width: 980px)': {
     textAlign: 'left',
   },
 })
 
-export const ButtonsContainer = styled('div', {
+export const FormContainer = styled('form', {
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
+  gap: '1.5rem',
+  width: '100%',
 })
 
-export const ButtonAccess = styled('button', {
+export const SignUpBtn = styled('button', {
+  backgroundColor: '$transparent',
   cursor: 'pointer',
+  fontSize: '0.8rem',
   border: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1.25rem',
-  backgroundColor: '$gray600',
-  borderRadius: 8,
-  padding: '1.25rem 1.5rem',
-  width: '16rem',
-  fontSize: '0.95rem',
-
-  svg: {
-    fontSize: 32,
-  },
-
-  p: {
-    color: '$gray100',
-  },
-
-  '& .rocket-icon': {
-    color: '$purple100',
-  },
+  color: '$gray400',
+  marginTop: '-1rem',
 
   '&:hover': {
-    backgroundColor: '$gray500',
-    transition: 'all 200ms',
-  },
-
-  '@media (min-width: 350px)': {
-    width: '18rem',
+    color: '$gray300',
+    transition: '200ms',
   },
 
   '@media (min-width: 480px)': {
-    fontSize: '1.1rem',
-    width: '23.25rem',
+    fontSize: '0.9rem',
+  },
+})
+
+export const Divider = styled('span', {
+  backgroundColor: '$gray600',
+  height: 0.5,
+  color: '$gray300',
+  width: '100%',
+  marginTop: 1,
+})
+
+export const Input = styled('input', {
+  backgroundColor: 'transparent',
+  border: 'solid 1px $gray500',
+  color: '$gray100',
+  padding: '0.6rem',
+  fontSize: '0.95rem',
+  borderRadius: 10,
+})
+
+export const AuthContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  gap: '1.8rem',
+  color: '$gray300',
+  fontSize: '0.9rem',
+})
+
+export const AuthOptions = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '1.5rem',
+  width: '100%',
+
+  '@media (min-width: 480px)': {
+    flexDirection: 'row',
+    width: 'auto',
+  },
+})
+
+export const AuthItem = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.5rem',
+  color: '$gray300',
+  fontSize: '0.9rem',
+  border: '1px solid $gray500',
+  borderRadius: 8,
+  padding: '0.8rem 1rem',
+  backgroundColor: 'transparent',
+  width: '100%',
+  cursor: 'pointer',
+
+  p: {
+    borderBottom: '1px solid transparent',
   },
 
-  '@media (min-width: 820px)': {
-    width: 'clamp(15rem, 40vw, 23rem)',
+  svg: {
+    color: '$purple100',
   },
 
-  '@media (min-width: 920px)': {
-    width: '23.25rem',
+  '@media (min-width: 480px)': {
+    border: 'none',
+    width: 'auto',
+    backgroundColor: 'transparent',
+    padding: 0,
+
+    '&:hover': {
+      p: {
+        borderBottom: '1px solid $gray300',
+        transition: '200ms',
+      },
+    },
   },
+})
+
+export const HorizontalDivider = styled('span', {
+  backgroundColor: '$gray600',
+  height: '2rem',
+  color: '$gray300',
+  width: 1,
+  marginTop: 1,
 })

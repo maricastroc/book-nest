@@ -11,7 +11,7 @@ export const users = [
     name: 'Brandon Botosh',
     email: 'brandon@gmail.com',
     avatarUrl:
-      'https://images.unsplash.com/photo-1531891437562-4301cf35b7e4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80',
+      './users/images/brandon_profile.png',
   },
   {
     id: '4383f783-6ce1-4f92-b1dd-7a7a693c4aef',

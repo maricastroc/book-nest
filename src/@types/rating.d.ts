@@ -7,7 +7,7 @@ export interface RatingProps {
   description: string
   createdAt: Date
 
-  book: BookProps
+  book?: BookProps | undefined
   bookId: string
 
   user: UserProps
