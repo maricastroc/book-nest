@@ -34,7 +34,7 @@ model Book {
   totalPages  Int
   createdAt   DateTime @default(now())
   
-  userId      String? // Adicionando o campo userId
+  userId      String?
   user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   categories CategoriesOnBooks[]

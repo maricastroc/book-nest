@@ -101,7 +101,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
                 id={rating.id}
                 avatarUrl={rating.user.avatarUrl}
                 name={rating.user.name}
-                created_at={rating.createdAt}
+                createdAt={rating.createdAt}
                 rating={rating.rate}
                 description={rating.description}
                 user={rating.userId}

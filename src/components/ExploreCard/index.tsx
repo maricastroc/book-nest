@@ -2,7 +2,7 @@ import { StarsRating } from '../StarsRating'
 import { BookCover, BookData, BookInfo, Container, ReadNotice } from './styles'
 
 interface ExploreCardProps {
-  cover_url: string
+  coverUrl: string
   name: string
   author: string
   rating: number
@@ -11,7 +11,7 @@ interface ExploreCardProps {
 }
 
 export function ExploreCard({
-  cover_url,
+  coverUrl,
   name,
   author,
   rating,
@@ -20,7 +20,7 @@ export function ExploreCard({
 }: ExploreCardProps) {
   return (
     <Container {...rest}>
-      <BookCover alt="" src={cover_url} />
+      <BookCover alt="" src={coverUrl} />
       <BookInfo>
         {alreadyRead && (
           <ReadNotice>

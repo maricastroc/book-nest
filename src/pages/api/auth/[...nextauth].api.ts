@@ -23,12 +23,12 @@ export function buildNextAuthOptions(
           },
         },
         profile(profile: GoogleProfile) {
-          console.log("Google Profile:", profile); // Adicione este log
           return {
             id: profile.sub,
             name: profile.name,
             email: profile.email,
-            image: profile.picture,
+            emailVerified: profile.email_verified,
+            avatarUrl: profile.picture,
           };
         }
       }),
@@ -41,7 +41,7 @@ export function buildNextAuthOptions(
             id: profile.id.toString(),
             name: profile.name!,
             email: profile.email!,
-            avatarUrl: profile.avatarUrl,
+            avatarUrl: profile.avatar_url,
           }
         },
       }),
