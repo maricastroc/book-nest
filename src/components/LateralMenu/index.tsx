@@ -64,11 +64,11 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
 
   return (
     <Container>
-      <CloseButton onClick={() => onClose()}>
-        <X />
-      </CloseButton>
       <ContainerOverlay onClick={() => onClose()} />
       <LateralMenuContainer>
+        <CloseButton onClick={() => onClose()}>
+          <X />
+        </CloseButton>
         {book && (
           <BookCard
             key={book.id}

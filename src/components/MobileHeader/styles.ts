@@ -1,4 +1,4 @@
-import { styled } from '../../styles'
+import { styled } from '@/styles'
 
 export const Container = styled('div', {
   display: 'flex',
@@ -14,6 +14,10 @@ export const Container = styled('div', {
 
   '@media (min-width: 480px)': {
     padding: '2rem 1.8rem 1.5rem',
+  },
+
+  '@media (min-width: 768px)': {
+    maxWidth: '100%',
   },
 })
 

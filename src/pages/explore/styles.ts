@@ -205,7 +205,6 @@ export const BooksContainer = styled('div', {
 
   '@media (min-width: 768px)': {
     gridTemplateColumns: '1fr 1fr',
-    paddingRight: '1rem',
   },
 
   '@media (min-width: 1400px)': {

@@ -1,7 +1,5 @@
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import {
-  AvatarContainer,
-  AvatarDefault,
   Container,
   EditUserBtn,
   ItemText,
@@ -27,6 +25,7 @@ import { handleAxiosError } from '@/utils/handleAxiosError'
 import { RatingProps } from '@/@types/rating'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+import { Avatar } from '../Avatar'
 
 interface UserDetailsProps {
   userId: string
@@ -64,7 +63,6 @@ export function UserDetails({ userId }: UserDetailsProps) {
         try {
           const response = await api.get(`/profile/${userId}`)
           if (response.data) {
-            console.log(response.data)
             setUserData(response.data.profile)
           }
         } catch (error) {
@@ -95,12 +93,10 @@ export function UserDetails({ userId }: UserDetailsProps) {
       ) : (
         <>
           <UserInfo>
-            <AvatarContainer>
-              <AvatarDefault
-                alt=""
-                src={userData?.user.avatarUrl ?? AVATAR_URL_DEFAULT}
-              />
-            </AvatarContainer>
+            <Avatar
+              avatarUrl={userData?.user.avatarUrl ?? AVATAR_URL_DEFAULT}
+              variant="large"
+            />
             <h2>{userData?.user.name}</h2>
             <time title={dateFormatted} dateTime={dateString}>
               joined {dateRelativeToNow}

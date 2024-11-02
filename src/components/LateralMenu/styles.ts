@@ -57,13 +57,15 @@ export const RatingContainer = styled('div', {
   },
 })
 
-export const CloseButton = styled('div', {
+export const CloseButton = styled('button', {
   cursor: 'pointer',
   position: 'absolute',
-  zIndex: 999,
+  zIndex: 1,
   top: '6%',
   left: '92%',
   transform: 'translate(-50%, -50%)',
+  backgroundColor: 'transparent',
+  border: 'none',
 
   svg: {
     fontSize: '1.4rem',

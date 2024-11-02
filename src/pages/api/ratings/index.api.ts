@@ -57,13 +57,14 @@ export default async function handler(
 
     return res.status(200).json({ message: 'Review successfully deleted!' })
   } else if (req.method === 'PUT') {
-    const { id, description } = req.body
+    const { id, description, rate } = req.body
     const updatedPost = await prisma.rating.update({
       where: {
         id,
       },
       data: {
         description,
+        rate,
       },
     })
 

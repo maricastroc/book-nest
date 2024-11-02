@@ -1,15 +1,31 @@
 import { ImgHTMLAttributes } from 'react'
 import { AvatarContainer, AvatarDefault } from './styles'
+import { CircularProgress } from '@mui/material'
 
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
   avatarUrl: string
-  onClick: () => void
+  isClickable?: boolean
+  variant?: '' | 'medium' | 'regular' | 'large'
+  onClick?: () => void
+  isLoading?: boolean
 }
 
-export function Avatar({ avatarUrl, onClick }: AvatarProps) {
-  return (
-    <AvatarContainer onClick={() => onClick()}>
-      <AvatarDefault src={avatarUrl} />
+export function Avatar({
+  avatarUrl,
+  onClick,
+  isClickable = false,
+  variant = '',
+  isLoading = false,
+}: AvatarProps) {
+  return isLoading ? (
+    <CircularProgress size="1.5rem" />
+  ) : (
+    <AvatarContainer
+      className={variant}
+      style={{ cursor: isClickable ? 'pointer' : 'default' }}
+      onClick={isClickable && onClick ? onClick : undefined}
+    >
+      <AvatarDefault className={variant} src={avatarUrl} />
     </AvatarContainer>
   )
 }

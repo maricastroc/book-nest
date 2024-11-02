@@ -25,6 +25,7 @@ import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { handleAxiosError } from '@/utils/handleAxiosError'
+import { useRouter } from 'next/router'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -42,7 +43,13 @@ export default function Explore({ categories, books }: ExploreProps) {
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const isMobile = useScreenSize(768)
+  const isMobile = useScreenSize(980)
+
+  const router = useRouter()
+
+  const refreshData = () => {
+    router.replace(router.asPath)
+  }
 
   async function selectCategory(categoryId: string | null) {
     try {
@@ -88,7 +95,13 @@ export default function Explore({ categories, books }: ExploreProps) {
       <NextSeo title="Explore | Book Wise" />
       <Container>
         {openLateralMenu && (
-          <LateralMenu book={selectedBook} onClose={handleCloseLateralMenu} />
+          <LateralMenu
+            book={selectedBook}
+            onClose={() => {
+              handleCloseLateralMenu()
+              refreshData()
+            }}
+          />
         )}
         {isMobile ? <MobileHeader /> : <Sidebar />}
         <ExploreContainer>

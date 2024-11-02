@@ -1,6 +1,4 @@
 import {
-  AvatarContainer,
-  AvatarDefault,
   BackgroundContainer,
   Container,
   Item,
@@ -28,6 +26,7 @@ import { UserProps } from '@/@types/user'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 import { CircularProgress } from '@mui/material'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+import { Avatar } from '../Avatar'
 
 interface NavigationItemProps {
   active: boolean
@@ -129,9 +128,12 @@ export function Sidebar() {
               {isLoading ? (
                 <CircularProgress size="1.5rem" />
               ) : (
-                <AvatarContainer>
-                  <AvatarDefault src={user?.avatarUrl ?? AVATAR_URL_DEFAULT} />
-                </AvatarContainer>
+                <Avatar
+                  isClickable
+                  isLoading={isLoading}
+                  avatarUrl={user?.avatarUrl ?? AVATAR_URL_DEFAULT}
+                  onClick={() => router.push(`profile/${session.data.user.id}`)}
+                />
               )}
               <SignOutContainer onClick={handleLogout}>
                 <p>{userFirstName}</p>

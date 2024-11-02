@@ -101,25 +101,6 @@ export const SignOutContainer = styled('div', {
   },
 })
 
-export const AvatarContainer = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 36,
-  height: 36,
-  borderRadius: '50%',
-  background: '$gradient-vertical',
-})
-
-export const AvatarDefault = styled('img', {
-  overflow: 'hidden',
-  objectFit: 'cover',
-  borderRadius: '50%',
-  width: 34,
-  aspectRatio: 'auto 34 / 34',
-  height: 34,
-})
-
 export const Separator = styled('span', {
   width: '100%',
   height: 0.5,

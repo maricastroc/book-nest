@@ -1,13 +1,9 @@
 import { StyledFormErrors } from './styles'
 
 interface FormErrorsProps {
-  error: string | undefined
+  error: string | undefined | null
 }
 
 export const FormErrors = ({ error }: FormErrorsProps) => {
-  return (
-    <StyledFormErrors>
-      <span>{error}</span>
-    </StyledFormErrors>
-  )
+  return <StyledFormErrors>{error && <span>{error}</span>}</StyledFormErrors>
 }

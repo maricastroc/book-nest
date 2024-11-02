@@ -121,24 +121,3 @@ export const ItemText = styled('div', {
     },
   },
 })
-
-export const AvatarContainer = styled('a', {
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 70,
-  height: 70,
-  borderRadius: '50%',
-  background: '$gradient-vertical',
-  marginBottom: '1.5rem',
-})
-
-export const AvatarDefault = styled('img', {
-  overflow: 'hidden',
-  objectFit: 'cover',
-  borderRadius: '50%',
-  width: 66,
-  aspectRatio: 'auto 68 / 68',
-  height: 66,
-})

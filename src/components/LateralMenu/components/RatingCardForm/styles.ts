@@ -37,25 +37,6 @@ export const UserData = styled('div', {
   },
 })
 
-export const AvatarContainer = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 36,
-  height: 36,
-  borderRadius: '50%',
-  background: '$gradient-vertical',
-})
-
-export const AvatarDefault = styled('img', {
-  overflow: 'hidden',
-  objectFit: 'cover',
-  borderRadius: '50%',
-  width: 34,
-  aspectRatio: 'auto 34 / 34',
-  height: 34,
-})
-
 export const ReviewFormContainer = styled('div', {
   position: 'relative',
   width: '100%',
@@ -68,26 +49,32 @@ export const ReviewForm = styled('textarea', {
   padding: '0.875rem 0.875rem 1.25rem',
   border: 'solid 1px $gray500',
   borderRadius: 8,
-  height: 164,
+  height: 188,
   minHeight: 80,
-  resize: 'none',
-  color: '$white',
+  color: '$gray300',
+  lineHeight: '1.3rem',
+  resize: 'vertical',
+})
+
+export const FooterContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  width: '100%',
+})
+
+export const InfoContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  marginLeft: '0.2rem',
 })
 
 export const CharacterCounter = styled('span', {
-  position: 'absolute',
   fontSize: '0.75rem',
-  color: '$gray400',
-  top: '85%',
-  right: '3vw',
-
-  '@media (min-width: 580px)': {
-    right: '2vw',
-  },
-
-  '@media (min-width: 1024px)': {
-    right: '2%',
-  },
+  color: '$gray100',
+  padding: '0.2rem 0',
+  marginBottom: '0.2rem',
 })
 
 export const ButtonsContainer = styled('div', {
@@ -115,7 +102,16 @@ export const ActionButton = styled('button', {
 
   '&:hover': {
     backgroundColor: '$gray500',
-    transition: 'all 0.5s ease-in-out',
+    transition: '200ms',
+  },
+
+  '&.lighter': {
+    backgroundColor: '$gray700',
+
+    '&:hover': {
+      filter: 'brightness(1.2)',
+      transition: '200ms',
+    },
   },
 
   variants: {
@@ -124,17 +120,5 @@ export const ActionButton = styled('button', {
         cursor: 'not-allowed',
       },
     },
-  },
-})
-
-export const FormErrors = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: '0.4rem',
-
-  span: {
-    color: '#F75A68',
-    fontSize: '0.8rem',
   },
 })
