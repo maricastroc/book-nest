@@ -36,7 +36,7 @@ export const ExploreContainer = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   maxWidth: '45rem',
-  marginTop: '1rem',
+  marginTop: '2rem',
 
   '@media (min-width: 768px)': {
     justifyContent: 'flex-start',
@@ -69,30 +69,17 @@ export const Heading = styled('div', {
 })
 
 export const HeadingTitle = styled('div', {
-  marginTop: '2rem',
   display: 'flex',
   alignItems: 'flex-start',
   gap: '0.8rem',
 
   h2: {
-    fontSize: '1.2rem',
+    fontSize: '1.5rem',
   },
 
   svg: {
-    fontSize: '1.8rem',
+    fontSize: '2rem',
     color: '$green100',
-  },
-
-  '@media (min-width: 980px)': {
-    marginTop: 0,
-
-    h2: {
-      fontSize: '1.5rem',
-    },
-
-    svg: {
-      fontSize: '2rem',
-    },
   },
 })
 
@@ -162,7 +149,7 @@ export const SearchBar = styled('div', {
 })
 
 export const Categories = styled('div', {
-  marginTop: '2.5rem',
+  marginTop: '1rem',
   display: 'flex',
   flexWrap: 'wrap',
   gap: '0.7rem',
