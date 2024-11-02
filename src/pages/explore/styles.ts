@@ -18,12 +18,11 @@ export const Container = styled('div', {
     alignItems: 'stretch',
     padding: '0 2rem 0 1rem',
     gap: '2.5rem',
-    paddingRight: '3rem',
+    paddingRight: '2rem',
     paddingLeft: '18rem',
   },
 
   '@media (min-width: 1024px)': {
-    paddingRight: '5rem',
     gap: '5rem',
     paddingLeft: '18rem',
   },
@@ -36,13 +35,17 @@ export const ExploreContainer = styled('div', {
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
-  maxWidth: '35rem',
-  marginTop: '2rem',
+  maxWidth: '45rem',
+  marginTop: '1rem',
 
   '@media (min-width: 768px)': {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     maxWidth: '100%',
+  },
+
+  '@media (min-width: 980px)': {
+    marginTop: '0.5rem',
   },
 })
 
@@ -101,6 +104,7 @@ export const ExploreContent = styled('div', {
   justifyContent: 'center',
 
   '@media (min-width: 768px)': {
+    paddingRight: '1rem',
     justifyContent: 'flex-start',
     overflowY: 'scroll',
   },

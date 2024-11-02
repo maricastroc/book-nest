@@ -44,14 +44,24 @@ export const ProfileWrapper = styled('div', {
   justifyContent: 'center',
   margin: '0 auto',
   maxHeight: '100%',
+  padding: '1rem',
   paddingTop: '2rem',
-  maxWidth: '32rem',
+  maxWidth: '42rem',
+
+  '@media (min-width: 480px)': {
+    padding: '1.5rem',
+  },
+
+  '@media (min-width: 980px)': {
+    marginTop: '0.5rem',
+  },
 
   '@media (min-width: 1024px)': {
     flexDirection: 'row',
     maxWidth: '100%',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    padding: '1.5rem 0',
     gap: '1rem',
   },
 })

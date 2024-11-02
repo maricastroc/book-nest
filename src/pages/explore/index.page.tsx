@@ -1,4 +1,4 @@
-import { Binoculars, MagnifyingGlass } from 'phosphor-react'
+import { Binoculars, MagnifyingGlass, X } from 'phosphor-react'
 import {
   Categories,
   CategoryBtn,
@@ -118,7 +118,11 @@ export default function Explore({ categories, books }: ExploreProps) {
                 onChange={(e) => setSearch(e.target.value)}
                 spellCheck={false}
               />
-              <MagnifyingGlass />
+                {search === '' ? (
+                  <MagnifyingGlass />
+                ) : (
+                  <X onClick={() => setSearch('')} />
+                )}
             </SearchBar>
           </Heading>
           <ExploreContent>

@@ -47,6 +47,7 @@ export const HomeContainer = styled('div', {
   },
 
   '@media (min-width: 768px)': {
+    marginTop: '2.5rem',
     alignItems: 'flex-start',
     padding: '0 0 0 2rem',
     maxWidth: '100%',
