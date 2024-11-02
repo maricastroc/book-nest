@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useEffect, useRef, useState } from 'react'
-
 import {
   Overlay,
   Description,
@@ -74,15 +73,10 @@ type SignUpFormData = z.infer<ReturnType<typeof signUpFormSchema>>
 
 export function EditUserModal({ onClose }: SignUpModalProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
-
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
-
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
-
   const [changePassword, setChangePassword] = useState(false)
-
   const [isLoading, setIsLoading] = useState(false)
-
   const { data: session } = useSession()
 
   const {
@@ -101,20 +95,17 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
     },
   })
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       setValue('avatarUrl', file)
-
       const reader = new FileReader()
-      reader.onload = () => {
-        setAvatarPreview(reader.result as string)
-      }
+      reader.onload = () => setAvatarPreview(reader.result as string)
       reader.readAsDataURL(file)
     }
   }
 
-  const handleFileButtonClick = () => {
+  const handleAvatarChangeClick = () => {
     inputFileRef.current?.click()
   }
 
@@ -125,31 +116,15 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
       formData.append('name', data.name)
       formData.append('user_id', session.user.id.toString())
 
-      if (data.avatarUrl) {
-        formData.append('avatarUrl', data.avatarUrl)
-      }
-
-      if (data.oldPassword) {
-        formData.append('oldPassword', data.oldPassword)
-      }
-
-      if (data.password) {
-        formData.append('password', data.password)
-      }
+      if (data.avatarUrl) formData.append('avatarUrl', data.avatarUrl)
+      if (data.oldPassword) formData.append('oldPassword', data.oldPassword)
+      if (data.password) formData.append('password', data.password)
 
       try {
-        const response = await api.put(
-          `/user/edit/${session.user.id}`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
-
+        await api.put(`/user/edit/${session.user.id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
         toast.success('User successfully updated!')
-
         onClose()
       } catch (error) {
         handleAxiosError(error)
@@ -161,17 +136,13 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
     const loadUser = async () => {
       if (session?.user) {
         setIsLoading(true)
-
         try {
-          const response = await api.get(`/profile/${session?.user.id}`)
+          const response = await api.get(`/profile/${session.user.id}`)
           if (response.data) {
             const user = response.data.profile.user
             setAvatarPreview(`../${user.avatarUrl}`)
-
             setAvatarUrl(`../${user.avatarUrl}`)
-
             setValue('name', user.name)
-
             setValue('email', user.email)
           }
         } catch (error) {
@@ -188,17 +159,15 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
   return (
     <Dialog.Portal>
       <Overlay className="DialogOverlay" />
-
       <Content className="DialogContent">
         <Header>
           <Title className="DialogTitle">
             Please, fill the fields above to sign up.
           </Title>
-          <CloseButton>
+          <CloseButton onClick={onClose}>
             <X alt="Close" />
           </CloseButton>
         </Header>
-
         <Description className="DialogDescription">
           <FormContainer onSubmit={handleSubmit(handleEditUser)}>
             <AvatarSectionContainer>
@@ -212,7 +181,7 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
                     <User />
                   )}
                 </ImagePreview>
-                <EditBtn type="button" onClick={handleFileButtonClick}>
+                <EditBtn type="button" onClick={handleAvatarChangeClick}>
                   <Pencil />
                 </EditBtn>
               </PreviewContainer>
@@ -223,9 +192,9 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
                     type="file"
                     ref={inputFileRef}
                     style={{ display: 'none' }}
-                    onChange={handleFileChange}
+                    onChange={handleAvatarChange}
                   />
-                  <button type="button" onClick={handleFileButtonClick}>
+                  <button type="button" onClick={handleAvatarChangeClick}>
                     Choose File
                   </button>
                   <span>
@@ -256,47 +225,34 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
                 className="CheckboxRoot"
                 defaultChecked={changePassword}
                 id="c1"
-                onCheckedChange={() => setChangePassword(!changePassword)}
+                onCheckedChange={() => setChangePassword((prev) => !prev)}
               >
                 <StyledIndicator className="CheckboxIndicator">
                   <FontAwesomeIcon icon={faCheck} />
                 </StyledIndicator>
+                <CustomLabel htmlFor="c1">Change password</CustomLabel>
               </StyledCheckbox>
-              <CustomLabel>Change password?</CustomLabel>
             </ChangePasswordInputContainer>
 
             {changePassword && (
               <>
                 <InputContainer>
-                  <CustomLabel>Your current password here</CustomLabel>
-                  <Input
-                    type="password"
-                    placeholder="password"
-                    {...register('oldPassword')}
-                  />
+                  <CustomLabel>Old password</CustomLabel>
+                  <Input type="password" {...register('oldPassword')} />
+                  {errors.oldPassword && (
+                    <FormErrors error={errors.oldPassword.message} />
+                  )}
+                </InputContainer>
+                <InputContainer>
+                  <CustomLabel>New password</CustomLabel>
+                  <Input type="password" {...register('password')} />
                   {errors.password && (
                     <FormErrors error={errors.password.message} />
                   )}
                 </InputContainer>
                 <InputContainer>
-                  <CustomLabel>Your new password here</CustomLabel>
-                  <Input
-                    type="password"
-                    placeholder="password"
-                    {...register('password')}
-                  />
-                  {errors.password && (
-                    <FormErrors error={errors.password.message} />
-                  )}
-                </InputContainer>
-
-                <InputContainer>
-                  <CustomLabel>Confirm your new password</CustomLabel>
-                  <Input
-                    type="password"
-                    placeholder="confirm password"
-                    {...register('passwordConfirm')}
-                  />
+                  <CustomLabel>Confirm password</CustomLabel>
+                  <Input type="password" {...register('passwordConfirm')} />
                   {errors.passwordConfirm && (
                     <FormErrors error={errors.passwordConfirm.message} />
                   )}
@@ -304,7 +260,13 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
               </>
             )}
 
-            <CustomButton content="Update Profile" disabled={isSubmitting} />
+            <CustomButton
+              content="Update Profile"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? <CircularProgress size="1rem" /> : 'Update'}
+            </CustomButton>
           </FormContainer>
         </Description>
       </Content>

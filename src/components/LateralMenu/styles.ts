@@ -18,6 +18,7 @@ export const Container = styled('section', {
   justifyContent: 'flex-end',
   zIndex: 998,
   overflow: 'scroll',
+  width: '100%',
   maxWidth: '41.5rem',
 })
 
@@ -110,6 +111,6 @@ export const RatingsContentTitle = styled('div', {
 export const RatingsContent = styled('div', {
   display: 'flex',
   flexDirection: 'column-reverse',
-  width: '100%',
+  minWidth: '100%',
   gap: '1.5rem',
 })

@@ -1,37 +1,39 @@
+import { BookProps } from '@/@types/book'
 import { StarsRating } from '../StarsRating'
-import { BookCover, BookData, BookInfo, Container, ReadNotice } from './styles'
+import {
+  BookCover,
+  BookData,
+  BookInfo,
+  Container,
+  InfosContainer,
+  ReadNotice,
+} from './styles'
+import { getBookTitle } from '@/utils/getBookTitle'
+import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 
 interface ExploreCardProps {
-  coverUrl: string
-  name: string
-  author: string
-  rating: number
-  alreadyRead: boolean
+  book: BookProps
   onClick: () => void
 }
 
-export function ExploreCard({
-  coverUrl,
-  name,
-  author,
-  rating,
-  alreadyRead,
-  ...rest
-}: ExploreCardProps) {
+export function ExploreCard({ book, ...rest }: ExploreCardProps) {
   return (
     <Container {...rest}>
-      <BookCover alt="" src={coverUrl} />
+      <BookCover alt="" src={book.coverUrl} />
       <BookInfo>
-        {alreadyRead && (
+        {book.alreadyRead && (
           <ReadNotice>
             <p>READ</p>
           </ReadNotice>
         )}
         <BookData>
-          <h2>{name}</h2>
-          <p>{author}</p>
+          <h2>{getBookTitle(book)}</h2>
+          <p>{book.author}</p>
         </BookData>
-        <StarsRating rating={rating} />
+        <InfosContainer>
+          <p>{getBookRatingsNumber(book)}</p>
+          <StarsRating rating={book?.rate ?? 0} />
+        </InfosContainer>
       </BookInfo>
     </Container>
   )

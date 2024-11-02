@@ -75,7 +75,8 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
   })
 
   async function handleCreateUser(data: SignUpFormData) {
-    const formData = new FormData() // Create a new FormData instance
+    const formData = new FormData()
+
     formData.append('email', data.email)
     formData.append('password', data.password)
     formData.append('name', data.name)
@@ -94,7 +95,7 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
     }
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       setValue('avatarUrl', file)
@@ -107,7 +108,7 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
     }
   }
 
-  const handleFileButtonClick = () => {
+  const handleAvatarChangeClick = () => {
     inputFileRef.current?.click()
   }
 
@@ -136,7 +137,7 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
                     <User />
                   )}
                 </ImagePreview>
-                <EditBtn onClick={handleFileButtonClick}>
+                <EditBtn onClick={handleAvatarChangeClick}>
                   <Pencil />
                 </EditBtn>
               </PreviewContainer>
@@ -147,9 +148,9 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
                     type="file"
                     ref={inputFileRef}
                     style={{ display: 'none' }}
-                    onChange={handleFileChange}
+                    onChange={handleAvatarChange}
                   />
-                  <button type="button" onClick={handleFileButtonClick}>
+                  <button type="button" onClick={handleAvatarChangeClick}>
                     Choose File
                   </button>
                   <span>{watch('avatarUrl')?.name}</span>

@@ -21,6 +21,7 @@ import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+import { SkeletonRatingCard } from '../SkeletonRatingCard'
 
 interface BookReviewsSidebarProps {
   book: BookProps | null
@@ -36,11 +37,15 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
 
   const [openReviewForm, setOpenReviewForm] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const session = useSession()
 
   useEffect(() => {
     const loadRatings = async () => {
       if (book) {
+        setIsLoading(true)
+
         try {
           const response = await api.get(`/books/${book.id}`)
           if (response.data) {
@@ -48,6 +53,8 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
           }
         } catch (error) {
           handleAxiosError(error)
+        } finally {
+          setIsLoading(false)
         }
       }
     }
@@ -64,12 +71,8 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
       <LateralMenuContainer>
         {book && (
           <BookCard
-            name={book.name}
-            author={book.author}
-            coverUrl={book.coverUrl}
-            rating={book.rate ?? 0}
-            ratingsNumber={book?.ratings?.length ?? 0}
-            totalPages={book.totalPages}
+            key={book.id}
+            book={book}
             categories={book.categories as CategoryProps[]}
           />
         )}
@@ -98,13 +101,21 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
             />
           )}
           <RatingsContent>
-            {ratings?.map((rating) => (
-              <LateralRatingCard
-                key={rating.id}
-                rating={rating}
-                onCloseLateralMenu={() => onClose()}
-              />
-            ))}
+            {isLoading ? (
+              <>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <SkeletonRatingCard key={index} />
+                ))}
+              </>
+            ) : (
+              ratings?.map((rating) => (
+                <LateralRatingCard
+                  key={rating.id}
+                  rating={rating}
+                  onCloseLateralMenu={() => onClose()}
+                />
+              ))
+            )}
           </RatingsContent>
         </RatingsContainer>
       </LateralMenuContainer>

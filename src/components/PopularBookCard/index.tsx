@@ -1,6 +1,14 @@
 import { BookProps } from '@/@types/book'
 import { StarsRating } from '../StarsRating'
-import { BookCover, BookData, BookInfo, Container, ReadNotice } from './styles'
+import {
+  BookCover,
+  BookData,
+  BookInfo,
+  Container,
+  InfosContainer,
+  ReadNotice,
+} from './styles'
+import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 
 interface PopularBookCardProps {
   book: BookProps
@@ -21,7 +29,10 @@ export function PopularBookCard({ book, onOpenDetails }: PopularBookCardProps) {
           <h2>{book.name}</h2>
           <p>{book.author}</p>
         </BookData>
-        <StarsRating rating={book.rate ?? 0} />
+        <InfosContainer>
+          <p>{getBookRatingsNumber(book)}</p>
+          <StarsRating rating={book?.rate ?? 0} />
+        </InfosContainer>
       </BookInfo>
     </Container>
   )

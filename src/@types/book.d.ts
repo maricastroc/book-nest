@@ -11,6 +11,7 @@ export interface BookProps {
   coverUrl: string
   totalPages: number
   createdAt: Date
+  publishingYear?: string | null | undefined
 
   userId?: string | null
   user?: UserProps | null | undefined

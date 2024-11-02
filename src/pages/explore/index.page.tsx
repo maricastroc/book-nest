@@ -135,11 +135,7 @@ export default function Explore({ categories, books }: ExploreProps) {
                   return (
                     <ExploreCard
                       key={book.id}
-                      coverUrl={book.coverUrl}
-                      author={book.author}
-                      name={book.name}
-                      rating={book.rate ?? 0}
-                      alreadyRead={book.alreadyRead ?? false}
+                      book={book}
                       onClick={() => {
                         setSelectedBook(book)
                         setOpenLateralMenu(true)

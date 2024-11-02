@@ -13,42 +13,31 @@ import {
 } from './styles'
 import { BookOpen, BookmarkSimple } from 'phosphor-react'
 import { CategoryProps } from '@/@types/category'
+import { getBookTitle } from '@/utils/getBookTitle'
+import { BookProps } from '@/@types/book'
 
 interface BookCardProps {
-  name: string
-  author: string
-  coverUrl: string
-  rating: number
-  totalPages: number
-  ratingsNumber: number
-  categories: CategoryProps[] | null
+  book: BookProps
+  categories: CategoryProps[]
 }
 
-export function BookCard({
-  name,
-  author,
-  coverUrl,
-  rating,
-  categories,
-  totalPages,
-  ratingsNumber,
-}: BookCardProps) {
-  const categoryNames = categories?.map((category) => category?.name)
+export function BookCard({ book, categories }: BookCardProps) {
+  const categoryNames = categories.map((category) => category?.name)
 
   return (
     <BookContainer>
       <BookContent>
-        <BookCover alt="" src={coverUrl} />
+        <BookCover alt="" src={book.coverUrl} />
         <BookInfo>
           <BookData>
-            <h2>{name}</h2>
-            <p>{author}</p>
+            <h2>{getBookTitle(book)}</h2>
+            <p>{book.author}</p>
           </BookData>
           <RatingContainer>
-            <StarsRating rating={rating} />
+            <StarsRating rating={book?.rate ?? 0} />
             <p>
-              <span>{ratingsNumber}</span> {''}
-              {ratingsNumber === 1 ? 'rating' : 'ratings'}
+              <span>{book?.ratings?.length ?? 0}</span> {''}
+              {book?.ratings?.length === 1 ? 'rating' : 'ratings'}
             </p>
           </RatingContainer>
         </BookInfo>
@@ -68,7 +57,7 @@ export function BookCard({
           <BookOpen />
           <ItemText>
             <p>Pages</p>
-            <h2>{totalPages}</h2>
+            <h2>{book.totalPages}</h2>
           </ItemText>
         </FooterItem>
       </Footer>

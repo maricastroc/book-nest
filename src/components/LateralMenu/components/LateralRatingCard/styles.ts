@@ -5,6 +5,7 @@ export const RatingContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
+  minWidth: '100%',
 })
 
 export const RatingContent = styled('div', {

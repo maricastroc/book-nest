@@ -31,8 +31,10 @@ model Book {
   author      String
   summary     String   @db.Text
   coverUrl    String
+  publishingYear String?
   totalPages  Int
   createdAt   DateTime @default(now())
+  updatedAt   DateTime?
   
   userId      String?
   user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -69,6 +71,7 @@ model Rating {
   rate        Int
   description String   @db.Text
   createdAt   DateTime @default(now())
+  updatedAt   DateTime?
 
   book    Book   @relation(fields: [bookId], references: [id])
   bookId  String

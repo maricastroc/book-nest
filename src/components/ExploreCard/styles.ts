@@ -61,3 +61,16 @@ export const ReadNotice = styled('div', {
   backgroundColor: '$green300',
   color: '$green100',
 })
+
+export const InfosContainer = styled('div', {
+  marginTop: '0.5rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '0.2rem',
+
+  p: {
+    color: '$gray400',
+    fontSize: '0.8rem',
+  },
+})

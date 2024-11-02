@@ -42,6 +42,7 @@ export const BookInfo = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   marginTop: '1.5rem',
+  width: '100%',
   gap: '1.5rem',
 
   '@media (min-width: 580px)': {
@@ -145,6 +146,7 @@ export const RatingContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '0.2rem',
+  width: '100%',
 
   p: {
     color: '$gray400',
