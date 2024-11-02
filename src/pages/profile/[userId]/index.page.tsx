@@ -122,7 +122,7 @@ export default function Profile({ user, allRatings, infos }: ProfileProps) {
                     return null
                   })
                 ) : (
-                  <EmptyContainer />
+                  <EmptyContainer hasIcon largeSize />
                 )}
               </UserRatings>
             </UserRatingsContainer>
