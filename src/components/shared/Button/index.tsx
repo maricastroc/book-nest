@@ -4,17 +4,19 @@ import { ReactNode, ButtonHTMLAttributes } from 'react'
 interface CustomButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string | undefined
   icon?: ReactNode
+  isSubmitting?: boolean
 }
 
 export const CustomButton = ({
   content,
   icon,
+  isSubmitting = false,
   ...props
 }: CustomButtonProps) => {
   return (
-    <StyledButton {...props}>
+    <StyledButton className={isSubmitting ? 'disabled' : ''} {...props}>
       {icon}
-      {content}
+      {isSubmitting ? 'Loading...' : content}
     </StyledButton>
   )
 }

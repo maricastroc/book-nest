@@ -13,6 +13,7 @@ import {
   UserDetailsContainer,
   ProfileWrapper,
   Divider,
+  EmptyWrapper,
 } from './styles'
 import { prisma } from '@/lib/prisma'
 import { GetServerSideProps } from 'next'
@@ -32,12 +33,6 @@ import { CategoryProps } from '@/@types/category'
 import { useScreenSize } from '@/utils/useScreenSize'
 
 interface ProfileProps {
-  infos: {
-    pages: number
-    booksCount: number
-    authorsCount: number
-    bestGenre: Category
-  }
   user: UserPrisma & {
     allRatings: (RatingProps & {
       book: Book & {
@@ -58,7 +53,7 @@ interface ProfileProps {
   })[]
 }
 
-export default function Profile({ user, allRatings, infos }: ProfileProps) {
+export default function Profile({ user, allRatings }: ProfileProps) {
   const [ratings, setRatings] = useState(allRatings)
 
   const [search, setSearch] = useState('')
@@ -72,6 +67,7 @@ export default function Profile({ user, allRatings, infos }: ProfileProps) {
           rating.book.name.toLowerCase().includes(search.toLowerCase()) ||
           rating.book.author.toLowerCase().includes(search.toLowerCase()),
       )
+
       setRatings(filteredRatings)
     } else {
       setRatings(allRatings)
@@ -106,8 +102,13 @@ export default function Profile({ user, allRatings, infos }: ProfileProps) {
                   <X onClick={() => setSearch('')} />
                 )}
               </SearchBar>
+              {!ratings?.length && (
+                <EmptyWrapper>
+                  <EmptyContainer />
+                </EmptyWrapper>
+              )}
               <UserRatings>
-                {ratings?.length > 0 ? (
+                {ratings?.length > 0 &&
                   ratings.map((rating: RatingProps) => {
                     if (rating?.book) {
                       return (
@@ -120,26 +121,13 @@ export default function Profile({ user, allRatings, infos }: ProfileProps) {
                     }
 
                     return null
-                  })
-                ) : (
-                  <EmptyContainer hasIcon largeSize />
-                )}
+                  })}
               </UserRatings>
             </UserRatingsContainer>
           </ProfileContainer>
           <Divider />
           <UserDetailsContainer>
-            {user && (
-              <UserDetails
-                avatarUrl={user?.avatarUrl ?? ''}
-                createdAt={user?.createdAt}
-                name={user?.name}
-                totalPages={infos?.pages}
-                booksRated={infos?.booksCount}
-                authorsRead={infos?.authorsCount}
-                bestGenre={infos?.bestGenre?.name ?? '-'}
-              />
-            )}
+            {user && <UserDetails userId={user.id} />}
           </UserDetailsContainer>
         </ProfileWrapper>
       </Container>

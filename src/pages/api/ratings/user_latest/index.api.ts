@@ -1,6 +1,3 @@
-// === Retorna a Avaliação mais Recente do Usuário (Essa Rota exige estar logado) ===
-// /api/ratings/user_latest
-
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
@@ -19,9 +16,7 @@ export default async function handler(
   )
 
   if (!session)
-    return res
-      .status(401)
-      .end('Por favor, realize o Login para acessar esta rota de API.')
+    return res.status(401).end('Please login to access this API route.')
 
   const userLastRating = await prisma.rating.findFirst({
     where: {

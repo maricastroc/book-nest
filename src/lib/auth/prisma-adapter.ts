@@ -22,8 +22,6 @@ export function PrismaAdapter(
         },
       })
 
-      console.log('Created User:', createdUser)
-
       return {
         id: createdUser.id,
         name: createdUser.name,

@@ -19,6 +19,8 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { LoginModal } from '../LoginModal'
 import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
+import { handleAxiosError } from '@/utils/handleAxiosError'
+import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 
 interface BookReviewsSidebarProps {
   book: BookProps | null
@@ -35,7 +37,6 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
   const [openReviewForm, setOpenReviewForm] = useState(false)
 
   const session = useSession()
-  console.log(session)
 
   useEffect(() => {
     const loadRatings = async () => {
@@ -45,8 +46,8 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
           if (response.data) {
             setRatings(response.data.book.ratings)
           }
-        } catch (err) {
-          console.error(err)
+        } catch (error) {
+          handleAxiosError(error)
         }
       }
     }
@@ -88,7 +89,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
           </RatingsContentTitle>
           {session.data?.user && openReviewForm && book && (
             <RatingCardForm
-              avatarUrl={session.data?.user?.avatarUrl ?? ''}
+              avatarUrl={session.data?.user?.avatarUrl ?? AVATAR_URL_DEFAULT}
               name={session.data?.user.name}
               onClose={() => setOpenReviewForm(false)}
               onCloseLateralMenu={() => onClose()}

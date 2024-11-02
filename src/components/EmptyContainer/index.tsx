@@ -1,18 +1,8 @@
-import { BookOpen } from 'phosphor-react'
 import { Container } from './styles'
 
-interface EmptyContainerProps {
-  hasIcon?: boolean
-  largeSize?: boolean
-}
-
-export function EmptyContainer({
-  hasIcon = false,
-  largeSize = false,
-}: EmptyContainerProps) {
+export function EmptyContainer() {
   return (
-    <Container className={largeSize ? 'large' : ''}>
-      {hasIcon && <BookOpen />}
+    <Container>
       <p>It&apos;s a little empty around here!</p>
       <span>We could not find any reviewed books yet.</span>
     </Container>

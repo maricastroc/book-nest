@@ -22,4 +22,16 @@ export const StyledButton = styled('button', {
     backgroundColor: '$gray500',
     transition: '200ms',
   },
+
+  '&.disabled': {
+    backgroundColor: '$gray500',
+    color: '$gray300',
+    cursor: 'not-allowed',
+    opacity: 0.7,
+    pointerEvents: 'none',
+
+    '&:hover': {
+      backgroundColor: '$gray400',
+    },
+  },
 })

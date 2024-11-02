@@ -22,6 +22,7 @@ import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useState } from 'react'
+import { handleAxiosError } from '@/utils/handleAxiosError'
 
 interface RatingCardFormProps {
   avatarUrl: string
@@ -75,14 +76,20 @@ export function RatingCardForm({
   const characterCount = watch('description')?.split('').length || 0
 
   async function handleSubmitNewReview(data: RatingCardFormData) {
-    await api.post(`/ratings/${bookId}`, {
-      rate: data.rating,
-      description: data.description,
-      userId,
-      bookId,
-    })
-    onCloseLateralMenu()
-    toast.success('Review successfully registered!')
+    try {
+      await api.post(`/ratings/${bookId}`, {
+        rate: data.rating,
+        description: data.description,
+        userId,
+        bookId,
+      })
+
+      onCloseLateralMenu()
+
+      toast.success('Review successfully registered!')
+    } catch (error) {
+      handleAxiosError(error)
+    }
   }
 
   return (

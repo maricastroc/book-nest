@@ -55,8 +55,6 @@ export default async function handler(
       const password = getSingleString(fields.password)
       const avatarFile = files.avatarUrl?.[0]
 
-      console.log(name)
-
       if (!avatarFile) {
         return res.status(400).json({ message: 'Avatar file is required.' })
       }
@@ -74,7 +72,7 @@ export default async function handler(
               })
               return !existingUser
             },
-            { message: 'Email already exists.' },
+            { message: 'This email address is already in use.' },
           ),
         password: z
           .string()
@@ -107,7 +105,6 @@ export default async function handler(
 
       return res.status(201).json(user)
     } catch (error) {
-      console.error('Error:', error) // Adicionei um log para depuração
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors[0].message })
       } else if (error instanceof Error) {

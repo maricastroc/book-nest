@@ -139,7 +139,7 @@ export const SignOutContainer = styled('div', {
 
   svg: {
     color: '#F75A68',
-    fontSize: '1.8rem',
+    fontSize: '1.5rem',
   },
 
   p: {

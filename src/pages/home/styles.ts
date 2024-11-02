@@ -246,10 +246,11 @@ export const PopularBooksCardsContent = styled('div', {
 export const StyledToastContainer = styled(ToastContainer, {
   '& .Toastify__toast': {
     backgroundColor: '$gray700',
-    color: '$gray200',
+    color: '$gray300',
     borderRadius: 4,
     fontFamily: 'Nunito, sans-serif',
-    fontSize: '0.95rem',
+    fontSize: '0.9rem',
+    padding: '0.75rem',
   },
 
   '& .Toastify__close-button': {
@@ -258,7 +259,7 @@ export const StyledToastContainer = styled(ToastContainer, {
 
   '& .Toastify__toast-body svg': {
     fill: '$purple100',
-    fontSize: '0.5rem',
+    fontSize: '0.4rem',
   },
 
   '& .Toastify__progress-bar': {

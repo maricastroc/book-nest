@@ -61,12 +61,18 @@ export default function Login() {
 
   const isMobile = useScreenSize(480)
 
+  const [isLoading, setIsLoading] = useState(false)
+
   async function handleSignIn(provider: string) {
+    setIsLoading(true)
+
     if (provider === 'google') {
       await signIn('google', { callbackUrl: '/home' })
     } else if (provider === 'github') {
       await signIn('github', { callbackUrl: '/home' })
     } else router.push('/home')
+
+    setIsLoading(false)
   }
 
   async function onSubmit(data: LoginFormData) {
@@ -150,7 +156,7 @@ export default function Login() {
                 type="submit"
                 content="Sign in"
                 icon={<SignIn size={24} />}
-                disabled={isSubmitting}
+                isSubmitting={isSubmitting || isLoading}
               />
               <Divider />
 

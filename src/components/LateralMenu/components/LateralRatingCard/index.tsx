@@ -30,6 +30,8 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
+import { handleAxiosError } from '@/utils/handleAxiosError'
+import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 
 interface LateralRatingCardProps {
   rating: RatingProps
@@ -77,8 +79,8 @@ export function LateralRatingCard({
         id,
       }
       await api.delete('/ratings', { data: payload })
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
+      handleAxiosError(error)
     }
     onCloseLateralMenu()
     toast.success('Rating successfully deleted!')
@@ -92,12 +94,15 @@ export function LateralRatingCard({
         id: rating.id,
         description,
       }
+
       await api.put('/ratings', payload)
-    } catch (err) {
-      console.log(err)
+
+      onCloseLateralMenu()
+
+      toast.success('Review successfully edited!')
+    } catch (error) {
+      handleAxiosError(error)
     }
-    onCloseLateralMenu()
-    toast.success('Review successfully edited!')
   }
 
   return (
@@ -112,7 +117,10 @@ export function LateralRatingCard({
                 router.push(`/profile/${rating.userId}`)
               }}
             >
-              <AvatarDefault alt="" src={rating.user?.avatarUrl ?? ''} />
+              <AvatarDefault
+                alt=""
+                src={rating.user?.avatarUrl ?? AVATAR_URL_DEFAULT}
+              />
             </AvatarContainer>
             <NameAndDate>
               <p>{rating.user.name}</p>

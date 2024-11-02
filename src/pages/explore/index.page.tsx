@@ -10,7 +10,7 @@ import {
   ExploreContent,
   HeadingTitle,
 } from './styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MobileHeader } from '@/components/MobileHeader'
 import { Sidebar } from '@/components/Sidebar'
 import { GetServerSideProps } from 'next'
@@ -24,6 +24,7 @@ import { NextSeo } from 'next-seo'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
+import { handleAxiosError } from '@/utils/handleAxiosError'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -43,29 +44,44 @@ export default function Explore({ categories, books }: ExploreProps) {
 
   const isMobile = useScreenSize(768)
 
-  const filteredBooks = booksList?.filter((book) => {
-    return (
-      book.name
-        .toLowerCase()
-        .includes(search.toLowerCase().replace(/( )+/g, ' ')) ||
-      book.author
-        .toLowerCase()
-        .includes(search.toLowerCase().replace(/( )+/g, ' '))
-    )
-  })
-
   async function selectCategory(categoryId: string | null) {
-    const query = categoryId ? `?category=${categoryId}` : ''
-    const response = await api.get(`/books${query}`)
-    if (response.data.booksWithRating) {
-      setBooksList(response.data.booksWithRating)
+    try {
+      const query = categoryId ? `?category=${categoryId}` : ''
+
+      const response = await api.get(`/books${query}`)
+
+      if (response.data.booksWithRating) {
+        setBooksList(response.data.booksWithRating)
+      }
+
+      setCategorySelected(categoryId)
+    } catch (error) {
+      handleAxiosError(error)
     }
-    setCategorySelected(categoryId)
   }
 
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
+
+  useEffect(() => {
+    if (search) {
+      const filteredBooks = booksList?.filter((book) => {
+        return (
+          book.name
+            .toLowerCase()
+            .includes(search.toLowerCase().replace(/( )+/g, ' ')) ||
+          book.author
+            .toLowerCase()
+            .includes(search.toLowerCase().replace(/( )+/g, ' '))
+        )
+      })
+
+      setBooksList(filteredBooks)
+    } else {
+      setBooksList(books)
+    }
+  }, [search, booksList, books])
 
   return (
     <>
@@ -114,8 +130,8 @@ export default function Explore({ categories, books }: ExploreProps) {
                 })}
             </Categories>
             <BooksContainer>
-              {filteredBooks.length > 0 &&
-                filteredBooks.map((book) => {
+              {booksList.length > 0 &&
+                booksList.map((book) => {
                   return (
                     <ExploreCard
                       key={book.id}

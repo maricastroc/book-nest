@@ -198,6 +198,25 @@ export const SearchBar = styled('div', {
   },
 })
 
+export const EmptyWrapper = styled('div', {
+  marginTop: '2rem',
+  display: 'flex',
+  alignItems: 'flex-start',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '1.5rem',
+
+  '@media (min-width: 1024px)': {
+    height: '100%',
+    paddingBottom: '4rem',
+    minWidth: '27rem',
+  },
+
+  '@media (min-width: 1200px)': {
+    justifyContent: 'flex-start',
+  },
+})
+
 export const UserRatings = styled('div', {
   marginTop: '2rem',
   display: 'flex',

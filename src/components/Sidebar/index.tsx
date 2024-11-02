@@ -22,18 +22,72 @@ import { signOut, useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { LoginModal } from '../LoginModal'
 import { toast } from 'react-toastify'
+import { useEffect, useState, useCallback, ComponentType } from 'react'
+import { api } from '@/lib/axios'
+import { UserProps } from '@/@types/user'
+import { handleAxiosError } from '@/utils/handleAxiosError'
+import { CircularProgress } from '@mui/material'
+import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+
+interface NavigationItemProps {
+  active: boolean
+  onClick: () => void
+  icon: ComponentType
+  label: string
+}
+
+const NavigationItem: React.FC<NavigationItemProps> = ({
+  active,
+  onClick,
+  icon: Icon,
+  label,
+}) => (
+  <Item>
+    <PageBtn active={active} onClick={onClick}>
+      <Icon />
+      <p>{label}</p>
+    </PageBtn>
+  </Item>
+)
 
 export function Sidebar() {
+  const [user, setUser] = useState<UserProps | null>(null)
+
+  const [userFirstName, setUserFirstName] = useState('')
+
   const router = useRouter()
+
   const session = useSession()
 
-  const fullName = session.data?.user.name
-  const firstName = fullName?.split(' ')[0] ?? ''
+  const [isLoading, setIsLoading] = useState(false)
 
-  async function handleLogout() {
+  const handleLogout = useCallback(() => {
     signOut({ callbackUrl: '/' })
     toast.success('See you soon!')
-  }
+  }, [])
+
+  useEffect(() => {
+    const loadUser = async () => {
+      setIsLoading(true)
+
+      if (session?.data?.user) {
+        try {
+          const response = await api.get(`/profile/${session.data.user.id}`)
+          if (response.data) {
+            const userProfile = response.data.profile.user
+            setUser(userProfile)
+            setUserFirstName(userProfile.name.split(' ')[0] ?? '')
+          }
+        } catch (error) {
+          handleAxiosError(error)
+        } finally {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadUser()
+  }, [session?.data?.user])
 
   return (
     <Container>
@@ -48,48 +102,39 @@ export function Sidebar() {
               quality={100}
             />
             <ItemsContainer>
-              <Item>
-                <PageBtn
-                  onClick={() => router.push('/home')}
-                  active={router.pathname === '/home'}
-                >
-                  <ChartLineUp />
-                  <p>Home</p>
-                </PageBtn>
-              </Item>
-              <Item>
-                <PageBtn
-                  onClick={() => router.push('/explore')}
-                  active={router.pathname === '/explore'}
-                >
-                  <Binoculars />
-                  <p>Explore</p>
-                </PageBtn>
-              </Item>
+              <NavigationItem
+                active={router.pathname === '/home'}
+                onClick={() => router.push('/home')}
+                icon={ChartLineUp}
+                label="Home"
+              />
+              <NavigationItem
+                active={router.pathname === '/explore'}
+                onClick={() => router.push('/explore')}
+                icon={Binoculars}
+                label="Explore"
+              />
               {session.data?.user && (
-                <Item>
-                  <PageBtn
-                    active={router.pathname.includes('profile')}
-                    onClick={() => {
-                      router.pathname.includes('profile')
-                        ? router.push(`../profile/${session.data?.user.id}`)
-                        : router.push(`profile/${session.data?.user.id}`)
-                    }}
-                  >
-                    <Binoculars />
-                    <p>Profile</p>
-                  </PageBtn>
-                </Item>
+                <NavigationItem
+                  active={router.pathname.includes('profile')}
+                  onClick={() => router.push(`profile/${session.data.user.id}`)}
+                  icon={Binoculars}
+                  label="Profile"
+                />
               )}
             </ItemsContainer>
           </SidebarMain>
           {session.data?.user ? (
             <ProfileContainer>
-              <AvatarContainer>
-                <AvatarDefault src={session.data?.user.avatarUrl} />
-              </AvatarContainer>
+              {isLoading ? (
+                <CircularProgress size="1.5rem" />
+              ) : (
+                <AvatarContainer>
+                  <AvatarDefault src={user?.avatarUrl ?? AVATAR_URL_DEFAULT} />
+                </AvatarContainer>
+              )}
               <SignOutContainer onClick={handleLogout}>
-                <p>{firstName}</p>
+                <p>{userFirstName}</p>
                 <SignOut />
               </SignOutContainer>
             </ProfileContainer>
