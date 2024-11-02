@@ -19,7 +19,15 @@ export const Container = styled('section', {
   zIndex: 998,
   overflow: 'scroll',
   width: '100%',
-  maxWidth: '41.5rem',
+  maxWidth: '100%',
+
+  '@media (min-width: 680px)': {
+    maxWidth: '35rem',
+  },
+
+  '@media (min-width: 768px)': {
+    maxWidth: '41.5rem',
+  },
 })
 
 export const ContainerOverlay = styled('div', {
@@ -40,9 +48,13 @@ export const LateralMenuContainer = styled('div', {
   height: '100vh',
   overflow: 'scroll',
   width: '100%',
-  padding: '4.5rem 3rem 3rem',
+  padding: '2rem 1.5rem 1.5rem',
   borderRadius: 8,
   animation: `${entranceAnimation} 0.4s`,
+
+  '@media (min-width: 480px)': {
+    padding: '4.5rem 3rem 3rem',
+  },
 })
 
 export const RatingContainer = styled('div', {
@@ -64,11 +76,16 @@ export const CloseButton = styled('button', {
   top: '6%',
   left: '92%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: 'transparent',
-  border: 'none',
+  backgroundColor: '$gray700',
+  padding: '0.3rem',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 8,
+  border: '1px solid $gray500',
 
   svg: {
-    fontSize: '1.4rem',
+    fontSize: '1.2rem',
     color: '$gray400',
   },
 

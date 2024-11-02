@@ -78,7 +78,8 @@ export const BookData = styled('div', {
     textAlign: 'left',
 
     h2: {
-      fontSize: '1.25rem',
+      fontSize: '1.2rem',
+      maxHeight: '100%',
     },
 
     p: {

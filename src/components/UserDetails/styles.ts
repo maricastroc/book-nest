@@ -70,7 +70,7 @@ export const Separator = styled('span', {
   background: '$gradient-horizontal',
   borderRadius: 8,
   height: 4,
-  margin: '2.8rem 0',
+  margin: '2.4rem 0',
 })
 
 export const UserInfoContainer = styled('div', {

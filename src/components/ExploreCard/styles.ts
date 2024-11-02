@@ -53,7 +53,7 @@ export const BookData = styled('div', {
     h2: {
       fontSize: '0.9rem',
     },
-  
+
     p: {
       fontSize: '0.85rem',
     },

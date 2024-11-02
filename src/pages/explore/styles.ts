@@ -179,6 +179,25 @@ export const CategoryBtn = styled('button', {
   padding: '0.3rem 0.8rem',
   fontSize: '0.8rem',
 
+  '&:hover': {
+    transition: '200ms',
+    border: 'solid 1px $purple200',
+    backgroundColor: '$purple200',
+    color: '$white',
+  },
+
+  '&.loading': {
+    cursor: 'not-allowed',
+    opacity: 0.7,
+
+    '&:hover': {
+      backgroundColor: 'transparent',
+      border: 'solid 1px $purple100',
+      color: '$purple100',
+      opacity: 0.7,
+    },
+  },
+
   variants: {
     selected: {
       true: {

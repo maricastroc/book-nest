@@ -26,6 +26,7 @@ import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 import { useRouter } from 'next/router'
+import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -35,6 +36,8 @@ export interface ExploreProps {
 export default function Explore({ categories, books }: ExploreProps) {
   const [booksList, setBooksList] = useState<BookProps[]>(books)
 
+  const [filteredBooks, setFilteredBooks] = useState<BookProps[]>(books)
+
   const [categorySelected, setCategorySelected] = useState<string | null>(null)
 
   const [search, setSearch] = useState('')
@@ -42,6 +45,8 @@ export default function Explore({ categories, books }: ExploreProps) {
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const isMobile = useScreenSize(980)
 
@@ -51,44 +56,55 @@ export default function Explore({ categories, books }: ExploreProps) {
     router.replace(router.asPath)
   }
 
-  async function selectCategory(categoryId: string | null) {
-    try {
-      const query = categoryId ? `?category=${categoryId}` : ''
-
-      const response = await api.get(`/books${query}`)
-
-      if (response.data.booksWithRating) {
-        setBooksList(response.data.booksWithRating)
-      }
-
-      setCategorySelected(categoryId)
-    } catch (error) {
-      handleAxiosError(error)
-    }
-  }
-
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
 
-  useEffect(() => {
-    if (search) {
-      const filteredBooks = booksList?.filter((book) => {
-        return (
-          book.name
-            .toLowerCase()
-            .includes(search.toLowerCase().replace(/( )+/g, ' ')) ||
-          book.author
-            .toLowerCase()
-            .includes(search.toLowerCase().replace(/( )+/g, ' '))
-        )
-      })
+  async function selectCategory(categoryId: string | null) {
+    try {
+      setIsLoading(true)
 
-      setBooksList(filteredBooks)
-    } else {
-      setBooksList(books)
+      const query = categoryId ? `?category=${categoryId}` : ''
+      const response = await api.get(`/books${query}`)
+      if (response.data.booksWithRating) {
+        setBooksList(response.data.booksWithRating)
+      }
+      setCategorySelected(categoryId)
+    } catch (error) {
+      handleAxiosError(error)
+    } finally {
+      setIsLoading(false)
     }
-  }, [search, booksList, books])
+  }
+
+  useEffect(() => {
+    const applyFilters = () => {
+      let updatedBooks = [...booksList]
+
+      if (categorySelected) {
+        updatedBooks = updatedBooks.filter((book) =>
+          book?.categories?.some((cat) => {
+            if ('id' in cat) {
+              return (cat as CategoryProps).id === categorySelected
+            }
+            return false
+          }),
+        )
+      }
+
+      if (search) {
+        updatedBooks = updatedBooks.filter(
+          (book) =>
+            book.name.toLowerCase().includes(search.toLowerCase()) ||
+            book.author.toLowerCase().includes(search.toLowerCase()),
+        )
+      }
+
+      setFilteredBooks(updatedBooks)
+    }
+
+    applyFilters()
+  }, [booksList, categorySelected, search])
 
   return (
     <>
@@ -118,11 +134,11 @@ export default function Explore({ categories, books }: ExploreProps) {
                 onChange={(e) => setSearch(e.target.value)}
                 spellCheck={false}
               />
-                {search === '' ? (
-                  <MagnifyingGlass />
-                ) : (
-                  <X onClick={() => setSearch('')} />
-                )}
+              {search === '' ? (
+                <MagnifyingGlass />
+              ) : (
+                <X onClick={() => setSearch('')} />
+              )}
             </SearchBar>
           </Heading>
           <ExploreContent>
@@ -133,23 +149,23 @@ export default function Explore({ categories, books }: ExploreProps) {
               >
                 All
               </CategoryBtn>
-              {categories.length > 0 &&
-                categories.map((category) => {
-                  return (
-                    <CategoryBtn
-                      selected={categorySelected === category.id}
-                      key={category.id}
-                      onClick={() => selectCategory(category.id)}
-                    >
-                      {category.name}
-                    </CategoryBtn>
-                  )
-                })}
+              {categories.map((category) => (
+                <CategoryBtn
+                  selected={!isLoading && categorySelected === category.id}
+                  key={category.id}
+                  onClick={() => selectCategory(category.id)}
+                  className={isLoading ? 'loading' : ''}
+                >
+                  {category.name}
+                </CategoryBtn>
+              ))}
             </Categories>
             <BooksContainer>
-              {booksList.length > 0 &&
-                booksList.map((book) => {
-                  return (
+              {isLoading
+                ? Array.from({ length: 9 }).map((_, index) => (
+                    <SkeletonPopularBook key={index} />
+                  ))
+                : filteredBooks.map((book) => (
                     <ExploreCard
                       key={book.id}
                       book={book}
@@ -158,8 +174,7 @@ export default function Explore({ categories, books }: ExploreProps) {
                         setOpenLateralMenu(true)
                       }}
                     />
-                  )
-                })}
+                  ))}
             </BooksContainer>
           </ExploreContent>
         </ExploreContainer>
