@@ -8,7 +8,7 @@ export const Container = styled('div', {
   position: 'sticky',
   backgroundColor: '$gray800',
   top: 0,
-  maxWidth: '35rem',
+  maxWidth: '45rem',
   zIndex: 10,
   borderBottom: 'solid 2px $gray700',
 

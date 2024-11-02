@@ -18,9 +18,9 @@ export const Header = styled('div', {
   flexDirection: 'column',
   gap: '1.2rem',
   width: '100%',
-  marginBottom: '1.5rem',
+  marginBottom: '1rem',
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
@@ -35,7 +35,7 @@ export const UserInfo = styled('div', {
   gap: '1rem',
   width: '100%',
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
@@ -54,7 +54,7 @@ export const NameAndDate = styled('div', {
     fontSize: '$sm',
   },
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     alignItems: 'flex-start',
   },
 })
@@ -66,10 +66,9 @@ export const BookContainer = styled('div', {
   justifyContent: 'center',
   width: '100%',
 
-  '@media (min-width: 980px)': {
+  '@media (min-width: 480px)': {
     flexDirection: 'row',
     gap: '1.5rem',
-    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     width: '100%',
   },
@@ -79,7 +78,7 @@ export const BookCover = styled('img', {
   width: '6.75rem',
   height: 'auto',
   borderRadius: 8,
-  marginTop: '2rem',
+  marginTop: '1.2rem',
 })
 
 export const BookDetails = styled('div', {
@@ -88,9 +87,9 @@ export const BookDetails = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '1rem',
-  marginTop: '1.5rem',
+  marginTop: '1.2rem',
 
-  '@media (min-width: 980px)': {
+  '@media (min-width: 480px)': {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
@@ -104,7 +103,7 @@ export const BookInfo = styled('div', {
   gap: '0.2rem',
 
   h2: {
-    fontSize: '$md',
+    fontSize: '0.95rem',
   },
 
   p: {
@@ -112,7 +111,7 @@ export const BookInfo = styled('div', {
     fontSize: '$sm',
   },
 
-  '@media (min-width: 980px)': {
+  '@media (min-width: 480px)': {
     alignItems: 'flex-start',
   },
 })
@@ -125,7 +124,7 @@ export const RatingContainer = styled('div', {
   p: {
     color: '$gray300',
     lineHeight: '160%',
-    fontSize: '$sm',
+    fontSize: '0.85rem',
     wordBreak: 'break-word',
     paddingRight: '0.3rem',
   },
@@ -134,11 +133,15 @@ export const RatingContainer = styled('div', {
 export const Separator = styled('span', {
   width: '100%',
   height: 0.5,
-  backgroundColor: '$gray400',
-  opacity: 0.4,
+  backgroundColor: '$gray500',
+  opacity: 0.7,
 
-  '@media (min-width: 980px)': {
+  '@media (min-width: 480px)': {
     display: 'none',
+
+    '&.larger': {
+      display: 'block',
+    },
   },
 })
 

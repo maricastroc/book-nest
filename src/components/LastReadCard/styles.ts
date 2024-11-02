@@ -11,8 +11,14 @@ export const Container = styled('div', {
   position: 'relative',
   marginBottom: '1.5rem',
 
+  '@media (min-width: 680px)': {
+    alignItems: 'center',
+  },
+
   '@media (min-width: 768px)': {
+    padding: '1.5rem',
     paddingRight: '1rem',
+    alignItems: 'center',
   },
 })
 
@@ -35,8 +41,7 @@ export const TimeAndRating = styled('div', {
   gap: '0.3rem',
 
   time: {
-    color: '$gray400',
-    fontSize: '$sm',
+    display: 'none',
   },
 
   '@media (min-width: 580px)': {
@@ -44,25 +49,37 @@ export const TimeAndRating = styled('div', {
     justifyContent: 'space-between',
     width: '100%',
   },
+
+  '@media (min-width: 480px)': {
+    time: {
+      display: 'block',
+      color: '$gray400',
+      fontSize: '$sm',
+    },
+  },
 })
 
 export const BookData = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
+  overflow: 'scroll',
+
+  '@media (min-width: 680px)': {
+    marginTop: '1.5rem',
+  },
 })
 
 export const BookTitle = styled('div', {
   display: 'flex',
-  marginTop: '1.5rem',
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '0.2rem',
 
   h2: {
-    fontSize: '1rem',
+    fontSize: '0.9rem',
     minHeight: '1rem',
-    maxHeight: '3.5rem',
+    maxHeight: '4rem',
     whiteSpace: 'break-spaces',
     overflow: 'scroll',
     position: 'relative',
@@ -72,14 +89,18 @@ export const BookTitle = styled('div', {
     color: '$gray400',
     fontSize: '0.85rem',
   },
+
+  '@media (min-width: 680px)': {
+    h2: {
+      fontSize: '1rem',
+    },
+  },
 })
 
 export const BookDescription = styled('div', {
   display: 'none',
-  maxHeight: '2.8rem',
   marginTop: '1.5rem',
   position: 'relative',
-  overflow: 'scroll',
 
   p: {
     color: '$gray300',
@@ -90,7 +111,13 @@ export const BookDescription = styled('div', {
   },
 
   '@media (min-width: 580px)': {
+    maxHeight: '3.2rem',
+    marginTop: '1rem',
     display: 'block',
+  },
+
+  '@media (min-width: 980px)': {
+    maxHeight: '5rem',
   },
 })
 

@@ -22,7 +22,6 @@ import { getServerSession } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { PopularBookCard } from '@/components/PopularBookCard'
-import { LastReadCard } from '@/components/LastReadCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
 import { NextSeo } from 'next-seo'
 import { useState } from 'react'
@@ -32,6 +31,7 @@ import { BookProps } from '@/@types/book'
 import { UserProps } from '@/@types/user'
 import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
+import { LastReadCard } from '@/components/LastReadCard'
 
 export interface RecentReadCardProps {
   book: BookProps

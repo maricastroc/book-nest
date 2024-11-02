@@ -54,7 +54,7 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
         </UserInfo>
         <StarsRating rating={rating.rate} />
       </Header>
-      <Separator />
+      <Separator className="larger" />
       {rating?.book && (
         <BookContainer {...rest}>
           <BookCover src={rating.book.coverUrl} alt="" />

@@ -11,10 +11,6 @@ export const Container = styled('div', {
   maxWidth: '100vw',
   overflowX: 'hidden',
 
-  '@media (min-width: 480px)': {
-    padding: '0 2rem',
-  },
-
   '@media (min-width: 768px)': {
     flexDirection: 'row',
     height: '97vh',
@@ -26,7 +22,6 @@ export const Container = styled('div', {
     gap: '3rem',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingRight: '3rem',
     height: '100%',
   },
 
@@ -43,7 +38,7 @@ export const HomeContainer = styled('div', {
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
-  maxWidth: '35rem',
+  maxWidth: '45rem',
   marginTop: '2rem',
   overflowY: 'hidden',
 
@@ -126,27 +121,16 @@ export const Heading = styled('div', {
   },
 })
 
-export const LastReadContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  gap: '1rem',
-
-  '@media (min-width: 768px)': {
-    paddingRight: '1rem',
-  },
-})
-
-export const LastReadTitle = styled('p', {
-  fontSize: '$sm',
-})
-
 export const LastRatingsWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
+
+  '@media (min-width: 768px)': {
+    paddingRight: '1rem',
+  },
 
   '@media (min-width: 1200px)': {
     overflowY: 'scroll',
@@ -158,30 +142,14 @@ export const LastRatingsContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
-  overflow: 'scroll',
   minWidth: '100%',
-
-  '@media (min-width: 768px)': {
-    paddingRight: '1rem',
-  },
-
-  '@media (min-width: 1200px)': {
-    overflowY: 'scroll',
-    height: '100%',
-  },
 })
 
 export const LastRatingsContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
+  gap: '1.5rem',
   width: '100%',
-
-  '@media (min-width: 1200px)': {
-    overflowY: 'scroll',
-    height: '100%',
-    paddingRight: '1rem',
-  },
 })
 
 export const LastRatingsTitle = styled('p', {
@@ -196,11 +164,14 @@ export const PopularBooksCardsContainer = styled('div', {
   width: '100%',
   gap: '1rem',
 
+  '@media (min-width: 768px)': {
+    paddingRight: '1rem',
+  },
+
   '@media (min-width: 1200px)': {
     marginTop: 0,
     marginBottom: 0,
-    width: '35rem',
-    paddingRight: '1rem',
+    width: '45rem',
     overflowY: 'scroll',
     height: '100%',
   },
@@ -236,7 +207,14 @@ export const PopularBooksCardsContent = styled('div', {
   flexDirection: 'column',
   gap: '2rem',
 
+  '@media (min-width: 980px)': {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+  },
+
   '@media (min-width: 1200px)': {
+    display: 'flex',
+    flexDirection: 'column',
     overflowY: 'scroll',
     height: '100%',
     paddingRight: '1rem',
@@ -246,11 +224,10 @@ export const PopularBooksCardsContent = styled('div', {
 export const StyledToastContainer = styled(ToastContainer, {
   '& .Toastify__toast': {
     backgroundColor: '$gray700',
-    color: '$gray300',
+    color: '$gray200',
     borderRadius: 4,
     fontFamily: 'Nunito, sans-serif',
-    fontSize: '0.9rem',
-    padding: '0.75rem',
+    fontSize: '0.95rem',
   },
 
   '& .Toastify__close-button': {
@@ -259,10 +236,21 @@ export const StyledToastContainer = styled(ToastContainer, {
 
   '& .Toastify__toast-body svg': {
     fill: '$purple100',
-    fontSize: '0.4rem',
+    fontSize: '0.5rem',
   },
 
   '& .Toastify__progress-bar': {
     backgroundColor: '$purple100',
   },
+})
+
+export const LastReadContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '1rem',
+})
+
+export const LastReadTitle = styled('p', {
+  fontSize: '$sm',
 })

@@ -3,7 +3,7 @@ import { styled } from '../../styles'
 export const Container = styled('div', {
   cursor: 'pointer',
   display: 'flex',
-  padding: '2rem 1.5rem 1.5rem',
+  padding: '1rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'stretch',
@@ -12,7 +12,7 @@ export const Container = styled('div', {
   position: 'relative',
 
   '@media (min-width: 1200px)': {
-    padding: '1.5rem',
+    padding: '1.2rem',
   },
 
   '&:hover': {
@@ -36,8 +36,7 @@ export const BookData = styled('div', {
   gap: '0.2rem',
 
   h2: {
-    fontSize: '1rem',
-    maxHeight: '3.5rem',
+    fontSize: '0.9rem',
     whiteSpace: 'break-spaces',
     overflow: 'scroll',
     position: 'relative',
