@@ -35,6 +35,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
   const [openReviewForm, setOpenReviewForm] = useState(false)
 
   const session = useSession()
+  console.log(session)
 
   useEffect(() => {
     const loadRatings = async () => {

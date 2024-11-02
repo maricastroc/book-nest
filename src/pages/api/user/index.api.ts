@@ -1,4 +1,4 @@
-import formidable from 'formidable'
+import { IncomingForm } from 'formidable'
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
@@ -10,19 +10,18 @@ import path from 'path'
 
 export const config = {
   api: {
-    bodyParser: false, // Desativa o bodyParser padrão
+    bodyParser: false,
   },
 }
 
-// Função auxiliar para garantir que obtemos um valor de string
 const getSingleString = (value: string | string[] | undefined): string => {
   if (Array.isArray(value)) {
-    return value[0] // Retorna o primeiro valor se for um array
+    return value[0]
   }
   if (typeof value === 'string') {
-    return value // Retorna o valor se for uma string
+    return value
   }
-  throw new Error('Field is required') // Lança um erro se o valor for indefinido
+  throw new Error('Field is required')
 }
 
 export default async function handler(
@@ -30,7 +29,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   if (req.method !== 'POST') {
-    return res.status(405).end()
+    return res.status(405).json({ message: 'Method Not Allowed' })
   }
 
   const session = await getServerSession(
@@ -43,7 +42,7 @@ export default async function handler(
     return res.status(403).json({ message: 'You are already logged in.' })
   }
 
-  const form = new formidable.IncomingForm()
+  const form = new IncomingForm()
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
@@ -51,14 +50,15 @@ export default async function handler(
     }
 
     try {
-      // Acessando os campos do formulário como strings
       const name = getSingleString(fields.name)
       const email = getSingleString(fields.email)
       const password = getSingleString(fields.password)
-      const avatarFile = files.avatar?.[0] as formidable.File
+      const avatarFile = files.avatarUrl?.[0]
+
+      console.log(name)
 
       if (!avatarFile) {
-        return res.status(400).json({ message: 'Avatar file is required.' }) // Verificação de arquivo
+        return res.status(400).json({ message: 'Avatar file is required.' })
       }
 
       const createUserSchema = z.object({
@@ -79,40 +79,39 @@ export default async function handler(
         password: z
           .string()
           .min(8, 'Password must be at least 8 characters')
-          .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
           .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
           .regex(/[0-9]/, 'Password must contain at least one number'),
       })
 
-      // Validação
-      createUserSchema.parse({ name, email, password })
+      await createUserSchema.parseAsync({ name, email, password })
 
       const hashedPassword = await bcrypt.hash(password, 10)
 
-      // Armazenando a imagem
       const avatarPath = path.join(
         process.cwd(),
         'public',
-        'uploads',
+        'users',
+        'images',
         avatarFile.originalFilename ?? '',
       )
-      fs.renameSync(avatarFile.filepath, avatarPath) // Mover o arquivo para a pasta 'uploads'
+      fs.renameSync(avatarFile.filepath, avatarPath)
 
       const user = await prisma.user.create({
         data: {
-          name, // Aqui é uma string
-          email, // Aqui é uma string
+          name,
+          email,
           password: hashedPassword,
-          avatarUrl: `/uploads/${avatarFile.originalFilename}`, // Salve a URL do avatar
+          avatarUrl: `/users/images/${avatarFile.originalFilename}`,
         },
       })
 
       return res.status(201).json(user)
     } catch (error) {
+      console.error('Error:', error) // Adicionei um log para depuração
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors[0].message })
       } else if (error instanceof Error) {
-        return res.status(400).json({ message: error.message }) // Mensagem de erro customizada
+        return res.status(400).json({ message: error.message })
       }
       return res.status(500).json({ message: 'Internal server error' })
     }

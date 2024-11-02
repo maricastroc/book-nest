@@ -50,7 +50,7 @@ interface HomeProps {
 
 export default function Home({ ratings, books, userLastRating }: HomeProps) {
   const session = useSession()
-
+  console.log(session)
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)

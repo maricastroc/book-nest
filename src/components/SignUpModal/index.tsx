@@ -3,7 +3,6 @@ import { Pencil, User, X } from 'phosphor-react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useRef, useState } from 'react'
 
@@ -26,7 +25,7 @@ import { CustomLabel } from '../shared/Label'
 import { FormErrors } from '../shared/FormErrors'
 import { InputContainer } from '../shared/InputContainer'
 import { CustomButton } from '../shared/Button'
-import Image from 'next/image'
+import { api } from '@/lib/axios'
 
 interface SignUpModalProps {
   onClose: () => void
@@ -38,20 +37,17 @@ const signUpFormSchema = z
     password: z
       .string()
       .min(8, { message: 'Password must be at least 8 characters long.' }),
-    password_confirm: z
+    passwordConfirm: z
       .string()
       .min(8, { message: 'Password must be at least 8 characters long.' }),
     name: z.string().min(3, { message: 'Name is required.' }),
-    avatar_url: z.custom<File>(
-      (file) => file instanceof File && file.size > 0,
-      {
-        message: 'Avatar file is required.',
-      },
-    ),
+    avatarUrl: z.custom<File>((file) => file instanceof File && file.size > 0, {
+      message: 'Avatar file is required.',
+    }),
   })
-  .refine((data) => data.password === data.password_confirm, {
+  .refine((data) => data.password === data.passwordConfirm, {
     message: "Passwords don't match",
-    path: ['password_confirm'],
+    path: ['passwordConfirm'],
   })
 
 type SignUpFormData = z.infer<typeof signUpFormSchema>
@@ -73,33 +69,35 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
       email: '',
       name: '',
       password: '',
-      password_confirm: '',
+      passwordConfirm: '',
     },
   })
 
-  const handleSignUp = async (data: SignUpFormData) => {
-    const formData = new FormData()
+  async function handleCreateUser(data: SignUpFormData) {
+    const formData = new FormData() // Create a new FormData instance
     formData.append('email', data.email)
     formData.append('password', data.password)
     formData.append('name', data.name)
-    formData.append('avatar_url', data.avatar_url)
+    formData.append('avatarUrl', data.avatarUrl)
 
     try {
-      await axios.post('http://localhost:8000/sign-up', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      await api.post(`/user`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
-
       toast.success('User successfully registered!')
       onClose()
     } catch (error) {
-      console.log('error')
+      console.log(error)
+      toast.error('Failed to register user. Please try again.')
     }
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      setValue('avatar_url', file)
+      setValue('avatarUrl', file)
 
       const reader = new FileReader()
       reader.onload = () => {
@@ -133,7 +131,7 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
               <PreviewContainer>
                 <ImagePreview>
                   {avatarPreview ? (
-                    <Image src={avatarPreview} alt="Avatar Preview" />
+                    <img src={avatarPreview} alt="Avatar Preview" width={40} />
                   ) : (
                     <User />
                   )}
@@ -154,10 +152,10 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
                   <button type="button" onClick={handleFileButtonClick}>
                     Choose File
                   </button>
-                  <span>{watch('avatar_url')?.name}</span>
+                  <span>{watch('avatarUrl')?.name}</span>
                 </ImageInput>
-                {errors.avatar_url && (
-                  <FormErrors error={errors.avatar_url.message} />
+                {errors.avatarUrl && (
+                  <FormErrors error={errors.avatarUrl.message} />
                 )}
               </InputContainer>
             </AvatarSectionContainer>
@@ -190,16 +188,16 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
               <Input
                 type="password"
                 placeholder="confirm password"
-                {...register('password_confirm')}
+                {...register('passwordConfirm')}
               />
-              {errors.password_confirm && (
-                <FormErrors error={errors.password_confirm.message} />
+              {errors.passwordConfirm && (
+                <FormErrors error={errors.passwordConfirm.message} />
               )}
             </InputContainer>
 
             <CustomButton
               content="Sign Up"
-              onClick={handleSubmit(handleSignUp)}
+              onClick={handleSubmit(handleCreateUser)}
               disabled={isSubmitting}
             />
           </FormContainer>

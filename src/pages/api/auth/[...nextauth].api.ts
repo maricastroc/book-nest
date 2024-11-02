@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import NextAuth, { NextAuthOptions } from 'next-auth'
+import NextAuth, { NextAuthOptions, User } from 'next-auth'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import GithubProvider, { GithubProfile } from 'next-auth/providers/github'
 import { NextApiRequest, NextPageContext, NextApiResponse } from 'next'
 import { PrismaAdapter } from '@/lib/auth/prisma-adapter'
 import { prisma } from '@/lib/prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import bcrypt from 'bcrypt'
 
 export function buildNextAuthOptions(
   req: NextApiRequest | NextPageContext['req'],
@@ -13,6 +14,9 @@ export function buildNextAuthOptions(
 ): NextAuthOptions {
   return {
     adapter: PrismaAdapter(req, res),
+    session: {
+      strategy: 'jwt',
+    },
     providers: [
       GoogleProvider({
         allowDangerousEmailAccountLinking: true,
@@ -52,21 +56,21 @@ export function buildNextAuthOptions(
       CredentialsProvider({
         name: 'Credentials',
         credentials: {
-          email: {
-            label: 'Email',
-            type: 'text',
-            placeholder: 'email@example.com',
-          },
+          email: { label: 'Email', type: 'text' },
           password: { label: 'Password', type: 'password' },
         },
         async authorize(credentials) {
-          // Aqui você verifica as credenciais do usuário
           const user = await prisma.user.findUnique({
             where: { email: credentials?.email },
           })
 
-          if (user && user.password === credentials?.password) {
-            // Aqui você deve usar um método seguro de comparação
+          if (
+            user &&
+            (await bcrypt.compare(
+              credentials?.password ?? '',
+              user.password ?? '',
+            ))
+          ) {
             return {
               id: user.id,
               name: user.name,
@@ -74,17 +78,31 @@ export function buildNextAuthOptions(
               avatarUrl: user.avatarUrl,
             }
           } else {
-            return null // Retorna null se as credenciais não forem válidas
+            return null
           }
         },
       }),
     ],
     callbacks: {
-      async session({ session, user }) {
-        return {
-          ...session,
-          user,
+      async jwt({ token, user }) {
+        if (user) {
+          token.id = user.id
+          token.name = user.name
+          token.email = user.email
+          token.avatarUrl = (user as User & { avatarUrl: string }).avatarUrl
         }
+        return token
+      },
+      async session({ session, token }) {
+        if (token) {
+          session.user = {
+            id: token.id as string,
+            name: token.name as string,
+            email: token.email as string,
+            avatarUrl: token.avatarUrl as string,
+          }
+        }
+        return session
       },
     },
   }

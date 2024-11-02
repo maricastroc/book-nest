@@ -36,6 +36,7 @@ import Image from 'next/image'
 import CoverImage from '../../../public/assets/cover.png'
 import Logo from '../../../public/assets/logo.svg'
 import { useScreenSize } from '@/utils/useScreenSize'
+import { toast } from 'react-toastify'
 
 const loginFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -47,6 +48,7 @@ type LoginFormData = z.infer<typeof loginFormSchema>
 export default function Login() {
   const {
     register,
+    handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -65,6 +67,21 @@ export default function Login() {
     } else if (provider === 'github') {
       await signIn('github', { callbackUrl: '/home' })
     } else router.push('/home')
+  }
+
+  async function onSubmit(data: LoginFormData) {
+    const result = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    })
+
+    if (result?.error) {
+      console.error('Login failed', result.error)
+    } else {
+      toast.success('Welcome to the Book Wise!')
+      router.push('/home')
+    }
   }
 
   return (
@@ -96,7 +113,7 @@ export default function Login() {
               <h2>Welcome!</h2>
               <p>Please, login or enter as a guest.</p>
             </Heading>
-            <FormContainer>
+            <FormContainer onSubmit={handleSubmit(onSubmit)}>
               <InputContainer>
                 <CustomLabel>Your e-mail here:</CustomLabel>
                 <Input placeholder="myuser@email.com" {...register('email')} />
@@ -140,12 +157,18 @@ export default function Login() {
               <AuthContainer>
                 <p>Or Login with:</p>
                 <AuthOptions>
-                  <AuthItem onClick={() => handleSignIn('google')}>
+                  <AuthItem
+                    type="button"
+                    onClick={() => handleSignIn('google')}
+                  >
                     <Icon icon="flat-color-icons:google" fontSize={24} />
                     <p>Google</p>
                   </AuthItem>
                   {!isMobile && <HorizontalDivider />}
-                  <AuthItem onClick={() => handleSignIn('github')}>
+                  <AuthItem
+                    type="button"
+                    onClick={() => handleSignIn('github')}
+                  >
                     <Icon
                       icon="ant-design:github-outlined"
                       color="white"
@@ -154,7 +177,7 @@ export default function Login() {
                     <p>Github</p>
                   </AuthItem>
                   {!isMobile && <HorizontalDivider />}
-                  <AuthItem onClick={() => router.push('/home')}>
+                  <AuthItem type="button" onClick={() => router.push('/home')}>
                     {<RocketLaunch size={24} />}
                     <p>Guest</p>
                   </AuthItem>

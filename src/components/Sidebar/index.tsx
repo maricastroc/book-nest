@@ -21,6 +21,7 @@ import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { LoginModal } from '../LoginModal'
+import { toast } from 'react-toastify'
 
 export function Sidebar() {
   const router = useRouter()
@@ -31,6 +32,7 @@ export function Sidebar() {
 
   async function handleLogout() {
     signOut({ callbackUrl: '/' })
+    toast.success('See you soon!')
   }
 
   return (
