@@ -24,7 +24,7 @@ export const Content = styled(RadixContent, {
   display: 'flex',
   flexDirection: 'column',
   transform: 'translate(-50%, -50%)',
-  width: 'clamp(300px, 80vw, 300px)',
+  width: '100%',
   borderRadius: '4px',
   zIndex: 9999,
   overflow: 'scroll',
