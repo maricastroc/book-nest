@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { MobileHeader } from '@/components/MobileHeader'
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
@@ -15,64 +16,41 @@ import {
   Divider,
   EmptyWrapper,
 } from './styles'
-import { prisma } from '@/lib/prisma'
-import { GetServerSideProps } from 'next'
-import {
-  Book,
-  CategoriesOnBooks,
-  Category,
-  Rating,
-  User as UserPrisma,
-} from '@prisma/client'
 import { MagnifyingGlass, User, X } from 'phosphor-react'
 import { ProfileCard } from '@/components/ProfileCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
 import { UserDetails } from '@/components/UserDetails'
 import { RatingProps } from '@/@types/rating'
-import { CategoryProps } from '@/@types/category'
 import { useScreenSize } from '@/utils/useScreenSize'
+import { useAppContext, UserStatistics } from '@/contexts/AppContext'
+import { useRouter } from 'next/router'
 
-interface ProfileProps {
-  user: UserPrisma & {
-    allRatings: (RatingProps & {
-      book: Book & {
-        categories: (CategoriesOnBooks & {
-          category: Category
-        })[]
-      }
-    })[]
-  }
-  allRatings: (Rating & {
-    alreadyRead: boolean
-    user: UserPrisma
-    book: Book & {
-      categories: (CategoriesOnBooks & {
-        category: Category
-      })[]
-    }
-  })[]
-}
+export default function Profile() {
+  const router = useRouter()
 
-export default function Profile({ user, allRatings }: ProfileProps) {
-  const [ratings, setRatings] = useState(allRatings)
+  const { userId } = router.query
 
   const [search, setSearch] = useState('')
 
+  const [userStatistics, setUserStatistics] = useState<
+    UserStatistics | undefined
+  >(undefined)
+
   const isMobile = useScreenSize(768)
 
-  useEffect(() => {
-    if (search) {
-      const filteredRatings = allRatings.filter(
-        (rating) =>
-          rating.book.name.toLowerCase().includes(search.toLowerCase()) ||
-          rating.book.author.toLowerCase().includes(search.toLowerCase()),
-      )
+  const { fetchUserStatistics } = useAppContext()
 
-      setRatings(filteredRatings)
-    } else {
-      setRatings(allRatings)
+  useEffect(() => {
+    const loadUserStatistics = async () => {
+      const statistics = await fetchUserStatistics(userId as string, search)
+
+      setUserStatistics(statistics)
     }
-  }, [search, allRatings])
+
+    if (userId !== undefined) {
+      loadUserStatistics()
+    }
+  }, [userId, search])
 
   return (
     <>
@@ -102,14 +80,15 @@ export default function Profile({ user, allRatings }: ProfileProps) {
                   <X onClick={() => setSearch('')} />
                 )}
               </SearchBar>
-              {!ratings?.length && (
+              {!userStatistics?.ratings?.length && (
                 <EmptyWrapper>
                   <EmptyContainer />
                 </EmptyWrapper>
               )}
               <UserRatings>
-                {ratings?.length > 0 &&
-                  ratings.map((rating: RatingProps) => {
+                {userStatistics?.ratings?.length &&
+                  userStatistics?.ratings?.length > 0 &&
+                  userStatistics?.ratings.map((rating: RatingProps) => {
                     if (rating?.book) {
                       return (
                         <ProfileCard
@@ -127,99 +106,10 @@ export default function Profile({ user, allRatings }: ProfileProps) {
           </ProfileContainer>
           <Divider />
           <UserDetailsContainer>
-            {user && <UserDetails userId={user.id} />}
+            {userId && <UserDetails userId={userId as string} />}
           </UserDetailsContainer>
         </ProfileWrapper>
       </Container>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async ({
-  params,
-  query,
-}) => {
-  const userId = String(params?.userId)
-  const search = query.search?.toString().toLowerCase() || ''
-
-  try {
-    const user = await prisma.user.findFirstOrThrow({
-      where: { id: userId },
-      include: {
-        ratings: {
-          where: {
-            OR: [
-              { book: { name: { contains: search, mode: 'insensitive' } } },
-              { book: { author: { contains: search, mode: 'insensitive' } } },
-            ],
-          },
-          orderBy: { createdAt: 'desc' },
-          include: {
-            book: { include: { categories: { include: { category: true } } } },
-          },
-        },
-      },
-    })
-
-    const pages = user.ratings.reduce((acc, rating) => {
-      return (acc += rating.book.totalPages)
-    }, 0)
-
-    const books = user.ratings.map((rating) => rating.book)
-
-    const authors = user.ratings.map((rating) => rating.book.author)
-
-    const uniqueAuthors: string[] = []
-
-    authors.forEach((author) => {
-      if (uniqueAuthors.indexOf(author) === -1) {
-        uniqueAuthors.push(author)
-      }
-    })
-
-    const genres = books
-      .map((book) => book.categories.map((category) => category.category))
-      .flat()
-
-    interface CategoryWithCount extends CategoryProps {
-      qtd: number
-    }
-
-    const genreNumbers = genres
-      .reduce((acc: CategoryWithCount[], genre) => {
-        const qtd = genres.filter(
-          (i: CategoryProps) => i.id === genre.id,
-        ).length
-        return [
-          ...acc,
-          {
-            ...genre,
-            qtd,
-          },
-        ]
-      }, [])
-      .sort(
-        (a: CategoryWithCount, b: CategoryWithCount) =>
-          (b.qtd || 0) - (a.qtd || 0),
-      )
-
-    const infos = {
-      pages,
-      booksCount: books.length,
-      authorsCount: uniqueAuthors.length,
-      bestGenre: genreNumbers[0] ? genreNumbers[0] : null,
-    }
-
-    return {
-      props: {
-        allRatings: JSON.parse(JSON.stringify(user.ratings)),
-        user: JSON.parse(JSON.stringify(user)),
-        infos,
-      },
-    }
-  } catch (error) {
-    return {
-      notFound: true,
-    }
-  }
 }

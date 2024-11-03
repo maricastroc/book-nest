@@ -24,7 +24,6 @@ export const UserInfo = styled('div', {
   },
 
   time: {
-    marginTop: '0.5rem',
     fontSize: '0.85rem',
     color: '$gray400',
   },

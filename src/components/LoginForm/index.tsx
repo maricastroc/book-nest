@@ -113,12 +113,21 @@ export default function LoginForm({ onClose }: LoginFormProps) {
 
         <Dialog.Root>
           <Dialog.Trigger asChild>
-            <SignUpBtn type="button" onClick={() => setIsSignUpModalOpen(true)}>
+            <SignUpBtn
+              type="button"
+              onClick={() => {
+                setIsSignUpModalOpen(true)
+              }}
+            >
               Still don&apos;t have an account? Click here to sign up!
             </SignUpBtn>
           </Dialog.Trigger>
           {isSignUpModalOpen && (
-            <SignUpModal onClose={() => setIsSignUpModalOpen(false)} />
+            <SignUpModal
+              onClose={() => {
+                setIsSignUpModalOpen(false)
+              }}
+            />
           )}
         </Dialog.Root>
 

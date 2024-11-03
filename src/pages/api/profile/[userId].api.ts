@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { prisma } from '@/lib/prisma'
 import { getMostFrequentString } from '@/utils/getMostFrequentString'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -44,7 +45,8 @@ export default async function handler(
       0,
     )
     const ratedBooks = profile.ratings.length
-    const readAuthors = profile.ratings.reduce((acc, rating) => {
+
+    const authorsCount = profile.ratings.reduce((acc, rating) => {
       if (!acc.includes(rating.book.author)) {
         acc.push(rating.book.author)
       }
@@ -55,9 +57,7 @@ export default async function handler(
       rating?.book?.categories?.flatMap((category) => category?.category?.name),
     )
 
-    const mostReadCategory = categories
-      ? getMostFrequentString(categories)
-      : null
+    const bestGenre = categories ? getMostFrequentString(categories) : null
 
     const profileData = {
       user: {
@@ -69,8 +69,8 @@ export default async function handler(
       ratings: profile.ratings,
       readPages,
       ratedBooks,
-      readAuthors: readAuthors?.length,
-      mostReadCategory,
+      authorsCount: authorsCount?.length,
+      bestGenre,
     }
     return res.json({ profile: profileData })
   }

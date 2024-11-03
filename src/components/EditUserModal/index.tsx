@@ -33,6 +33,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSession } from 'next-auth/react'
 import { api } from '@/lib/axios'
 import { CircularProgress } from '@mui/material'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface SignUpModalProps {
   onClose: () => void
@@ -73,10 +74,15 @@ type SignUpFormData = z.infer<ReturnType<typeof signUpFormSchema>>
 
 export function EditUserModal({ onClose }: SignUpModalProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
+
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+
   const [changePassword, setChangePassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+
+  const { loggedUser, isLoading, fetchUserStatistics } = useAppContext()
+
   const { data: session } = useSession()
 
   const {
@@ -97,6 +103,7 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
+
     if (file) {
       setValue('avatarUrl', file)
       const reader = new FileReader()
@@ -124,7 +131,11 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
         await api.put(`/user/edit/${session.user.id}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
+
         toast.success('User successfully updated!')
+
+        await fetchUserStatistics(session.user.id.toString())
+
         onClose()
       } catch (error) {
         handleAxiosError(error)
@@ -133,28 +144,13 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
   }
 
   useEffect(() => {
-    const loadUser = async () => {
-      if (session?.user) {
-        setIsLoading(true)
-        try {
-          const response = await api.get(`/profile/${session.user.id}`)
-          if (response.data) {
-            const user = response.data.profile.user
-            setAvatarPreview(`../${user.avatarUrl}`)
-            setAvatarUrl(`../${user.avatarUrl}`)
-            setValue('name', user.name)
-            setValue('email', user.email)
-          }
-        } catch (error) {
-          handleAxiosError(error)
-        } finally {
-          setIsLoading(false)
-        }
-      }
+    if (loggedUser) {
+      setAvatarPreview(`../${loggedUser.avatarUrl}`)
+      setAvatarUrl(`../${loggedUser.avatarUrl}`)
+      setValue('name', loggedUser.name)
+      setValue('email', loggedUser.email ?? '')
     }
-
-    loadUser()
-  }, [session?.user, setValue])
+  }, [loggedUser, setValue])
 
   return (
     <Dialog.Portal>

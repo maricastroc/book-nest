@@ -33,7 +33,6 @@ export const BookData = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
-  gap: '0.2rem',
 
   h2: {
     fontSize: '0.9rem',

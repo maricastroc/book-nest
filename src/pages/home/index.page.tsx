@@ -24,21 +24,12 @@ import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/Sidebar'
 import { LateralMenu } from '@/components/LateralMenu'
 import { BookProps } from '@/@types/book'
-import { UserProps } from '@/@types/user'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { LastReadCard } from '@/components/LastReadCard'
 import { useAppContext } from '@/contexts/AppContext'
 import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
 import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
-
-export interface RecentReadCardProps {
-  book: BookProps
-  created_at: string
-  description: string
-  id: string
-  rate: number
-  user: UserProps
-}
+import { RatingProps } from '@/@types/rating'
 
 export default function Home() {
   const session = useSession()
@@ -124,7 +115,7 @@ export default function Home() {
                     ? Array.from({ length: 9 }).map((_, index) => (
                         <SkeletonRatingCard key={index} />
                       ))
-                    : latestRatings.map((rating) => (
+                    : latestRatings.map((rating: RatingProps) => (
                         <RatingCard
                           key={rating.id}
                           rating={rating}

@@ -1,4 +1,4 @@
-import { styled } from '../../styles'
+import { styled } from '@/styles'
 
 export const AvatarContainer = styled('a', {
   display: 'flex',
@@ -62,5 +62,6 @@ export const AvatarDefault = styled('img', {
     height: 66,
   },
 
-  outline: '1.2px solid $green100',
+  outline: '1.5px solid $green100',
+  outlineOffset: 2,
 })

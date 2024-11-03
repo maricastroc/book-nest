@@ -20,13 +20,11 @@ import { signOut, useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { LoginModal } from '../LoginModal'
 import { toast } from 'react-toastify'
-import { useEffect, useState, useCallback, ComponentType } from 'react'
-import { api } from '@/lib/axios'
-import { UserProps } from '@/@types/user'
-import { handleAxiosError } from '@/utils/handleAxiosError'
+import { useState, useCallback, ComponentType } from 'react'
 import { CircularProgress } from '@mui/material'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { Avatar } from '../Avatar'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface NavigationItemProps {
   active: boolean
@@ -50,45 +48,18 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
 )
 
 export function Sidebar() {
-  const [user, setUser] = useState<UserProps | null>(null)
-
-  const [userFirstName, setUserFirstName] = useState('')
-
   const router = useRouter()
 
-  const session = useSession()
-
-  const [isLoading, setIsLoading] = useState(false)
+  const { data: session } = useSession()
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+
+  const { loggedUser, isLoading } = useAppContext()
 
   const handleLogout = useCallback(() => {
     signOut({ callbackUrl: '/' })
     toast.success('See you soon!')
   }, [])
-
-  useEffect(() => {
-    const loadUser = async () => {
-      setIsLoading(true)
-
-      if (session?.data?.user) {
-        try {
-          const response = await api.get(`/profile/${session.data.user.id}`)
-          if (response.data) {
-            const userProfile = response.data.profile.user
-            setUser(userProfile)
-            setUserFirstName(userProfile.name.split(' ')[0] ?? '')
-          }
-        } catch (error) {
-          handleAxiosError(error)
-        } finally {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    loadUser()
-  }, [session?.data?.user])
 
   return (
     <Container>
@@ -115,17 +86,24 @@ export function Sidebar() {
                 icon={Binoculars}
                 label="Explore"
               />
-              {session.data?.user && (
+              {session?.user && (
                 <NavigationItem
                   active={router.pathname.includes('profile')}
-                  onClick={() => router.push(`profile/${session.data.user.id}`)}
+                  onClick={() => {
+                    const currentPath = router.asPath
+                    const targetPath = currentPath.includes('/profile/')
+                      ? `/profile/${session.user.id}`
+                      : `profile/${session.user.id}`
+
+                    router.push(targetPath)
+                  }}
                   icon={Binoculars}
                   label="Profile"
                 />
               )}
             </ItemsContainer>
           </SidebarMain>
-          {session.data?.user ? (
+          {loggedUser && session?.user.id ? (
             <ProfileContainer>
               {isLoading ? (
                 <CircularProgress size="1.5rem" />
@@ -133,12 +111,19 @@ export function Sidebar() {
                 <Avatar
                   isClickable
                   isLoading={isLoading}
-                  avatarUrl={user?.avatarUrl ?? AVATAR_URL_DEFAULT}
-                  onClick={() => router.push(`profile/${session.data.user.id}`)}
+                  avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
+                  onClick={() => {
+                    const currentPath = router.asPath
+                    const targetPath = currentPath.includes('/profile/')
+                      ? `/profile/${session.user.id}`
+                      : `profile/${session.user.id}`
+
+                    router.push(targetPath)
+                  }}
                 />
               )}
               <SignOutContainer onClick={handleLogout}>
-                <p>{userFirstName}</p>
+                <p>{loggedUser.name.split(' ')[0]}</p>
                 <SignOut />
               </SignOutContainer>
             </ProfileContainer>

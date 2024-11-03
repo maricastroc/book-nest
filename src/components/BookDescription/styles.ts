@@ -1,4 +1,4 @@
-import { styled } from '../../styles'
+import { styled } from '@/styles'
 
 export const TruncatedText = styled('div', {
   maxHeight: '9rem',

@@ -9,6 +9,7 @@ export interface UserProps {
   avatarUrl?: string | null | undefined
   createdAt: Date
   password?: string | null
+  email?: string
 
   accounts?: AccountProps[] | null | undefined
   sessions?: SessionProps[] | null | undefined

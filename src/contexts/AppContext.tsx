@@ -6,8 +6,19 @@ import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
 import { useSession } from 'next-auth/react'
+import { UserProps } from '@/@types/user'
+
+export interface UserStatistics {
+  ratings: RatingProps[] | undefined
+  readPages: number
+  booksCount: number
+  authorsCount: number
+  bestGenre: string | undefined
+  user: UserProps
+}
 
 interface AppContextType {
+  loggedUser: UserProps | null
   books: BookProps[]
   popularBooks: BookProps[]
   latestRatings: RatingProps[]
@@ -17,6 +28,10 @@ interface AppContextType {
   refreshPopularBooks: () => Promise<void>
   refreshLatestRatings: () => Promise<void>
   refreshUserLatestRatings: () => Promise<void>
+  fetchUserStatistics: (
+    userId: string,
+    search?: string,
+  ) => Promise<UserStatistics | undefined>
   handleSetBooks: (updatedBooks: BookProps[]) => void
   isLoading: boolean
 }
@@ -35,6 +50,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   const [popularBooks, setPopularBooks] = useState<BookProps[]>([])
 
   const [userLatestRating, setUserLatestRating] = useState<RatingProps>()
+
+  const [loggedUser, setLoggedUser] = useState<UserProps | null>(null)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -87,6 +104,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setLatestRatings,
     )
 
+  const fetchUserStatistics = async (
+    userId: string,
+    search?: string,
+  ): Promise<UserStatistics | undefined> => {
+    setIsLoading(true)
+    try {
+      const response = await api.get(`/profile/${userId}`, {
+        params: { search },
+      })
+
+      if (session?.data?.user.id === userId) {
+        setLoggedUser(response.data.profile.user)
+      }
+
+      return response.data.profile
+    } catch (error) {
+      handleAxiosError(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleSetBooks = (updatedBooks: BookProps[]) => setBooks(updatedBooks)
 
   useEffect(() => {
@@ -105,6 +144,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <AppContext.Provider
       value={{
+        loggedUser,
         isLoading,
         books,
         categories,
@@ -116,6 +156,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         refreshPopularBooks,
         refreshLatestRatings,
         refreshUserLatestRatings,
+        fetchUserStatistics,
       }}
     >
       {children}

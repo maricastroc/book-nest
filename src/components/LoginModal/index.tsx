@@ -16,7 +16,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
           <CloseButton onClick={() => onClose()}>
             <X alt="Close" />
           </CloseButton>
-          <LoginForm />
+          <LoginForm onClose={() => onClose()} />
         </LoginModalContainer>
       </Content>
     </Dialog.Portal>
