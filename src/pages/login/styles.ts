@@ -8,6 +8,7 @@ export const Container = styled('div', {
   justifyContent: 'center',
   padding: '3rem 1.5rem 3rem',
   maxWidth: 'clamp(80rem, 85%, 40rem)',
+  height: '100vh',
   zIndex: '0',
 
   '@media (min-width: 980px)': {
@@ -24,6 +25,7 @@ export const Container = styled('div', {
     gridTemplateColumns: 'repeat(2, 1fr)',
     maxWidth: '90rem',
     margin: '0 auto',
+    overflow: 'hidden',
   },
 })
 

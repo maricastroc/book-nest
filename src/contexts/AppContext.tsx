@@ -1,13 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { api } from '@/lib/axios'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
-import { UserProps } from '@/@types/user'
 import { RatingProps } from '@/@types/rating'
+import { useSession } from 'next-auth/react'
 
 interface AppContextType {
-  loadUser: (userId: string) => Promise<UserProps | null>
   books: BookProps[]
   popularBooks: BookProps[]
   latestRatings: RatingProps[]
@@ -38,115 +38,72 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const loadUser = async (userId: string) => {
-    if (userId) {
-      setIsLoading(true)
+  const session = useSession()
 
-      try {
-        const response = await api.get(`/profile/${userId}`)
-        if (response.data) {
-          return response.data.profile.user
-        }
-      } catch (error) {
-        handleAxiosError(error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    return null
-  }
-
-  const refreshBooks = async () => {
+  const fetchData = async <T,>(
+    apiCall: () => Promise<T>,
+    setter: React.Dispatch<React.SetStateAction<T>>,
+  ) => {
     setIsLoading(true)
-
     try {
-      const response = await api.get('/books')
-
-      const booksWithRating = response.data.booksWithRating
-
-      setBooks(booksWithRating)
+      const response = await apiCall()
+      setter(response)
     } catch (error) {
-      console.error('Error loading books:', error)
+      handleAxiosError(error)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const refreshPopularBooks = async () => {
-    setIsLoading(true)
+  const refreshBooks = () =>
+    fetchData(
+      () => api.get('/books').then((res) => res.data.booksWithRating),
+      setBooks,
+    )
 
-    try {
-      const response = await api.get('/books/popular')
+  const refreshPopularBooks = () =>
+    fetchData(
+      () => api.get('/books/popular').then((res) => res.data.books),
+      setPopularBooks,
+    )
 
-      if (response.data) {
-        setPopularBooks(response.data.books)
-      }
-    } catch (error) {
-      console.error('Error loading books:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const refreshUserLatestRatings = () =>
+    fetchData(
+      () => api.get('/ratings/user_latest').then((res) => res.data.rating),
+      setUserLatestRating,
+    )
 
-  const refreshUserLatestRatings = async () => {
-    setIsLoading(true)
+  const loadCategories = () =>
+    fetchData(
+      () => api.get('/categories').then((res) => res.data.categories),
+      setCategories,
+    )
 
-    try {
-      const response = await api.get('/ratings/user_latest')
+  const refreshLatestRatings = () =>
+    fetchData(
+      () => api.get('/ratings/latest').then((res) => res.data.ratings),
+      setLatestRatings,
+    )
 
-      if (response.data) {
-        setUserLatestRating(response.data.rating)
-      }
-    } catch (error) {
-      console.error('Error loading books:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const loadCategories = async () => {
-    setIsLoading(true)
-
-    try {
-      const response = await api.get('/categories')
-      setCategories(response.data.categories)
-    } catch (error) {
-      console.error('Error loading categories:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleSetBooks = (updatedBooks: BookProps[]) => {
-    setBooks(updatedBooks)
-  }
-
-  const refreshLatestRatings = async () => {
-    setIsLoading(true)
-
-    try {
-      const response = await api.get('/ratings/latest')
-      setLatestRatings(response.data.ratings)
-    } catch (error) {
-      console.error('Error loading latest ratings:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const handleSetBooks = (updatedBooks: BookProps[]) => setBooks(updatedBooks)
 
   useEffect(() => {
     refreshBooks()
     loadCategories()
     refreshLatestRatings()
     refreshPopularBooks()
-    refreshUserLatestRatings()
   }, [])
+
+  useEffect(() => {
+    if (session?.data?.user) {
+      refreshUserLatestRatings()
+    }
+  }, [session])
 
   return (
     <AppContext.Provider
       value={{
         isLoading,
-        loadUser,
         books,
         categories,
         refreshBooks,
