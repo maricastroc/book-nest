@@ -60,7 +60,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
                   <span onClick={() => setIsLoginModalOpen(true)}>Review</span>
                 </Dialog.Trigger>
                 {isLoginModalOpen && (
-                  <LoginModal onClose={() => setIsLoginModalOpen(false)}/>
+                  <LoginModal onClose={() => setIsLoginModalOpen(false)} />
                 )}
               </Dialog.Root>
             )}
