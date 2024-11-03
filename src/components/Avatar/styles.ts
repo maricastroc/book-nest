@@ -7,7 +7,6 @@ export const AvatarContainer = styled('a', {
   width: 42,
   height: 42,
   borderRadius: '50%',
-  background: '$gradient-vertical',
 
   '&.medium': {
     width: 36,
@@ -17,6 +16,11 @@ export const AvatarContainer = styled('a', {
   '&.regular': {
     width: 39,
     height: 39,
+  },
+
+  '&.bigger': {
+    width: 48,
+    height: 48,
   },
 
   '&.large': {
@@ -46,9 +50,17 @@ export const AvatarDefault = styled('img', {
     height: 37,
   },
 
+  '&.bigger': {
+    width: 46,
+    aspectRatio: 'auto 46 / 46',
+    height: 46,
+  },
+
   '&.large': {
     width: 66,
     aspectRatio: 'auto 68 / 68',
     height: 66,
   },
+
+  outline: '1.2px solid $green100',
 })

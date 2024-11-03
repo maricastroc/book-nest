@@ -5,7 +5,7 @@ import { CircularProgress } from '@mui/material'
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
   avatarUrl: string
   isClickable?: boolean
-  variant?: '' | 'medium' | 'regular' | 'large'
+  variant?: '' | 'medium' | 'regular' | 'bigger' | 'large'
   onClick?: () => void
   isLoading?: boolean
 }

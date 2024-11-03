@@ -67,7 +67,7 @@ export const BookContainer = styled('div', {
 })
 
 export const BookCover = styled('img', {
-  width: '6.75rem',
+  width: '6.5rem',
   height: 'auto',
   borderRadius: 8,
 })

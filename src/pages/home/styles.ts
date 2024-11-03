@@ -160,7 +160,7 @@ export const LastRatingsTitle = styled('p', {
 export const PopularBooksCardsContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  marginTop: '5rem',
+  marginTop: '2.5rem',
   marginBottom: '2rem',
   width: '100%',
   gap: '1rem',

@@ -60,6 +60,8 @@ export function Sidebar() {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+
   const handleLogout = useCallback(() => {
     signOut({ callbackUrl: '/' })
     toast.success('See you soon!')
@@ -144,12 +146,14 @@ export function Sidebar() {
             <LoginContainer>
               <Dialog.Root>
                 <Dialog.Trigger asChild>
-                  <LoginButton>
+                  <LoginButton onClick={() => setIsLoginModalOpen(true)}>
                     <p>Login</p>
                     <SignIn />
                   </LoginButton>
                 </Dialog.Trigger>
-                <LoginModal />
+                {isLoginModalOpen && (
+                  <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+                )}
               </Dialog.Root>
             </LoginContainer>
           )}

@@ -127,6 +127,6 @@ export const BookCover = styled('img', {
   borderRadius: 8,
 
   '@media (min-width: 580px)': {
-    width: '6.75rem',
+    width: '6.5rem',
   },
 })

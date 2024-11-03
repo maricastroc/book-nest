@@ -4,7 +4,7 @@ import Link from 'next/link'
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '2rem',
+  padding: '1.5rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'center',
@@ -29,76 +29,89 @@ export const Header = styled('div', {
 
 export const UserInfo = styled('div', {
   display: 'flex',
-  flexDirection: 'column',
+  justifyContent: 'flex-start',
   alignItems: 'center',
-  justifyContent: 'center',
   gap: '1rem',
   width: '100%',
 
-  '@media (min-width: 480px)': {
-    flexDirection: 'row',
+  '@media (min-width: 580px)': {
     alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+  },
+})
+
+export const HeaderData = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+
+  '@media (min-width: 580px)': {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 })
 
 export const NameAndDate = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   gap: '0.1rem',
+  fontSize: '0.9rem',
 
   time: {
     color: '$gray400',
     fontSize: '$sm',
-  },
-
-  '@media (min-width: 480px)': {
-    alignItems: 'flex-start',
   },
 })
 
 export const BookContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
   width: '100%',
-
-  '@media (min-width: 480px)': {
-    flexDirection: 'row',
-    gap: '1.5rem',
-    justifyContent: 'flex-start',
-    width: '100%',
-  },
 })
 
 export const BookCover = styled('img', {
-  width: '6.75rem',
+  width: '5rem',
   height: 'auto',
   borderRadius: 8,
-  marginTop: '1.2rem',
+
+  '@media (min-width: 580px)': {
+    width: '6.5rem',
+  },
 })
 
 export const BookDetails = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
   gap: '1rem',
-  marginTop: '1.2rem',
 
-  '@media (min-width: 480px)': {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+  '@media (min-width: 580px)': {
+    gap: '0.5rem',
+  },
+})
+
+export const BookData = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  width: '100%',
+  gap: '1.5rem',
+  margin: '1rem 0',
+
+  '@media (min-width: 580px)': {
+    margin: '1rem 0 0',
   },
 })
 
 export const BookInfo = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
   gap: '0.2rem',
 
@@ -117,6 +130,8 @@ export const BookInfo = styled('div', {
 })
 
 export const RatingContainer = styled('div', {
+  display: 'flex',
+  marginTop: '1rem',
   maxHeight: '6.5rem',
   position: 'relative',
   overflow: 'scroll',
@@ -127,6 +142,10 @@ export const RatingContainer = styled('div', {
     fontSize: '0.85rem',
     wordBreak: 'break-word',
     paddingRight: '0.3rem',
+  },
+
+  '@media (min-width: 480px)': {
+    marginTop: 0,
   },
 })
 
