@@ -67,11 +67,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setPopularBooks,
     )
 
-  const refreshUserLatestRatings = () =>
-    fetchData(
+  const refreshUserLatestRatings = () => {
+    if (!session?.data?.user) return Promise.resolve()
+    return fetchData(
       () => api.get('/ratings/user_latest').then((res) => res.data.rating),
       setUserLatestRating,
     )
+  }
 
   const loadCategories = () =>
     fetchData(
@@ -98,7 +100,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     if (session?.data?.user) {
       refreshUserLatestRatings()
     }
-  }, [session])
+  }, [session?.data?.user])
 
   return (
     <AppContext.Provider
