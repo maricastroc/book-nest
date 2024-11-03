@@ -23,6 +23,7 @@ import { handleAxiosError } from '@/utils/handleAxiosError'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { RatingCardForm } from '../RatingCardForm'
 import { Avatar } from '@/components/Avatar'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface LateralRatingCardProps {
   rating: RatingProps
@@ -40,6 +41,8 @@ export function LateralRatingCard({
 
   const [openEditReviewBox, setOpenEditReviewBox] = useState(false)
 
+  const { refreshBooks } = useAppContext()
+
   const session = useSession()
 
   async function handleDeleteReview(id: string) {
@@ -47,12 +50,17 @@ export function LateralRatingCard({
       const payload = {
         id,
       }
+
       await api.delete('/ratings', { data: payload })
+
+      toast.success('Rating successfully deleted!')
+
+      refreshBooks()
+
+      onCloseLateralMenu()
     } catch (error) {
       handleAxiosError(error)
     }
-    onCloseLateralMenu()
-    toast.success('Rating successfully deleted!')
   }
 
   return openEditReviewBox ? (

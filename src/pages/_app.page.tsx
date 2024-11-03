@@ -3,6 +3,7 @@ import { globalStyles } from '../styles/global'
 import { SessionProvider } from 'next-auth/react'
 import { StyledToastContainer } from './home/styles'
 import 'react-toastify/dist/ReactToastify.css'
+import { AppProvider } from '@/contexts/AppContext'
 
 globalStyles()
 
@@ -13,7 +14,9 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <StyledToastContainer />
-      <Component {...pageProps} />
+      <AppProvider>
+        <Component {...pageProps} />
+      </AppProvider>
     </SessionProvider>
   )
 }

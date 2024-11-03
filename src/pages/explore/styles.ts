@@ -113,6 +113,7 @@ export const SearchBar = styled('div', {
     border: 'none',
     color: '$white',
     width: '100%',
+    fontSize: '0.9rem',
 
     '&:focus': {
       boxShadow: 'none',
@@ -164,7 +165,7 @@ export const CategoryBtn = styled('button', {
   border: 'solid 1px $purple100',
   color: '$purple100',
   padding: '0.3rem 0.8rem',
-  fontSize: '0.8rem',
+  fontSize: '0.85rem',
 
   '&:hover': {
     transition: '200ms',

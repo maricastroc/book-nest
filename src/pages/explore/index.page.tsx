@@ -27,28 +27,30 @@ import { useScreenSize } from '@/utils/useScreenSize'
 import { handleAxiosError } from '@/utils/handleAxiosError'
 import { useRouter } from 'next/router'
 import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
+import { useAppContext } from '@/contexts/AppContext'
+import { SkeletonCategories } from '@/components/SkeletonCategories'
 
 export interface ExploreProps {
   categories: CategoryProps[]
   books: BookProps[]
 }
 
-export default function Explore({ categories, books }: ExploreProps) {
-  const [booksList, setBooksList] = useState<BookProps[]>(books)
-
-  const [filteredBooks, setFilteredBooks] = useState<BookProps[]>(books)
-
-  const [categorySelected, setCategorySelected] = useState<string | null>(null)
-
+export default function Explore() {
   const [search, setSearch] = useState('')
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
+  const [categorySelected, setCategorySelected] = useState<string | null>(null)
+
   const [isLoading, setIsLoading] = useState(false)
 
   const isMobile = useScreenSize(980)
+
+  const { books, categories, handleSetBooks } = useAppContext()
+
+  const [filteredBooks, setFilteredBooks] = useState(books)
 
   const router = useRouter()
 
@@ -67,7 +69,7 @@ export default function Explore({ categories, books }: ExploreProps) {
       const query = categoryId ? `?category=${categoryId}` : ''
       const response = await api.get(`/books${query}`)
       if (response.data.booksWithRating) {
-        setBooksList(response.data.booksWithRating)
+        handleSetBooks(response.data.booksWithRating)
       }
       setCategorySelected(categoryId)
     } catch (error) {
@@ -79,7 +81,7 @@ export default function Explore({ categories, books }: ExploreProps) {
 
   useEffect(() => {
     const applyFilters = () => {
-      let updatedBooks = [...booksList]
+      let updatedBooks = [...books]
 
       if (categorySelected) {
         updatedBooks = updatedBooks.filter((book) =>
@@ -104,7 +106,13 @@ export default function Explore({ categories, books }: ExploreProps) {
     }
 
     applyFilters()
-  }, [booksList, categorySelected, search])
+  }, [categorySelected, search, books])
+
+  useEffect(() => {
+    if (books.length > 0) {
+      setFilteredBooks(books)
+    }
+  }, [books])
 
   return (
     <>
@@ -143,29 +151,35 @@ export default function Explore({ categories, books }: ExploreProps) {
           </Heading>
           <ExploreContent>
             <Categories>
-              <CategoryBtn
-                selected={!categorySelected}
-                onClick={() => selectCategory(null)}
-              >
-                All
-              </CategoryBtn>
-              {categories.map((category) => (
-                <CategoryBtn
-                  selected={!isLoading && categorySelected === category.id}
-                  key={category.id}
-                  onClick={() => selectCategory(category.id)}
-                  className={isLoading ? 'loading' : ''}
-                >
-                  {category.name}
-                </CategoryBtn>
-              ))}
+              {!categories.length ? (
+                <SkeletonCategories />
+              ) : (
+                <>
+                  <CategoryBtn
+                    selected={!categorySelected}
+                    onClick={() => selectCategory(null)}
+                  >
+                    All
+                  </CategoryBtn>
+                  {categories.map((category) => (
+                    <CategoryBtn
+                      selected={!isLoading && categorySelected === category.id}
+                      key={category.id}
+                      onClick={() => selectCategory(category.id)}
+                      className={isLoading ? 'loading' : ''}
+                    >
+                      {category.name}
+                    </CategoryBtn>
+                  ))}
+                </>
+              )}
             </Categories>
             <BooksContainer>
-              {isLoading
+              {isLoading || !books.length
                 ? Array.from({ length: 9 }).map((_, index) => (
                     <SkeletonPopularBook key={index} />
                   ))
-                : filteredBooks.map((book) => (
+                : filteredBooks?.map((book) => (
                     <ExploreCard
                       key={book.id}
                       book={book}

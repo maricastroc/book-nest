@@ -25,6 +25,7 @@ import { REVIEW_MAX_LENGTH } from '@/utils/constants'
 import { FormErrors } from '@/components/shared/FormErrors'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/Avatar'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface RatingCardFormProps {
   isEdit?: boolean
@@ -77,6 +78,8 @@ export function RatingCardForm({
     setValue('rate', rate)
   }
 
+  const { refreshBooks } = useAppContext()
+
   const characterCount = watch('description')?.split('').length || 0
 
   async function handleSubmitNewReview(data: RatingCardFormData) {
@@ -88,6 +91,7 @@ export function RatingCardForm({
         bookId,
       })
 
+      refreshBooks()
       onCloseLateralMenu()
 
       toast.success('Review successfully registered!')

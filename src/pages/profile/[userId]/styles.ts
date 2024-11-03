@@ -176,6 +176,7 @@ export const SearchBar = styled('div', {
     border: 'none',
     color: '$white',
     width: '100%',
+    fontSize: '0.9rem',
 
     '&:focus': {
       boxShadow: 'none',
