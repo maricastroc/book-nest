@@ -192,6 +192,7 @@ export const SearchBar = styled('div', {
   svg: {
     fontSize: '1.2rem',
     color: '$gray500',
+    cursor: 'pointer',
   },
 
   '&:has(input:focus)': {

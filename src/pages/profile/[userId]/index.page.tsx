@@ -32,6 +32,10 @@ export default function Profile() {
 
   const [search, setSearch] = useState('')
 
+  const [allRatings, setAllRatings] = useState<RatingProps[]>([])
+
+  const [filteredRatings, setFilteredRatings] = useState<RatingProps[]>([])
+
   const [userStatistics, setUserStatistics] = useState<
     UserStatistics | undefined
   >(undefined)
@@ -45,10 +49,26 @@ export default function Profile() {
       const statistics = await fetchUserStatistics(userId as string, search)
 
       setUserStatistics(statistics)
+      setAllRatings(statistics?.ratings ?? [])
+      setFilteredRatings(statistics?.ratings ?? [])
     }
 
     if (userId !== undefined) {
       loadUserStatistics()
+    }
+  }, [userId])
+
+  useEffect(() => {
+    if (search) {
+      const ratings = filteredRatings.filter(
+        (rating) =>
+          rating?.book?.name.toLowerCase().includes(search.toLowerCase()) ||
+          rating?.book?.author.toLowerCase().includes(search.toLowerCase()),
+      )
+
+      setFilteredRatings(ratings)
+    } else {
+      setFilteredRatings(allRatings)
     }
   }, [userId, search])
 
@@ -86,9 +106,8 @@ export default function Profile() {
                 </EmptyWrapper>
               )}
               <UserRatings>
-                {userStatistics?.ratings?.length &&
-                  userStatistics?.ratings?.length > 0 &&
-                  userStatistics?.ratings.map((rating: RatingProps) => {
+                {filteredRatings?.length > 0 &&
+                  filteredRatings.map((rating: RatingProps) => {
                     if (rating?.book) {
                       return (
                         <ProfileCard
