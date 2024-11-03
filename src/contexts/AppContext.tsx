@@ -126,6 +126,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  const fetchLoggedUser = async (): Promise<UserStatistics | undefined> => {
+    setIsLoading(true)
+
+    if (session?.data?.user) {
+      try {
+        const response = await api.get(`/profile/${session?.data?.user.id}`)
+
+        setLoggedUser(response.data.profile.user)
+
+        return response.data.profile
+      } catch (error) {
+        handleAxiosError(error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+  }
+
   const handleSetBooks = (updatedBooks: BookProps[]) => setBooks(updatedBooks)
 
   useEffect(() => {
@@ -138,6 +156,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (session?.data?.user) {
       refreshUserLatestRatings()
+      fetchLoggedUser()
     }
   }, [session?.data?.user])
 
