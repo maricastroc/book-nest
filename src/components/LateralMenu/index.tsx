@@ -27,7 +27,9 @@ interface BookReviewsSidebarProps {
 }
 
 export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
-  const [openReviewForm, setOpenReviewForm] = useState(false)
+  const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
+
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
   const session = useSession()
 
@@ -51,21 +53,23 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
           <RatingsContentTitle>
             <p>Ratings</p>
             {session.data?.user ? (
-              <span onClick={() => setOpenReviewForm(true)}>Review</span>
+              <span onClick={() => setIsReviewFormOpen(true)}>Review</span>
             ) : (
               <Dialog.Root>
                 <Dialog.Trigger asChild>
-                  <span>Review</span>
+                  <span onClick={() => setIsLoginModalOpen(true)}>Review</span>
                 </Dialog.Trigger>
-                <LoginModal />
+                {isLoginModalOpen && (
+                  <LoginModal onClose={() => setIsLoginModalOpen(false)}/>
+                )}
               </Dialog.Root>
             )}
           </RatingsContentTitle>
-          {session.data?.user && openReviewForm && book && (
+          {session.data?.user && isReviewFormOpen && book && (
             <RatingCardForm
               avatarUrl={session.data?.user?.avatarUrl ?? AVATAR_URL_DEFAULT}
               name={session.data?.user.name}
-              onClose={() => setOpenReviewForm(false)}
+              onClose={() => setIsReviewFormOpen(false)}
               onCloseLateralMenu={() => onClose()}
               bookId={book.id}
               userId={session.data?.user.id}

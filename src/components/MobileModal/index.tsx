@@ -26,6 +26,8 @@ export function MobileModal() {
 
   const [userFirstName, setUserFirstName] = useState('')
 
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+
   const router = useRouter()
 
   const session = useSession()
@@ -93,12 +95,14 @@ export function MobileModal() {
           <LoginContainer>
             <Dialog.Root>
               <Dialog.Trigger asChild>
-                <LoginButton>
+                <LoginButton onClick={() => setIsLoginModalOpen(true)}>
                   <p>Login</p>
                   <SignIn />
                 </LoginButton>
               </Dialog.Trigger>
-              <LoginModal />
+              {isLoginModalOpen && (
+                <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+              )}
             </Dialog.Root>
           </LoginContainer>
         )}
