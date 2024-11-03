@@ -9,9 +9,7 @@ import {
 } from './styles'
 import { BookCard } from './components/BookCard'
 import { X } from 'phosphor-react'
-import { useEffect, useState } from 'react'
-import { api } from '@/lib/axios'
-import { Rating as RatingInfo, User as UserPrisma } from '@prisma/client'
+import { useState } from 'react'
 import { LateralRatingCard } from './components/LateralRatingCard'
 import { useSession } from 'next-auth/react'
 import { RatingCardForm } from './components/RatingCardForm'
@@ -19,48 +17,21 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { LoginModal } from '../LoginModal'
 import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
-import { handleAxiosError } from '@/utils/handleAxiosError'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { SkeletonRatingCard } from '../SkeletonRatingCard'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface BookReviewsSidebarProps {
   book: BookProps | null
   onClose: () => void
 }
 
-interface RatingProps extends RatingInfo {
-  user: UserPrisma
-}
-
 export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
-  const [ratings, setRatings] = useState<RatingProps[]>([])
-
   const [openReviewForm, setOpenReviewForm] = useState(false)
-
-  const [isLoading, setIsLoading] = useState(false)
 
   const session = useSession()
 
-  useEffect(() => {
-    const loadRatings = async () => {
-      if (book) {
-        setIsLoading(true)
-
-        try {
-          const response = await api.get(`/books/${book.id}`)
-          if (response.data) {
-            setRatings(response.data.book.ratings)
-          }
-        } catch (error) {
-          handleAxiosError(error)
-        } finally {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    loadRatings()
-  }, [book])
+  const { isLoading } = useAppContext()
 
   return (
     <Container>
@@ -108,7 +79,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
                 ))}
               </>
             ) : (
-              ratings?.map((rating) => (
+              book?.ratings?.map((rating) => (
                 <LateralRatingCard
                   key={rating.id}
                   rating={rating}

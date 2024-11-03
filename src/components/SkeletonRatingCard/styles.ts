@@ -10,6 +10,10 @@ export const Container = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   minWidth: '100%',
+
+  '&.marginBottom': {
+    marginBottom: '1.5rem',
+  },
 })
 
 export const Header = styled('div', {

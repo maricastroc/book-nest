@@ -1,9 +1,15 @@
 import { Container, Content, Header, Main } from './styles'
 import { Skeleton } from '@mui/material'
 
-export function SkeletonRatingCard() {
+interface SkeletonRatingCardProps {
+  withMarginBottom?: boolean
+}
+
+export function SkeletonRatingCard({
+  withMarginBottom = false,
+}: SkeletonRatingCardProps) {
   return (
-    <Container>
+    <Container className={withMarginBottom ? 'marginBottom' : ''}>
       <Header>
         <Skeleton
           width={'100%'}

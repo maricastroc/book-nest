@@ -8,9 +8,9 @@ export function SkeletonCategories() {
   )
 
   const getSkeletonWidth = () => {
-    if (isSmallScreen) return '5rem' // Para telas pequenas
-    if (isMediumScreen) return '7rem' // Para telas médias
-    return '9rem' // Para telas grandes
+    if (isSmallScreen) return '5rem'
+    if (isMediumScreen) return '7rem'
+    return '9rem'
   }
 
   return (

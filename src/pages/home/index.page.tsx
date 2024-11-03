@@ -15,10 +15,6 @@ import {
   PopularBooksTitle,
 } from './styles'
 import { RatingCard } from '@/components/RatingCard'
-import { prisma } from '@/lib/prisma'
-import { GetServerSideProps } from 'next'
-import { buildNextAuthOptions } from '../api/auth/[...nextauth].api'
-import { getServerSession } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { PopularBookCard } from '@/components/PopularBookCard'
@@ -29,9 +25,11 @@ import { Sidebar } from '@/components/Sidebar'
 import { LateralMenu } from '@/components/LateralMenu'
 import { BookProps } from '@/@types/book'
 import { UserProps } from '@/@types/user'
-import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { LastReadCard } from '@/components/LastReadCard'
+import { useAppContext } from '@/contexts/AppContext'
+import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
+import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
 
 export interface RecentReadCardProps {
   book: BookProps
@@ -42,18 +40,15 @@ export interface RecentReadCardProps {
   user: UserProps
 }
 
-interface HomeProps {
-  ratings: RatingProps[]
-  books: BookProps[]
-  userLastRating: RatingProps
-}
-
-export default function Home({ ratings, books, userLastRating }: HomeProps) {
+export default function Home() {
   const session = useSession()
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
+
+  const { isLoading, popularBooks, userLatestRating, latestRatings } =
+    useAppContext()
 
   const isMobile = useScreenSize(768)
 
@@ -62,7 +57,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
       return
     }
 
-    const foundBook = books.find((book) => book.id === ratingBookId)
+    const foundBook = popularBooks.find((book) => book.id === ratingBookId)
     if (!foundBook) {
       return
     }
@@ -74,7 +69,7 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
-
+  console.log(!latestRatings.length, isLoading)
   return (
     <>
       <NextSeo title="Home | Book Wise" />
@@ -91,37 +86,43 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
           <HomeContent>
             <LastRatingsWrapper>
               {session.data?.user && (
-                <LastReadContainer>
-                  {userLastRating && userLastRating?.book ? (
-                    <>
-                      <LastReadTitle>Your last reading</LastReadTitle>
-                      <LastReadCard
-                        key={userLastRating.id}
-                        rating={userLastRating}
-                        book={userLastRating.book}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <LastReadTitle>Your last reading</LastReadTitle>
-                      <EmptyContainer />
-                    </>
-                  )}
-                </LastReadContainer>
+                <>
+                  <LastReadTitle>Your last reading</LastReadTitle>
+                  <LastReadContainer>
+                    {isLoading ? (
+                      <SkeletonRatingCard withMarginBottom />
+                    ) : userLatestRating && userLatestRating?.book ? (
+                      <>
+                        <LastReadCard
+                          key={userLatestRating.id}
+                          rating={userLatestRating}
+                          book={userLatestRating.book}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <EmptyContainer />
+                      </>
+                    )}
+                  </LastReadContainer>
+                </>
               )}
               <LastRatingsContainer>
                 <LastRatingsTitle>Last Ratings</LastRatingsTitle>
                 <LastRatingsContent>
-                  {ratings.length > 0 &&
-                    ratings.map((rating) => (
-                      <RatingCard
-                        key={rating.id}
-                        rating={rating}
-                        onClick={() => {
-                          handleSetSelectedBook(rating?.book?.id)
-                        }}
-                      />
-                    ))}
+                  {isLoading || !latestRatings.length
+                    ? Array.from({ length: 9 }).map((_, index) => (
+                        <SkeletonRatingCard key={index} />
+                      ))
+                    : latestRatings.map((rating) => (
+                        <RatingCard
+                          key={rating.id}
+                          rating={rating}
+                          onClick={() => {
+                            handleSetSelectedBook(rating?.book?.id)
+                          }}
+                        />
+                      ))}
                 </LastRatingsContent>
               </LastRatingsContainer>
             </LastRatingsWrapper>
@@ -135,17 +136,21 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
                 </span>
               </PopularBooksTitle>
               <PopularBooksCardsContent>
-                {books?.length > 0 &&
-                  books.map((book) => (
-                    <PopularBookCard
-                      key={book.id}
-                      book={book}
-                      onOpenDetails={() => {
-                        setSelectedBook(book)
-                        setOpenLateralMenu(true)
-                      }}
-                    />
-                  ))}
+                {isLoading || !popularBooks.length
+                  ? Array.from({ length: 12 }).map((_, index) => (
+                      <SkeletonPopularBook key={index} />
+                    ))
+                  : popularBooks.length > 0 &&
+                    popularBooks.map((book) => (
+                      <PopularBookCard
+                        key={book.id}
+                        book={book}
+                        onOpenDetails={() => {
+                          setSelectedBook(book)
+                          setOpenLateralMenu(true)
+                        }}
+                      />
+                    ))}
               </PopularBooksCardsContent>
             </PopularBooksCardsContainer>
           </HomeContent>
@@ -153,118 +158,4 @@ export default function Home({ ratings, books, userLastRating }: HomeProps) {
       </Container>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = await getServerSession(
-    req,
-    res,
-    buildNextAuthOptions(req, res),
-  )
-
-  let userLastRating = null
-
-  if (session?.user) {
-    userLastRating = await prisma.rating.findFirst({
-      where: {
-        userId: String(session?.user?.id),
-      },
-      include: {
-        user: true,
-        book: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
-  }
-
-  const books = await prisma.book.findMany({
-    include: {
-      ratings: {
-        select: {
-          rate: true,
-        },
-      },
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-    },
-
-    take: 4,
-    orderBy: {
-      ratings: {
-        _count: 'desc',
-      },
-    },
-  })
-
-  const booksWithCategory = books.map((book) => {
-    return {
-      ...book,
-      categories: book.categories.map((category) => category.category),
-    }
-  })
-
-  let userBooksIds: string[] = []
-
-  if (session) {
-    const userBooks = await prisma.book.findMany({
-      where: {
-        ratings: {
-          some: {
-            userId: String(session?.user?.id),
-          },
-        },
-      },
-    })
-
-    userBooksIds = userBooks?.map((x) => x?.id)
-  }
-
-  const booksWithRating = booksWithCategory.map((book) => {
-    const avgRate =
-      book.ratings.reduce((sum, rateObj) => {
-        return sum + rateObj.rate
-      }, 0) / book.ratings.length
-
-    return {
-      ...book,
-      rate: avgRate,
-      alreadyRead: userBooksIds.includes(book.id),
-    }
-  })
-
-  const ratings = await prisma.rating.findMany({
-    where: {
-      NOT: {
-        id: userLastRating?.id,
-      },
-    },
-    include: {
-      user: true,
-      book: true,
-    },
-    take: 4,
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-
-  const ratingWithReadStatus = ratings.map((rating) => {
-    return {
-      ...rating,
-      alreadyRead: userBooksIds.includes(rating.book.id),
-    }
-  })
-
-  return {
-    props: {
-      ratings: JSON.parse(JSON.stringify(ratingWithReadStatus)),
-      userLastRating: JSON.parse(JSON.stringify(userLastRating)),
-      books: JSON.parse(JSON.stringify(booksWithRating)),
-    },
-  }
 }

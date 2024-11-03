@@ -41,7 +41,12 @@ export function LateralRatingCard({
 
   const [openEditReviewBox, setOpenEditReviewBox] = useState(false)
 
-  const { refreshBooks } = useAppContext()
+  const {
+    refreshBooks,
+    refreshPopularBooks,
+    refreshLatestRatings,
+    refreshUserLatestRatings,
+  } = useAppContext()
 
   const session = useSession()
 
@@ -56,6 +61,9 @@ export function LateralRatingCard({
       toast.success('Rating successfully deleted!')
 
       refreshBooks()
+      refreshLatestRatings()
+      refreshUserLatestRatings()
+      refreshPopularBooks()
 
       onCloseLateralMenu()
     } catch (error) {

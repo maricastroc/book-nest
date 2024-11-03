@@ -13,10 +13,6 @@ import {
 import { useEffect, useState } from 'react'
 import { MobileHeader } from '@/components/MobileHeader'
 import { Sidebar } from '@/components/Sidebar'
-import { GetServerSideProps } from 'next'
-import { getServerSession } from 'next-auth'
-import { buildNextAuthOptions } from '../api/auth/[...nextauth].api'
-import { prisma } from '@/lib/prisma'
 import { ExploreCard } from '@/components/ExploreCard'
 import { api } from '@/lib/axios'
 import { LateralMenu } from '@/components/LateralMenu'
@@ -195,72 +191,4 @@ export default function Explore() {
       </Container>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = await getServerSession(
-    req,
-    res,
-    buildNextAuthOptions(req, res),
-  )
-
-  const categories = await prisma.category.findMany()
-
-  const books = await prisma.book.findMany({
-    include: {
-      ratings: {
-        select: {
-          rate: true,
-        },
-      },
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-    },
-  })
-
-  const booksFixedRelationWithCategory = books.map((book) => {
-    return {
-      ...book,
-      categories: book.categories.map((category) => category.category),
-    }
-  })
-
-  let userBooksIds: string[] = []
-
-  if (session) {
-    const userBooks = await prisma.book.findMany({
-      where: {
-        ratings: {
-          some: {
-            userId: String(session?.user?.id),
-          },
-        },
-      },
-    })
-
-    userBooksIds = userBooks?.map((x) => x?.id)
-  }
-
-  const booksWithRating = booksFixedRelationWithCategory.map((book) => {
-    const avgRate =
-      book.ratings.reduce((sum, rateObj) => {
-        return sum + rateObj.rate
-      }, 0) / book.ratings.length
-
-    return {
-      ...book,
-      rate: avgRate,
-      alreadyRead: userBooksIds.includes(book.id),
-    }
-  })
-
-  return {
-    props: {
-      categories: JSON.parse(JSON.stringify(categories)),
-      books: JSON.parse(JSON.stringify(booksWithRating)),
-    },
-  }
 }

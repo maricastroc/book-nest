@@ -28,8 +28,8 @@ export default async function handler(
     },
     include: {
       ratings: {
-        select: {
-          rate: true,
+        include: {
+          user: true,
         },
       },
       categories: {
@@ -87,6 +87,7 @@ export default async function handler(
 
     return {
       ...book,
+      ratings: book.ratings,
       rate: avgRate,
       alreadyRead,
     }

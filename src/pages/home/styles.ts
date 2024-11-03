@@ -254,4 +254,5 @@ export const LastReadContainer = styled('div', {
 
 export const LastReadTitle = styled('p', {
   fontSize: '$sm',
+  marginBottom: '1rem',
 })

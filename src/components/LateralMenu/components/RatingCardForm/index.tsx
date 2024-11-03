@@ -78,7 +78,12 @@ export function RatingCardForm({
     setValue('rate', rate)
   }
 
-  const { refreshBooks } = useAppContext()
+  const {
+    refreshBooks,
+    refreshPopularBooks,
+    refreshLatestRatings,
+    refreshUserLatestRatings,
+  } = useAppContext()
 
   const characterCount = watch('description')?.split('').length || 0
 
@@ -92,6 +97,9 @@ export function RatingCardForm({
       })
 
       refreshBooks()
+      refreshLatestRatings()
+      refreshPopularBooks()
+      refreshUserLatestRatings()
       onCloseLateralMenu()
 
       toast.success('Review successfully registered!')
@@ -112,6 +120,11 @@ export function RatingCardForm({
         }
 
         await api.put('/ratings', payload)
+
+        refreshBooks()
+        refreshLatestRatings()
+        refreshUserLatestRatings()
+        refreshPopularBooks()
 
         onCloseLateralMenu()
 

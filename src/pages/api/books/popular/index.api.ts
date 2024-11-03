@@ -16,9 +16,25 @@ export default async function handler(
       },
     },
     include: {
-      ratings: true,
+      ratings: {
+        include: {
+          user: true, // Inclui os detalhes do usuário associado ao rating
+        },
+      },
+      categories: {
+        include: {
+          category: true,
+        },
+      },
     },
     take: 4,
+  })
+
+  const booksFixedRelationWithCategory = books.map((book) => {
+    return {
+      ...book,
+      categories: book.categories.map((category) => category.category),
+    }
   })
 
   const booksAvgRating = await prisma.rating.groupBy({
@@ -55,13 +71,14 @@ export default async function handler(
     userBooksId = userBooks.map((book) => book.id)
   }
 
-  const booksWithAvgRating = books.map((book) => {
+  const booksWithAvgRating = booksFixedRelationWithCategory.map((book) => {
     const bookAvgRating = booksAvgRating.find(
       (avgRating) => avgRating.bookId === book.id,
     )
     const { ...bookInfo } = book
     return {
       ...bookInfo,
+      ratings: book.ratings, // Todos os atributos dos ratings são mantidos
       rate: bookAvgRating?._avg.rate,
       alreadyRead: userBooksId.includes(book.id),
     }
