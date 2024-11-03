@@ -75,9 +75,13 @@ export const BookCover = styled('img', {
 export const BookDetails = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-start',
+  alignItems: 'center',
   justifyContent: 'center',
   gap: '1rem',
+
+  '@media (min-width: 580px)': {
+    alignItems: 'flex-start',
+  },
 })
 
 export const BookData = styled('div', {
