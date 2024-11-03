@@ -40,6 +40,7 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
       <Header>
         <UserInfo>
           <Avatar
+            isClickable
             avatarUrl={avatarUrl}
             onClick={() => {
               router.push(`/profile/${rating.user.id}`)

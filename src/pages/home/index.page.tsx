@@ -20,7 +20,7 @@ import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { PopularBookCard } from '@/components/PopularBookCard'
 import { EmptyContainer } from '@/components/EmptyContainer'
 import { NextSeo } from 'next-seo'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/Sidebar'
 import { LateralMenu } from '@/components/LateralMenu'
 import { BookProps } from '@/@types/book'
@@ -47,8 +47,13 @@ export default function Home() {
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const { isLoading, popularBooks, userLatestRating, latestRatings } =
-    useAppContext()
+  const {
+    isLoading,
+    popularBooks,
+    userLatestRating,
+    latestRatings,
+    refreshUserLatestRatings,
+  } = useAppContext()
 
   const isMobile = useScreenSize(768)
 
@@ -69,7 +74,12 @@ export default function Home() {
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
-  console.log(!latestRatings.length, isLoading)
+
+  useEffect(() => {
+    refreshUserLatestRatings()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.data?.user])
+
   return (
     <>
       <NextSeo title="Home | Book Wise" />
