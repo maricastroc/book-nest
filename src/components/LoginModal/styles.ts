@@ -24,11 +24,11 @@ export const Content = styled(RadixContent, {
   display: 'flex',
   flexDirection: 'column',
   transform: 'translate(-50%, -50%)',
-  width: '100%',
+  width: 'clamp(300px, 85vw, 100%)',
   borderRadius: '4px',
   zIndex: 9999,
   overflow: 'scroll',
-  maxHeight: '90vh',
+  maxHeight: '75vh',
   border: 'solid 1px $gray500',
 
   '@media (min-width: 480px)': {
