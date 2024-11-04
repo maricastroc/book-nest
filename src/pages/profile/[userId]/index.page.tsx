@@ -13,8 +13,8 @@ import {
   SearchBar,
   UserDetailsContainer,
   ProfileWrapper,
-  Divider,
   EmptyWrapper,
+  UserRatingsTitle,
 } from './styles'
 import { MagnifyingGlass, User, X } from 'phosphor-react'
 import { ProfileCard } from '@/components/ProfileCard'
@@ -78,14 +78,15 @@ export default function Profile() {
       <Container>
         {isMobile ? <MobileHeader /> : <Sidebar />}
         <ProfileWrapper>
+          <Heading>
+            <HeadingTitle>
+              <User />
+              <h2>Profile</h2>
+            </HeadingTitle>
+          </Heading>
           <ProfileContainer>
-            <Heading>
-              <HeadingTitle>
-                <User />
-                <h2>Profile</h2>
-              </HeadingTitle>
-            </Heading>
             <UserRatingsContainer>
+              <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
               <SearchBar>
                 <input
                   type="text"
@@ -105,7 +106,9 @@ export default function Profile() {
                   <EmptyContainer />
                 </EmptyWrapper>
               )}
-              <UserRatings>
+              <UserRatings
+                className={(filteredRatings?.length ?? 0) > 1 ? 'smaller' : ''}
+              >
                 {filteredRatings?.length > 0 &&
                   filteredRatings.map((rating: RatingProps) => {
                     if (rating?.book) {
@@ -122,11 +125,11 @@ export default function Profile() {
                   })}
               </UserRatings>
             </UserRatingsContainer>
+
+            <UserDetailsContainer>
+              {userId && <UserDetails userId={userId as string} />}
+            </UserDetailsContainer>
           </ProfileContainer>
-          <Divider />
-          <UserDetailsContainer>
-            {userId && <UserDetails userId={userId as string} />}
-          </UserDetailsContainer>
         </ProfileWrapper>
       </Container>
     </>

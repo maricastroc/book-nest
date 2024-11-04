@@ -8,6 +8,10 @@ export const Container = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+
+  '@media (min-width: 1024px)': {
+    padding: '0.2rem 1.5rem',
+  },
 })
 
 export const UserInfo = styled('div', {

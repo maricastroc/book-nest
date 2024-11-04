@@ -4,10 +4,9 @@ export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
-  minWidth: '100vw',
+  maxWidth: '100vw',
   alignItems: 'center',
   justifyContent: 'center',
-  maxWidth: '100vw',
 
   '@media (min-width: 480px)': {
     padding: '0 2rem',
@@ -25,13 +24,19 @@ export const Container = styled('div', {
     gap: '3rem',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    height: '100vh',
     overflow: 'hidden',
+    height: '100vh',
+    paddingLeft: '19rem',
   },
 
-  '@media (min-width: 1440px)': {
-    gap: '5rem',
+  '@media (min-width: 1200px)': {
     paddingLeft: '21rem',
+  },
+
+  '@media (min-width: 1800px)': {
+    minWidth: 'auto',
+    maxWidth: '80rem',
+    margin: '0 auto',
   },
 })
 
@@ -52,14 +57,17 @@ export const ProfileWrapper = styled('div', {
     padding: '1.5rem',
   },
 
+  '@media (min-width: 768px)': {
+    padding: '1.5rem 0',
+  },
+
   '@media (min-width: 980px)': {
     marginTop: '0.5rem',
+    padding: '1.5rem',
   },
 
   '@media (min-width: 1024px)': {
-    flexDirection: 'row',
     maxWidth: '100%',
-    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     padding: '1.5rem 0',
     gap: '1rem',
@@ -68,7 +76,7 @@ export const ProfileWrapper = styled('div', {
 
 export const ProfileContainer = styled('div', {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column-reverse',
   padding: 0,
   width: '100%',
   gap: 0,
@@ -76,13 +84,15 @@ export const ProfileContainer = styled('div', {
   justifyContent: 'flex-start',
 
   '@media (min-width: 1024px)': {
-    maxHeight: '100vh',
-    padding: '0 1.25rem',
+    display: 'grid',
+    gridTemplateColumns: '2fr 1fr',
+    height: '100%',
+    padding: '0 1.25rem 0 0',
   },
 })
 
 export const Heading = styled('div', {
-  display: 'flex',
+  display: 'none',
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
@@ -91,6 +101,11 @@ export const Heading = styled('div', {
   textAlign: 'left',
   marginBottom: '1rem',
   width: '100%',
+
+  '@media (min-width: 1024px)': {
+    display: 'flex',
+    marginTop: '0.5rem',
+  },
 })
 
 export const HeadingTitle = styled('div', {
@@ -114,28 +129,20 @@ export const UserRatingsContainer = styled('div', {
   margin: '0 auto',
   width: '100%',
   minHeight: '100%',
+  borderTop: 'solid 2px $gray700',
+  paddingTop: '2rem',
 
   '@media (min-width: 1024px)': {
+    borderTop: 0,
+    paddingTop: 0,
+    overflowY: 'scroll',
     minWidth: '26rem',
     maxWidth: '100%',
     gap: 0,
   },
 
   '@media (min-width: 1200px)': {
-    maxWidth: '40rem',
-  },
-})
-
-export const Divider = styled('span', {
-  display: 'block',
-  backgroundColor: '$gray600',
-  height: 0.5,
-  color: '$gray300',
-  width: '100%',
-  marginTop: 1,
-
-  '@media (min-width: 1024px)': {
-    display: 'none',
+    maxWidth: '50rem',
   },
 })
 
@@ -145,17 +152,19 @@ export const UserDetailsContainer = styled('div', {
   padding: '0 2rem',
   width: '100%',
 
+  '@media (min-width: 768px)': {
+    marginTop: '2.5rem',
+  },
+
   '@media (min-width: 1024px)': {
-    borderLeft: '2px solid $gray700',
     height: '100vh',
     overflow: 'scroll',
     padding: 0,
-    paddingBottom: '3rem',
+    paddingBottom: '5rem',
+    marginTop: '-2.5rem',
   },
 
   '@media (min-width: 1200px)': {
-    borderLeft: '2px solid $gray700',
-    width: '50%',
     height: '100vh',
     overflow: 'scroll',
   },
@@ -238,17 +247,24 @@ export const UserRatings = styled('div', {
   gap: '1.5rem',
 
   '@media (min-width: 768px)': {
-    paddingRight: '1rem',
+    '&.smaller': {
+      paddingRight: '1rem',
+    },
   },
 
   '@media (min-width: 1024px)': {
     overflowY: 'scroll',
-    height: '100%',
-    paddingBottom: '4rem',
+    height: '100vh',
+    paddingBottom: '13rem',
     minWidth: '27rem',
   },
 
   '@media (min-width: 1200px)': {
     justifyContent: 'flex-start',
   },
+})
+
+export const UserRatingsTitle = styled('p', {
+  fontSize: '$sm',
+  marginBottom: '0.5rem',
 })
