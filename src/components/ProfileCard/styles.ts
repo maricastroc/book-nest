@@ -24,11 +24,14 @@ export const Container = styled('div', {
 
 export const Heading = styled('div', {
   display: 'flex',
-  alignItems: 'flex-start',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
 
   time: {
     color: '$gray400',
     fontSize: '$sm',
+    width: '100%',
   },
 })
 
@@ -56,7 +59,6 @@ export const BookContainer = styled('div', {
 
   '@media (min-width: 580px)': {
     alignItems: 'flex-start',
-    width: 'auto',
     justifyContent: 'flex-start',
   },
 
@@ -70,6 +72,8 @@ export const BookCover = styled('img', {
   width: '6.5rem',
   height: 'auto',
   borderRadius: 8,
+  outline: '1.2px solid rgba(141, 149, 175, 0.7)',
+  outlineOffset: 3,
 })
 
 export const BookDetails = styled('div', {
@@ -78,6 +82,7 @@ export const BookDetails = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '1rem',
+  width: '100%',
 
   '@media (min-width: 580px)': {
     alignItems: 'flex-start',
@@ -156,7 +161,7 @@ export const BookDescription = styled('div', {
 export const Separator = styled('span', {
   width: '100%',
   height: 0.5,
-  backgroundColor: '$gray400',
+  backgroundColor: 'rgba(131, 129, 217, 0.7)',
   opacity: 0.4,
 })
 
@@ -182,4 +187,33 @@ export const ReadNotice = styled('div', {
   borderRadius: '0 8px 0 8px',
   backgroundColor: '$green300',
   color: '$green100',
+})
+
+export const DeleteAndEdit = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  width: '100%',
+  gap: '0.4rem',
+  marginTop: '0.5rem',
+  borderRadius: 8,
+
+  svg: {
+    cursor: 'pointer',
+    fontSize: '1.2rem',
+    color: '$gray400',
+
+    '&.edit_icon': {
+      color: '$green100',
+    },
+
+    '&.delete_icon': {
+      color: '#C6616D',
+    },
+
+    '&:hover': {
+      filter: 'brightness(1.5)',
+      transition: '200ms ease-in-out',
+    },
+  },
 })

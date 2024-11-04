@@ -86,7 +86,7 @@ export const ConfirmButton = styled(RadixClose, {
   cursor: 'pointer',
   backgroundColor: 'transparent',
   border: '2px solid $purple100',
-  borderRadius: '4px',
+  borderRadius: 8,
 
   '&:hover': {
     backgroundColor: '$purple100',

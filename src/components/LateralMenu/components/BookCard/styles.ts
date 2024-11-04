@@ -17,31 +17,40 @@ export const BookContainer = styled('div', {
 
 export const BookContent = styled('div', {
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  width: '100%',
+  gap: '1.5rem',
 
   '@media (min-width: 580px)': {
     width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
     gap: '2rem',
   },
 })
 
 export const BookCover = styled('img', {
-  width: 171,
+  width: 90,
   height: 'auto',
   borderRadius: 8,
+  outline: '1px solid rgba(131, 129, 217, 0.5)',
+  outlineOffset: 3,
+  opacity: 0.9,
+
+  '@media (min-width: 480px)': {
+    width: 105,
+  },
+
+  '@media (min-width: 580px)': {
+    width: 120,
+  },
 })
 
 export const BookInfo = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginTop: '1.5rem',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  height: '100%',
   width: '100%',
   gap: '1.5rem',
 
@@ -57,11 +66,11 @@ export const BookInfo = styled('div', {
 export const BookData = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
+  alignItems: 'flex-start',
+  textAlign: 'left',
 
   h2: {
-    fontSize: '1rem',
+    fontSize: '0.95rem',
     maxHeight: '4.5rem',
     whiteSpace: 'break-spaces',
     overflow: 'scroll',
@@ -70,7 +79,17 @@ export const BookData = styled('div', {
 
   p: {
     color: '$gray300',
-    fontSize: '0.9rem',
+    fontSize: '0.8rem',
+  },
+
+  '@media (min-width: 480px)': {
+    h2: {
+      fontSize: '1rem',
+    },
+
+    p: {
+      fontSize: '0.9rem',
+    },
   },
 
   '@media (min-width: 580px)': {
@@ -78,14 +97,31 @@ export const BookData = styled('div', {
     textAlign: 'left',
 
     h2: {
-      fontSize: '1.2rem',
+      fontSize: '1.5rem',
       maxHeight: '100%',
     },
 
     p: {
       color: '$gray300',
-      fontSize: '1rem',
+      fontSize: '1.1rem',
     },
+  },
+})
+
+export const BookSummary = styled('div', {
+  maxHeight: '6.5rem',
+  position: 'relative',
+  overflow: 'scroll',
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+
+  p: {
+    color: '$gray300',
+    lineHeight: '1.4rem',
+    fontSize: '0.875rem',
+    wordBreak: 'break-word',
+    paddingRight: '0.3rem',
   },
 })
 
@@ -95,9 +131,9 @@ export const Footer = styled('footer', {
   alignItems: 'flex-start',
   gap: '1rem',
 
-  '@media (min-width: 580px)': {
-    flexDirection: 'row',
-    gap: '4rem',
+  '@media (min-width: 480px)': {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 1fr',
     width: '100%',
   },
 })
@@ -112,9 +148,19 @@ export const FooterItem = styled('div', {
     color: '$green100',
   },
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: '0.5rem',
+
     svg: {
       fontSize: '1.7rem',
+    },
+  },
+
+  '@media (min-width: 680px)': {
+    svg: {
+      fontSize: '1.9rem',
     },
   },
 })
@@ -135,9 +181,15 @@ export const ItemText = styled('div', {
     color: '$white',
   },
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+
+  '@media (min-width: 680px)': {
     h2: {
-      fontSize: '1rem',
+      fontSize: '1.1rem',
+      color: '$white',
     },
   },
 })
@@ -145,12 +197,12 @@ export const ItemText = styled('div', {
 export const RatingContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  gap: '0.2rem',
+  alignItems: 'flex-start',
+  gap: '0.3rem',
   width: '100%',
 
   p: {
-    color: '$gray400',
+    color: '$gray200',
     fontSize: '0.85rem',
   },
 
@@ -158,7 +210,6 @@ export const RatingContainer = styled('div', {
     alignItems: 'flex-start',
 
     p: {
-      color: '$gray400',
       fontSize: '0.9rem',
     },
   },
@@ -168,5 +219,5 @@ export const Separator = styled('span', {
   width: '100%',
   height: 0.5,
   backgroundColor: '$gray600',
-  margin: '1.5rem 0 2rem',
+  margin: '1rem 0',
 })

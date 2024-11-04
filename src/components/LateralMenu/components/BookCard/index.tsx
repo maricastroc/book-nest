@@ -5,15 +5,15 @@ import {
   BookCover,
   BookData,
   BookInfo,
+  BookSummary,
   Footer,
   FooterItem,
   ItemText,
   RatingContainer,
   Separator,
 } from './styles'
-import { BookOpen, BookmarkSimple } from 'phosphor-react'
+import { BookOpen, BookmarkSimple, CalendarBlank } from 'phosphor-react'
 import { CategoryProps } from '@/@types/category'
-import { getBookTitle } from '@/utils/getBookTitle'
 import { BookProps } from '@/@types/book'
 
 interface BookCardProps {
@@ -30,7 +30,7 @@ export function BookCard({ book, categories }: BookCardProps) {
         <BookCover alt="" src={book.coverUrl} />
         <BookInfo>
           <BookData>
-            <h2>{getBookTitle(book)}</h2>
+            <h2>{book.name}</h2>
             <p>{book.author}</p>
           </BookData>
           <RatingContainer>
@@ -42,6 +42,10 @@ export function BookCard({ book, categories }: BookCardProps) {
           </RatingContainer>
         </BookInfo>
       </BookContent>
+      <Separator />
+      <BookSummary>
+        <p>{book.summary}</p>
+      </BookSummary>
       <Separator />
       <Footer>
         <FooterItem>
@@ -58,6 +62,13 @@ export function BookCard({ book, categories }: BookCardProps) {
           <ItemText>
             <p>Pages</p>
             <h2>{book.totalPages}</h2>
+          </ItemText>
+        </FooterItem>
+        <FooterItem>
+          <CalendarBlank />
+          <ItemText>
+            <p>Published on</p>
+            <h2>{book.publishingYear}</h2>
           </ItemText>
         </FooterItem>
       </Footer>

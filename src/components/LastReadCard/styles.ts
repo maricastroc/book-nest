@@ -10,9 +10,10 @@ export const Container = styled('div', {
   width: '100%',
   position: 'relative',
   marginBottom: '1.5rem',
+  height: '100%',
 
   '@media (min-width: 680px)': {
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
 
   '@media (min-width: 768px)': {
@@ -31,6 +32,8 @@ export const BookInfo = styled('div', {
 
   '@media (min-width: 580px)': {
     flexDirection: 'column-reverse',
+    height: '100%',
+    alignItems: 'space-between',
   },
 })
 
@@ -63,18 +66,16 @@ export const BookData = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  height: '100%',
   overflow: 'scroll',
-
-  '@media (min-width: 680px)': {
-    marginTop: '1.5rem',
-  },
 })
 
 export const BookTitle = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '0.2rem',
+  gap: '0.1rem',
 
   h2: {
     fontSize: '0.9rem',
@@ -88,6 +89,10 @@ export const BookTitle = styled('div', {
   p: {
     color: '$gray400',
     fontSize: '0.85rem',
+  },
+
+  '@media (min-width: 580px)': {
+    marginTop: '0.5rem',
   },
 
   '@media (min-width: 680px)': {

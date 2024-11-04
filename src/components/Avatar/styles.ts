@@ -64,4 +64,11 @@ export const AvatarDefault = styled('img', {
 
   outline: '1.5px solid $green100',
   outlineOffset: 2,
+
+  '&.clickable': {
+    '&:hover': {
+      filter: 'brightness(1.15)',
+      transition: '200ms',
+    },
+  },
 })

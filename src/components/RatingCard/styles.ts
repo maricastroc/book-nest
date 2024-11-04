@@ -7,10 +7,15 @@ export const Container = styled('div', {
   padding: '1.5rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
-  alignItems: 'center',
+  alignItems: 'space-between',
   justifyContent: 'center',
   width: '100%',
   position: 'relative',
+  height: '100%',
+
+  '@media (min-width: 480px)': {
+    alignItems: 'space-between',
+  },
 })
 
 export const Header = styled('div', {
@@ -34,7 +39,7 @@ export const UserInfo = styled('div', {
   gap: '1rem',
   width: '100%',
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     alignItems: 'flex-start',
   },
 })
@@ -45,7 +50,7 @@ export const HeaderData = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
@@ -77,8 +82,11 @@ export const BookCover = styled('img', {
   width: '5rem',
   height: 'auto',
   borderRadius: 8,
+  outline: '1px solid rgba(131, 129, 217, 0.55)',
+  outlineOffset: 3,
+  opacity: 0.9,
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     width: '6.5rem',
   },
 })
@@ -87,24 +95,25 @@ export const BookDetails = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
   gap: '1rem',
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     gap: '0.5rem',
   },
 })
 
 export const BookData = styled('div', {
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'flex-start',
   width: '100%',
   gap: '1.5rem',
   margin: '1rem 0',
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 480px)': {
     margin: '1rem 0 0',
+    alignItems: 'center',
   },
 })
 
@@ -126,6 +135,7 @@ export const BookInfo = styled('div', {
 
   '@media (min-width: 480px)': {
     alignItems: 'flex-start',
+    marginTop: '0.2rem',
   },
 })
 
@@ -133,6 +143,7 @@ export const RatingContainer = styled('div', {
   display: 'flex',
   marginTop: '1rem',
   maxHeight: '6.5rem',
+  height: '100%',
   position: 'relative',
   overflow: 'scroll',
 
@@ -146,6 +157,8 @@ export const RatingContainer = styled('div', {
 
   '@media (min-width: 480px)': {
     marginTop: 0,
+    minHeight: '6.3rem',
+    alignItems: 'flex-end',
   },
 })
 

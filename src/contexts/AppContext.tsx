@@ -7,6 +7,7 @@ import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
 import { useSession } from 'next-auth/react'
 import { UserProps } from '@/@types/user'
+import { toast } from 'react-toastify'
 
 export interface UserStatistics {
   ratings: RatingProps[] | undefined
@@ -33,6 +34,7 @@ interface AppContextType {
     search?: string,
   ) => Promise<UserStatistics | undefined>
   handleSetBooks: (updatedBooks: BookProps[]) => void
+  handleDeleteReview: (id: string) => void
   isLoading: boolean
 }
 
@@ -144,6 +146,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  async function handleDeleteReview(id: string) {
+    setIsLoading(true)
+
+    try {
+      const payload = {
+        id,
+      }
+
+      await api.delete('/ratings', { data: payload })
+
+      toast.success('Rating successfully deleted!')
+    } catch (error) {
+      handleAxiosError(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleSetBooks = (updatedBooks: BookProps[]) => setBooks(updatedBooks)
 
   useEffect(() => {
@@ -176,6 +196,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         refreshLatestRatings,
         refreshUserLatestRatings,
         fetchUserStatistics,
+        handleDeleteReview,
       }}
     >
       {children}

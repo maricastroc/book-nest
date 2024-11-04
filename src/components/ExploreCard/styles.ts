@@ -21,6 +21,9 @@ export const BookCover = styled('img', {
   width: '6.75rem',
   height: 'auto',
   borderRadius: 8,
+  outline: '1px solid rgba(131, 129, 217, 0.55)',
+  outlineOffset: 3,
+  opacity: 0.9,
 })
 
 export const BookInfo = styled('div', {

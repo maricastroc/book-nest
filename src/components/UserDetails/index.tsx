@@ -27,14 +27,11 @@ import {
 
 interface UserDetailsProps {
   userId: string
+  userStatistics: UserStatistics | undefined
 }
 
-export function UserDetails({ userId }: UserDetailsProps) {
+export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false)
-
-  const [userStatistics, setUserStatistics] = useState<
-    UserStatistics | undefined
-  >(undefined)
 
   const [dateInfo, setDateInfo] = useState({
     dateFormatted: '',
@@ -44,25 +41,16 @@ export function UserDetails({ userId }: UserDetailsProps) {
 
   const { data: session } = useSession()
 
-  const { loggedUser, fetchUserStatistics, isLoading } = useAppContext()
+  const { loggedUser, isLoading } = useAppContext()
 
   useEffect(() => {
-    if (userId) {
-      const loadUserStatistics = async () => {
-        const statistics = await fetchUserStatistics(userId)
-
-        setUserStatistics(statistics)
-
-        if (statistics?.user.createdAt) {
-          const dateFormattedData = getDateFormattedAndRelative(
-            statistics.user.createdAt,
-          )
-          setDateInfo(dateFormattedData)
-        }
-      }
-      loadUserStatistics()
+    if (userId && userStatistics) {
+      const dateFormattedData = getDateFormattedAndRelative(
+        userStatistics.user.createdAt,
+      )
+      setDateInfo(dateFormattedData)
     }
-  }, [userId, session?.user.id])
+  }, [userId, userStatistics])
 
   const userAvatarUrl =
     session?.user.id === userId

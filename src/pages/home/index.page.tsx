@@ -48,20 +48,6 @@ export default function Home() {
 
   const isMobile = useScreenSize(768)
 
-  function handleSetSelectedBook(ratingBookId: string | undefined) {
-    if (!ratingBookId) {
-      return
-    }
-
-    const foundBook = popularBooks.find((book) => book.id === ratingBookId)
-    if (!foundBook) {
-      return
-    }
-
-    setSelectedBook(foundBook)
-    setOpenLateralMenu(true)
-  }
-
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
@@ -70,7 +56,7 @@ export default function Home() {
     refreshUserLatestRatings()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.data?.user])
-
+  console.log(latestRatings)
   return (
     <>
       <NextSeo title="Home | Book Wise" />
@@ -116,13 +102,7 @@ export default function Home() {
                         <SkeletonRatingCard key={index} />
                       ))
                     : latestRatings.map((rating: RatingProps) => (
-                        <RatingCard
-                          key={rating.id}
-                          rating={rating}
-                          onClick={() => {
-                            handleSetSelectedBook(rating?.book?.id)
-                          }}
-                        />
+                        <RatingCard key={rating.id} rating={rating} />
                       ))}
                 </LastRatingsContent>
               </LastRatingsContainer>

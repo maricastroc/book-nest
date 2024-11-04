@@ -20,6 +20,7 @@ export const Container = styled('section', {
   overflow: 'scroll',
   width: '100%',
   maxWidth: '100%',
+  height: '100%',
 
   '@media (min-width: 680px)': {
     maxWidth: '35rem',
@@ -33,7 +34,7 @@ export const Container = styled('section', {
 export const ContainerOverlay = styled('div', {
   position: 'fixed',
   width: '100vw',
-  height: '100vh',
+  height: '100%',
   inset: 0,
   backgroundColor: 'rgba(0, 0, 0, 0.6)',
 })
@@ -45,7 +46,7 @@ export const LateralMenuContainer = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
   backgroundColor: '$gray800',
-  height: '100vh',
+  height: '100%',
   overflow: 'scroll',
   width: '100%',
   padding: '2rem 1.5rem 1.5rem',

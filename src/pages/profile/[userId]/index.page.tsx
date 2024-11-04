@@ -24,6 +24,7 @@ import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
+import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
 
 export default function Profile() {
   const router = useRouter()
@@ -42,17 +43,17 @@ export default function Profile() {
 
   const isMobile = useScreenSize(768)
 
-  const { fetchUserStatistics } = useAppContext()
+  const { fetchUserStatistics, isLoading } = useAppContext()
+
+  const loadUserStatistics = async () => {
+    const statistics = await fetchUserStatistics(userId as string, search)
+
+    setUserStatistics(statistics)
+    setAllRatings(statistics?.ratings ?? [])
+    setFilteredRatings(statistics?.ratings ?? [])
+  }
 
   useEffect(() => {
-    const loadUserStatistics = async () => {
-      const statistics = await fetchUserStatistics(userId as string, search)
-
-      setUserStatistics(statistics)
-      setAllRatings(statistics?.ratings ?? [])
-      setFilteredRatings(statistics?.ratings ?? [])
-    }
-
     if (userId !== undefined) {
       loadUserStatistics()
     }
@@ -101,33 +102,47 @@ export default function Profile() {
                   <X onClick={() => setSearch('')} />
                 )}
               </SearchBar>
-              {!userStatistics?.ratings?.length && (
+              {!userStatistics?.ratings?.length && !isLoading && (
                 <EmptyWrapper>
                   <EmptyContainer />
                 </EmptyWrapper>
               )}
               <UserRatings
-                className={(filteredRatings?.length ?? 0) > 1 ? 'smaller' : ''}
+                className={
+                  isLoading || (filteredRatings?.length ?? 0) > 1
+                    ? 'smaller'
+                    : ''
+                }
               >
-                {filteredRatings?.length > 0 &&
-                  filteredRatings.map((rating: RatingProps) => {
-                    if (rating?.book) {
-                      return (
-                        <ProfileCard
-                          key={rating.id}
-                          book={rating.book}
-                          rating={rating}
-                        />
-                      )
-                    }
+                {isLoading
+                  ? Array.from({ length: 4 }).map((_, index) => (
+                      <SkeletonRatingCard key={index} />
+                    ))
+                  : filteredRatings?.length > 0 &&
+                    filteredRatings.map((rating: RatingProps) => {
+                      if (rating?.book) {
+                        return (
+                          <ProfileCard
+                            key={rating.id}
+                            book={rating.book}
+                            rating={rating}
+                            onDeleteRating={() => loadUserStatistics()}
+                          />
+                        )
+                      }
 
-                    return null
-                  })}
+                      return null
+                    })}
               </UserRatings>
             </UserRatingsContainer>
 
             <UserDetailsContainer>
-              {userId && <UserDetails userId={userId as string} />}
+              {userId && (
+                <UserDetails
+                  userStatistics={userStatistics}
+                  userId={userId as string}
+                />
+              )}
             </UserDetailsContainer>
           </ProfileContainer>
         </ProfileWrapper>

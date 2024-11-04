@@ -25,7 +25,10 @@ export function Avatar({
       style={{ cursor: isClickable ? 'pointer' : 'default' }}
       onClick={isClickable && onClick ? onClick : undefined}
     >
-      <AvatarDefault className={variant} src={avatarUrl} />
+      <AvatarDefault
+        className={`${variant} ${isClickable && 'clickable'}`}
+        src={avatarUrl}
+      />
     </AvatarContainer>
   )
 }

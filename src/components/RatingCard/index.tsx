@@ -22,7 +22,6 @@ import { useScreenSize } from '@/utils/useScreenSize'
 
 interface RatingCardProps {
   rating: RatingProps
-  onClick: () => void
 }
 
 export function RatingCard({ rating, ...rest }: RatingCardProps) {
@@ -33,7 +32,7 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
 
   const router = useRouter()
 
-  const isMobile = useScreenSize(580)
+  const isMobile = useScreenSize(480)
 
   return (
     <Container>

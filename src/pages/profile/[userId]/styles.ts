@@ -255,7 +255,7 @@ export const UserRatings = styled('div', {
   '@media (min-width: 1024px)': {
     overflowY: 'scroll',
     height: '100vh',
-    paddingBottom: '13rem',
+    paddingBottom: '16rem',
     minWidth: '27rem',
   },
 
