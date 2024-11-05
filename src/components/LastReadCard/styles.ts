@@ -130,6 +130,7 @@ export const BookCover = styled('img', {
   width: '5rem',
   height: 'auto',
   borderRadius: 8,
+  boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
 
   '@media (min-width: 580px)': {
     width: '6.5rem',

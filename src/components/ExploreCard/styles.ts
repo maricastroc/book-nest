@@ -21,8 +21,7 @@ export const BookCover = styled('img', {
   width: '6.75rem',
   height: 'auto',
   borderRadius: 8,
-  outline: '1px solid rgba(131, 129, 217, 0.55)',
-  outlineOffset: 3,
+  boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
   opacity: 0.9,
 })
 

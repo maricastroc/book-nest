@@ -51,8 +51,7 @@ export const BookCover = styled('img', {
   width: '4.5rem',
   height: 'auto',
   borderRadius: 8,
-  outline: '1px solid rgba(141, 149, 175, 0.6)',
-  outlineOffset: 3,
+  boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
 })
 
 export const ReadNotice = styled('div', {
