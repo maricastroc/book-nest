@@ -10,7 +10,7 @@ const entranceAnimation = keyframes({
   },
 })
 
-export const Container = styled('div', {
+export const MobileModalBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -26,7 +26,7 @@ export const Container = styled('div', {
   animation: `${entranceAnimation} 1s`,
 })
 
-export const ItemsContainer = styled('div', {
+export const PagesLinksContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -34,7 +34,7 @@ export const ItemsContainer = styled('div', {
   gap: '1.2rem',
 })
 
-export const Item = styled('div', {
+export const PageLink = styled('div', {
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
@@ -101,14 +101,14 @@ export const SignOutContainer = styled('div', {
   },
 })
 
-export const Separator = styled('span', {
+export const DividerLine = styled('span', {
   width: '100%',
   height: 0.5,
   backgroundColor: '$gray600',
   margin: '1.5rem 0',
 })
 
-export const LoginContainer = styled('div', {
+export const SignInContainer = styled('div', {
   marginTop: '1.5rem',
   cursor: 'pointer',
   display: 'flex',
@@ -118,7 +118,7 @@ export const LoginContainer = styled('div', {
   gap: '0.8rem',
 })
 
-export const LoginButton = styled('button', {
+export const SignInButton = styled('button', {
   display: 'flex',
   cursor: 'pointer',
   border: 'none',

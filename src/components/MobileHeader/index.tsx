@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Container, HeaderContainer, ListContainer } from './styles'
+import { MobileHeaderBox, MobileHeaderContent, LinksContainer } from './styles'
 import Logo from '../../../public/assets/logo.svg'
 import { List, X } from 'phosphor-react'
 import { useState } from 'react'
@@ -9,8 +9,8 @@ export function MobileHeader() {
   const [openModal, setOpenModal] = useState(false)
 
   return (
-    <Container>
-      <HeaderContainer>
+    <MobileHeaderBox>
+      <MobileHeaderContent>
         <Image
           src={Logo}
           width={200}
@@ -18,11 +18,11 @@ export function MobileHeader() {
           fetchPriority="high"
           quality={100}
         />
-        <ListContainer onClick={() => setOpenModal(!openModal)}>
+        <LinksContainer onClick={() => setOpenModal(!openModal)}>
           {openModal ? <X /> : <List />}
-        </ListContainer>
-      </HeaderContainer>
+        </LinksContainer>
+      </MobileHeaderContent>
       {openModal && <MobileModal />}
-    </Container>
+    </MobileHeaderBox>
   )
 }

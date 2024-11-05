@@ -1,6 +1,6 @@
 import { styled } from '../../../../styles'
 
-export const RatingContainer = styled('div', {
+export const UserRatingBoxWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -8,7 +8,7 @@ export const RatingContainer = styled('div', {
   minWidth: '100%',
 })
 
-export const RatingContent = styled('div', {
+export const UserRatingBoxContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -19,7 +19,7 @@ export const RatingContent = styled('div', {
   width: '100%',
 })
 
-export const Header = styled('div', {
+export const UserRatingBoxHeader = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -32,13 +32,13 @@ export const Header = styled('div', {
   },
 })
 
-export const UserData = styled('div', {
+export const UserDetailsWrapper = styled('div', {
   display: 'flex',
   alignItems: 'flex-start',
   gap: '1rem',
 })
 
-export const NameAndDate = styled('div', {
+export const UserNameDateWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -55,37 +55,7 @@ export const NameAndDate = styled('div', {
   },
 })
 
-export const DeleteAndEdit = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  paddingRight: '1rem',
-  width: '100%',
-  gap: '0.4rem',
-  marginTop: '0.5rem',
-  borderRadius: 8,
-
-  svg: {
-    cursor: 'pointer',
-    fontSize: '1.2rem',
-    color: '$gray400',
-
-    '&.edit_icon': {
-      color: '$green100',
-    },
-
-    '&.delete_icon': {
-      color: '#C6616D',
-    },
-
-    '&:hover': {
-      filter: 'brightness(1.5)',
-      transition: '200ms ease-in-out',
-    },
-  },
-})
-
-export const BookDescription = styled('div', {
+export const RatingTextContainer = styled('div', {
   maxHeight: '10rem',
   marginTop: '1.5rem',
   position: 'relative',

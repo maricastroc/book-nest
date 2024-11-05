@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const Container = styled('div', {
+export const ProfilePageWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
@@ -40,7 +40,7 @@ export const Container = styled('div', {
   },
 })
 
-export const ProfileWrapper = styled('div', {
+export const ProfilePageContainer = styled('div', {
   display: 'flex',
   width: '100%',
   gap: '2.5rem',
@@ -74,7 +74,7 @@ export const ProfileWrapper = styled('div', {
   },
 })
 
-export const ProfileContainer = styled('div', {
+export const ProfilePageContent = styled('div', {
   display: 'flex',
   flexDirection: 'column-reverse',
   padding: 0,
@@ -91,7 +91,7 @@ export const ProfileContainer = styled('div', {
   },
 })
 
-export const Heading = styled('div', {
+export const ProfilePageHeading = styled('div', {
   display: 'none',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -108,7 +108,7 @@ export const Heading = styled('div', {
   },
 })
 
-export const HeadingTitle = styled('div', {
+export const ProfilePageHeadingTitle = styled('div', {
   display: 'flex',
   alignItems: 'flex-start',
   gap: '0.8rem',

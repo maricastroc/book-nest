@@ -1,20 +1,20 @@
 import {
   CloseButton,
-  Container,
-  ContainerOverlay,
-  LateralMenuContainer,
-  RatingsContainer,
-  RatingsContent,
-  RatingsContentTitle,
+  LateralMenuWrapper,
+  OverlayBackground,
+  MenuBody,
+  RatingsWrapper,
+  RatingsList,
+  RatingsListHeader,
 } from './styles'
 import { BookCard } from './components/BookCard'
 import { X } from 'phosphor-react'
 import { useState } from 'react'
-import { LateralRatingCard } from './components/LateralRatingCard'
+import { UserRatingBox } from './components/UserRatingBox'
 import { useSession } from 'next-auth/react'
 import { RatingCardForm } from './components/RatingCardForm'
 import * as Dialog from '@radix-ui/react-dialog'
-import { LoginModal } from '../LoginModal'
+import { SignInModal } from '../SignInModal'
 import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
@@ -29,19 +29,19 @@ interface BookReviewsSidebarProps {
 export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
   const session = useSession()
 
   const { isLoading } = useAppContext()
 
   return (
-    <Container>
-      <ContainerOverlay onClick={() => onClose()} />
+    <LateralMenuWrapper>
+      <OverlayBackground onClick={() => onClose()} />
       <CloseButton onClick={() => onClose()}>
         <X />
       </CloseButton>
-      <LateralMenuContainer>
+      <MenuBody>
         {book && (
           <BookCard
             key={book.id}
@@ -49,22 +49,22 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
             categories={book.categories as CategoryProps[]}
           />
         )}
-        <RatingsContainer>
-          <RatingsContentTitle>
+        <RatingsWrapper>
+          <RatingsListHeader>
             <p>Ratings</p>
             {session.data?.user ? (
               <span onClick={() => setIsReviewFormOpen(true)}>Review</span>
             ) : (
               <Dialog.Root>
                 <Dialog.Trigger asChild>
-                  <span onClick={() => setIsLoginModalOpen(true)}>Review</span>
+                  <span onClick={() => setIsSignInModalOpen(true)}>Review</span>
                 </Dialog.Trigger>
-                {isLoginModalOpen && (
-                  <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+                {isSignInModalOpen && (
+                  <SignInModal onClose={() => setIsSignInModalOpen(false)} />
                 )}
               </Dialog.Root>
             )}
-          </RatingsContentTitle>
+          </RatingsListHeader>
           {session.data?.user && isReviewFormOpen && book && (
             <RatingCardForm
               avatarUrl={session.data?.user?.avatarUrl ?? AVATAR_URL_DEFAULT}
@@ -75,7 +75,7 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
               userId={session.data?.user.id}
             />
           )}
-          <RatingsContent>
+          <RatingsList>
             {isLoading ? (
               <>
                 {Array.from({ length: 3 }).map((_, index) => (
@@ -84,16 +84,16 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
               </>
             ) : (
               book?.ratings?.map((rating) => (
-                <LateralRatingCard
+                <UserRatingBox
                   key={rating.id}
                   rating={rating}
-                  onCloseLateralMenu={() => onClose()}
+                  onCloseUserRatingBox={() => onClose()}
                 />
               ))
             )}
-          </RatingsContent>
-        </RatingsContainer>
-      </LateralMenuContainer>
-    </Container>
+          </RatingsList>
+        </RatingsWrapper>
+      </MenuBody>
+    </LateralMenuWrapper>
   )
 }

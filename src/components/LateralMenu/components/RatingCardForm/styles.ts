@@ -1,6 +1,6 @@
 import { styled } from '../../../../styles'
 
-export const Container = styled('form', {
+export const RatingCardFormWrapper = styled('form', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -12,7 +12,7 @@ export const Container = styled('form', {
   width: '100%',
 })
 
-export const ReviewFormHeader = styled('div', {
+export const RatingCardFormHeader = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -26,7 +26,7 @@ export const ReviewFormHeader = styled('div', {
   },
 })
 
-export const UserData = styled('div', {
+export const UserDetailsWrapper = styled('div', {
   display: 'flex',
   alignItems: 'center',
   gap: '0.8rem',
@@ -37,7 +37,7 @@ export const UserData = styled('div', {
   },
 })
 
-export const ReviewFormContainer = styled('div', {
+export const ReviewFormWrapper = styled('div', {
   position: 'relative',
   width: '100%',
 })
@@ -56,14 +56,14 @@ export const ReviewForm = styled('textarea', {
   resize: 'vertical',
 })
 
-export const FooterContainer = styled('div', {
+export const FooterWrapper = styled('div', {
   display: 'flex',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   width: '100%',
 })
 
-export const InfoContainer = styled('div', {
+export const CharacterCounterWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -77,7 +77,7 @@ export const CharacterCounter = styled('span', {
   marginBottom: '0.2rem',
 })
 
-export const ButtonsContainer = styled('div', {
+export const UserActionsWrapper = styled('div', {
   marginTop: '0.5rem',
   display: 'flex',
   alignItems: 'center',

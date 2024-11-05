@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const Container = styled('div', {
+export const SignInPageWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100vw',
@@ -66,7 +66,7 @@ export const CoverContainer = styled('div', {
   },
 })
 
-export const Separator = styled('span', {
+export const DividerLine = styled('span', {
   width: '100%',
   height: 0.7,
   backgroundColor: '$gray700',

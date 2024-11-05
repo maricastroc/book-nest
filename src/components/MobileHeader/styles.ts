@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const Container = styled('div', {
+export const MobileHeaderBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -21,7 +21,7 @@ export const Container = styled('div', {
   },
 })
 
-export const HeaderContainer = styled('header', {
+export const MobileHeaderContent = styled('header', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -33,7 +33,7 @@ export const HeaderContainer = styled('header', {
   },
 })
 
-export const ListContainer = styled('button', {
+export const LinksContainer = styled('button', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

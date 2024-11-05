@@ -1,12 +1,11 @@
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import {
-  BookDescription,
-  DeleteAndEdit,
-  Header,
-  NameAndDate,
-  RatingContainer,
-  RatingContent,
-  UserData,
+  RatingTextContainer,
+  UserRatingBoxHeader,
+  UserNameDateWrapper,
+  UserRatingBoxWrapper,
+  UserRatingBoxContent,
+  UserDetailsWrapper,
 } from './styles'
 import { StarsRating } from '@/components/StarsRating'
 import { useSession } from 'next-auth/react'
@@ -24,16 +23,17 @@ import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { RatingCardForm } from '../RatingCardForm'
 import { Avatar } from '@/components/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
+import { UserActions } from '@/styles/shared'
 
-interface LateralRatingCardProps {
+interface UserRatingBoxProps {
   rating: RatingProps
-  onCloseLateralMenu: () => void
+  onCloseUserRatingBox: () => void
 }
 
-export function LateralRatingCard({
+export function UserRatingBox({
   rating,
-  onCloseLateralMenu,
-}: LateralRatingCardProps) {
+  onCloseUserRatingBox,
+}: UserRatingBoxProps) {
   const router = useRouter()
 
   const { dateFormatted, dateRelativeToNow, dateString } =
@@ -60,12 +60,14 @@ export function LateralRatingCard({
 
       toast.success('Rating successfully deleted!')
 
-      refreshBooks()
-      refreshLatestRatings()
-      refreshUserLatestRatings()
-      refreshPopularBooks()
+      await Promise.all([
+        refreshBooks(),
+        refreshLatestRatings(),
+        refreshUserLatestRatings(),
+        refreshPopularBooks(),
+      ])
 
-      onCloseLateralMenu()
+      onCloseUserRatingBox()
     } catch (error) {
       handleAxiosError(error)
     }
@@ -79,14 +81,14 @@ export function LateralRatingCard({
       bookId={rating.bookId}
       name={rating.user.name}
       userId={rating.user.id}
-      onClose={onCloseLateralMenu}
-      onCloseLateralMenu={onCloseLateralMenu}
+      onClose={onCloseUserRatingBox}
+      onCloseLateralMenu={onCloseUserRatingBox}
     />
   ) : (
-    <RatingContainer>
-      <RatingContent>
-        <Header>
-          <UserData>
+    <UserRatingBoxWrapper>
+      <UserRatingBoxContent>
+        <UserRatingBoxHeader>
+          <UserDetailsWrapper>
             <Avatar
               isClickable
               variant="regular"
@@ -95,33 +97,33 @@ export function LateralRatingCard({
                 router.push(`/profile/${rating.userId}`)
               }}
             />
-            <NameAndDate>
+            <UserNameDateWrapper>
               <p>{rating.user.name}</p>
               <time title={dateFormatted} dateTime={dateString}>
                 {dateRelativeToNow}
               </time>
-            </NameAndDate>
-          </UserData>
+            </UserNameDateWrapper>
+          </UserDetailsWrapper>
           <StarsRating rating={rating.rate} />
-        </Header>
+        </UserRatingBoxHeader>
         {openEditReviewBox ? (
           <RatingCardForm
             avatarUrl={rating.user.avatarUrl ?? ''}
             bookId={rating.bookId}
             name={rating.user.name}
             userId={rating.user.id}
-            onClose={onCloseLateralMenu}
-            onCloseLateralMenu={onCloseLateralMenu}
+            onClose={onCloseUserRatingBox}
+            onCloseLateralMenu={onCloseUserRatingBox}
           />
         ) : (
-          <BookDescription>
+          <RatingTextContainer>
             <p>{rating.description}</p>
-          </BookDescription>
+          </RatingTextContainer>
         )}
-      </RatingContent>
+      </UserRatingBoxContent>
       {rating.userId === session.data?.user.id && (
         <>
-          <DeleteAndEdit>
+          <UserActions>
             <Dialog.Root>
               <Dialog.Trigger asChild>
                 <Trash className="delete_icon" />
@@ -132,9 +134,9 @@ export function LateralRatingCard({
               className="edit_icon"
               onClick={() => setOpenEditReviewBox(!openEditReviewBox)}
             />
-          </DeleteAndEdit>
+          </UserActions>
         </>
       )}
-    </RatingContainer>
+    </UserRatingBoxWrapper>
   )
 }

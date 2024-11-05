@@ -1,24 +1,25 @@
 import { Avatar } from '../Avatar'
 import {
-  BookContainer,
+  BookContentWrapper,
   BookCover,
-  BookDetails,
+  BookSummaryWrapper,
   RatingContainer,
-  BookInfo,
-  Container,
-  Header,
-  NameAndDate,
-  Separator,
-  UserInfo,
-  ReadNotice,
-  HeaderData,
-  BookData,
+  BookTitleAndAuthor,
+  RatingCardBox,
+  RatingCardHeader,
+  UserNameDateWrapper,
+  DividerLine,
+  UserDetailsWrapper,
+  UserDetailsHeader,
+  BookDetailsContainer,
 } from './styles'
 import { StarsRating } from '../StarsRating'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
+import { ReadNotice } from '@/styles/shared'
+import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 
 interface RatingCardProps {
   rating: RatingProps
@@ -28,21 +29,22 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
 
-  const avatarUrl = rating.user.avatarUrl || 'https://github/octocat.png'
+  const avatarUrl = rating.user.avatarUrl || AVATAR_URL_DEFAULT
 
   const router = useRouter()
 
   const isMobile = useScreenSize(480)
 
   return (
-    <Container>
+    <RatingCardBox>
       {rating?.book && rating?.book.alreadyRead && (
         <ReadNotice>
           <p>READ</p>
         </ReadNotice>
       )}
-      <Header>
-        <UserInfo>
+
+      <RatingCardHeader>
+        <UserDetailsWrapper>
           <Avatar
             variant="bigger"
             isClickable
@@ -51,46 +53,49 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
               router.push(`/profile/${rating.user.id}`)
             }}
           />
-
-          <HeaderData>
-            <NameAndDate>
+          <UserDetailsHeader>
+            <UserNameDateWrapper>
               <p>{rating.user.name}</p>
               <time title={dateFormatted} dateTime={dateString}>
                 {dateRelativeToNow}
               </time>
-            </NameAndDate>
+            </UserNameDateWrapper>
             {!isMobile && <StarsRating rating={rating.rate} />}
-          </HeaderData>
-        </UserInfo>
-      </Header>
-      <Separator className="larger" />
+          </UserDetailsHeader>
+        </UserDetailsWrapper>
+      </RatingCardHeader>
+
+      <DividerLine className="larger" />
+
       {rating?.book && (
-        <BookContainer {...rest}>
-          <BookData>
+        <BookContentWrapper {...rest}>
+          <BookDetailsContainer>
             <BookCover src={rating.book.coverUrl} alt="" />
-            <BookDetails>
-              <BookInfo>
+            <BookSummaryWrapper>
+              <BookTitleAndAuthor>
                 <h2>{rating.book.name}</h2>
                 <p>{rating.book.author}</p>
-              </BookInfo>
-              {isMobile && <StarsRating rating={rating.rate} />}
-              {!isMobile && (
+              </BookTitleAndAuthor>
+              {isMobile ? (
+                <StarsRating rating={rating.rate} />
+              ) : (
                 <RatingContainer>
                   <p>{rating.description}</p>
                 </RatingContainer>
               )}
-            </BookDetails>
-          </BookData>
+            </BookSummaryWrapper>
+          </BookDetailsContainer>
+
           {isMobile && (
             <>
-              <Separator />
+              <DividerLine />
               <RatingContainer>
                 <p>{rating.description}</p>
               </RatingContainer>
             </>
           )}
-        </BookContainer>
+        </BookContentWrapper>
       )}
-    </Container>
+    </RatingCardBox>
   )
 }

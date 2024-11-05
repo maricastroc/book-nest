@@ -2,8 +2,8 @@ import { NextSeo } from 'next-seo'
 import {
   CoverContainer,
   Heading,
-  Container,
-  Separator,
+  SignInPageWrapper,
+  DividerLine,
   WelcomeContainer,
   WelcomeContent,
 } from './styles'
@@ -11,13 +11,13 @@ import {
 import Image from 'next/image'
 import CoverImage from '../../../public/assets/cover.png'
 import Logo from '../../../public/assets/logo.svg'
-import LoginForm from '@/components/LoginForm'
+import SignInForm from '@/components/SignInForm'
 
 export default function Login() {
   return (
     <>
       <NextSeo title="Login | Book Wise" />
-      <Container>
+      <SignInPageWrapper>
         <CoverContainer>
           <Image
             fetchPriority="high"
@@ -36,17 +36,17 @@ export default function Login() {
             className="cover_image"
           />
         </CoverContainer>
-        <Separator />
+        <DividerLine />
         <WelcomeContainer>
           <WelcomeContent>
             <Heading>
               <h2>Welcome!</h2>
               <p>Please, login or enter as a guest.</p>
             </Heading>
-            <LoginForm />
+            <SignInForm />
           </WelcomeContent>
         </WelcomeContainer>
-      </Container>
+      </SignInPageWrapper>
     </>
   )
 }

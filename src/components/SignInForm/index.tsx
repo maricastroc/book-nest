@@ -28,24 +28,24 @@ import {
 import { useScreenSize } from '@/utils/useScreenSize'
 import { toast } from 'react-toastify'
 
-const loginFormSchema = z.object({
+const signInFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
   password: z.string().min(3, { message: 'Password is required' }),
 })
 
-type LoginFormData = z.infer<typeof loginFormSchema>
+type SignInFormData = z.infer<typeof signInFormSchema>
 
-interface LoginFormProps {
+interface SignInFormProps {
   onClose?: () => void
 }
 
-export default function LoginForm({ onClose }: LoginFormProps) {
+export default function SignInForm({ onClose }: SignInFormProps) {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginFormSchema),
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInFormSchema),
     defaultValues: { email: '', password: '' },
   })
 
@@ -73,7 +73,7 @@ export default function LoginForm({ onClose }: LoginFormProps) {
     }
   }
 
-  async function onSubmit(data: LoginFormData) {
+  async function onSubmit(data: SignInFormData) {
     const result = await signIn('credentials', {
       email: data.email,
       password: data.password,

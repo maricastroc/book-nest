@@ -3,8 +3,8 @@ import {
   Container,
   Item,
   ItemsContainer,
-  LoginButton,
-  LoginContainer,
+  SignInButton,
+  SignInContainer,
   PageBtn,
   ProfileContainer,
   SidebarContent,
@@ -18,7 +18,7 @@ import { Binoculars, ChartLineUp, SignIn, SignOut } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { LoginModal } from '../LoginModal'
+import { SignInModal } from '../SignInModal'
 import { toast } from 'react-toastify'
 import { useState, useCallback, ComponentType } from 'react'
 import { CircularProgress } from '@mui/material'
@@ -52,7 +52,7 @@ export function Sidebar() {
 
   const { data: session } = useSession()
 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
   const { loggedUser, isLoading } = useAppContext()
 
@@ -128,19 +128,19 @@ export function Sidebar() {
               </SignOutContainer>
             </ProfileContainer>
           ) : (
-            <LoginContainer>
+            <SignInContainer>
               <Dialog.Root>
                 <Dialog.Trigger asChild>
-                  <LoginButton onClick={() => setIsLoginModalOpen(true)}>
+                  <SignInButton onClick={() => setIsSignInModalOpen(true)}>
                     <p>Login</p>
                     <SignIn />
-                  </LoginButton>
+                  </SignInButton>
                 </Dialog.Trigger>
-                {isLoginModalOpen && (
-                  <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+                {isSignInModalOpen && (
+                  <SignInModal onClose={() => setIsSignInModalOpen(false)} />
                 )}
               </Dialog.Root>
-            </LoginContainer>
+            </SignInContainer>
           )}
         </SidebarContent>
         <Image

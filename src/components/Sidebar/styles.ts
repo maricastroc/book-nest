@@ -152,7 +152,7 @@ export const SignOutContainer = styled('div', {
   },
 })
 
-export const LoginContainer = styled('div', {
+export const SignInContainer = styled('div', {
   cursor: 'pointer',
   display: 'flex',
   justifySelf: 'flex-end',
@@ -161,7 +161,7 @@ export const LoginContainer = styled('div', {
   gap: '0.8rem',
 })
 
-export const LoginButton = styled('button', {
+export const SignInButton = styled('button', {
   display: 'flex',
   cursor: 'pointer',
   border: 'none',

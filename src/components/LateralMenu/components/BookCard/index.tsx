@@ -1,16 +1,16 @@
 import { StarsRating } from '@/components/StarsRating'
 import {
-  BookContainer,
-  BookContent,
+  BookCardWrapper,
+  BookCardContent,
   BookCover,
-  BookData,
-  BookInfo,
+  BookTitleAndAuthor,
+  BookDetailsWrapper,
   BookSummary,
-  Footer,
-  FooterItem,
-  ItemText,
-  RatingContainer,
-  Separator,
+  BookStatsWrapper,
+  StatWrapper,
+  StatText,
+  BookRatingInfo,
+  DividerLine,
 } from './styles'
 import { BookOpen, BookmarkSimple, CalendarBlank } from 'phosphor-react'
 import { CategoryProps } from '@/@types/category'
@@ -25,53 +25,53 @@ export function BookCard({ book, categories }: BookCardProps) {
   const categoryNames = categories.map((category) => category?.name)
 
   return (
-    <BookContainer>
-      <BookContent>
+    <BookCardWrapper>
+      <BookCardContent>
         <BookCover alt="" src={book.coverUrl} />
-        <BookInfo>
-          <BookData>
+        <BookDetailsWrapper>
+          <BookTitleAndAuthor>
             <h2>{book.name}</h2>
             <p>{book.author}</p>
-          </BookData>
-          <RatingContainer>
+          </BookTitleAndAuthor>
+          <BookRatingInfo>
             <StarsRating rating={book?.rate ?? 0} />
             <p>
               <span>{book?.ratings?.length ?? 0}</span> {''}
               {book?.ratings?.length === 1 ? 'rating' : 'ratings'}
             </p>
-          </RatingContainer>
-        </BookInfo>
-      </BookContent>
-      <Separator />
+          </BookRatingInfo>
+        </BookDetailsWrapper>
+      </BookCardContent>
+      <DividerLine />
       <BookSummary>
         <p>{book.summary}</p>
       </BookSummary>
-      <Separator />
-      <Footer>
-        <FooterItem>
+      <DividerLine />
+      <BookStatsWrapper>
+        <StatWrapper>
           <BookmarkSimple />
           {categories && categoryNames && (
-            <ItemText>
+            <StatText>
               <p>Category</p>
               <h2>{categoryNames.join(', ')}</h2>
-            </ItemText>
+            </StatText>
           )}
-        </FooterItem>
-        <FooterItem>
+        </StatWrapper>
+        <StatWrapper>
           <BookOpen />
-          <ItemText>
+          <StatText>
             <p>Pages</p>
             <h2>{book.totalPages}</h2>
-          </ItemText>
-        </FooterItem>
-        <FooterItem>
+          </StatText>
+        </StatWrapper>
+        <StatWrapper>
           <CalendarBlank />
-          <ItemText>
+          <StatText>
             <p>Published on</p>
             <h2>{book.publishingYear}</h2>
-          </ItemText>
-        </FooterItem>
-      </Footer>
-    </BookContainer>
+          </StatText>
+        </StatWrapper>
+      </BookStatsWrapper>
+    </BookCardWrapper>
   )
 }

@@ -1,6 +1,6 @@
 import { styled } from '../../../../styles'
 
-export const BookContainer = styled('div', {
+export const BookCardWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -15,7 +15,7 @@ export const BookContainer = styled('div', {
   },
 })
 
-export const BookContent = styled('div', {
+export const BookCardContent = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'flex-start',
@@ -45,7 +45,7 @@ export const BookCover = styled('img', {
   },
 })
 
-export const BookInfo = styled('div', {
+export const BookDetailsWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -63,7 +63,7 @@ export const BookInfo = styled('div', {
   },
 })
 
-export const BookData = styled('div', {
+export const BookTitleAndAuthor = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -108,6 +108,27 @@ export const BookData = styled('div', {
   },
 })
 
+export const BookRatingInfo = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '0.3rem',
+  width: '100%',
+
+  p: {
+    color: '$gray200',
+    fontSize: '0.85rem',
+  },
+
+  '@media (min-width: 580px)': {
+    alignItems: 'flex-start',
+
+    p: {
+      fontSize: '0.9rem',
+    },
+  },
+})
+
 export const BookSummary = styled('div', {
   maxHeight: '6.5rem',
   position: 'relative',
@@ -125,7 +146,7 @@ export const BookSummary = styled('div', {
   },
 })
 
-export const Footer = styled('footer', {
+export const BookStatsWrapper = styled('footer', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -138,7 +159,7 @@ export const Footer = styled('footer', {
   },
 })
 
-export const FooterItem = styled('div', {
+export const StatWrapper = styled('div', {
   display: 'flex',
   alignItems: 'center',
   gap: '1rem',
@@ -165,7 +186,7 @@ export const FooterItem = styled('div', {
   },
 })
 
-export const ItemText = styled('div', {
+export const StatText = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '0.2rem',
@@ -194,28 +215,7 @@ export const ItemText = styled('div', {
   },
 })
 
-export const RatingContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: '0.3rem',
-  width: '100%',
-
-  p: {
-    color: '$gray200',
-    fontSize: '0.85rem',
-  },
-
-  '@media (min-width: 580px)': {
-    alignItems: 'flex-start',
-
-    p: {
-      fontSize: '0.9rem',
-    },
-  },
-})
-
-export const Separator = styled('span', {
+export const DividerLine = styled('span', {
   width: '100%',
   height: 0.5,
   backgroundColor: '$gray600',

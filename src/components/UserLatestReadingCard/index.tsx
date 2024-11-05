@@ -2,45 +2,48 @@ import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { StarsRating } from '../StarsRating'
 import {
   BookCover,
-  BookData,
-  BookDescription,
-  BookInfo,
-  BookTitle,
-  Container,
+  ReviewInfoSection,
+  UserReviewContainer,
+  UserReviewWrapper,
+  BookTitleAndAuthor,
+  UserLatestReadingCardWrapper,
   TimeAndRating,
 } from './styles'
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
 
-interface LastReadCardProps {
+interface UserLatestReadingCardProps {
   book: BookProps
   rating: RatingProps
 }
 
-export function LastReadCard({ book, rating }: LastReadCardProps) {
+export function UserLatestReadingCard({
+  book,
+  rating,
+}: UserLatestReadingCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
 
   return (
-    <Container>
+    <UserLatestReadingCardWrapper>
       <BookCover src={book.coverUrl} />
-      <BookInfo>
-        <BookData>
-          <BookTitle>
+      <UserReviewWrapper>
+        <ReviewInfoSection>
+          <BookTitleAndAuthor>
             <h2>{book.name}</h2>
             <p>{book.author}</p>
-          </BookTitle>
-          <BookDescription>
+          </BookTitleAndAuthor>
+          <UserReviewContainer>
             <p>{rating.description}</p>
-          </BookDescription>
-        </BookData>
+          </UserReviewContainer>
+        </ReviewInfoSection>
         <TimeAndRating>
           <StarsRating rating={rating.rate} />
           <time title={dateFormatted} dateTime={dateString}>
             {dateRelativeToNow}
           </time>
         </TimeAndRating>
-      </BookInfo>
-    </Container>
+      </UserReviewWrapper>
+    </UserLatestReadingCardWrapper>
   )
 }

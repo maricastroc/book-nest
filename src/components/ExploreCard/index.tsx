@@ -6,10 +6,10 @@ import {
   BookInfo,
   Container,
   InfosContainer,
-  ReadNotice,
 } from './styles'
 import { getBookTitle } from '@/utils/getBookTitle'
 import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
+import { ReadNotice } from '@/styles/shared'
 
 interface ExploreCardProps {
   book: BookProps

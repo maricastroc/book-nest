@@ -1,7 +1,6 @@
 import { styled } from '@/styles'
-import Link from 'next/link'
 
-export const Container = styled('div', {
+export const RatingCardBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '1.5rem',
@@ -18,7 +17,7 @@ export const Container = styled('div', {
   },
 })
 
-export const Header = styled('div', {
+export const RatingCardHeader = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '1.2rem',
@@ -32,7 +31,7 @@ export const Header = styled('div', {
   },
 })
 
-export const UserInfo = styled('div', {
+export const UserDetailsWrapper = styled('div', {
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
@@ -44,7 +43,7 @@ export const UserInfo = styled('div', {
   },
 })
 
-export const HeaderData = styled('div', {
+export const UserDetailsHeader = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -57,7 +56,7 @@ export const HeaderData = styled('div', {
   },
 })
 
-export const NameAndDate = styled('div', {
+export const UserNameDateWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
@@ -70,12 +69,26 @@ export const NameAndDate = styled('div', {
   },
 })
 
-export const BookContainer = styled('div', {
+export const BookContentWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
   width: '100%',
+})
+
+export const BookDetailsContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  width: '100%',
+  gap: '1.5rem',
+  margin: '1rem 0',
+
+  '@media (min-width: 480px)': {
+    margin: '1rem 0 0',
+    alignItems: 'center',
+  },
 })
 
 export const BookCover = styled('img', {
@@ -90,7 +103,7 @@ export const BookCover = styled('img', {
   },
 })
 
-export const BookDetails = styled('div', {
+export const BookSummaryWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -102,21 +115,7 @@ export const BookDetails = styled('div', {
   },
 })
 
-export const BookData = styled('div', {
-  display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'flex-start',
-  width: '100%',
-  gap: '1.5rem',
-  margin: '1rem 0',
-
-  '@media (min-width: 480px)': {
-    margin: '1rem 0 0',
-    alignItems: 'center',
-  },
-})
-
-export const BookInfo = styled('div', {
+export const BookTitleAndAuthor = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -161,7 +160,7 @@ export const RatingContainer = styled('div', {
   },
 })
 
-export const Separator = styled('span', {
+export const DividerLine = styled('span', {
   width: '100%',
   height: 0.5,
   backgroundColor: '$gray500',
@@ -174,28 +173,4 @@ export const Separator = styled('span', {
       display: 'block',
     },
   },
-})
-
-export const ReadNotice = styled('div', {
-  display: 'flex',
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  padding: '0.2rem 0.5rem',
-  fontSize: '$xs',
-  borderRadius: '0 8px 0 8px',
-  backgroundColor: '$green300',
-  color: '$green100',
-})
-
-export const ImageWrapper = styled(Link, {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-
-  width: 42,
-  height: 42,
-
-  borderRadius: '$full',
-  background: '$gradient-vertical',
 })

@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const Container = styled('div', {
+export const UserProfileContainer = styled('div', {
   display: 'flex',
   backgroundColor: 'gray800',
   padding: '1.5rem',
@@ -14,7 +14,7 @@ export const Container = styled('div', {
   },
 })
 
-export const UserInfo = styled('div', {
+export const UserProfileInfo = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -33,7 +33,7 @@ export const UserInfo = styled('div', {
   },
 })
 
-export const EditUserBtn = styled('button', {
+export const EditProfileButton = styled('button', {
   backgroundColor: 'transparent',
   display: 'flex',
   alignItems: 'center',
@@ -68,7 +68,7 @@ export const EditUserBtn = styled('button', {
   },
 })
 
-export const Separator = styled('span', {
+export const DividerLine = styled('span', {
   width: 30,
   background: '$gradient-horizontal',
   borderRadius: 8,
@@ -76,7 +76,7 @@ export const Separator = styled('span', {
   margin: '2.4rem 0',
 })
 
-export const UserInfoContainer = styled('div', {
+export const UserStatsWrapper = styled('div', {
   display: 'flex',
   width: '100%',
   flexDirection: 'column',
@@ -86,7 +86,7 @@ export const UserInfoContainer = styled('div', {
   paddingLeft: '6.5rem',
 })
 
-export const UserInfoItem = styled('div', {
+export const UserStatItem = styled('div', {
   display: 'flex',
   alignItems: 'center',
   width: '15rem',
@@ -104,7 +104,7 @@ export const UserInfoItem = styled('div', {
   },
 })
 
-export const ItemText = styled('div', {
+export const UserStatText = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',

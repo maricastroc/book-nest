@@ -1,17 +1,17 @@
 import { MobileHeader } from '@/components/MobileHeader'
 import {
-  Container,
-  Heading,
-  HomeContainer,
-  HomeContent,
+  HomePageWrapper,
+  HomePageHeading,
+  HomePageContainer,
+  HomePageContent,
   LastRatingsContainer,
   LastRatingsContent,
   LastRatingsTitle,
   LastRatingsWrapper,
-  LastReadContainer,
-  LastReadTitle,
-  PopularBooksCardsContainer,
-  PopularBooksCardsContent,
+  UserLatestReadingContainer,
+  UserLatestReadingTitle,
+  PopularBooksWrapper,
+  PopularBooksContent,
   PopularBooksTitle,
 } from './styles'
 import { RatingCard } from '@/components/RatingCard'
@@ -25,7 +25,7 @@ import { Sidebar } from '@/components/Sidebar'
 import { LateralMenu } from '@/components/LateralMenu'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
-import { LastReadCard } from '@/components/LastReadCard'
+import { UserLatestReadingCard } from '@/components/UserLatestReadingCard'
 import { useAppContext } from '@/contexts/AppContext'
 import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
 import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
@@ -56,31 +56,33 @@ export default function Home() {
     refreshUserLatestRatings()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.data?.user])
-  console.log(latestRatings)
+
   return (
     <>
       <NextSeo title="Home | Book Wise" />
-      <Container>
+      <HomePageWrapper>
         {openLateralMenu && (
           <LateralMenu book={selectedBook} onClose={handleCloseLateralMenu} />
         )}
         {isMobile ? <MobileHeader /> : <Sidebar />}
-        <HomeContainer>
-          <Heading>
+        <HomePageContainer>
+          <HomePageHeading>
             <ChartLineUp />
             <h2>Home</h2>
-          </Heading>
-          <HomeContent>
+          </HomePageHeading>
+          <HomePageContent>
             <LastRatingsWrapper>
               {session.data?.user && (
                 <>
-                  <LastReadTitle>Your last reading</LastReadTitle>
-                  <LastReadContainer>
+                  <UserLatestReadingTitle>
+                    Your last reading
+                  </UserLatestReadingTitle>
+                  <UserLatestReadingContainer>
                     {isLoading ? (
                       <SkeletonRatingCard withMarginBottom />
                     ) : userLatestRating && userLatestRating?.book ? (
                       <>
-                        <LastReadCard
+                        <UserLatestReadingCard
                           key={userLatestRating.id}
                           rating={userLatestRating}
                           book={userLatestRating.book}
@@ -91,7 +93,7 @@ export default function Home() {
                         <EmptyContainer />
                       </>
                     )}
-                  </LastReadContainer>
+                  </UserLatestReadingContainer>
                 </>
               )}
               <LastRatingsContainer>
@@ -108,7 +110,7 @@ export default function Home() {
               </LastRatingsContainer>
             </LastRatingsWrapper>
 
-            <PopularBooksCardsContainer>
+            <PopularBooksWrapper>
               <PopularBooksTitle>
                 <p>Popular Books</p>
                 <span>
@@ -116,7 +118,7 @@ export default function Home() {
                   <CaretRight />
                 </span>
               </PopularBooksTitle>
-              <PopularBooksCardsContent>
+              <PopularBooksContent>
                 {isLoading || !popularBooks.length
                   ? Array.from({ length: 12 }).map((_, index) => (
                       <SkeletonPopularBook key={index} />
@@ -132,11 +134,11 @@ export default function Home() {
                         }}
                       />
                     ))}
-              </PopularBooksCardsContent>
-            </PopularBooksCardsContainer>
-          </HomeContent>
-        </HomeContainer>
-      </Container>
+              </PopularBooksContent>
+            </PopularBooksWrapper>
+          </HomePageContent>
+        </HomePageContainer>
+      </HomePageWrapper>
     </>
   )
 }

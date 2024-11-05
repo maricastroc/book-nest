@@ -6,13 +6,13 @@ import { Sidebar } from '@/components/Sidebar'
 import {
   UserRatings,
   UserRatingsContainer,
-  Container,
-  Heading,
-  HeadingTitle,
-  ProfileContainer,
+  ProfilePageContent,
+  ProfilePageHeading,
+  ProfilePageHeadingTitle,
+  ProfilePageContainer,
   SearchBar,
   UserDetailsContainer,
-  ProfileWrapper,
+  ProfilePageWrapper,
   EmptyWrapper,
   UserRatingsTitle,
 } from './styles'
@@ -76,16 +76,16 @@ export default function Profile() {
   return (
     <>
       <NextSeo title="Profile | Book Wise" />
-      <Container>
+      <ProfilePageWrapper>
         {isMobile ? <MobileHeader /> : <Sidebar />}
-        <ProfileWrapper>
-          <Heading>
-            <HeadingTitle>
+        <ProfilePageContainer>
+          <ProfilePageHeading>
+            <ProfilePageHeadingTitle>
               <User />
               <h2>Profile</h2>
-            </HeadingTitle>
-          </Heading>
-          <ProfileContainer>
+            </ProfilePageHeadingTitle>
+          </ProfilePageHeading>
+          <ProfilePageContent>
             <UserRatingsContainer>
               <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
               <SearchBar>
@@ -126,7 +126,9 @@ export default function Profile() {
                             key={rating.id}
                             book={rating.book}
                             rating={rating}
-                            onDeleteRating={() => loadUserStatistics()}
+                            onDeleteRating={async () => {
+                              await loadUserStatistics()
+                            }}
                           />
                         )
                       }
@@ -144,9 +146,9 @@ export default function Profile() {
                 />
               )}
             </UserDetailsContainer>
-          </ProfileContainer>
-        </ProfileWrapper>
-      </Container>
+          </ProfilePageContent>
+        </ProfilePageContainer>
+      </ProfilePageWrapper>
     </>
   )
 }

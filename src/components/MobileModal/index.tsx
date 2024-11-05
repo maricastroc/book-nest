@@ -1,130 +1,132 @@
 import { Binoculars, ChartLineUp, SignIn, SignOut, User } from 'phosphor-react'
 import {
-  Container,
-  Item,
-  ItemsContainer,
-  LoginButton,
-  LoginContainer,
+  MobileModalBox,
+  PageLink,
+  PagesLinksContainer,
+  SignInButton,
+  SignInContainer,
   ProfileContainer,
-  Separator,
+  DividerLine,
   SignOutContainer,
 } from './styles'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { LoginModal } from '../LoginModal'
+import { SignInModal } from '../SignInModal'
 import { Avatar } from '../Avatar'
-import { useEffect, useState } from 'react'
-import { api } from '@/lib/axios'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { handleAxiosError } from '@/utils/handleAxiosError'
-import { UserProps } from '@/@types/user'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+import { useAppContext } from '@/contexts/AppContext'
+import { UserProps } from '@/@types/user'
+
+interface SignInButtonComponentProps {
+  setIsLoginModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function SignInButtonComponent({
+  setIsLoginModalOpen,
+}: SignInButtonComponentProps) {
+  return (
+    <SignInContainer>
+      <Dialog.Root>
+        <Dialog.Trigger asChild>
+          <SignInButton onClick={() => setIsLoginModalOpen(true)}>
+            <p>Login</p>
+            <SignIn />
+          </SignInButton>
+        </Dialog.Trigger>
+      </Dialog.Root>
+    </SignInContainer>
+  )
+}
+
+interface UserProfileProps {
+  loggedUser: UserProps | null
+  isLoading: boolean
+  handleLogout: () => void
+}
+
+function UserProfile({
+  loggedUser,
+  isLoading,
+  handleLogout,
+}: UserProfileProps) {
+  const router = useRouter()
+
+  return (
+    <ProfileContainer>
+      <Avatar
+        isClickable
+        isLoading={isLoading}
+        avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
+        variant="medium"
+        onClick={() => router.push(`profile/${loggedUser?.id}`)}
+      />
+      <SignOutContainer>
+        <p>{loggedUser?.name.split(' ')[0]}</p>
+        <SignOut onClick={handleLogout} />
+      </SignOutContainer>
+    </ProfileContainer>
+  )
+}
 
 export function MobileModal() {
-  const [user, setUser] = useState<UserProps | null>(null)
-
-  const [userFirstName, setUserFirstName] = useState('')
-
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
   const router = useRouter()
 
   const session = useSession()
 
-  async function handleLogout() {
-    signOut({ callbackUrl: '/' })
+  const { loggedUser, isLoading } = useAppContext()
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/' })
     toast.success('See you soon!')
   }
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    const loadUser = async () => {
-      setIsLoading(true)
-
-      if (session?.data?.user) {
-        try {
-          const response = await api.get(`/profile/${session.data.user.id}`)
-          if (response.data) {
-            const userProfile = response.data.profile.user
-            setUser(userProfile)
-            setUserFirstName(userProfile.name.split(' ')[0] ?? '')
-          }
-        } catch (error) {
-          handleAxiosError(error)
-        } finally {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    loadUser()
-  }, [session?.data?.user])
-
   return (
-    <Container>
-      <ItemsContainer>
-        <Item
+    <MobileModalBox>
+      <PagesLinksContainer>
+        <PageLink
           active={router.pathname === '/home'}
           onClick={() => router.push('/home')}
         >
           <ChartLineUp />
           <p>Home</p>
-        </Item>
-        <Item
+        </PageLink>
+        <PageLink
           active={router.pathname === '/explore'}
           onClick={() => router.push('/explore')}
         >
           <Binoculars />
           <p>Explore</p>
-        </Item>
-        {session.data?.user ? (
-          <Item
+        </PageLink>
+        {session.data?.user && (
+          <PageLink
             active={router.pathname.includes('profile')}
-            onClick={() => {
-              router.pathname.includes('profile')
-                ? router.push(`../profile/${session.data?.user.id}`)
-                : router.push(`profile/${session.data?.user.id}`)
-            }}
+            onClick={() => router.push(`/profile/${session.data.user.id}`)}
           >
             <User />
             <p>Profile</p>
-          </Item>
-        ) : (
-          <LoginContainer>
-            <Dialog.Root>
-              <Dialog.Trigger asChild>
-                <LoginButton onClick={() => setIsLoginModalOpen(true)}>
-                  <p>Login</p>
-                  <SignIn />
-                </LoginButton>
-              </Dialog.Trigger>
-              {isLoginModalOpen && (
-                <LoginModal onClose={() => setIsLoginModalOpen(false)} />
-              )}
-            </Dialog.Root>
-          </LoginContainer>
+          </PageLink>
         )}
-      </ItemsContainer>
-      {session.data?.user && (
+      </PagesLinksContainer>
+      {loggedUser ? (
         <>
-          <Separator />
-          <ProfileContainer>
-            <Avatar
-              isClickable
-              isLoading={isLoading}
-              avatarUrl={user?.avatarUrl ?? AVATAR_URL_DEFAULT}
-              variant="medium"
-              onClick={() => router.push(`profile/${user?.id}`)}
-            />
-            <SignOutContainer>
-              <p>{userFirstName}</p>
-              <SignOut onClick={handleLogout} />
-            </SignOutContainer>
-          </ProfileContainer>
+          <DividerLine />
+          <UserProfile
+            loggedUser={loggedUser}
+            isLoading={isLoading}
+            handleLogout={handleLogout}
+          />
         </>
+      ) : (
+        <SignInButtonComponent setIsLoginModalOpen={setIsLoginModalOpen} />
       )}
-    </Container>
+      {isLoginModalOpen && (
+        <SignInModal onClose={() => setIsLoginModalOpen(false)} />
+      )}
+    </MobileModalBox>
   )
 }

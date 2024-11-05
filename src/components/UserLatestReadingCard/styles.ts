@@ -1,6 +1,6 @@
 import { styled } from '../../styles'
 
-export const Container = styled('div', {
+export const UserLatestReadingCardWrapper = styled('div', {
   display: 'flex',
   padding: '1.25rem',
   backgroundColor: '$gray600',
@@ -23,7 +23,19 @@ export const Container = styled('div', {
   },
 })
 
-export const BookInfo = styled('div', {
+export const BookCover = styled('img', {
+  width: '5rem',
+  height: 'auto',
+  borderRadius: 8,
+  boxShadow:
+    '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
+
+  '@media (min-width: 580px)': {
+    width: '6.5rem',
+  },
+})
+
+export const UserReviewWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -37,32 +49,7 @@ export const BookInfo = styled('div', {
   },
 })
 
-export const TimeAndRating = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: '0.3rem',
-
-  time: {
-    display: 'none',
-  },
-
-  '@media (min-width: 580px)': {
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-
-  '@media (min-width: 480px)': {
-    time: {
-      display: 'block',
-      color: '$gray400',
-      fontSize: '$sm',
-    },
-  },
-})
-
-export const BookData = styled('div', {
+export const ReviewInfoSection = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -71,7 +58,7 @@ export const BookData = styled('div', {
   overflow: 'scroll',
 })
 
-export const BookTitle = styled('div', {
+export const BookTitleAndAuthor = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -102,7 +89,32 @@ export const BookTitle = styled('div', {
   },
 })
 
-export const BookDescription = styled('div', {
+export const TimeAndRating = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '0.3rem',
+
+  time: {
+    display: 'none',
+  },
+
+  '@media (min-width: 580px)': {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  '@media (min-width: 480px)': {
+    time: {
+      display: 'block',
+      color: '$gray400',
+      fontSize: '$sm',
+    },
+  },
+})
+
+export const UserReviewContainer = styled('div', {
   display: 'none',
   marginTop: '1.5rem',
   position: 'relative',
@@ -123,17 +135,5 @@ export const BookDescription = styled('div', {
 
   '@media (min-width: 980px)': {
     maxHeight: '5rem',
-  },
-})
-
-export const BookCover = styled('img', {
-  width: '5rem',
-  height: 'auto',
-  borderRadius: 8,
-  boxShadow:
-    '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
-
-  '@media (min-width: 580px)': {
-    width: '6.5rem',
   },
 })

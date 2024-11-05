@@ -1,7 +1,7 @@
 import { styled } from '../../styles'
 import { ToastContainer } from 'react-toastify'
 
-export const Container = styled('div', {
+export const HomePageWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
@@ -31,7 +31,7 @@ export const Container = styled('div', {
   },
 })
 
-export const HomeContainer = styled('div', {
+export const HomePageContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
@@ -72,7 +72,27 @@ export const HomeContainer = styled('div', {
   },
 })
 
-export const HomeContent = styled('div', {
+export const HomePageHeading = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  alignSelf: 'start',
+  gap: '0.8rem',
+  textAlign: 'left',
+  marginBottom: '2.5rem',
+  width: '100%',
+
+  h2: {
+    fontSize: '1.5rem',
+  },
+
+  svg: {
+    fontSize: '2rem',
+    color: '$green100',
+  },
+})
+
+export const HomePageContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -102,26 +122,6 @@ export const HomeContent = styled('div', {
   },
 })
 
-export const Heading = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-  alignSelf: 'start',
-  gap: '0.8rem',
-  textAlign: 'left',
-  marginBottom: '2.5rem',
-  width: '100%',
-
-  h2: {
-    fontSize: '1.5rem',
-  },
-
-  svg: {
-    fontSize: '2rem',
-    color: '$green100',
-  },
-})
-
 export const LastRatingsWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
@@ -137,6 +137,18 @@ export const LastRatingsWrapper = styled('div', {
     overflowY: 'scroll',
     height: '100%',
   },
+})
+
+export const UserLatestReadingContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  gap: '1rem',
+})
+
+export const UserLatestReadingTitle = styled('p', {
+  fontSize: '$sm',
+  marginBottom: '1rem',
 })
 
 export const LastRatingsContainer = styled('div', {
@@ -157,7 +169,7 @@ export const LastRatingsTitle = styled('p', {
   fontSize: '$sm',
 })
 
-export const PopularBooksCardsContainer = styled('div', {
+export const PopularBooksWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   marginTop: '2.5rem',
@@ -203,7 +215,7 @@ export const PopularBooksTitle = styled('div', {
   },
 })
 
-export const PopularBooksCardsContent = styled('div', {
+export const PopularBooksContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '2rem',
@@ -243,16 +255,4 @@ export const StyledToastContainer = styled(ToastContainer, {
   '& .Toastify__progress-bar': {
     backgroundColor: '$purple100',
   },
-})
-
-export const LastReadContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  gap: '1rem',
-})
-
-export const LastReadTitle = styled('p', {
-  fontSize: '$sm',
-  marginBottom: '1rem',
 })

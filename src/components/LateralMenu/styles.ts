@@ -10,7 +10,7 @@ const entranceAnimation = keyframes({
   },
 })
 
-export const Container = styled('section', {
+export const LateralMenuWrapper = styled('section', {
   position: 'fixed',
   top: '0',
   right: '0',
@@ -31,7 +31,7 @@ export const Container = styled('section', {
   },
 })
 
-export const ContainerOverlay = styled('div', {
+export const OverlayBackground = styled('div', {
   position: 'fixed',
   width: '100vw',
   height: '100%',
@@ -39,7 +39,7 @@ export const ContainerOverlay = styled('div', {
   backgroundColor: 'rgba(0, 0, 0, 0.6)',
 })
 
-export const LateralMenuContainer = styled('div', {
+export const MenuBody = styled('div', {
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
@@ -96,7 +96,7 @@ export const CloseButton = styled('button', {
   },
 })
 
-export const RatingsContainer = styled('div', {
+export const RatingsWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -104,7 +104,14 @@ export const RatingsContainer = styled('div', {
   marginTop: '3rem',
 })
 
-export const RatingsContentTitle = styled('div', {
+export const RatingsList = styled('div', {
+  display: 'flex',
+  flexDirection: 'column-reverse',
+  minWidth: '100%',
+  gap: '1.5rem',
+})
+
+export const RatingsListHeader = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -126,11 +133,4 @@ export const RatingsContentTitle = styled('div', {
       transition: '200ms all ease-in-out',
     },
   },
-})
-
-export const RatingsContent = styled('div', {
-  display: 'flex',
-  flexDirection: 'column-reverse',
-  minWidth: '100%',
-  gap: '1.5rem',
 })

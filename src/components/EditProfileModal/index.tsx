@@ -35,11 +35,11 @@ import { api } from '@/lib/axios'
 import { CircularProgress } from '@mui/material'
 import { useAppContext } from '@/contexts/AppContext'
 
-interface SignUpModalProps {
+interface EditProfileModalProps {
   onClose: () => void
 }
 
-const signUpFormSchema = (changePassword: boolean) =>
+const editProfileFormSchema = (changePassword: boolean) =>
   z
     .object({
       email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -70,9 +70,9 @@ const signUpFormSchema = (changePassword: boolean) =>
       },
     )
 
-type SignUpFormData = z.infer<ReturnType<typeof signUpFormSchema>>
+type EditProfileFormData = z.infer<ReturnType<typeof editProfileFormSchema>>
 
-export function EditUserModal({ onClose }: SignUpModalProps) {
+export function EditProfileModal({ onClose }: EditProfileModalProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
@@ -91,8 +91,8 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
     setValue,
     watch,
     formState: { isSubmitting, errors },
-  } = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpFormSchema(changePassword)),
+  } = useForm<EditProfileFormData>({
+    resolver: zodResolver(editProfileFormSchema(changePassword)),
     defaultValues: {
       email: '',
       name: '',
@@ -116,7 +116,7 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
     inputFileRef.current?.click()
   }
 
-  async function handleEditUser(data: SignUpFormData) {
+  async function handleEditProfile(data: EditProfileFormData) {
     if (session?.user) {
       const formData = new FormData()
       formData.append('email', data.email)
@@ -165,7 +165,7 @@ export function EditUserModal({ onClose }: SignUpModalProps) {
           </CloseButton>
         </Header>
         <Description className="DialogDescription">
-          <FormContainer onSubmit={handleSubmit(handleEditUser)}>
+          <FormContainer onSubmit={handleSubmit(handleEditProfile)}>
             <AvatarSectionContainer>
               <PreviewContainer>
                 <ImagePreview>

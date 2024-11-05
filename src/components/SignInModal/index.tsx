@@ -1,13 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { Overlay, Content, CloseButton, LoginModalContainer } from './styles'
-import LoginForm from '../LoginForm'
+import LoginForm from '../SignInForm'
 import { X } from 'phosphor-react'
 
-interface LoginModalProps {
+interface SignInModalProps {
   onClose: () => void
 }
 
-export function LoginModal({ onClose }: LoginModalProps) {
+export function SignInModal({ onClose }: SignInModalProps) {
   return (
     <Dialog.Portal>
       <Overlay className="DialogOverlay" />

@@ -36,6 +36,7 @@ interface AppContextType {
   handleSetBooks: (updatedBooks: BookProps[]) => void
   handleDeleteReview: (id: string) => void
   isLoading: boolean
+  handleSetIsLoading: (value: boolean) => void
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -72,6 +73,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleSetIsLoading = (value: boolean) => {
+    setIsLoading(value)
   }
 
   const refreshBooks = () =>
@@ -185,6 +190,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         loggedUser,
         isLoading,
+        handleSetIsLoading,
         books,
         categories,
         refreshBooks,

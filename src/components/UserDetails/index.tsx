@@ -6,16 +6,16 @@ import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import {
-  Container,
-  EditUserBtn,
-  ItemText,
-  Separator,
-  UserInfo,
-  UserInfoContainer,
-  UserInfoItem,
+  UserProfileContainer,
+  EditProfileButton,
+  UserStatText,
+  DividerLine,
+  UserProfileInfo,
+  UserStatsWrapper,
+  UserStatItem,
 } from './styles'
 import { Avatar } from '../Avatar'
-import { EditUserModal } from '../EditUserModal'
+import { EditProfileModal } from '../EditProfileModal'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import {
   BookOpen,
@@ -30,8 +30,24 @@ interface UserDetailsProps {
   userStatistics: UserStatistics | undefined
 }
 
+interface UserStat {
+  icon: JSX.Element
+  value: string | number | undefined
+  label: string
+}
+
+const renderUserStatItem = ({ icon, value, label }: UserStat) => (
+  <UserStatItem>
+    {icon}
+    <UserStatText>
+      <h2>{value ?? '-'}</h2>
+      <p>{label}</p>
+    </UserStatText>
+  </UserStatItem>
+)
+
 export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
-  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false)
+  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
 
   const [dateInfo, setDateInfo] = useState({
     dateFormatted: '',
@@ -43,6 +59,41 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
 
   const { loggedUser, isLoading } = useAppContext()
 
+  const userStats: UserStat[] = [
+    {
+      icon: <BookOpen />,
+      value: userStatistics?.readPages,
+      label: 'Pages read',
+    },
+    {
+      icon: <Books />,
+      value: userStatistics?.ratings?.length,
+      label: 'Rated books',
+    },
+    {
+      icon: <UserList />,
+      value: userStatistics?.authorsCount,
+      label: 'Authors read',
+    },
+    {
+      icon: <BookmarkSimple />,
+      value: userStatistics?.bestGenre,
+      label: 'Most read category',
+    },
+  ]
+
+  const getUserAvatarUrl = () => {
+    return session?.user.id === userId
+      ? loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT
+      : userStatistics?.user.avatarUrl ?? AVATAR_URL_DEFAULT
+  }
+
+  const getUserName = () => {
+    return session?.user.id === userId
+      ? loggedUser?.name
+      : userStatistics?.user.name
+  }
+
   useEffect(() => {
     if (userId && userStatistics) {
       const dateFormattedData = getDateFormattedAndRelative(
@@ -52,79 +103,46 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
     }
   }, [userId, userStatistics])
 
-  const userAvatarUrl =
-    session?.user.id === userId
-      ? loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT
-      : userStatistics?.user.avatarUrl ?? AVATAR_URL_DEFAULT
-
-  const userName =
-    session?.user.id === userId ? loggedUser?.name : userStatistics?.user.name
-
   return (
-    <Container>
+    <UserProfileContainer>
       {isLoading ? (
         <SkeletonUserDetails />
       ) : (
         <>
-          <UserInfo>
-            <Avatar avatarUrl={userAvatarUrl} variant="large" />
-            <h2>{userName}</h2>
+          <UserProfileInfo>
+            <Avatar avatarUrl={getUserAvatarUrl()} variant="large" />
+            <h2>{getUserName()}</h2>
             <time title={dateInfo.dateFormatted} dateTime={dateInfo.dateString}>
               joined {dateInfo.dateRelativeToNow}
             </time>
-          </UserInfo>
+          </UserProfileInfo>
 
           {session?.user.id === userId && (
             <Dialog.Root>
               <Dialog.Trigger asChild>
-                <EditUserBtn
+                <EditProfileButton
                   type="button"
-                  onClick={() => setIsEditUserModalOpen(true)}
+                  onClick={() => setIsEditProfileModalOpen(true)}
                 >
                   <PencilSimple />
                   Edit Info
-                </EditUserBtn>
+                </EditProfileButton>
               </Dialog.Trigger>
-              {isEditUserModalOpen && (
-                <EditUserModal onClose={() => setIsEditUserModalOpen(false)} />
+              {isEditProfileModalOpen && (
+                <EditProfileModal
+                  onClose={() => setIsEditProfileModalOpen(false)}
+                />
               )}
             </Dialog.Root>
           )}
 
-          <Separator />
+          <DividerLine />
 
-          <UserInfoContainer>
-            <UserInfoItem>
-              <BookOpen />
-              <ItemText>
-                <h2>{userStatistics?.readPages}</h2>
-                <p>Pages read</p>
-              </ItemText>
-            </UserInfoItem>
-            <UserInfoItem>
-              <Books />
-              <ItemText>
-                <h2>{userStatistics?.ratings?.length ?? 0}</h2>
-                <p>Rated books</p>
-              </ItemText>
-            </UserInfoItem>
-            <UserInfoItem>
-              <UserList />
-              <ItemText>
-                <h2>{userStatistics?.authorsCount ?? 0}</h2>
-                <p>Authors read</p>
-              </ItemText>
-            </UserInfoItem>
-            <UserInfoItem>
-              <BookmarkSimple />
-              <ItemText>
-                <h2>{userStatistics?.bestGenre ?? '-'}</h2>
-                <p>Most read category</p>
-              </ItemText>
-            </UserInfoItem>
-          </UserInfoContainer>
+          <UserStatsWrapper>
+            {userStats.map(renderUserStatItem)}
+          </UserStatsWrapper>
         </>
       )}
-    </Container>
+    </UserProfileContainer>
   )
 }

@@ -1,6 +1,6 @@
-import { styled } from '../../styles'
+import { styled } from '@/styles'
 
-export const Container = styled('div', {
+export const PopularBookCardBox = styled('div', {
   cursor: 'pointer',
   display: 'flex',
   padding: '1rem',
@@ -21,14 +21,14 @@ export const Container = styled('div', {
   },
 })
 
-export const BookInfo = styled('div', {
+export const BookContentWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
 })
 
-export const BookData = styled('div', {
+export const BookTitleAndAuthor = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -53,21 +53,13 @@ export const BookCover = styled('img', {
   borderRadius: 8,
   boxShadow:
     '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
+
+  '@media (min-width: 480px)': {
+    width: '6.5rem',
+  },
 })
 
-export const ReadNotice = styled('div', {
-  display: 'flex',
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  padding: '0.2rem 0.5rem',
-  fontSize: '$xs',
-  borderRadius: '0 8px 0 8px',
-  backgroundColor: '$green300',
-  color: '$green100',
-})
-
-export const InfosContainer = styled('div', {
+export const RatingWrapper = styled('div', {
   marginTop: '0.5rem',
   display: 'flex',
   flexDirection: 'column',

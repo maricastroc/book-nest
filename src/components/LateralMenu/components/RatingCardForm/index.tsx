@@ -1,15 +1,15 @@
 import { Check, Star, X } from 'phosphor-react'
 import {
   ActionButton,
-  ButtonsContainer,
   CharacterCounter,
-  Container,
-  FooterContainer,
-  InfoContainer,
+  CharacterCounterWrapper,
+  RatingCardFormWrapper,
+  FooterWrapper,
+  UserActionsWrapper,
   ReviewForm,
-  ReviewFormContainer,
-  ReviewFormHeader,
-  UserData,
+  ReviewFormWrapper,
+  RatingCardFormHeader,
+  UserDetailsWrapper,
 } from './styles'
 
 import { Rating } from 'react-simple-star-rating'
@@ -136,14 +136,14 @@ export function RatingCardForm({
   }
 
   return (
-    <Container
+    <RatingCardFormWrapper
       onSubmit={handleSubmit(isEdit ? handleEditReview : handleSubmitNewReview)}
     >
-      <ReviewFormHeader>
-        <UserData>
+      <RatingCardFormHeader>
+        <UserDetailsWrapper>
           <Avatar isClickable={false} avatarUrl={avatarUrl} variant="medium" />
           <p>{name}</p>
-        </UserData>
+        </UserDetailsWrapper>
         <Rating
           initialValue={rating?.rate}
           onClick={handleRating}
@@ -153,17 +153,17 @@ export function RatingCardForm({
           fillColor="#8381D9"
           {...register('rate')}
         />
-      </ReviewFormHeader>
-      <ReviewFormContainer>
+      </RatingCardFormHeader>
+      <ReviewFormWrapper>
         <ReviewForm
           placeholder="Write your review here"
           maxLength={REVIEW_MAX_LENGTH}
           spellCheck={false}
           {...register('description')}
         />
-      </ReviewFormContainer>
-      <FooterContainer>
-        <InfoContainer>
+      </ReviewFormWrapper>
+      <FooterWrapper>
+        <CharacterCounterWrapper>
           <CharacterCounter>
             <span>{characterCount}</span>/{REVIEW_MAX_LENGTH}
           </CharacterCounter>
@@ -173,8 +173,8 @@ export function RatingCardForm({
               <FormErrors error={errors?.description?.message} />
             </>
           )}
-        </InfoContainer>
-        <ButtonsContainer>
+        </CharacterCounterWrapper>
+        <UserActionsWrapper>
           <ActionButton
             type="button"
             disabled={isSubmitting}
@@ -185,8 +185,8 @@ export function RatingCardForm({
           <ActionButton type="submit" disabled={isSubmitting}>
             <Check color="#50B2C0" />
           </ActionButton>
-        </ButtonsContainer>
-      </FooterContainer>
-    </Container>
+        </UserActionsWrapper>
+      </FooterWrapper>
+    </RatingCardFormWrapper>
   )
 }
