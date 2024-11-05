@@ -17,15 +17,12 @@ import { Rating } from 'react-simple-star-rating'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { api } from '@/lib/axios'
-import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { handleAxiosError } from '@/utils/handleAxiosError'
 import { REVIEW_MAX_LENGTH } from '@/utils/constants'
 import { FormErrors } from '@/components/shared/FormErrors'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/Avatar'
-import { useAppContext } from '@/contexts/AppContext'
+import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 
 interface RatingCardFormProps {
   isEdit?: boolean
@@ -35,7 +32,8 @@ interface RatingCardFormProps {
   bookId: string
   userId: string | number | undefined
   onClose: () => void
-  onCloseLateralMenu: () => void
+  handleEditReview: (data: EditReviewData) => void
+  handleCreateReview: (data: CreateReviewData) => void
 }
 
 const ratingCardFormSchema = z.object({
@@ -56,7 +54,8 @@ export function RatingCardForm({
   bookId,
   userId,
   onClose,
-  onCloseLateralMenu,
+  handleEditReview,
+  handleCreateReview,
   isEdit = false,
   rating = null,
 }: RatingCardFormProps) {
@@ -78,66 +77,44 @@ export function RatingCardForm({
     setValue('rate', rate)
   }
 
-  const {
-    refreshBooks,
-    refreshPopularBooks,
-    refreshLatestRatings,
-    refreshUserLatestRatings,
-  } = useAppContext()
-
   const characterCount = watch('description')?.split('').length || 0
 
-  async function handleSubmitNewReview(data: RatingCardFormData) {
-    try {
-      await api.post(`/ratings/${bookId}`, {
+  async function submitReview() {
+    if (userId) {
+      const data = watch()
+
+      const payload = {
         rate: data.rate,
         description: data.description,
-        userId,
-        bookId,
-      })
+        userId: userId.toString(),
+        bookId: bookId.toString(),
+      }
 
-      refreshBooks()
-      refreshLatestRatings()
-      refreshPopularBooks()
-      refreshUserLatestRatings()
-      onCloseLateralMenu()
+      handleCreateReview(payload)
 
-      toast.success('Review successfully registered!')
-    } catch (error) {
-      handleAxiosError(error)
+      onClose()
     }
   }
 
-  async function handleEditReview() {
-    const data = watch()
-
+  async function editReview() {
     if (rating) {
-      try {
-        const payload = {
-          id: rating.id,
-          description: data.description,
-          rate: data.rate,
-        }
+      const data = watch()
 
-        await api.put('/ratings', payload)
-
-        refreshBooks()
-        refreshLatestRatings()
-        refreshUserLatestRatings()
-        refreshPopularBooks()
-
-        onCloseLateralMenu()
-
-        toast.success('Review successfully edited!')
-      } catch (error) {
-        handleAxiosError(error)
+      const payload = {
+        rate: data.rate,
+        description: data.description,
+        ratingId: rating.id,
       }
+
+      handleEditReview(payload)
+
+      onClose()
     }
   }
 
   return (
     <RatingCardFormWrapper
-      onSubmit={handleSubmit(isEdit ? handleEditReview : handleSubmitNewReview)}
+      onSubmit={handleSubmit(isEdit ? editReview : submitReview)}
     >
       <RatingCardFormHeader>
         <UserDetailsWrapper>

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { api } from '@/lib/axios'
-import { handleAxiosError } from '@/utils/handleAxiosError'
+import { handleApiError } from '@/utils/handleApiError'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
@@ -69,7 +69,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await apiCall()
       setter(response)
     } catch (error) {
-      handleAxiosError(error)
+      handleApiError(error)
     } finally {
       setIsLoading(false)
     }
@@ -127,7 +127,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return response.data.profile
     } catch (error) {
-      handleAxiosError(error)
+      handleApiError(error)
     } finally {
       setIsLoading(false)
     }
@@ -144,7 +144,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
         return response.data.profile
       } catch (error) {
-        handleAxiosError(error)
+        handleApiError(error)
       } finally {
         setIsLoading(false)
       }
@@ -163,7 +163,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
       toast.success('Rating successfully deleted!')
     } catch (error) {
-      handleAxiosError(error)
+      handleApiError(error)
     } finally {
       setIsLoading(false)
     }

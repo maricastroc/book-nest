@@ -26,7 +26,7 @@ import { FormErrors } from '../shared/FormErrors'
 import { InputContainer } from '../shared/InputContainer'
 import { CustomButton } from '../shared/Button'
 import { api } from '@/lib/axios'
-import { handleAxiosError } from '@/utils/handleAxiosError'
+import { handleApiError } from '@/utils/handleApiError'
 
 interface SignUpModalProps {
   onClose: () => void
@@ -91,7 +91,7 @@ export function SignUpModal({ onClose }: SignUpModalProps) {
       toast.success('User successfully registered!')
       onClose()
     } catch (error) {
-      handleAxiosError(error)
+      handleApiError(error)
     }
   }
 

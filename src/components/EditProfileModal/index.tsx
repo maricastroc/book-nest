@@ -28,7 +28,7 @@ import { CustomLabel } from '../shared/Label'
 import { FormErrors } from '../shared/FormErrors'
 import { InputContainer } from '../shared/InputContainer'
 import { CustomButton } from '../shared/Button'
-import { handleAxiosError } from '@/utils/handleAxiosError'
+import { handleApiError } from '@/utils/handleApiError'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSession } from 'next-auth/react'
 import { api } from '@/lib/axios'
@@ -138,7 +138,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
 
         onClose()
       } catch (error) {
-        handleAxiosError(error)
+        handleApiError(error)
       }
     }
   }

@@ -10,7 +10,7 @@ import {
   ExplorePageContent,
   HeadingTitle,
 } from './styles'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { MobileHeader } from '@/components/MobileHeader'
 import { Sidebar } from '@/components/Sidebar'
 import { ExploreCard } from '@/components/ExploreCard'
@@ -20,13 +20,13 @@ import { NextSeo } from 'next-seo'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
-import { handleAxiosError } from '@/utils/handleAxiosError'
-import { useRouter } from 'next/router'
 import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
-import { useAppContext } from '@/contexts/AppContext'
 import { SkeletonCategories } from '@/components/SkeletonCategories'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/LoadingPage'
+import { CreateReviewData, EditReviewData } from '../home/index.page'
+import { toast } from 'react-toastify'
+import useRequest from '@/utils/useRequest'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -42,77 +42,85 @@ export default function Explore() {
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const [categorySelected, setCategorySelected] = useState<string | null>(null)
-
-  const [isLoading, setIsLoading] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const isMobile = useScreenSize(980)
 
-  const { books, categories, handleSetBooks } = useAppContext()
+  const {
+    data: books,
+    mutate: mutateBooks,
+    isValidating,
+  } = useRequest<BookProps[] | null>({
+    url: '/books',
+    method: 'GET',
+    params: {
+      category: selectedCategory,
+      ...(search?.length ? { search } : {}),
+    },
+  })
 
-  const [filteredBooks, setFilteredBooks] = useState(books)
-
-  const router = useRouter()
-
-  const refreshData = () => {
-    router.replace(router.asPath)
-  }
+  const { data: categories } = useRequest<CategoryProps[] | null>({
+    url: '/categories',
+    method: 'GET',
+  })
 
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
 
-  async function selectCategory(categoryId: string | null) {
+  const handleDeleteReview = async (id: string) => {
     try {
-      setIsLoading(true)
+      const payload = { id }
 
-      const query = categoryId ? `?category=${categoryId}` : ''
-      const response = await api.get(`/books${query}`)
-      if (response.data.booksWithRating) {
-        handleSetBooks(response.data.booksWithRating)
-      }
-      setCategorySelected(categoryId)
+      await api.delete('/ratings', { data: payload })
+
+      await mutateBooks()
+
+      toast.success('Rating successfully deleted!')
     } catch (error) {
-      handleAxiosError(error)
-    } finally {
-      setIsLoading(false)
+      toast.error('Error deleting rating.')
+      console.error(error)
     }
   }
 
-  useEffect(() => {
-    const applyFilters = () => {
-      let updatedBooks = [...books]
-
-      if (categorySelected) {
-        updatedBooks = updatedBooks.filter((book) =>
-          book?.categories?.some((cat) => {
-            if ('id' in cat) {
-              return (cat as CategoryProps).id === categorySelected
-            }
-            return false
-          }),
-        )
+  const handleEditReview = async (data: EditReviewData) => {
+    try {
+      const payload = {
+        id: data.ratingId,
+        description: data.description,
+        rate: data.rate,
       }
 
-      if (search) {
-        updatedBooks = updatedBooks.filter(
-          (book) =>
-            book.name.toLowerCase().includes(search.toLowerCase()) ||
-            book.author.toLowerCase().includes(search.toLowerCase()),
-        )
+      await api.put('/ratings', payload)
+
+      await mutateBooks()
+
+      toast.success('Rating successfully edited!')
+    } catch (error) {
+      toast.error('Error editing rating.')
+      console.error(error)
+    }
+  }
+
+  const handleCreateReview = async (data: CreateReviewData) => {
+    try {
+      const payload = {
+        bookId: data.bookId,
+        userId: data.userId,
+        description: data.description,
+        rate: data.rate,
       }
 
-      setFilteredBooks(updatedBooks)
-    }
+      await api.post(`/ratings`, { data: payload })
 
-    applyFilters()
-  }, [categorySelected, search, books])
+      await mutateBooks()
 
-  useEffect(() => {
-    if (books.length > 0) {
-      setFilteredBooks(books)
+      toast.success('Rating successfully submitted!')
+    } catch (error) {
+      toast.error('Error creating rating.')
+      console.error(error)
     }
-  }, [books])
+  }
 
   return (
     <>
@@ -124,9 +132,11 @@ export default function Explore() {
           {openLateralMenu && (
             <LateralMenu
               book={selectedBook}
+              handleCreateReview={handleCreateReview}
+              handleEditReview={handleEditReview}
+              handleDeleteReview={handleDeleteReview}
               onClose={() => {
                 handleCloseLateralMenu()
-                refreshData()
               }}
             />
           )}
@@ -154,24 +164,24 @@ export default function Explore() {
             </ExplorePageHeading>
             <ExplorePageContent>
               <Categories>
-                {!categories.length ? (
+                {!categories?.length ? (
                   <SkeletonCategories />
                 ) : (
                   <>
                     <SelectCategoryButton
-                      selected={!categorySelected}
-                      onClick={() => selectCategory(null)}
+                      selected={!selectedCategory}
+                      onClick={() => setSelectedCategory(null)}
                     >
                       All
                     </SelectCategoryButton>
-                    {categories.map((category) => (
+                    {categories?.map((category) => (
                       <SelectCategoryButton
                         selected={
-                          !isLoading && categorySelected === category.id
+                          !isValidating && selectedCategory === category.id
                         }
                         key={category.id}
-                        onClick={() => selectCategory(category.id)}
-                        className={isLoading ? 'loading' : ''}
+                        onClick={() => setSelectedCategory(category.id)}
+                        className={isValidating ? 'loading' : ''}
                       >
                         {category.name}
                       </SelectCategoryButton>
@@ -180,11 +190,11 @@ export default function Explore() {
                 )}
               </Categories>
               <BooksContainer>
-                {isLoading || !books.length
+                {isValidating || !books?.length
                   ? Array.from({ length: 9 }).map((_, index) => (
                       <SkeletonPopularBook key={index} />
                     ))
-                  : filteredBooks?.map((book) => (
+                  : books?.map((book) => (
                       <ExploreCard
                         key={book.id}
                         book={book}

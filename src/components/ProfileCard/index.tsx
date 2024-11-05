@@ -43,28 +43,15 @@ export function ProfileCard({
 
   const [isEditRatingBoxOpen, setIsEditRatingBoxOpen] = useState(false)
 
-  const {
-    handleDeleteReview,
-    refreshLatestRatings,
-    refreshUserLatestRatings,
-    refreshPopularBooks,
-    handleSetIsLoading,
-  } = useAppContext()
+  const { handleSetIsLoading } = useAppContext()
 
   const isLoggedUser = rating.userId === session?.user.id
 
-  const onDelete = async () => {
+  const handleDeleteReview = async () => {
     if (session?.user?.id && onDeleteRating) {
       handleSetIsLoading(true)
 
-      handleDeleteReview(rating.id)
-
-      await Promise.all([
-        onDeleteRating(),
-        refreshLatestRatings(),
-        refreshPopularBooks(),
-        refreshUserLatestRatings(),
-      ])
+      onDeleteRating()
 
       handleSetIsLoading(false)
     }
@@ -82,7 +69,7 @@ export function ProfileCard({
               <Dialog.Trigger asChild>
                 <Trash className="delete_icon" />
               </Dialog.Trigger>
-              <DeleteModal onConfirm={() => onDelete()} />
+              <DeleteModal onConfirm={() => handleDeleteReview()} />
             </Dialog.Root>
             <Pencil
               className="edit_icon"

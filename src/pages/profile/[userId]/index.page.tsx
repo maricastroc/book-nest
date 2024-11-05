@@ -22,18 +22,23 @@ import { EmptyContainer } from '@/components/EmptyContainer'
 import { UserDetails } from '@/components/UserDetails'
 import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
-import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
 import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/LoadingPage'
+import useRequest from '@/utils/useRequest'
+import { UserStatistics } from '@/contexts/AppContext'
+import { api } from '@/lib/axios'
+import { toast } from 'react-toastify'
 
 export default function Profile() {
   const isRouteLoading = useLoadingOnRouteChange()
 
   const router = useRouter()
 
-  const { userId } = router.query
+  const userId = Array.isArray(router.query.userId)
+    ? router.query.userId[0]
+    : router.query.userId
 
   const [search, setSearch] = useState('')
 
@@ -41,41 +46,55 @@ export default function Profile() {
 
   const [filteredRatings, setFilteredRatings] = useState<RatingProps[]>([])
 
-  const [userStatistics, setUserStatistics] = useState<
-    UserStatistics | undefined
-  >(undefined)
+  const requestConfig = userId
+    ? {
+        url: `/profile/${userId}`,
+        method: 'GET',
+        params: { search },
+      }
+    : null
+
+  const {
+    data: userStatistics,
+    isValidating,
+    mutate,
+  } = useRequest<UserStatistics>(requestConfig)
+
+  const handleDeleteReview = async (id: string) => {
+    try {
+      const payload = { id }
+      await api.delete('/ratings', { data: payload })
+
+      toast.success('Rating successfully deleted!')
+
+      await mutate()
+    } catch (error) {
+      toast.error('Error deleting rating.')
+      console.error(error)
+    }
+  }
 
   const isMobile = useScreenSize(768)
 
-  const { fetchUserStatistics, isLoading } = useAppContext()
-
-  const loadUserStatistics = async () => {
-    const statistics = await fetchUserStatistics(userId as string, search)
-
-    setUserStatistics(statistics)
-    setAllRatings(statistics?.ratings ?? [])
-    setFilteredRatings(statistics?.ratings ?? [])
-  }
-
   useEffect(() => {
-    if (userId !== undefined) {
-      loadUserStatistics()
+    if (userStatistics) {
+      setAllRatings(userStatistics.ratings ?? [])
+      setFilteredRatings(userStatistics.ratings ?? [])
     }
-  }, [userId])
+  }, [userStatistics])
 
   useEffect(() => {
     if (search) {
-      const ratings = filteredRatings.filter(
+      const ratings = allRatings.filter(
         (rating) =>
           rating?.book?.name.toLowerCase().includes(search.toLowerCase()) ||
           rating?.book?.author.toLowerCase().includes(search.toLowerCase()),
       )
-
       setFilteredRatings(ratings)
     } else {
       setFilteredRatings(allRatings)
     }
-  }, [userId, search])
+  }, [search, allRatings])
 
   return (
     <>
@@ -109,19 +128,19 @@ export default function Profile() {
                     <X onClick={() => setSearch('')} />
                   )}
                 </SearchBar>
-                {!userStatistics?.ratings?.length && !isLoading && (
+                {!userStatistics?.ratings?.length && !isValidating && (
                   <EmptyWrapper>
                     <EmptyContainer />
                   </EmptyWrapper>
                 )}
                 <UserRatings
                   className={
-                    isLoading || (filteredRatings?.length ?? 0) > 1
+                    isValidating || (filteredRatings?.length ?? 0) > 1
                       ? 'smaller'
                       : ''
                   }
                 >
-                  {isLoading
+                  {isValidating
                     ? Array.from({ length: 4 }).map((_, index) => (
                         <SkeletonRatingCard key={index} />
                       ))
@@ -134,12 +153,11 @@ export default function Profile() {
                               book={rating.book}
                               rating={rating}
                               onDeleteRating={async () => {
-                                await loadUserStatistics()
+                                handleDeleteReview(rating.id)
                               }}
                             />
                           )
                         }
-
                         return null
                       })}
                 </UserRatings>

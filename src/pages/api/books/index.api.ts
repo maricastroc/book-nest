@@ -12,6 +12,7 @@ export default async function handler(
   }
 
   let categoriesQuery
+  let searchQuery
 
   if (req.query.category) {
     const categoryId = String(req.query.category)
@@ -22,9 +23,31 @@ export default async function handler(
     }
   }
 
+  if (req.query.search) {
+    searchQuery = String(req.query.search).toLowerCase() // Converte para minúsculas
+  }
+
   const books = await prisma.book.findMany({
     where: {
       categories: categoriesQuery,
+      ...(searchQuery
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: searchQuery,
+                  mode: 'insensitive', // busca insensível a maiúsculas e minúsculas
+                },
+              },
+              {
+                author: {
+                  contains: searchQuery,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          }
+        : {}), // Se searchQuery não estiver presente, não adiciona o filtro OR
     },
     include: {
       ratings: {

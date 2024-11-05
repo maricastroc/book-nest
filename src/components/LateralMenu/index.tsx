@@ -20,13 +20,23 @@ import { CategoryProps } from '@/@types/category'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { SkeletonRatingCard } from '../SkeletonRatingCard'
 import { useAppContext } from '@/contexts/AppContext'
+import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 
 interface BookReviewsSidebarProps {
+  handleDeleteReview: (value: string) => void
+  handleEditReview: (data: EditReviewData) => void
+  handleCreateReview: (data: CreateReviewData) => void
   book: BookProps | null
   onClose: () => void
 }
 
-export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
+export function LateralMenu({
+  book,
+  handleDeleteReview,
+  handleCreateReview,
+  handleEditReview,
+  onClose,
+}: BookReviewsSidebarProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
@@ -70,9 +80,16 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
               avatarUrl={session.data?.user?.avatarUrl ?? AVATAR_URL_DEFAULT}
               name={session.data?.user.name}
               onClose={() => setIsReviewFormOpen(false)}
-              onCloseLateralMenu={() => onClose()}
               bookId={book.id}
               userId={session.data?.user.id}
+              handleEditReview={(data: EditReviewData) => {
+                handleEditReview(data)
+                onClose()
+              }}
+              handleCreateReview={(data: CreateReviewData) => {
+                handleCreateReview(data)
+                onClose()
+              }}
             />
           )}
           <RatingsList>
@@ -88,6 +105,9 @@ export function LateralMenu({ book, onClose }: BookReviewsSidebarProps) {
                   key={rating.id}
                   rating={rating}
                   onCloseUserRatingBox={() => onClose()}
+                  handleEditReview={handleEditReview}
+                  handleDeleteReview={handleDeleteReview}
+                  handleCreateReview={handleCreateReview}
                 />
               ))
             )}

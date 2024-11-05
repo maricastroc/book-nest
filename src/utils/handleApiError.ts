@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-export function handleAxiosError(error: unknown) {
+export function handleApiError(error: unknown) {
   if (axios.isAxiosError(error) && error.response) {
     let errorMessage = 'Ooops, something went wrong. Please try again later.'
 
