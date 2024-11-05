@@ -30,8 +30,12 @@ import { useAppContext } from '@/contexts/AppContext'
 import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
 import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
 import { RatingProps } from '@/@types/rating'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { LoadingPage } from '@/components/LoadingPage'
 
 export default function Home() {
+  const isRouteLoading = useLoadingOnRouteChange()
+
   const session = useSession()
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
@@ -60,85 +64,89 @@ export default function Home() {
   return (
     <>
       <NextSeo title="Home | Book Wise" />
-      <HomePageWrapper>
-        {openLateralMenu && (
-          <LateralMenu book={selectedBook} onClose={handleCloseLateralMenu} />
-        )}
-        {isMobile ? <MobileHeader /> : <Sidebar />}
-        <HomePageContainer>
-          <HomePageHeading>
-            <ChartLineUp />
-            <h2>Home</h2>
-          </HomePageHeading>
-          <HomePageContent>
-            <LastRatingsWrapper>
-              {session.data?.user && (
-                <>
-                  <UserLatestReadingTitle>
-                    Your last reading
-                  </UserLatestReadingTitle>
-                  <UserLatestReadingContainer>
-                    {isLoading ? (
-                      <SkeletonRatingCard withMarginBottom />
-                    ) : userLatestRating && userLatestRating?.book ? (
-                      <>
-                        <UserLatestReadingCard
-                          key={userLatestRating.id}
-                          rating={userLatestRating}
-                          book={userLatestRating.book}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <EmptyContainer />
-                      </>
-                    )}
-                  </UserLatestReadingContainer>
-                </>
-              )}
-              <LastRatingsContainer>
-                <LastRatingsTitle>Last Ratings</LastRatingsTitle>
-                <LastRatingsContent>
-                  {isLoading || !latestRatings.length
-                    ? Array.from({ length: 9 }).map((_, index) => (
-                        <SkeletonRatingCard key={index} />
-                      ))
-                    : latestRatings.map((rating: RatingProps) => (
-                        <RatingCard key={rating.id} rating={rating} />
-                      ))}
-                </LastRatingsContent>
-              </LastRatingsContainer>
-            </LastRatingsWrapper>
+      {isRouteLoading ? (
+        <LoadingPage />
+      ) : (
+        <HomePageWrapper>
+          {openLateralMenu && (
+            <LateralMenu book={selectedBook} onClose={handleCloseLateralMenu} />
+          )}
+          {isMobile ? <MobileHeader /> : <Sidebar />}
+          <HomePageContainer>
+            <HomePageHeading>
+              <ChartLineUp />
+              <h2>Home</h2>
+            </HomePageHeading>
+            <HomePageContent>
+              <LastRatingsWrapper>
+                {session.data?.user && (
+                  <>
+                    <UserLatestReadingTitle>
+                      Your last reading
+                    </UserLatestReadingTitle>
+                    <UserLatestReadingContainer>
+                      {isLoading ? (
+                        <SkeletonRatingCard withMarginBottom />
+                      ) : userLatestRating && userLatestRating?.book ? (
+                        <>
+                          <UserLatestReadingCard
+                            key={userLatestRating.id}
+                            rating={userLatestRating}
+                            book={userLatestRating.book}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <EmptyContainer />
+                        </>
+                      )}
+                    </UserLatestReadingContainer>
+                  </>
+                )}
+                <LastRatingsContainer>
+                  <LastRatingsTitle>Last Ratings</LastRatingsTitle>
+                  <LastRatingsContent>
+                    {isLoading || !latestRatings.length
+                      ? Array.from({ length: 9 }).map((_, index) => (
+                          <SkeletonRatingCard key={index} />
+                        ))
+                      : latestRatings.map((rating: RatingProps) => (
+                          <RatingCard key={rating.id} rating={rating} />
+                        ))}
+                  </LastRatingsContent>
+                </LastRatingsContainer>
+              </LastRatingsWrapper>
 
-            <PopularBooksWrapper>
-              <PopularBooksTitle>
-                <p>Popular Books</p>
-                <span>
-                  View All
-                  <CaretRight />
-                </span>
-              </PopularBooksTitle>
-              <PopularBooksContent>
-                {isLoading || !popularBooks.length
-                  ? Array.from({ length: 12 }).map((_, index) => (
-                      <SkeletonPopularBook key={index} />
-                    ))
-                  : popularBooks.length > 0 &&
-                    popularBooks.map((book) => (
-                      <PopularBookCard
-                        key={book.id}
-                        book={book}
-                        onOpenDetails={() => {
-                          setSelectedBook(book)
-                          setOpenLateralMenu(true)
-                        }}
-                      />
-                    ))}
-              </PopularBooksContent>
-            </PopularBooksWrapper>
-          </HomePageContent>
-        </HomePageContainer>
-      </HomePageWrapper>
+              <PopularBooksWrapper>
+                <PopularBooksTitle>
+                  <p>Popular Books</p>
+                  <span>
+                    View All
+                    <CaretRight />
+                  </span>
+                </PopularBooksTitle>
+                <PopularBooksContent>
+                  {isLoading || !popularBooks.length
+                    ? Array.from({ length: 12 }).map((_, index) => (
+                        <SkeletonPopularBook key={index} />
+                      ))
+                    : popularBooks.length > 0 &&
+                      popularBooks.map((book) => (
+                        <PopularBookCard
+                          key={book.id}
+                          book={book}
+                          onOpenDetails={() => {
+                            setSelectedBook(book)
+                            setOpenLateralMenu(true)
+                          }}
+                        />
+                      ))}
+                </PopularBooksContent>
+              </PopularBooksWrapper>
+            </HomePageContent>
+          </HomePageContainer>
+        </HomePageWrapper>
+      )}
     </>
   )
 }

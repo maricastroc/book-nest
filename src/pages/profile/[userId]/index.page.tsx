@@ -25,8 +25,12 @@ import { useScreenSize } from '@/utils/useScreenSize'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
 import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { LoadingPage } from '@/components/LoadingPage'
 
 export default function Profile() {
+  const isRouteLoading = useLoadingOnRouteChange()
+
   const router = useRouter()
 
   const { userId } = router.query
@@ -76,79 +80,83 @@ export default function Profile() {
   return (
     <>
       <NextSeo title="Profile | Book Wise" />
-      <ProfilePageWrapper>
-        {isMobile ? <MobileHeader /> : <Sidebar />}
-        <ProfilePageContainer>
-          <ProfilePageHeading>
-            <ProfilePageHeadingTitle>
-              <User />
-              <h2>Profile</h2>
-            </ProfilePageHeadingTitle>
-          </ProfilePageHeading>
-          <ProfilePageContent>
-            <UserRatingsContainer>
-              <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
-              <SearchBar>
-                <input
-                  type="text"
-                  placeholder="Search for author or title"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  spellCheck={false}
-                />
-                {search === '' ? (
-                  <MagnifyingGlass />
-                ) : (
-                  <X onClick={() => setSearch('')} />
+      {isRouteLoading ? (
+        <LoadingPage />
+      ) : (
+        <ProfilePageWrapper>
+          {isMobile ? <MobileHeader /> : <Sidebar />}
+          <ProfilePageContainer>
+            <ProfilePageHeading>
+              <ProfilePageHeadingTitle>
+                <User />
+                <h2>Profile</h2>
+              </ProfilePageHeadingTitle>
+            </ProfilePageHeading>
+            <ProfilePageContent>
+              <UserRatingsContainer>
+                <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
+                <SearchBar>
+                  <input
+                    type="text"
+                    placeholder="Search for author or title"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    spellCheck={false}
+                  />
+                  {search === '' ? (
+                    <MagnifyingGlass />
+                  ) : (
+                    <X onClick={() => setSearch('')} />
+                  )}
+                </SearchBar>
+                {!userStatistics?.ratings?.length && !isLoading && (
+                  <EmptyWrapper>
+                    <EmptyContainer />
+                  </EmptyWrapper>
                 )}
-              </SearchBar>
-              {!userStatistics?.ratings?.length && !isLoading && (
-                <EmptyWrapper>
-                  <EmptyContainer />
-                </EmptyWrapper>
-              )}
-              <UserRatings
-                className={
-                  isLoading || (filteredRatings?.length ?? 0) > 1
-                    ? 'smaller'
-                    : ''
-                }
-              >
-                {isLoading
-                  ? Array.from({ length: 4 }).map((_, index) => (
-                      <SkeletonRatingCard key={index} />
-                    ))
-                  : filteredRatings?.length > 0 &&
-                    filteredRatings.map((rating: RatingProps) => {
-                      if (rating?.book) {
-                        return (
-                          <ProfileCard
-                            key={rating.id}
-                            book={rating.book}
-                            rating={rating}
-                            onDeleteRating={async () => {
-                              await loadUserStatistics()
-                            }}
-                          />
-                        )
-                      }
+                <UserRatings
+                  className={
+                    isLoading || (filteredRatings?.length ?? 0) > 1
+                      ? 'smaller'
+                      : ''
+                  }
+                >
+                  {isLoading
+                    ? Array.from({ length: 4 }).map((_, index) => (
+                        <SkeletonRatingCard key={index} />
+                      ))
+                    : filteredRatings?.length > 0 &&
+                      filteredRatings.map((rating: RatingProps) => {
+                        if (rating?.book) {
+                          return (
+                            <ProfileCard
+                              key={rating.id}
+                              book={rating.book}
+                              rating={rating}
+                              onDeleteRating={async () => {
+                                await loadUserStatistics()
+                              }}
+                            />
+                          )
+                        }
 
-                      return null
-                    })}
-              </UserRatings>
-            </UserRatingsContainer>
+                        return null
+                      })}
+                </UserRatings>
+              </UserRatingsContainer>
 
-            <UserDetailsContainer>
-              {userId && (
-                <UserDetails
-                  userStatistics={userStatistics}
-                  userId={userId as string}
-                />
-              )}
-            </UserDetailsContainer>
-          </ProfilePageContent>
-        </ProfilePageContainer>
-      </ProfilePageWrapper>
+              <UserDetailsContainer>
+                {userId && (
+                  <UserDetails
+                    userStatistics={userStatistics}
+                    userId={userId as string}
+                  />
+                )}
+              </UserDetailsContainer>
+            </ProfilePageContent>
+          </ProfilePageContainer>
+        </ProfilePageWrapper>
+      )}
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const Container = styled('div', {
+export const ExplorePageWrapper = styled('div', {
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
@@ -28,7 +28,7 @@ export const Container = styled('div', {
   },
 })
 
-export const ExploreContainer = styled('div', {
+export const ExplorePageContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
@@ -49,7 +49,7 @@ export const ExploreContainer = styled('div', {
   },
 })
 
-export const Heading = styled('div', {
+export const ExplorePageHeading = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -83,7 +83,7 @@ export const HeadingTitle = styled('div', {
   },
 })
 
-export const ExploreContent = styled('div', {
+export const ExplorePageContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -158,7 +158,7 @@ export const Categories = styled('div', {
   width: '100%',
 })
 
-export const CategoryBtn = styled('button', {
+export const SelectCategoryButton = styled('button', {
   cursor: 'pointer',
   backgroundColor: 'transparent',
   borderRadius: 16,

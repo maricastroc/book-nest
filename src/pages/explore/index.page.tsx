@@ -1,13 +1,13 @@
 import { Binoculars, MagnifyingGlass, X } from 'phosphor-react'
 import {
   Categories,
-  CategoryBtn,
-  Container,
-  ExploreContainer,
-  Heading,
+  SelectCategoryButton,
+  ExplorePageWrapper,
+  ExplorePageContainer,
+  ExplorePageHeading,
   SearchBar,
   BooksContainer,
-  ExploreContent,
+  ExplorePageContent,
   HeadingTitle,
 } from './styles'
 import { useEffect, useState } from 'react'
@@ -25,6 +25,8 @@ import { useRouter } from 'next/router'
 import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
 import { useAppContext } from '@/contexts/AppContext'
 import { SkeletonCategories } from '@/components/SkeletonCategories'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { LoadingPage } from '@/components/LoadingPage'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -32,6 +34,8 @@ export interface ExploreProps {
 }
 
 export default function Explore() {
+  const isRouteLoading = useLoadingOnRouteChange()
+
   const [search, setSearch] = useState('')
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
@@ -113,82 +117,88 @@ export default function Explore() {
   return (
     <>
       <NextSeo title="Explore | Book Wise" />
-      <Container>
-        {openLateralMenu && (
-          <LateralMenu
-            book={selectedBook}
-            onClose={() => {
-              handleCloseLateralMenu()
-              refreshData()
-            }}
-          />
-        )}
-        {isMobile ? <MobileHeader /> : <Sidebar />}
-        <ExploreContainer>
-          <Heading>
-            <HeadingTitle>
-              <Binoculars />
-              <h2>Explore</h2>
-            </HeadingTitle>
-            <SearchBar>
-              <input
-                type="text"
-                placeholder="Search for author or title"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                spellCheck={false}
-              />
-              {search === '' ? (
-                <MagnifyingGlass />
-              ) : (
-                <X onClick={() => setSearch('')} />
-              )}
-            </SearchBar>
-          </Heading>
-          <ExploreContent>
-            <Categories>
-              {!categories.length ? (
-                <SkeletonCategories />
-              ) : (
-                <>
-                  <CategoryBtn
-                    selected={!categorySelected}
-                    onClick={() => selectCategory(null)}
-                  >
-                    All
-                  </CategoryBtn>
-                  {categories.map((category) => (
-                    <CategoryBtn
-                      selected={!isLoading && categorySelected === category.id}
-                      key={category.id}
-                      onClick={() => selectCategory(category.id)}
-                      className={isLoading ? 'loading' : ''}
+      {isRouteLoading ? (
+        <LoadingPage />
+      ) : (
+        <ExplorePageWrapper>
+          {openLateralMenu && (
+            <LateralMenu
+              book={selectedBook}
+              onClose={() => {
+                handleCloseLateralMenu()
+                refreshData()
+              }}
+            />
+          )}
+          {isMobile ? <MobileHeader /> : <Sidebar />}
+          <ExplorePageContainer>
+            <ExplorePageHeading>
+              <HeadingTitle>
+                <Binoculars />
+                <h2>Explore</h2>
+              </HeadingTitle>
+              <SearchBar>
+                <input
+                  type="text"
+                  placeholder="Search for author or title"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  spellCheck={false}
+                />
+                {search === '' ? (
+                  <MagnifyingGlass />
+                ) : (
+                  <X onClick={() => setSearch('')} />
+                )}
+              </SearchBar>
+            </ExplorePageHeading>
+            <ExplorePageContent>
+              <Categories>
+                {!categories.length ? (
+                  <SkeletonCategories />
+                ) : (
+                  <>
+                    <SelectCategoryButton
+                      selected={!categorySelected}
+                      onClick={() => selectCategory(null)}
                     >
-                      {category.name}
-                    </CategoryBtn>
-                  ))}
-                </>
-              )}
-            </Categories>
-            <BooksContainer>
-              {isLoading || !books.length
-                ? Array.from({ length: 9 }).map((_, index) => (
-                    <SkeletonPopularBook key={index} />
-                  ))
-                : filteredBooks?.map((book) => (
-                    <ExploreCard
-                      key={book.id}
-                      book={book}
-                      onClick={() => {
-                        setSelectedBook(book)
-                        setOpenLateralMenu(true)
-                      }}
-                    />
-                  ))}
-            </BooksContainer>
-          </ExploreContent>
-        </ExploreContainer>
-      </Container>
+                      All
+                    </SelectCategoryButton>
+                    {categories.map((category) => (
+                      <SelectCategoryButton
+                        selected={
+                          !isLoading && categorySelected === category.id
+                        }
+                        key={category.id}
+                        onClick={() => selectCategory(category.id)}
+                        className={isLoading ? 'loading' : ''}
+                      >
+                        {category.name}
+                      </SelectCategoryButton>
+                    ))}
+                  </>
+                )}
+              </Categories>
+              <BooksContainer>
+                {isLoading || !books.length
+                  ? Array.from({ length: 9 }).map((_, index) => (
+                      <SkeletonPopularBook key={index} />
+                    ))
+                  : filteredBooks?.map((book) => (
+                      <ExploreCard
+                        key={book.id}
+                        book={book}
+                        onClick={() => {
+                          setSelectedBook(book)
+                          setOpenLateralMenu(true)
+                        }}
+                      />
+                    ))}
+              </BooksContainer>
+            </ExplorePageContent>
+          </ExplorePageContainer>
+        </ExplorePageWrapper>
+      )}
     </>
   )
 }

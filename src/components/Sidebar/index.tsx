@@ -21,10 +21,10 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { SignInModal } from '../SignInModal'
 import { toast } from 'react-toastify'
 import { useState, useCallback, ComponentType } from 'react'
-import { CircularProgress } from '@mui/material'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { Avatar } from '../Avatar'
 import { useAppContext } from '@/contexts/AppContext'
+import { SkeletonUserSidebar } from '../SkeletonUserSidebar'
 
 interface NavigationItemProps {
   active: boolean
@@ -106,7 +106,7 @@ export function Sidebar() {
           {loggedUser && session?.user.id ? (
             <ProfileContainer>
               {isLoading ? (
-                <CircularProgress size="1.5rem" />
+                <SkeletonUserSidebar />
               ) : (
                 <Avatar
                   isClickable

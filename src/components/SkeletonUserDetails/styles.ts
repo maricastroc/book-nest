@@ -27,3 +27,11 @@ export const Main = styled('div', {
   gap: '3rem',
   width: '100%',
 })
+
+export const MainItem = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '1rem',
+  width: '100%',
+})
