@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { MobileHeader } from '@/components/MobileHeader'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import {
   HomePageWrapper,
   HomePageHeading,
@@ -15,23 +15,23 @@ import {
   PopularBooksContent,
   PopularBooksTitle,
 } from './styles'
-import { RatingCard } from '@/components/RatingCard'
+import { RatingCard } from '@/components/cards/RatingCard'
 import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
-import { PopularBookCard } from '@/components/PopularBookCard'
-import { EmptyContainer } from '@/components/EmptyContainer'
+import { PopularBookCard } from '@/components/cards/PopularBookCard'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
-import { Sidebar } from '@/components/Sidebar'
-import { LateralMenu } from '@/components/LateralMenu'
+import { Sidebar } from '@/components/shared/Sidebar'
+import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
-import { UserLatestReadingCard } from '@/components/UserLatestReadingCard'
-import { SkeletonPopularBook } from '@/components/SkeletonPopularBook'
-import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
+import { UserLatestReadingCard } from '@/components/cards/UserLatestReadingCard'
+import { SkeletonPopularBook } from '@/components/skeletons/SkeletonPopularBook'
+import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { RatingProps } from '@/@types/rating'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/LoadingPage'
+import { LoadingPage } from '@/components/shared/LoadingPage'
 import useRequest from '@/utils/useRequest'
 import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'

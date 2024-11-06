@@ -11,9 +11,9 @@ import {
 import Image from 'next/image'
 import CoverImage from '../../../public/assets/cover.png'
 import Logo from '../../../public/assets/logo.svg'
-import SignInForm from '@/components/SignInForm'
+import SignInForm from '@/components/shared/SignInForm'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/LoadingPage'
+import { LoadingPage } from '@/components/shared/LoadingPage'
 
 export default function Login() {
   const isRouteLoading = useLoadingOnRouteChange()

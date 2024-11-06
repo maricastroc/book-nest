@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { MobileHeader } from '@/components/MobileHeader'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
-import { Sidebar } from '@/components/Sidebar'
+import { Sidebar } from '@/components/shared/Sidebar'
 import {
   UserRatings,
   UserRatingsContainer,
@@ -17,15 +17,15 @@ import {
   UserRatingsTitle,
 } from './styles'
 import { MagnifyingGlass, User, X } from 'phosphor-react'
-import { ProfileCard } from '@/components/ProfileCard'
-import { EmptyContainer } from '@/components/EmptyContainer'
+import { ProfileCard } from '@/components/cards/ProfileCard'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { UserDetails } from '@/components/UserDetails'
 import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { useRouter } from 'next/router'
-import { SkeletonRatingCard } from '@/components/SkeletonRatingCard'
+import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/LoadingPage'
+import { LoadingPage } from '@/components/shared/LoadingPage'
 import useRequest from '@/utils/useRequest'
 import { UserStatistics } from '@/contexts/AppContext'
 import { api } from '@/lib/axios'
