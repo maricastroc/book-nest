@@ -27,6 +27,7 @@ import { LoadingPage } from '@/components/LoadingPage'
 import { CreateReviewData, EditReviewData } from '../home/index.page'
 import { toast } from 'react-toastify'
 import useRequest from '@/utils/useRequest'
+import { handleApiError } from '@/utils/handleApiError'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -78,8 +79,7 @@ export default function Explore() {
 
       toast.success('Rating successfully deleted!')
     } catch (error) {
-      toast.error('Error deleting rating.')
-      console.error(error)
+      handleApiError(error)
     }
   }
 
@@ -97,8 +97,7 @@ export default function Explore() {
 
       toast.success('Rating successfully edited!')
     } catch (error) {
-      toast.error('Error editing rating.')
-      console.error(error)
+      handleApiError(error)
     }
   }
 
@@ -117,8 +116,7 @@ export default function Explore() {
 
       toast.success('Rating successfully submitted!')
     } catch (error) {
-      toast.error('Error creating rating.')
-      console.error(error)
+      handleApiError(error)
     }
   }
 

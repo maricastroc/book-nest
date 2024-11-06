@@ -50,10 +50,7 @@ export function UserRatingBox({
     <RatingCardForm
       isEdit
       rating={rating}
-      avatarUrl={rating.user.avatarUrl ?? ''}
       bookId={rating.bookId}
-      name={rating.user.name}
-      userId={rating.user.id}
       onClose={onCloseUserRatingBox}
       handleEditReview={handleEditReview}
       handleCreateReview={handleCreateReview}
@@ -82,10 +79,7 @@ export function UserRatingBox({
         </UserRatingBoxHeader>
         {openEditReviewBox ? (
           <RatingCardForm
-            avatarUrl={rating.user.avatarUrl ?? ''}
             bookId={rating.bookId}
-            name={rating.user.name}
-            userId={rating.user.id}
             onClose={onCloseUserRatingBox}
             handleEditReview={handleEditReview}
             handleCreateReview={handleCreateReview}

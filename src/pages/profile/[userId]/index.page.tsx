@@ -30,6 +30,8 @@ import useRequest from '@/utils/useRequest'
 import { UserStatistics } from '@/contexts/AppContext'
 import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
+import { handleApiError } from '@/utils/handleApiError'
+import { EditReviewData } from '@/pages/home/index.page'
 
 export default function Profile() {
   const isRouteLoading = useLoadingOnRouteChange()
@@ -42,9 +44,7 @@ export default function Profile() {
 
   const [search, setSearch] = useState('')
 
-  const [allRatings, setAllRatings] = useState<RatingProps[]>([])
-
-  const [filteredRatings, setFilteredRatings] = useState<RatingProps[]>([])
+  const [userRatings, setUserRatings] = useState<RatingProps[]>([])
 
   const requestConfig = userId
     ? {
@@ -69,8 +69,25 @@ export default function Profile() {
 
       await mutate()
     } catch (error) {
-      toast.error('Error deleting rating.')
-      console.error(error)
+      handleApiError(error)
+    }
+  }
+
+  const handleEditReview = async (data: EditReviewData) => {
+    try {
+      const payload = {
+        id: data.ratingId,
+        description: data.description,
+        rate: data.rate,
+      }
+
+      await api.put('/ratings', payload)
+
+      toast.success('Rating successfully edited!')
+
+      await mutate()
+    } catch (error) {
+      handleApiError(error)
     }
   }
 
@@ -78,23 +95,9 @@ export default function Profile() {
 
   useEffect(() => {
     if (userStatistics) {
-      setAllRatings(userStatistics.ratings ?? [])
-      setFilteredRatings(userStatistics.ratings ?? [])
+      setUserRatings(userStatistics.ratings ?? [])
     }
   }, [userStatistics])
-
-  useEffect(() => {
-    if (search) {
-      const ratings = allRatings.filter(
-        (rating) =>
-          rating?.book?.name.toLowerCase().includes(search.toLowerCase()) ||
-          rating?.book?.author.toLowerCase().includes(search.toLowerCase()),
-      )
-      setFilteredRatings(ratings)
-    } else {
-      setFilteredRatings(allRatings)
-    }
-  }, [search, allRatings])
 
   return (
     <>
@@ -135,7 +138,7 @@ export default function Profile() {
                 )}
                 <UserRatings
                   className={
-                    isValidating || (filteredRatings?.length ?? 0) > 1
+                    isValidating || (userRatings?.length ?? 0) > 1
                       ? 'smaller'
                       : ''
                   }
@@ -144,16 +147,21 @@ export default function Profile() {
                     ? Array.from({ length: 4 }).map((_, index) => (
                         <SkeletonRatingCard key={index} />
                       ))
-                    : filteredRatings?.length > 0 &&
-                      filteredRatings.map((rating: RatingProps) => {
+                    : userRatings?.length > 0 &&
+                      userRatings.map((rating: RatingProps) => {
                         if (rating?.book) {
                           return (
                             <ProfileCard
                               key={rating.id}
                               book={rating.book}
                               rating={rating}
-                              onDeleteRating={async () => {
+                              handleDeleteReview={async () => {
                                 handleDeleteReview(rating.id)
+                              }}
+                              handleEditReview={async (
+                                data: EditReviewData,
+                              ) => {
+                                handleEditReview(data)
                               }}
                             />
                           )

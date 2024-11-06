@@ -24,17 +24,21 @@ import {
   BookTitleAndAuthor,
 } from './styles'
 import { ReadNotice, UserActions } from '@/styles/shared'
+import { RatingCardForm } from '../LateralMenu/components/RatingCardForm'
+import { EditReviewData } from '@/pages/home/index.page'
 
 interface ProfileCardProps {
   book: BookProps
   rating: RatingProps
-  onDeleteRating?: () => Promise<void>
+  handleDeleteReview?: () => void
+  handleEditReview?: (data: EditReviewData) => void
 }
 
 export function ProfileCard({
   book,
   rating,
-  onDeleteRating,
+  handleDeleteReview,
+  handleEditReview,
 }: ProfileCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
@@ -47,11 +51,11 @@ export function ProfileCard({
 
   const isLoggedUser = rating.userId === session?.user.id
 
-  const handleDeleteReview = async () => {
-    if (session?.user?.id && onDeleteRating) {
+  const onDeleteReview = async () => {
+    if (session?.user?.id && handleDeleteReview) {
       handleSetIsLoading(true)
 
-      onDeleteRating()
+      handleDeleteReview()
 
       handleSetIsLoading(false)
     }
@@ -69,7 +73,7 @@ export function ProfileCard({
               <Dialog.Trigger asChild>
                 <Trash className="delete_icon" />
               </Dialog.Trigger>
-              <DeleteModal onConfirm={() => handleDeleteReview()} />
+              <DeleteModal onConfirm={() => onDeleteReview()} />
             </Dialog.Root>
             <Pencil
               className="edit_icon"
@@ -93,13 +97,24 @@ export function ProfileCard({
                   <h2>{book.name}</h2>
                   <p>{book.author}</p>
                 </BookTitleAndAuthor>
-                <StarsRating rating={rating.rate} />
+                {!isEditRatingBoxOpen && <StarsRating rating={rating.rate} />}
               </BookInfoHeader>
             </BookInfoSection>
             <DividerLine />
-            <ReviewTextContainer>
-              <p>{rating.description}</p>
-            </ReviewTextContainer>
+            {isEditRatingBoxOpen ? (
+              <RatingCardForm
+                isProfileScreen
+                isEdit
+                rating={rating}
+                bookId={book.id}
+                onClose={() => setIsEditRatingBoxOpen(false)}
+                handleEditReview={handleEditReview}
+              />
+            ) : (
+              <ReviewTextContainer>
+                <p>{rating.description}</p>
+              </ReviewTextContainer>
+            )}
           </BookDetailsContent>
         </BookDetailsContainer>
       </ProfileCardBody>

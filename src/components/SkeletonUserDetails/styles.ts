@@ -13,6 +13,7 @@ export const Container = styled('div', {
 
 export const Header = styled('div', {
   display: 'flex',
+  flexDirection: 'column',
   width: '5rem',
   margin: '0 auto',
   gap: '1rem',

@@ -81,7 +81,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
 
   const [changePassword, setChangePassword] = useState(false)
 
-  const { loggedUser, isLoading, fetchUserStatistics } = useAppContext()
+  const { loggedUser, handleSetLoggedUser } = useAppContext()
 
   const { data: session } = useSession()
 
@@ -128,13 +128,17 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
       if (data.password) formData.append('password', data.password)
 
       try {
-        await api.put(`/user/edit/${session.user.id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
+        const response = await api.put(
+          `/user/edit/${session.user.id}`,
+          formData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          },
+        )
 
         toast.success('User successfully updated!')
 
-        await fetchUserStatistics(session.user.id.toString())
+        handleSetLoggedUser(response.data)
 
         onClose()
       } catch (error) {
@@ -169,9 +173,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
             <AvatarSectionContainer>
               <PreviewContainer>
                 <ImagePreview>
-                  {isLoading ? (
-                    <CircularProgress size="3rem" />
-                  ) : avatarPreview ? (
+                  {avatarPreview ? (
                     <img src={avatarPreview} alt="Avatar Preview" />
                   ) : (
                     <User />

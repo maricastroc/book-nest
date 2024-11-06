@@ -18,22 +18,21 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import 'react-toastify/dist/ReactToastify.css'
-import { REVIEW_MAX_LENGTH } from '@/utils/constants'
+import { AVATAR_URL_DEFAULT, REVIEW_MAX_LENGTH } from '@/utils/constants'
 import { FormErrors } from '@/components/shared/FormErrors'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/Avatar'
 import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface RatingCardFormProps {
+  isProfileScreen?: boolean
   isEdit?: boolean
   rating?: RatingProps | null
-  avatarUrl: string
-  name: string
   bookId: string
-  userId: string | number | undefined
   onClose: () => void
-  handleEditReview: (data: EditReviewData) => void
-  handleCreateReview: (data: CreateReviewData) => void
+  handleEditReview?: (data: EditReviewData) => void
+  handleCreateReview?: (data: CreateReviewData) => void
 }
 
 const ratingCardFormSchema = z.object({
@@ -49,13 +48,11 @@ const ratingCardFormSchema = z.object({
 type RatingCardFormData = z.infer<typeof ratingCardFormSchema>
 
 export function RatingCardForm({
-  avatarUrl,
-  name,
   bookId,
-  userId,
   onClose,
   handleEditReview,
   handleCreateReview,
+  isProfileScreen = false,
   isEdit = false,
   rating = null,
 }: RatingCardFormProps) {
@@ -73,6 +70,8 @@ export function RatingCardForm({
     },
   })
 
+  const { loggedUser } = useAppContext()
+
   const handleRating = (rate: number) => {
     setValue('rate', rate)
   }
@@ -80,13 +79,13 @@ export function RatingCardForm({
   const characterCount = watch('description')?.split('').length || 0
 
   async function submitReview() {
-    if (userId) {
+    if (loggedUser && handleCreateReview) {
       const data = watch()
 
       const payload = {
         rate: data.rate,
         description: data.description,
-        userId: userId.toString(),
+        userId: loggedUser.id.toString(),
         bookId: bookId.toString(),
       }
 
@@ -97,7 +96,7 @@ export function RatingCardForm({
   }
 
   async function editReview() {
-    if (rating) {
+    if (rating && handleEditReview) {
       const data = watch()
 
       const payload = {
@@ -113,57 +112,66 @@ export function RatingCardForm({
   }
 
   return (
-    <RatingCardFormWrapper
-      onSubmit={handleSubmit(isEdit ? editReview : submitReview)}
-    >
-      <RatingCardFormHeader>
-        <UserDetailsWrapper>
-          <Avatar isClickable={false} avatarUrl={avatarUrl} variant="medium" />
-          <p>{name}</p>
-        </UserDetailsWrapper>
-        <Rating
-          initialValue={rating?.rate}
-          onClick={handleRating}
-          emptyIcon={<Star size={20} />}
-          fillIcon={<Star weight="fill" size={20} />}
-          emptyColor="#8381D9"
-          fillColor="#8381D9"
-          {...register('rate')}
-        />
-      </RatingCardFormHeader>
-      <ReviewFormWrapper>
-        <ReviewForm
-          placeholder="Write your review here"
-          maxLength={REVIEW_MAX_LENGTH}
-          spellCheck={false}
-          {...register('description')}
-        />
-      </ReviewFormWrapper>
-      <FooterWrapper>
-        <CharacterCounterWrapper>
-          <CharacterCounter>
-            <span>{characterCount}</span>/{REVIEW_MAX_LENGTH}
-          </CharacterCounter>
-          {(errors.rate || errors.description) && (
-            <>
-              <FormErrors error={errors?.rate?.message} />
-              <FormErrors error={errors?.description?.message} />
-            </>
+    loggedUser && (
+      <RatingCardFormWrapper
+        className={isProfileScreen ? 'profile' : ''}
+        onSubmit={handleSubmit(isEdit ? editReview : submitReview)}
+      >
+        <RatingCardFormHeader>
+          {!isProfileScreen && (
+            <UserDetailsWrapper>
+              <Avatar
+                isClickable={false}
+                avatarUrl={loggedUser.avatarUrl ?? AVATAR_URL_DEFAULT}
+                variant="medium"
+              />
+              <p>{loggedUser.name}</p>
+            </UserDetailsWrapper>
           )}
-        </CharacterCounterWrapper>
-        <UserActionsWrapper>
-          <ActionButton
-            type="button"
-            disabled={isSubmitting}
-            onClick={() => onClose()}
-          >
-            <X color="#8381D9" />
-          </ActionButton>
-          <ActionButton type="submit" disabled={isSubmitting}>
-            <Check color="#50B2C0" />
-          </ActionButton>
-        </UserActionsWrapper>
-      </FooterWrapper>
-    </RatingCardFormWrapper>
+          <Rating
+            initialValue={rating?.rate}
+            onClick={handleRating}
+            emptyIcon={<Star size={20} />}
+            fillIcon={<Star weight="fill" size={20} />}
+            emptyColor="#8381D9"
+            fillColor="#8381D9"
+            {...register('rate')}
+          />
+        </RatingCardFormHeader>
+        <ReviewFormWrapper>
+          <ReviewForm
+            placeholder="Write your review here"
+            maxLength={REVIEW_MAX_LENGTH}
+            spellCheck={false}
+            {...register('description')}
+          />
+        </ReviewFormWrapper>
+        <FooterWrapper>
+          <CharacterCounterWrapper>
+            <CharacterCounter>
+              <span>{characterCount}</span>/{REVIEW_MAX_LENGTH}
+            </CharacterCounter>
+            {(errors.rate || errors.description) && (
+              <>
+                <FormErrors error={errors?.rate?.message} />
+                <FormErrors error={errors?.description?.message} />
+              </>
+            )}
+          </CharacterCounterWrapper>
+          <UserActionsWrapper>
+            <ActionButton
+              type="button"
+              disabled={isSubmitting}
+              onClick={() => onClose()}
+            >
+              <X color="#8381D9" />
+            </ActionButton>
+            <ActionButton type="submit" disabled={isSubmitting}>
+              <Check color="#50B2C0" />
+            </ActionButton>
+          </UserActionsWrapper>
+        </FooterWrapper>
+      </RatingCardFormWrapper>
+    )
   )
 }

@@ -108,24 +108,26 @@ export function Sidebar() {
               {isLoading ? (
                 <SkeletonUserSidebar />
               ) : (
-                <Avatar
-                  isClickable
-                  isLoading={isLoading}
-                  avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
-                  onClick={() => {
-                    const currentPath = router.asPath
-                    const targetPath = currentPath.includes('/profile/')
-                      ? `/profile/${session.user.id}`
-                      : `profile/${session.user.id}`
+                <>
+                  <Avatar
+                    isClickable
+                    isLoading={isLoading}
+                    avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
+                    onClick={() => {
+                      const currentPath = router.asPath
+                      const targetPath = currentPath.includes('/profile/')
+                        ? `/profile/${session.user.id}`
+                        : `profile/${session.user.id}`
 
-                    router.push(targetPath)
-                  }}
-                />
+                      router.push(targetPath)
+                    }}
+                  />
+                  <SignOutContainer onClick={handleLogout}>
+                    <p>{loggedUser.name.split(' ')[0]}</p>
+                    <SignOut />
+                  </SignOutContainer>
+                </>
               )}
-              <SignOutContainer onClick={handleLogout}>
-                <p>{loggedUser.name.split(' ')[0]}</p>
-                <SignOut />
-              </SignOutContainer>
             </ProfileContainer>
           ) : (
             <SignInContainer>

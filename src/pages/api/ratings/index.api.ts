@@ -1,6 +1,3 @@
-// === Retorna todas as avaliações ===
-// /api/ratings
-
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 
@@ -9,7 +6,23 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   if (req.method === 'GET') {
+    let searchQuery
+
+    if (req.query.search) {
+      searchQuery = String(req.query.search).toLowerCase()
+    }
+
     const ratings = await prisma.rating.findMany({
+      where: searchQuery
+        ? {
+            book: {
+              name: {
+                contains: searchQuery,
+                mode: 'insensitive',
+              },
+            },
+          }
+        : {},
       include: {
         book: {
           select: {

@@ -35,6 +35,7 @@ import { LoadingPage } from '@/components/LoadingPage'
 import useRequest from '@/utils/useRequest'
 import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
+import { handleApiError } from '@/utils/handleApiError'
 
 export interface EditReviewData {
   ratingId: string
@@ -101,8 +102,7 @@ export default function Home() {
       await mutateLatestRatings()
       await mutatePopularBooks()
     } catch (error) {
-      toast.error('Error deleting rating.')
-      console.error(error)
+      handleApiError(error)
     }
   }
 
@@ -122,8 +122,7 @@ export default function Home() {
       await mutateLatestRatings()
       await mutatePopularBooks()
     } catch (error) {
-      toast.error('Error editing rating.')
-      console.error(error)
+      handleApiError(error)
     }
   }
 
@@ -144,8 +143,7 @@ export default function Home() {
       await mutateLatestRatings()
       await mutatePopularBooks()
     } catch (error) {
-      toast.error('Error creating rating.')
-      console.error(error)
+      handleApiError(error)
     }
   }
 

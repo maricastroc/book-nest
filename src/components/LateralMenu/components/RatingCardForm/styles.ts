@@ -10,6 +10,10 @@ export const RatingCardFormWrapper = styled('form', {
   padding: '1.5rem',
   borderRadius: 8,
   width: '100%',
+
+  '&.profile': {
+    padding: 0,
+  },
 })
 
 export const RatingCardFormHeader = styled('div', {

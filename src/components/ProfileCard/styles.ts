@@ -25,13 +25,17 @@ export const ProfileCardHeader = styled('div', {
 export const ProfileCardBody = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '2rem',
+  padding: '1rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'flex-start',
   justifyContent: 'center',
   width: '100%',
   position: 'relative',
+
+  '@media (min-width: 480px)': {
+    padding: '2rem 1rem',
+  },
 })
 
 export const BookDetailsContainer = styled('div', {
