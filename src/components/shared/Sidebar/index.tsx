@@ -12,8 +12,8 @@ import {
   SignOutContainer,
 } from './styles'
 import Image from 'next/image'
-import SidebarBackground from '../../../public/assets/sidebar.svg'
-import Logo from '../../../public/assets/logo.svg'
+import SidebarBackground from '../../../../public/assets/sidebar.svg'
+import Logo from '../../../../public/assets/logo.svg'
 import { Binoculars, ChartLineUp, SignIn, SignOut } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
