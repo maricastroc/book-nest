@@ -6,7 +6,7 @@ import {
   UserRatingBoxContent,
   UserDetailsWrapper,
 } from './styles'
-import { StarsRating } from '@/components/StarsRating'
+import { StarsRating } from '@/components/shared/StarsRating'
 import { useSession } from 'next-auth/react'
 import { Trash, Pencil } from 'phosphor-react'
 import { DeleteModal } from '../../modals/DeleteModal'

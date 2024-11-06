@@ -24,7 +24,7 @@ import { useState, useCallback, ComponentType } from 'react'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { Avatar } from '../Avatar'
 import { useAppContext } from '@/contexts/AppContext'
-import { SkeletonUserSidebar } from '../../SkeletonUserSidebar'
+import { SkeletonUserSidebar } from '@/components/skeletons/SkeletonUserSidebar'
 
 interface NavigationItemProps {
   active: boolean

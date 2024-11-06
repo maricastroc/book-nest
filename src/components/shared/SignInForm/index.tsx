@@ -8,7 +8,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { z } from 'zod'
 import { signIn } from 'next-auth/react'
 
-import { SignUpModal } from '@/components/SignUpModal'
+import { SignUpModal } from '@/components/modals/SignUpModal'
 import { CustomLabel } from '@/components/shared/Label'
 import { InputContainer } from '@/components/shared/InputContainer'
 import { FormErrors } from '@/components/shared/FormErrors'
