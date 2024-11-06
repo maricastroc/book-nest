@@ -77,11 +77,8 @@ export function LateralMenu({
           </RatingsListHeader>
           {session.data?.user && isReviewFormOpen && book && (
             <RatingCardForm
-              avatarUrl={session.data?.user?.avatarUrl ?? AVATAR_URL_DEFAULT}
-              name={session.data?.user.name}
               onClose={() => setIsReviewFormOpen(false)}
               bookId={book.id}
-              userId={session.data?.user.id}
               handleEditReview={(data: EditReviewData) => {
                 handleEditReview(data)
                 onClose()
