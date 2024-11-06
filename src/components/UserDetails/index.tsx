@@ -14,9 +14,9 @@ import {
   UserStatsWrapper,
   UserStatItem,
 } from './styles'
-import { Avatar } from '../Avatar'
-import { EditProfileModal } from '../EditProfileModal'
-import { SkeletonUserDetails } from '../SkeletonUserDetails'
+import { Avatar } from '../shared/Avatar'
+import { EditProfileModal } from '../modals/EditProfileModal'
+import { SkeletonUserDetails } from '../skeletons/SkeletonUserDetails'
 import {
   BookOpen,
   BookmarkSimple,
