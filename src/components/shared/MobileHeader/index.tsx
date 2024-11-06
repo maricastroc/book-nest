@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { MobileHeaderBox, MobileHeaderContent, LinksContainer } from './styles'
-import Logo from '../../../public/assets/logo.svg'
+import Logo from '../../../../public/assets/logo.svg'
 import { List, X } from 'phosphor-react'
 import { useState } from 'react'
 import { MobileModal } from '../../modals/MobileModal'
