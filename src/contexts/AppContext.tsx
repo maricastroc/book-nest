@@ -1,7 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { RatingProps } from '@/@types/rating'
 import { UserProps } from '@/@types/user'
+import { api } from '@/lib/axios'
+import { handleApiError } from '@/utils/handleApiError'
+import { useSession } from 'next-auth/react'
 
 export interface UserStatistics {
   ratings: RatingProps[] | undefined
@@ -28,6 +31,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const session = useSession()
+
   const handleSetIsLoading = (value: boolean) => {
     setIsLoading(value)
   }
@@ -35,6 +40,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleSetLoggedUser = (value: UserProps) => {
     setLoggedUser(value)
   }
+
+  const fetchLoggedUser = async (): Promise<UserStatistics | undefined> => {
+    setIsLoading(true)
+
+    if (session?.data?.user) {
+      try {
+        const response = await api.get(`/profile/${session?.data?.user.id}`)
+
+        setLoggedUser(response.data.profile.user)
+
+        return response.data.profile
+      } catch (error) {
+        handleApiError(error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (session?.data?.user) {
+      fetchLoggedUser()
+    }
+  }, [session?.data?.user])
 
   return (
     <AppContext.Provider

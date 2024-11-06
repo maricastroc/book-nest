@@ -13,6 +13,7 @@ export const RatingCardFormWrapper = styled('form', {
 
   '&.profile': {
     padding: 0,
+    margin: '0.5rem auto 0',
   },
 })
 
