@@ -140,7 +140,6 @@ export const BookTitleAndAuthor = styled('div', {
 export const RatingContainer = styled('div', {
   display: 'flex',
   marginTop: '1rem',
-  maxHeight: '6.5rem',
   height: '100%',
   position: 'relative',
   overflow: 'scroll',
@@ -156,7 +155,6 @@ export const RatingContainer = styled('div', {
   '@media (min-width: 480px)': {
     marginTop: 0,
     minHeight: '6.3rem',
-    alignItems: 'flex-end',
   },
 })
 

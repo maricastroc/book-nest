@@ -34,7 +34,7 @@ export const ProfileCardBody = styled('div', {
   position: 'relative',
 
   '@media (min-width: 480px)': {
-    padding: '2rem 1rem',
+    padding: '2rem',
   },
 })
 

@@ -9,40 +9,57 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String          @id @default(uuid())
   name          String
   avatarUrl     String?
-  createdAt     DateTime  @default(now())
-  email         String?   @unique
+  createdAt     DateTime        @default(now())
+  email         String?         @unique
   emailVerified DateTime?
   password      String?
 
   accounts      Account[]
   sessions      Session[]
   ratings       Rating[]
-  books         Book[] // Adicionando o campo de relação
+  books         Book[]
+  readingStatus ReadingStatus[]
 
   @@map("users")
 }
 
 model Book {
-  id          String   @id @default(uuid())
+  id          String          @id @default(uuid())
   name        String
   author      String
-  summary     String   @db.Text
+  summary     String          @db.Text
   coverUrl    String
   publishingYear String?
   totalPages  Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime? @updatedAt
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime?       @updatedAt
   
   userId      String?
-  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  categories CategoriesOnBooks[]
-  ratings    Rating[]
+  categories  CategoriesOnBooks[]
+  ratings     Rating[]
+  readingStatus ReadingStatus[]
 
   @@map("books")
+}
+
+model ReadingStatus {
+  id        String   @id @default(uuid())
+  status    String
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  bookId    String
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bookId]) 
+  @@map("reading_status")
 }
 
 model Category {

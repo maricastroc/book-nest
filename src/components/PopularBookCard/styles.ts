@@ -26,6 +26,7 @@ export const BookContentWrapper = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
+  width: '100%',
 })
 
 export const BookTitleAndAuthor = styled('div', {
@@ -33,6 +34,7 @@ export const BookTitleAndAuthor = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
+  width: '100%',
 
   h2: {
     fontSize: '0.9rem',

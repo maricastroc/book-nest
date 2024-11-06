@@ -31,6 +31,11 @@ export const {
       gray700: '#181C2A',
       gray800: '#0E1116',
 
+      reading: '#5A7CB8',
+      dnf: '#A65E5E',
+      read: '#3C9A97',
+      wantread: '#9A8C4E',
+
       'gradient-vertical': `linear-gradient(180deg, #7FD1CC 0%, #9694F5 100%)`,
       'gradient-horizontal': `linear-gradient(90deg, #7FD1CC 0%, #9694F5 100%)`,
     },

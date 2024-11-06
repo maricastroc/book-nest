@@ -43,6 +43,7 @@ export const UserNameDateWrapper = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
+  marginBottom: '1.5rem',
   gap: '0.1rem',
 
   time: {
@@ -52,20 +53,5 @@ export const UserNameDateWrapper = styled('div', {
 
   p: {
     fontSize: '0.9rem',
-  },
-})
-
-export const RatingTextContainer = styled('div', {
-  maxHeight: '10rem',
-  marginTop: '1.5rem',
-  position: 'relative',
-  overflow: 'scroll',
-
-  p: {
-    color: '$gray300',
-    lineHeight: '160%',
-    fontSize: '$sm',
-    wordBreak: 'break-word',
-    paddingRight: '0.3rem',
   },
 })

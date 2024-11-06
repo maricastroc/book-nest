@@ -5,11 +5,6 @@ export const globalStyles = globalCss({
     margin: 0,
     padding: 0,
     boxSizing: 'border-box',
-
-    ':focus': {
-      outline: 'transparent',
-      boxShadow: '0 0 0 2px rgba(37, 45, 74, 1)',
-    },
   },
 
   body: {

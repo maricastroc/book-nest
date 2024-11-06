@@ -5,16 +5,26 @@ import {
   BookCover,
   BookTitleAndAuthor,
   BookDetailsWrapper,
-  BookSummary,
   BookStatsWrapper,
   StatWrapper,
   StatText,
   BookRatingInfo,
   DividerLine,
+  AddToLibraryButton,
+  BookRatingAndReviews,
+  BookOtherInfo,
+  AddToLibrarySection,
+  AddToLibraryDropdown,
+  ReadingStatusItem,
+  DividerDropdown,
 } from './styles'
 import { BookOpen, BookmarkSimple, CalendarBlank } from 'phosphor-react'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
+import { useState } from 'react'
+import { TextBox } from '@/components/shared/TextBox'
+import { faBookmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface BookCardProps {
   book: BookProps
@@ -23,6 +33,9 @@ interface BookCardProps {
 
 export function BookCard({ book, categories }: BookCardProps) {
   const categoryNames = categories.map((category) => category?.name)
+
+  const [isAddToLibraryDropdownOpen, setIsAddToLibraryDropdownOpen] =
+    useState(false)
 
   return (
     <BookCardWrapper>
@@ -33,19 +46,55 @@ export function BookCard({ book, categories }: BookCardProps) {
             <h2>{book.name}</h2>
             <p>{book.author}</p>
           </BookTitleAndAuthor>
-          <BookRatingInfo>
-            <StarsRating rating={book?.rate ?? 0} />
-            <p>
-              <span>{book?.ratings?.length ?? 0}</span> {''}
-              {book?.ratings?.length === 1 ? 'rating' : 'ratings'}
-            </p>
-          </BookRatingInfo>
+          <BookOtherInfo>
+            <BookRatingAndReviews>
+              <BookRatingInfo>
+                <StarsRating rating={book?.rate ?? 0} />
+                <p>{book?.rate?.toFixed(2)}</p>
+              </BookRatingInfo>
+              <p>
+                (<span>{book?.ratings?.length ?? 0}</span> {''}
+                {book?.ratings?.length === 1 ? 'rating' : 'ratings'})
+              </p>
+            </BookRatingAndReviews>
+            <AddToLibrarySection>
+              <AddToLibraryButton
+                onClick={() =>
+                  setIsAddToLibraryDropdownOpen(!isAddToLibraryDropdownOpen)
+                }
+              >
+                Add to Library
+              </AddToLibraryButton>
+              {isAddToLibraryDropdownOpen && (
+                <AddToLibraryDropdown>
+                  <ReadingStatusItem>
+                    Read
+                    <FontAwesomeIcon icon={faBookmark} className="read" />
+                  </ReadingStatusItem>
+                  <DividerDropdown />
+                  <ReadingStatusItem>
+                    Reading
+                    <FontAwesomeIcon icon={faBookmark} className="reading" />
+                  </ReadingStatusItem>
+                  <DividerDropdown />
+                  <ReadingStatusItem>
+                    Did not Finished
+                    <FontAwesomeIcon icon={faBookmark} className="dnf" />
+                  </ReadingStatusItem>
+                  <DividerDropdown />
+                  <ReadingStatusItem>
+                    Want to Read
+                    <FontAwesomeIcon icon={faBookmark} className="wantread" />
+                  </ReadingStatusItem>
+                  <DividerDropdown />
+                </AddToLibraryDropdown>
+              )}
+            </AddToLibrarySection>
+          </BookOtherInfo>
         </BookDetailsWrapper>
       </BookCardContent>
       <DividerLine />
-      <BookSummary>
-        <p>{book.summary}</p>
-      </BookSummary>
+      <TextBox maxHeight="5.6rem" description={book.summary} />
       <DividerLine />
       <BookStatsWrapper>
         <StatWrapper>

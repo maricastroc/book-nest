@@ -17,38 +17,40 @@ export const BookCardWrapper = styled('div', {
 
 export const BookCardContent = styled('div', {
   display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
   width: '100%',
   gap: '1.5rem',
 
   '@media (min-width: 580px)': {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
     gap: '2rem',
   },
 })
 
 export const BookCover = styled('img', {
-  width: 90,
+  width: 120,
   height: 'auto',
   borderRadius: 8,
-  boxShadow:
-    '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
   opacity: 0.9,
 
   '@media (min-width: 480px)': {
-    width: 105,
+    width: 135,
   },
 
   '@media (min-width: 580px)': {
-    width: 120,
+    width: 140,
   },
 })
 
 export const BookDetailsWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-start',
+  alignItems: 'center',
   justifyContent: 'space-between',
   height: '100%',
   width: '100%',
@@ -66,11 +68,11 @@ export const BookDetailsWrapper = styled('div', {
 export const BookTitleAndAuthor = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-start',
-  textAlign: 'left',
+  alignItems: 'center',
+  textAlign: 'center',
 
   h2: {
-    fontSize: '0.95rem',
+    fontSize: '1.15rem',
     maxHeight: '4.5rem',
     whiteSpace: 'break-spaces',
     overflow: 'scroll',
@@ -79,17 +81,7 @@ export const BookTitleAndAuthor = styled('div', {
 
   p: {
     color: '$gray300',
-    fontSize: '0.8rem',
-  },
-
-  '@media (min-width: 480px)': {
-    h2: {
-      fontSize: '1rem',
-    },
-
-    p: {
-      fontSize: '0.9rem',
-    },
+    fontSize: '0.95rem',
   },
 
   '@media (min-width: 580px)': {
@@ -108,41 +100,43 @@ export const BookTitleAndAuthor = styled('div', {
   },
 })
 
-export const BookRatingInfo = styled('div', {
+export const BookOtherInfo = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: '0.3rem',
+  gap: '1rem',
   width: '100%',
+})
+
+export const BookRatingInfo = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
 
   p: {
-    color: '$gray200',
+    color: '$gray100',
+    fontSize: '0.95rem',
+    fontWeight: 700,
+  },
+})
+
+export const BookRatingAndReviews = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.6rem',
+
+  p: {
+    color: '$gray300',
     fontSize: '0.85rem',
   },
 
   '@media (min-width: 580px)': {
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
 
     p: {
       fontSize: '0.9rem',
     },
-  },
-})
-
-export const BookSummary = styled('div', {
-  maxHeight: '6.5rem',
-  position: 'relative',
-  overflow: 'scroll',
-  display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'flex-start',
-
-  p: {
-    color: '$gray300',
-    lineHeight: '1.4rem',
-    fontSize: '0.875rem',
-    wordBreak: 'break-word',
-    paddingRight: '0.3rem',
   },
 })
 
@@ -220,4 +214,87 @@ export const DividerLine = styled('span', {
   height: 0.5,
   backgroundColor: '$gray600',
   margin: '1rem 0',
+})
+
+export const AddToLibrarySection = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  paddingTop: '1.5rem',
+  width: '100%',
+  gap: '0.5rem',
+})
+
+export const AddToLibraryButton = styled('button', {
+  color: '$green100',
+  width: '100%',
+  textAlign: 'center',
+  padding: '0.5rem',
+  cursor: 'pointer',
+  backgroundColor: 'transparent',
+  border: '1px solid $green100',
+  fontSize: '0.9rem',
+
+  '&:hover': {
+    backgroundColor: '$green200',
+    transition: 'all 200ms',
+    border: '1px solid $green200',
+    color: '$gray100',
+  },
+
+  '&:selected': {
+    backgroundColor: '$green200',
+    transition: 'all 200ms',
+    border: '1px solid $green200',
+    color: '$gray100',
+  },
+})
+
+export const AddToLibraryDropdown = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  backgroundColor: '$gray600',
+  border: '1px solid $gray500',
+  width: '100%',
+  zIndex: 999,
+})
+
+export const ReadingStatusItem = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  fontSize: '0.9rem',
+  color: '$gray100',
+  width: '100%',
+  border: 'transparent',
+  backgroundColor: 'transparent',
+  height: '2.6rem',
+  justifyContent: 'space-between',
+  padding: '0 1.5rem',
+
+  svg: {
+    '&.read': {
+      color: '$read',
+    },
+
+    '&.wantread': {
+      color: '$wantread',
+    },
+
+    '&.reading': {
+      color: '$reading',
+    },
+
+    '&.dnf': {
+      color: '$dnf',
+    },
+  },
+})
+
+export const DividerDropdown = styled('span', {
+  width: '100%',
+  height: 0.2,
+  backgroundColor: '$gray500',
+  margin: 0,
+  padding: 0,
 })

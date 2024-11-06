@@ -41,3 +41,22 @@ export const UserActions = styled('div', {
     },
   },
 })
+
+export const ReadingStatusButton = styled('button', {
+  backgroundColor: '$gray800',
+  width: '1.5rem',
+  height: '1.5rem',
+  color: '$gray800',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '0.7rem',
+  borderRadius: '50%',
+  border: '2px solid $green100',
+
+  svg: {
+    color: '$green100',
+    width: '0.7rem',
+    height: '0.7rem',
+  },
+})

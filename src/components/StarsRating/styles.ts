@@ -10,8 +10,4 @@ export const Rating = styled('div', {
     fontSize: '$md',
     color: '$purple100',
   },
-
-  '@media (min-width: 580px)': {
-    marginTop: '0.2rem',
-  },
 })

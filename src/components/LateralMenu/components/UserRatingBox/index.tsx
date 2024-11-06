@@ -1,6 +1,5 @@
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import {
-  RatingTextContainer,
   UserRatingBoxHeader,
   UserNameDateWrapper,
   UserRatingBoxWrapper,
@@ -21,6 +20,7 @@ import { RatingCardForm } from '../RatingCardForm'
 import { Avatar } from '@/components/Avatar'
 import { UserActions } from '@/styles/shared'
 import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
+import { TextBox } from '@/components/shared/TextBox'
 
 interface UserRatingBoxProps {
   rating: RatingProps
@@ -85,9 +85,7 @@ export function UserRatingBox({
             handleCreateReview={handleCreateReview}
           />
         ) : (
-          <RatingTextContainer>
-            <p>{rating.description}</p>
-          </RatingTextContainer>
+          <TextBox description={rating.description} />
         )}
       </UserRatingBoxContent>
       {rating.userId === session.data?.user.id && (

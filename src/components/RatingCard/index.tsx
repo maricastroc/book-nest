@@ -3,7 +3,6 @@ import {
   BookContentWrapper,
   BookCover,
   BookSummaryWrapper,
-  RatingContainer,
   BookTitleAndAuthor,
   RatingCardBox,
   RatingCardHeader,
@@ -20,6 +19,7 @@ import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { ReadNotice } from '@/styles/shared'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+import { TextBox } from '../shared/TextBox'
 
 interface RatingCardProps {
   rating: RatingProps
@@ -79,9 +79,7 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
               {isMobile ? (
                 <StarsRating rating={rating.rate} />
               ) : (
-                <RatingContainer>
-                  <p>{rating.description}</p>
-                </RatingContainer>
+                <TextBox maxHeight="5.8rem" description={rating.description} />
               )}
             </BookSummaryWrapper>
           </BookDetailsContainer>
@@ -89,9 +87,7 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
           {isMobile && (
             <>
               <DividerLine />
-              <RatingContainer>
-                <p>{rating.description}</p>
-              </RatingContainer>
+              <TextBox maxHeight="5.8rem" description={rating.description} />
             </>
           )}
         </BookContentWrapper>
