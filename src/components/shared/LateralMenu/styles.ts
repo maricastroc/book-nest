@@ -1,5 +1,5 @@
 import { keyframes } from '@stitches/react'
-import { styled } from '../../styles'
+import { styled } from '@/styles'
 
 const entranceAnimation = keyframes({
   from: {

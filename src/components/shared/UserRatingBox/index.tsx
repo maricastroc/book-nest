@@ -9,7 +9,7 @@ import {
 import { StarsRating } from '@/components/StarsRating'
 import { useSession } from 'next-auth/react'
 import { Trash, Pencil } from 'phosphor-react'
-import { DeleteModal } from '../LateralMenu/components/DeleteModal'
+import { DeleteModal } from '../../modals/DeleteModal'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
 

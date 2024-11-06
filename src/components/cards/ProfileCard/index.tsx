@@ -4,7 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Pencil, Trash } from 'phosphor-react'
 
 import { StarsRating } from '@/components/shared/StarsRating'
-import { DeleteModal } from '@/components/shared/LateralMenu/components/DeleteModal'
+import { DeleteModal } from '@/components/modals/DeleteModal'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
 import { RatingProps } from '@/@types/rating'

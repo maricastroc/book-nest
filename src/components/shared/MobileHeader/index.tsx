@@ -3,7 +3,7 @@ import { MobileHeaderBox, MobileHeaderContent, LinksContainer } from './styles'
 import Logo from '../../../public/assets/logo.svg'
 import { List, X } from 'phosphor-react'
 import { useState } from 'react'
-import { MobileModal } from '../MobileModal'
+import { MobileModal } from '../../modals/MobileModal'
 
 export function MobileHeader() {
   const [openModal, setOpenModal] = useState(false)
