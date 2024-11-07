@@ -24,6 +24,7 @@ import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
 import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { useAppContext } from '@/contexts/AppContext'
+import { useSession } from 'next-auth/react'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean
@@ -36,9 +37,7 @@ interface RatingCardFormProps {
 }
 
 const ratingCardFormSchema = z.object({
-  description: z
-    .string()
-    .min(3, { message: 'Please, write your review before submit.' }),
+  description: z.string().nullable(),
   rate: z
     .number()
     .positive({ message: 'Please choose a rating from 1 to 5.' })
@@ -70,6 +69,8 @@ export function RatingCardForm({
     },
   })
 
+  const session = useSession()
+
   const { loggedUser } = useAppContext()
 
   const handleRating = (rate: number) => {
@@ -79,13 +80,13 @@ export function RatingCardForm({
   const characterCount = watch('description')?.split('').length || 0
 
   async function submitReview() {
-    if (loggedUser && handleCreateReview) {
+    if (session.data?.user && handleCreateReview) {
       const data = watch()
 
       const payload = {
         rate: data.rate,
-        description: data.description,
-        userId: loggedUser.id.toString(),
+        description: data?.description || '',
+        userId: session.data.user.id.toString(),
         bookId: bookId.toString(),
       }
 
@@ -101,7 +102,7 @@ export function RatingCardForm({
 
       const payload = {
         rate: data.rate,
-        description: data.description,
+        description: data?.description || '',
         ratingId: rating.id,
       }
 

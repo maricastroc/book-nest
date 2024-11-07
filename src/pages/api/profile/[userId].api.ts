@@ -42,7 +42,7 @@ export default async function handler(
                 },
               ],
             }
-          : {}, // Se searchQuery estiver vazio, não aplica filtro
+          : {},
         include: {
           book: {
             include: {
@@ -86,6 +86,7 @@ export default async function handler(
 
   const profileData = {
     user: {
+      id: profile.id,
       avatarUrl: profile.avatarUrl,
       name: profile.name,
       email: profile.email,

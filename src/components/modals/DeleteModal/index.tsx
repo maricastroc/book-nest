@@ -1,13 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import {
-  Overlay,
-  Description,
-  Title,
-  Content,
-  CloseButton,
-  ConfirmButton,
-} from './styles'
+import { Title, Content, CloseButton } from './styles'
 import { X } from 'phosphor-react'
+import { Overlay, Description } from '@/styles/shared'
+import { CustomButton } from '@/components/shared/Button'
 
 interface DeleteModalProps {
   onConfirm: () => void
@@ -26,9 +21,12 @@ export function DeleteModal({ onConfirm }: DeleteModalProps) {
           Are you sure you want to delete this review? This action cannot be
           reversed.
         </Description>
-        <ConfirmButton onClick={() => onConfirm()}>
-          Confirm & Delete
-        </ConfirmButton>
+        <CustomButton
+          hasRoundedBorder={false}
+          style={{ marginTop: '2rem' }}
+          content="Confirm & Delete"
+          onClick={() => onConfirm()}
+        />
       </Content>
     </Dialog.Portal>
   )

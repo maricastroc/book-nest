@@ -239,7 +239,7 @@ export const StyledToastContainer = styled(ToastContainer, {
     backgroundColor: '$gray700',
     color: '$gray200',
     borderRadius: 4,
-    fontFamily: 'Nunito, sans-serif',
+    fontFamily: 'Nunito sans, sans-serif',
     fontSize: '0.95rem',
   },
 

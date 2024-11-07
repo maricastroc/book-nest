@@ -1,5 +1,10 @@
 import { styled } from '@/styles'
 
+import {
+  Overlay as RadixOverlay,
+  Description as RadixDescription,
+} from '@radix-ui/react-dialog'
+
 export const ReadNotice = styled('div', {
   display: 'flex',
   position: 'absolute',
@@ -59,4 +64,22 @@ export const ReadingStatusButton = styled('button', {
     width: '0.7rem',
     height: '0.7rem',
   },
+})
+
+export const Overlay = styled(RadixOverlay, {
+  position: 'fixed',
+  width: '100vw',
+  height: '100vh',
+  inset: 0,
+  zIndex: 9998,
+  backgroundColor: 'rgba(10, 10, 10, 0.7)',
+})
+
+export const Description = styled(RadixDescription, {
+  fontSize: '0.9rem',
+  width: '100%',
+  marginTop: '1rem',
+  textAlign: 'left',
+  color: '$gray300',
+  lineHeight: '180%',
 })

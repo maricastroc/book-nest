@@ -1,33 +1,42 @@
 import { styled } from '@/styles'
 
 export const StyledButton = styled('button', {
-  backgroundColor: '$gray600',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   gap: '0.7rem',
   cursor: 'pointer',
-  color: '$gray100',
+  color: '$purple50',
+  backgroundColor: 'transparent',
   padding: '0.6rem',
   fontSize: '0.95rem',
-  borderRadius: 10,
-  border: 'none',
+  border: '1px solid $purple100',
   width: '100%',
 
   svg: {
-    color: '$purple100',
+    color: '$purple50',
+  },
+
+  '&.rounded': {
+    borderRadius: 8,
   },
 
   '&:hover': {
-    backgroundColor: '$gray500',
-    transition: '200ms',
+    backgroundColor: '$purple200',
+    borderColor: '$purple200',
+    transition: '250ms all',
+    color: '$gray100',
+
+    svg: {
+      color: '$gray100',
+    },
   },
 
-  '&.disabled': {
-    backgroundColor: '$gray500',
-    color: '$gray300',
+  '&:disabled': {
+    backgroundColor: 'rgba(131, 129, 217, 0.5)',
+    border: 'solid 1px rgba(131, 129, 217, 0.5)',
+    color: '$gray100',
     cursor: 'not-allowed',
-    opacity: 0.7,
     pointerEvents: 'none',
 
     '&:hover': {

@@ -7,8 +7,6 @@ import { toast } from 'react-toastify'
 import { useRef, useState } from 'react'
 
 import {
-  Overlay,
-  Description,
   Title,
   Content,
   CloseButton,
@@ -27,6 +25,7 @@ import { InputContainer } from '@/components/shared/InputContainer'
 import { CustomButton } from '@/components/shared/Button'
 import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
+import { Overlay, Description } from '@/styles/shared'
 
 interface SignUpModalProps {
   onClose: () => void

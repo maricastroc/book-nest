@@ -16,7 +16,6 @@ import {
   PopularBooksTitle,
 } from './styles'
 import { RatingCard } from '@/components/cards/RatingCard'
-import { useSession } from 'next-auth/react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { PopularBookCard } from '@/components/cards/PopularBookCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
@@ -36,6 +35,7 @@ import useRequest from '@/utils/useRequest'
 import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
 import { handleApiError } from '@/utils/handleApiError'
+import { useAppContext } from '@/contexts/AppContext'
 
 export interface EditReviewData {
   ratingId: string
@@ -46,18 +46,18 @@ export interface EditReviewData {
 export interface CreateReviewData {
   userId: string
   bookId: string
-  description: string
+  description?: string
   rate: number
 }
 
 export default function Home() {
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const session = useSession()
-
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
+
+  const { loggedUser } = useAppContext()
 
   const {
     data: popularBooks,
@@ -81,7 +81,7 @@ export default function Home() {
     useRequest<RatingProps | null>({
       url: '/ratings/user_latest',
       method: 'GET',
-      params: { userId: session.data?.user?.id },
+      params: { userId: loggedUser?.id },
     })
 
   const isMobile = useScreenSize(768)
@@ -147,15 +147,35 @@ export default function Home() {
     }
   }
 
+  const handleSelectReadingStatus = async (book: BookProps, status: string) => {
+    if (loggedUser && book) {
+      try {
+        const payload = {
+          userId: loggedUser?.id,
+          bookId: book.id,
+          status,
+        }
+
+        await api.post('/reading_status', payload)
+
+        await mutateUserLatestRating()
+        await mutateLatestRatings()
+        await mutatePopularBooks()
+      } catch (error) {
+        handleApiError(error)
+      }
+    }
+  }
+
   useEffect(() => {
     const loadUserLatestRating = async () => {
-      if (!session.data?.user) return
+      if (!loggedUser) return
 
       mutateUserLatestRating()
     }
 
     loadUserLatestRating()
-  }, [session.data?.user])
+  }, [loggedUser])
 
   const isLoading = isValidatingPopularBooks || isValidatingLatestRatings
 
@@ -171,6 +191,7 @@ export default function Home() {
               handleDeleteReview={handleDeleteReview}
               handleCreateReview={handleCreateReview}
               handleEditReview={handleEditReview}
+              handleSelectReadingStatus={handleSelectReadingStatus}
               book={selectedBook}
               onClose={handleCloseLateralMenu}
             />
@@ -183,7 +204,7 @@ export default function Home() {
             </HomePageHeading>
             <HomePageContent>
               <LastRatingsWrapper>
-                {session.data?.user && (
+                {loggedUser && (
                   <>
                     <UserLatestReadingTitle>
                       Your last reading

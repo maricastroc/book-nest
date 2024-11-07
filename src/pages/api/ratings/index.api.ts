@@ -72,7 +72,7 @@ export default async function handler(
   } else if (req.method === 'PUT') {
     const { id, description, rate } = req.body
 
-    if (!id || description === undefined || rate === undefined) {
+    if (!id || rate === undefined) {
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
@@ -102,10 +102,8 @@ export default async function handler(
   } else if (req.method === 'POST') {
     const { bookId, userId, description, rate } = req.body.data
 
-    if (!description || !rate) {
-      return res
-        .status(400)
-        .json({ message: 'Rating and description are required.' })
+    if (!rate) {
+      return res.status(400).json({ message: 'Rating is required.' })
     }
 
     const newRating = await prisma.rating.create({

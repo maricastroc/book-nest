@@ -169,8 +169,8 @@ export const SelectCategoryButton = styled('button', {
 
   '&:hover': {
     transition: '200ms',
-    border: 'solid 1px $purple200',
-    backgroundColor: '$purple200',
+    border: 'solid 1px $purple300',
+    backgroundColor: '$purple300',
     color: '$white',
   },
 
@@ -189,8 +189,8 @@ export const SelectCategoryButton = styled('button', {
   variants: {
     selected: {
       true: {
-        border: 'solid 1px $purple200',
-        backgroundColor: '$purple200',
+        border: 'solid 1px $purple300',
+        backgroundColor: '$purple300',
         color: '$white',
       },
     },

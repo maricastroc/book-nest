@@ -1,21 +1,10 @@
 import { styled } from '@/styles'
 
 import {
-  Overlay as RadixOverlay,
   Content as RadixContent,
   Title as RadixTitle,
-  Description as RadixDescription,
   Close as RadixClose,
 } from '@radix-ui/react-dialog'
-
-export const Overlay = styled(RadixOverlay, {
-  position: 'fixed',
-  width: '100vw',
-  height: '100vh',
-  inset: 0,
-  zIndex: 9998,
-  backgroundColor: 'rgba(10, 10, 10, 0.7)',
-})
 
 export const Content = styled(RadixContent, {
   padding: '2rem',
@@ -37,15 +26,6 @@ export const Title = styled(RadixTitle, {
   color: '$gray100',
   fontSize: '1.35rem',
   textAlign: 'left',
-})
-
-export const Description = styled(RadixDescription, {
-  fontSize: '0.9rem',
-  width: '100%',
-  marginTop: '1rem',
-  textAlign: 'left',
-  color: '$gray300',
-  lineHeight: '180%',
 })
 
 export const CloseButton = styled(RadixClose, {
@@ -74,24 +54,5 @@ export const CloseButton = styled(RadixClose, {
 
   '&:focus': {
     boxShadow: '0 0 0 2px $purple100',
-  },
-})
-
-export const ConfirmButton = styled(RadixClose, {
-  marginTop: '2rem',
-  color: '$purple100',
-  width: '100%',
-  textAlign: 'center',
-  padding: '0.625rem',
-  cursor: 'pointer',
-  backgroundColor: 'transparent',
-  border: '2px solid $purple100',
-  borderRadius: 8,
-
-  '&:hover': {
-    backgroundColor: '$purple100',
-    transition: 'all 200ms',
-    border: '2px solid $purple100',
-    color: '$gray100',
   },
 })

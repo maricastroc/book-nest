@@ -5,6 +5,11 @@ export const globalStyles = globalCss({
     margin: 0,
     padding: 0,
     boxSizing: 'border-box',
+
+    '&:focus': {
+      border: '1px solid $purple100',
+      outlineColor: '$purple100',
+    },
   },
 
   body: {
@@ -14,6 +19,16 @@ export const globalStyles = globalCss({
     minHeight: '100vh',
     maxWidth: '100vw',
     overflowX: 'hidden',
+
+    input: {
+      '&:focus': {
+        backgroundColor: 'transparent',
+        border: 'solid 1px $purple100',
+        outline: 'none',
+        boxShadow: 'none',
+        outlineColor: '$purple100',
+      },
+    },
 
     '*::-webkit-scrollbar': {
       width: 2,

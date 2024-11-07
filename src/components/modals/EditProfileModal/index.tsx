@@ -7,8 +7,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useEffect, useRef, useState } from 'react'
 import {
-  Overlay,
-  Description,
   Title,
   Content,
   StyledCheckbox,
@@ -34,6 +32,7 @@ import { useSession } from 'next-auth/react'
 import { api } from '@/lib/axios'
 import { CircularProgress } from '@mui/material'
 import { useAppContext } from '@/contexts/AppContext'
+import { Description, Overlay } from '@/styles/shared'
 
 interface EditProfileModalProps {
   onClose: () => void
@@ -228,29 +227,41 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                 <StyledIndicator className="CheckboxIndicator">
                   <FontAwesomeIcon icon={faCheck} />
                 </StyledIndicator>
-                <CustomLabel htmlFor="c1">Change password</CustomLabel>
               </StyledCheckbox>
+              <CustomLabel htmlFor="c1">Change password?</CustomLabel>
             </ChangePasswordInputContainer>
 
             {changePassword && (
               <>
                 <InputContainer>
                   <CustomLabel>Old password</CustomLabel>
-                  <Input type="password" {...register('oldPassword')} />
+                  <Input
+                    placeholder="Old password"
+                    type="password"
+                    {...register('oldPassword')}
+                  />
                   {errors.oldPassword && (
                     <FormErrors error={errors.oldPassword.message} />
                   )}
                 </InputContainer>
                 <InputContainer>
                   <CustomLabel>New password</CustomLabel>
-                  <Input type="password" {...register('password')} />
+                  <Input
+                    placeholder="New password"
+                    type="password"
+                    {...register('password')}
+                  />
                   {errors.password && (
                     <FormErrors error={errors.password.message} />
                   )}
                 </InputContainer>
                 <InputContainer>
                   <CustomLabel>Confirm password</CustomLabel>
-                  <Input type="password" {...register('passwordConfirm')} />
+                  <Input
+                    placeholder="Confirm new password"
+                    type="password"
+                    {...register('passwordConfirm')}
+                  />
                   {errors.passwordConfirm && (
                     <FormErrors error={errors.passwordConfirm.message} />
                   )}

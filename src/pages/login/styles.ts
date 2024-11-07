@@ -10,6 +10,7 @@ export const SignInPageWrapper = styled('div', {
   maxWidth: 'clamp(80rem, 85%, 40rem)',
   height: '100vh',
   zIndex: '0',
+  overflow: 'scroll',
 
   '@media (min-width: 980px)': {
     display: 'grid',

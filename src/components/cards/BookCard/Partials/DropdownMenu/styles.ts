@@ -1,0 +1,47 @@
+import { styled } from '@/styles'
+
+export const AddToLibraryDropdown = styled('div', {
+  position: 'absolute',
+  top: '3.2rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  backgroundColor: '$gray700',
+  border: '2px solid $gray700',
+  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
+  width: '100%',
+  zIndex: 999,
+})
+
+export const ReadingStatusItem = styled('button', {
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  fontSize: '0.9rem',
+  color: '$gray100',
+  width: '100%',
+  border: 'transparent',
+  backgroundColor: 'transparent',
+  height: '2.7rem',
+  justifyContent: 'center',
+  padding: '0 1.5rem',
+
+  '&.selected': {
+    color: '$green100',
+  },
+
+  '&:hover': {
+    color: '$green100',
+    transition: 'all 200ms',
+  },
+})
+
+export const DividerDropdown = styled('span', {
+  width: '100%',
+  height: 0.2,
+
+  margin: 0,
+  padding: 0,
+  opacity: 0.7,
+})

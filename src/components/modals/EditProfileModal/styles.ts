@@ -1,10 +1,8 @@
 import { styled } from '@/styles'
 
 import {
-  Overlay as RadixOverlay,
   Content as RadixContent,
   Title as RadixTitle,
-  Description as RadixDescription,
   Close as RadixClose,
 } from '@radix-ui/react-dialog'
 
@@ -19,7 +17,7 @@ export const StyledCheckbox = styled(RadixRoot, {
   width: 18,
   height: 18,
   borderRadius: 4,
-  border: '2px solid $gray500',
+  border: 'solid 1px rgba(131, 129, 217, 0.5)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -28,7 +26,7 @@ export const StyledCheckbox = styled(RadixRoot, {
 
   '&[data-state="checked"]': {
     backgroundColor: 'transparent',
-    border: '2px solid $gray500',
+    border: 'solid 1px rgba(131, 129, 217, 0.5)',
   },
 
   '&:focus': {
@@ -38,15 +36,6 @@ export const StyledCheckbox = styled(RadixRoot, {
 
 export const StyledIndicator = styled(RadixIndicator, {
   color: 'white',
-})
-
-export const Overlay = styled(RadixOverlay, {
-  position: 'fixed',
-  width: '100%',
-  height: '100vh',
-  inset: 0,
-  zIndex: 2,
-  backgroundColor: 'rgba(10, 10, 10, 0.7)',
 })
 
 export const Content = styled(RadixContent, {
@@ -60,7 +49,7 @@ export const Content = styled(RadixContent, {
   borderRadius: '4px',
   zIndex: 9999,
   overflow: 'scroll',
-  border: 'solid 1px $gray500',
+  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
   height: '100%',
 
   '@media (min-width: 480px)': {
@@ -77,6 +66,12 @@ export const Content = styled(RadixContent, {
   '@media (min-width: 1025px)': {
     height: 'clamp(35rem, 80vh, 100%)',
   },
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: 'none',
+    border: 'none',
+  },
 })
 
 export const Title = styled(RadixTitle, {
@@ -90,15 +85,6 @@ export const Title = styled(RadixTitle, {
     marginBottom: 0,
     fontSize: '1.1rem',
   },
-})
-
-export const Description = styled(RadixDescription, {
-  fontSize: '0.9rem',
-  width: '100%',
-  marginTop: '1rem',
-  textAlign: 'left',
-  color: '$gray300',
-  lineHeight: '180%',
 })
 
 export const Header = styled('div', {
@@ -191,7 +177,7 @@ export const ImagePreview = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: 'solid 1px $gray500',
+  border: 'solid 1px rgba(131, 129, 217, 0.5)',
   color: '$gray100',
   padding: '0.4rem 0.6rem',
   borderRadius: '50%',
@@ -241,7 +227,7 @@ export const EditBtn = styled('button', {
 
 export const ImageInput = styled('div', {
   backgroundColor: 'transparent',
-  border: 'solid 1px $gray500',
+  border: 'solid 1px rgba(131, 129, 217, 0.5)',
   color: '$gray100',
   padding: '0.4rem 0.6rem',
   fontSize: '0.95rem',
@@ -277,7 +263,7 @@ export const ImageInput = styled('div', {
 
 export const Input = styled('input', {
   backgroundColor: 'transparent',
-  border: 'solid 1px $gray500',
+  border: 'solid 1px rgba(131, 129, 217, 0.5)',
   color: '$gray100',
   padding: '0.6rem',
   fontSize: '0.95rem',

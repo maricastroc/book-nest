@@ -39,7 +39,6 @@ export const ViewMoreButton = styled('button', {
 
   '&:focus': {
     outline: 'hidden',
-    borderRadius: 8,
     border: 'transparent',
   },
 })

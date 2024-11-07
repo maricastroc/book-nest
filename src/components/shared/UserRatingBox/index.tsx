@@ -85,7 +85,7 @@ export function UserRatingBox({
             handleCreateReview={handleCreateReview}
           />
         ) : (
-          <TextBox description={rating.description} />
+          <TextBox description={rating.description ?? ''} />
         )}
       </UserRatingBoxContent>
       {rating.userId === session.data?.user.id && (

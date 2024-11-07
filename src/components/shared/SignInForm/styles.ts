@@ -35,11 +35,19 @@ export const Divider = styled('span', {
 
 export const Input = styled('input', {
   backgroundColor: 'transparent',
-  border: 'solid 1px $gray500',
+  border: 'solid 1px rgba(131, 129, 217, 0.5)',
   color: '$gray100',
   padding: '0.6rem',
   fontSize: '0.95rem',
-  borderRadius: 10,
+  borderRadius: 6,
+
+  '&:focus': {
+    backgroundColor: 'transparent',
+    border: 'solid 1px $purple100',
+    outline: 'none',
+    boxShadow: 'none',
+    outlineColor: '$purple100',
+  },
 })
 
 export const AuthContainer = styled('div', {
