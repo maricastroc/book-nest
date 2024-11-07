@@ -3,7 +3,7 @@ import { ViewMoreButton, TextBoxContent, TextBoxWrapper } from './styles'
 
 interface TextBoxProps {
   maxHeight?: string
-  description: string
+  description: string | undefined
   variant?: 'primary' | 'secondary'
 }
 
