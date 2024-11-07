@@ -165,10 +165,17 @@ export const AddToLibraryButton = styled('button', {
   border: '1px solid $green100',
   fontSize: '0.9rem',
 
-  '&:hover': {
+  '&:not(:disabled):hover': {
     backgroundColor: '$green200',
     transition: 'all 200ms',
     border: '1px solid $green200',
+    color: '$gray100',
+  },
+
+  '&:disabled': {
+    backgroundColor: '$gray400',
+    cursor: 'not-allowed !important',
+    border: '1px solid $gray400',
     color: '$gray100',
   },
 })

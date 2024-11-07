@@ -86,7 +86,7 @@ export default function Home() {
 
   const isMobile = useScreenSize(768)
 
-  function handleCloseLateralMenu() {
+  async function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
 
@@ -98,9 +98,11 @@ export default function Home() {
 
       toast.success('Rating successfully deleted!')
 
-      await mutateUserLatestRating()
-      await mutateLatestRatings()
-      await mutatePopularBooks()
+      await Promise.all([
+        mutateUserLatestRating(),
+        mutateLatestRatings(),
+        mutatePopularBooks(),
+      ])
     } catch (error) {
       handleApiError(error)
     }
@@ -118,9 +120,11 @@ export default function Home() {
 
       toast.success('Rating successfully edited!')
 
-      await mutateUserLatestRating()
-      await mutateLatestRatings()
-      await mutatePopularBooks()
+      await Promise.all([
+        mutateUserLatestRating(),
+        mutateLatestRatings(),
+        mutatePopularBooks(),
+      ])
     } catch (error) {
       handleApiError(error)
     }
@@ -139,9 +143,11 @@ export default function Home() {
 
       toast.success('Rating successfully submitted!')
 
-      await mutateUserLatestRating()
-      await mutateLatestRatings()
-      await mutatePopularBooks()
+      await Promise.all([
+        mutateUserLatestRating(),
+        mutateLatestRatings(),
+        mutatePopularBooks(),
+      ])
     } catch (error) {
       handleApiError(error)
     }
@@ -156,11 +162,14 @@ export default function Home() {
           status,
         }
 
-        await api.post('/reading_status', payload)
+        await Promise.all([
+          api.post('/reading_status', payload),
+          mutateUserLatestRating(),
+          mutateLatestRatings(),
+          mutatePopularBooks(),
+        ])
 
-        await mutateUserLatestRating()
-        await mutateLatestRatings()
-        await mutatePopularBooks()
+        toast.success('Status successfully updated!')
       } catch (error) {
         handleApiError(error)
       }

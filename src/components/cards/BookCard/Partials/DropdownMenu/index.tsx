@@ -13,6 +13,7 @@ interface DropdownMenuProps {
   activeStatus: string | null
   dropdownRef: React.RefObject<HTMLDivElement>
   handleOpenReadBookModal: () => void
+  isValidating: boolean
 }
 
 export const DropdownMenu = ({
@@ -22,6 +23,7 @@ export const DropdownMenu = ({
   onClose,
   handleSelectReadingStatus,
   dropdownRef,
+  isValidating,
 }: DropdownMenuProps) => {
   const statuses = [
     { label: 'Read', className: 'read' },
@@ -42,6 +44,7 @@ export const DropdownMenu = ({
                   : ''
                 : ''
             }
+            disabled={isValidating}
             onClick={async () => {
               if (status.label === 'Read' && activeStatus !== 'Read') {
                 handleOpenReadBookModal()

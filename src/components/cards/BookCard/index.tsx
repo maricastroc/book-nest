@@ -51,6 +51,8 @@ export function BookCard({
 
   const [isReadBookModalOpen, setIsReadBookModalOpen] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const { loggedUser } = useAppContext()
 
   const dropdownRef = useRef<HTMLDivElement | null>(null)
@@ -73,7 +75,7 @@ export function BookCard({
 
     return data?.readingStatus ? data.readingStatus : 'Add to Library'
   }
-
+  console.log(data)
   return (
     <BookCardWrapper>
       <BookCardContent>
@@ -98,6 +100,7 @@ export function BookCard({
               <Dialog.Root open={isSignInModalOpen}>
                 <Dialog.Trigger asChild>
                   <AddToLibraryButton
+                    disabled={isValidating || isLoading}
                     onClick={() => {
                       !loggedUser
                         ? setIsSignInModalOpen(true)
@@ -122,9 +125,17 @@ export function BookCard({
                     dropdownRef={dropdownRef}
                     book={book}
                     handleOpenReadBookModal={() => setIsReadBookModalOpen(true)}
+                    isValidating={isValidating || isLoading}
                     handleSelectReadingStatus={async (value: string) => {
-                      await handleSelectReadingStatus(value)
-                      await mutate()
+                      setIsLoading(true)
+
+                      await Promise.all([
+                        handleSelectReadingStatus(value),
+                        mutate(),
+                      ])
+
+                      setIsLoading(false)
+                      closeLateralMenu()
                     }}
                   />
                 </Dialog.Trigger>
@@ -136,8 +147,7 @@ export function BookCard({
                     closeLateralMenu={() => closeLateralMenu()}
                     handleCreateReview={async (data: CreateReviewData) => {
                       await handleCreateReview(data)
-                      await handleSelectReadingStatus('Read')
-                      await mutate()
+                      closeLateralMenu()
                     }}
                   />
                 )}

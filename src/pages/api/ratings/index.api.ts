@@ -115,6 +115,14 @@ export default async function handler(
       },
     })
 
+    await prisma.readingStatus.upsert({
+      where: {
+        userId_bookId: { userId, bookId },
+      },
+      update: { status: 'Read' },
+      create: { userId, bookId, status: 'Read' },
+    })
+
     return res.status(201).json(newRating)
   } else {
     return res.status(405).end()

@@ -1,6 +1,3 @@
-// === Rota de Criação de Novas Avaliações ===
-// /api/ratings/48b86ac2-014e-401d-bcbb-331ce5f4a457
-
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
@@ -37,14 +34,14 @@ export default async function handler(
     return res.status(400).json({ message: 'Book does not exist.' })
   }
 
-  const createRatingbody = z.object({
+  const createRatingBody = z.object({
     description: z.string(),
     bookId: z.string(),
     userId: z.string(),
     rate: z.number(),
   })
 
-  const { description, userId, rate } = createRatingbody.parse({
+  const { description, userId, rate } = createRatingBody.parse({
     bookId,
     userId: session.user?.id,
     ...req.body,
@@ -59,6 +56,23 @@ export default async function handler(
     },
     include: {
       user: true,
+    },
+  })
+
+  await prisma.readingStatus.upsert({
+    where: {
+      userId_bookId: {
+        userId,
+        bookId,
+      },
+    },
+    update: {
+      status: 'READ',
+    },
+    create: {
+      userId,
+      bookId,
+      status: 'READ',
     },
   })
 

@@ -21,7 +21,7 @@ export const StyledButton = styled('button', {
     borderRadius: 8,
   },
 
-  '&:hover': {
+  '&:not(:disabled):hover': {
     backgroundColor: '$purple200',
     borderColor: '$purple200',
     transition: '250ms all',
@@ -33,14 +33,10 @@ export const StyledButton = styled('button', {
   },
 
   '&:disabled': {
-    backgroundColor: 'rgba(131, 129, 217, 0.5)',
-    border: 'solid 1px rgba(131, 129, 217, 0.5)',
+    backgroundColor: '$gray400',
+    border: 'solid 1px $gray400',
     color: '$gray100',
-    cursor: 'not-allowed',
+    cursor: 'not-allowed !important',
     pointerEvents: 'none',
-
-    '&:hover': {
-      backgroundColor: '$gray400',
-    },
   },
 })

@@ -31,9 +31,15 @@ export const ReadingStatusItem = styled('button', {
     color: '$green100',
   },
 
-  '&:hover': {
+  '&:not(:disabled):hover': {
     color: '$green100',
     transition: 'all 200ms',
+  },
+
+  '&:disabled': {
+    color: '$gray400',
+    cursor: 'not-allowed !important',
+    border: '1px solid $gray400',
   },
 })
 
