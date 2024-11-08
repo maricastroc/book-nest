@@ -38,7 +38,7 @@ export default async function handler(
         },
       },
     },
-    take: 4,
+    take: 6,
   })
 
   const booksFixedRelationWithCategory = books.map((book) => {

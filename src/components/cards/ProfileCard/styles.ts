@@ -80,6 +80,15 @@ export const BookCover = styled('img', {
     width: '6.5rem',
     marginTop: '1rem',
   },
+
+  '@media (min-width: 768px)': {
+    width: '6.9rem',
+  },
+
+  '@media (min-width: 1200px)': {
+    width: '7.2rem',
+    marginTop: '0.7rem',
+  },
 })
 
 export const BookSummaryWrapper = styled('div', {
@@ -129,6 +138,12 @@ export const BookTitleAndAuthor = styled('div', {
 
     alignItems: 'flex-start',
     marginTop: '0.2rem',
+  },
+
+  '@media (min-width: 768px)': {
+    h2: {
+      fontSize: '1.05rem',
+    },
   },
 })
 
