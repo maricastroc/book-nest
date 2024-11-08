@@ -14,9 +14,22 @@ import Logo from '../../../public/assets/logo.svg'
 import SignInForm from '@/components/shared/SignInForm'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
+import { useAppContext } from '@/contexts/AppContext'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Login() {
   const isRouteLoading = useLoadingOnRouteChange()
+
+  const router = useRouter()
+
+  const { loggedUser } = useAppContext()
+
+  useEffect(() => {
+    if (loggedUser) {
+      router.push('/home')
+    }
+  }, [loggedUser, router])
 
   return (
     <>
