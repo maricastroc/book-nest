@@ -101,12 +101,18 @@ export const BookCover = styled('img', {
   width: '5.95rem',
   height: 'auto',
   borderRadius: 8,
+  cursor: 'pointer',
   boxShadow:
     '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
 
   '@media (min-width: 480px)': {
     width: '6.5rem',
     marginTop: '1rem',
+  },
+
+  '&:hover': {
+    filter: 'brightness(1.15)',
+    transition: '200ms',
   },
 })
 

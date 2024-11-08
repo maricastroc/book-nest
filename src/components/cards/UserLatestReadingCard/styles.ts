@@ -66,9 +66,15 @@ export const BookDetailsContainer = styled('div', {
 export const BookCover = styled('img', {
   width: '5.8rem',
   height: 'auto',
+  cursor: 'pointer',
   borderRadius: 8,
   boxShadow:
     '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
+
+  '&:hover': {
+    filter: 'brightness(1.15)',
+    transition: '200ms',
+  },
 
   '@media (min-width: 480px)': {
     width: '6.5rem',

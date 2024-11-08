@@ -132,7 +132,7 @@ export default function Home() {
       handleApiError(error)
     }
   }
-
+  console.log(latestRatings)
   const handleCreateReview = async (data: CreateReviewData) => {
     try {
       const payload = {
@@ -229,6 +229,12 @@ export default function Home() {
                           key={userLatestRatingData.id}
                           rating={userLatestRatingData}
                           book={userLatestRatingData.book}
+                          onOpenDetails={() => {
+                            setSelectedBook(
+                              userLatestRatingData.book as BookProps,
+                            )
+                            setOpenLateralMenu(true)
+                          }}
                         />
                       ) : (
                         <EmptyContainer />
@@ -244,7 +250,16 @@ export default function Home() {
                           <SkeletonRatingCard key={index} />
                         ))
                       : latestRatings?.map((rating: RatingProps) => (
-                          <RatingCard key={rating.id} rating={rating} />
+                          <RatingCard
+                            key={rating.id}
+                            rating={rating}
+                            onOpenDetails={() => {
+                              if (rating?.book) {
+                                setSelectedBook(rating.book as BookProps)
+                                setOpenLateralMenu(true)
+                              }
+                            }}
+                          />
                         ))}
                   </LastRatingsContent>
                 </LastRatingsContainer>

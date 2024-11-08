@@ -18,11 +18,13 @@ import { useScreenSize } from '@/utils/useScreenSize'
 interface UserLatestReadingCardProps {
   book: BookProps
   rating: RatingProps
+  onOpenDetails: () => void
 }
 
 export function UserLatestReadingCard({
   book,
   rating,
+  onOpenDetails,
 }: UserLatestReadingCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
@@ -41,7 +43,7 @@ export function UserLatestReadingCard({
       {book && (
         <UserCardContent>
           <BookDetailsContainer>
-            <BookCover src={book.coverUrl} alt="" />
+            <BookCover src={book.coverUrl} alt="" onClick={onOpenDetails} />
             <BookSummaryWrapper>
               <BookTitleAndAuthor>
                 <h2>{book.name}</h2>

@@ -23,9 +23,14 @@ import { TextBox } from '@/components/shared/TextBox'
 
 interface RatingCardProps {
   rating: RatingProps
+  onOpenDetails: () => void
 }
 
-export function RatingCard({ rating, ...rest }: RatingCardProps) {
+export function RatingCard({
+  rating,
+  onOpenDetails,
+  ...rest
+}: RatingCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
 
@@ -68,7 +73,11 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
       {rating?.book && (
         <BookContentWrapper {...rest}>
           <BookDetailsContainer>
-            <BookCover src={rating.book.coverUrl} alt="" />
+            <BookCover
+              src={rating.book.coverUrl}
+              alt=""
+              onClick={onOpenDetails}
+            />
             <BookSummaryWrapper>
               <BookTitleAndAuthor>
                 <h2>{rating.book.name}</h2>
