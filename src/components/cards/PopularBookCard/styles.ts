@@ -44,7 +44,7 @@ export const BookTitleAndAuthor = styled('div', {
   width: '100%',
 
   h2: {
-    fontSize: '0.9rem',
+    fontSize: '0.95rem',
     position: 'relative',
     width: '85%',
     overflow: 'hidden',

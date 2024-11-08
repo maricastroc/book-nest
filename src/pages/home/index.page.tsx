@@ -36,6 +36,7 @@ import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
 import { handleApiError } from '@/utils/handleApiError'
 import { useAppContext } from '@/contexts/AppContext'
+import { useRouter } from 'next/router'
 
 export interface EditReviewData {
   ratingId: string
@@ -51,6 +52,8 @@ export interface CreateReviewData {
 }
 
 export default function Home() {
+  const router = useRouter()
+
   const isRouteLoading = useLoadingOnRouteChange()
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
@@ -250,7 +253,7 @@ export default function Home() {
               <PopularBooksWrapper>
                 <PopularBooksTitle>
                   <p>Popular Books</p>
-                  <span>
+                  <span onClick={() => router.push('/explore')}>
                     View All
                     <CaretRight />
                   </span>
