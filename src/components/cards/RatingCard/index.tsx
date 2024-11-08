@@ -65,8 +65,6 @@ export function RatingCard({ rating, ...rest }: RatingCardProps) {
         </UserDetailsWrapper>
       </RatingCardHeader>
 
-      <DividerLine className="larger" />
-
       {rating?.book && (
         <BookContentWrapper {...rest}>
           <BookDetailsContainer>

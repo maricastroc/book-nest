@@ -3,7 +3,6 @@ import { styled } from '@/styles'
 export const RatingCardBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '1.5rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'space-between',
@@ -20,9 +19,14 @@ export const RatingCardBox = styled('div', {
 export const RatingCardHeader = styled('div', {
   display: 'flex',
   flexDirection: 'column',
+  padding: '1.5rem 1.5rem 1.2rem',
+  borderTopLeftRadius: 8,
+  borderTopRightRadius: 8,
   gap: '1.2rem',
   width: '100%',
+  backgroundColor: '$gray650',
   marginBottom: '1rem',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.1)',
 
   '@media (min-width: 480px)': {
     flexDirection: 'row',
@@ -71,6 +75,8 @@ export const UserNameDateWrapper = styled('div', {
 
 export const BookContentWrapper = styled('div', {
   display: 'flex',
+  padding: '1.5rem',
+  paddingTop: 0,
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
@@ -82,17 +88,17 @@ export const BookDetailsContainer = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
   width: '100%',
-  gap: '1rem',
+  gap: '0.8rem',
   margin: '1rem 0',
 
   '@media (min-width: 480px)': {
-    margin: '1rem 0 0',
+    margin: '0.3rem 0 0',
     gap: '1.5rem',
   },
 })
 
 export const BookCover = styled('img', {
-  width: '5.8rem',
+  width: '5.95rem',
   height: 'auto',
   borderRadius: 8,
   boxShadow:
@@ -153,7 +159,7 @@ export const RatingContainer = styled('div', {
 
   p: {
     color: '$gray300',
-    lineHeight: '160%',
+    lineHeight: '150%',
     fontSize: '0.85rem',
     wordBreak: 'break-word',
     paddingRight: '0.3rem',

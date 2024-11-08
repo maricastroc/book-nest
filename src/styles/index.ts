@@ -20,6 +20,7 @@ export const {
       green300: '#0A313C',
 
       purple50: '#B2AFF0',
+      purple80: '#7f7cff',
       purple100: '#8381D9',
       purple200: '#4F47A3',
       purple300: '#2A2879',
@@ -31,6 +32,7 @@ export const {
       gray400: '#8D95AF',
       gray500: '#303F73',
       gray600: '#252D4A',
+      gray650: '#20263f',
       gray700: '#181C2A',
       gray800: '#0E1116',
 

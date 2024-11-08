@@ -59,9 +59,14 @@ export const ReviewForm = styled('textarea', {
   height: 188,
   minHeight: 80,
   color: '$gray300',
-  lineHeight: '1.4rem',
+  lineHeight: '1.45rem',
   fontSize: '0.9rem',
   resize: 'vertical',
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: 'none',
+  },
 })
 
 export const FooterWrapper = styled('div', {

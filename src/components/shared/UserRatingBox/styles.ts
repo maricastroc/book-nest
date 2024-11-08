@@ -24,9 +24,11 @@ export const UserRatingBoxHeader = styled('div', {
   flexDirection: 'column',
   width: '100%',
   alignItems: 'flex-start',
-  gap: '1rem',
+  marginBottom: '1rem',
 
-  '@media (min-width: 580px)': {
+  '@media (min-width: 380px)': {
+    marginBottom: 0,
+    gap: '1rem',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -53,5 +55,12 @@ export const UserNameDateWrapper = styled('div', {
 
   p: {
     fontSize: '0.9rem',
+    position: 'relative',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 1,
+    WebkitBoxOrient: 'vertical',
+    whiteSpace: 'normal',
   },
 })

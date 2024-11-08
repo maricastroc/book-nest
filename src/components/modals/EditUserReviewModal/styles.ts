@@ -20,11 +20,13 @@ export const Content = styled(RadixContent, {
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
   '@media (min-width: 480px)': {
+    padding: '0 0.5rem',
     width: 'clamp(440px, 80vw, 38rem)',
   },
 
   '&:focus': {
     outline: 'none',
+    border: 'none',
   },
 })
 

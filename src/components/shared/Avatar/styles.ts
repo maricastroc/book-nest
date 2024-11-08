@@ -16,6 +16,11 @@ export const AvatarContainer = styled('a', {
   '&.regular': {
     width: 39,
     height: 39,
+
+    '@media (min-width: 380px)': {
+      width: 42,
+      height: 42,
+    },
   },
 
   '&.bigger': {
@@ -48,6 +53,12 @@ export const AvatarDefault = styled('img', {
     width: 37,
     aspectRatio: 'auto 37 / 37',
     height: 37,
+
+    '@media (min-width: 380px)': {
+      width: 40,
+      aspectRatio: 'auto 40 / 40',
+      height: 40,
+    },
   },
 
   '&.bigger': {

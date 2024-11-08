@@ -11,17 +11,13 @@ export const ReadNotice = styled('div', {
   top: 0,
   right: '0.3rem',
   padding: '0.1rem 0.5rem',
-  fontSize: '0.98rem',
+  fontSize: '1.3rem',
   fontWeight: 700,
   borderRadius: '0 8px 0 8px',
   color: '$green100',
 
-  '@media (min-width: 480px)': {
-    fontSize: '1.1rem',
-  },
-
   '@media (min-width: 1024px)': {
-    fontSize: '1.2rem',
+    fontSize: '1.4rem',
   },
 })
 

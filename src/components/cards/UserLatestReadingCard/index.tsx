@@ -38,8 +38,6 @@ export function UserLatestReadingCard({
         <StarsRating rating={rating.rate} />
       </UserCardHeader>
 
-      <DividerLine className="larger" />
-
       {book && (
         <UserCardContent>
           <BookDetailsContainer>

@@ -100,8 +100,6 @@ export function ProfileCard({
           )}
         </ProfileCardHeader>
 
-        <DividerLine className="larger" />
-
         {book && (
           <ProfileCardBody>
             <BookDetailsContainer>

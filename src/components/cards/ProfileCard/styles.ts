@@ -15,8 +15,7 @@ export const ProfileCardWrapper = styled('div', {
 export const ProfileCardBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '1.5rem',
-  backgroundColor: '$gray600',
+  backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'space-between',
   justifyContent: 'center',
@@ -34,7 +33,12 @@ export const ProfileCardHeader = styled('div', {
   justifyContent: 'space-between',
   alignItems: 'center',
   width: '100%',
+  borderTopLeftRadius: 8,
+  borderTopRightRadius: 8,
   marginBottom: '1rem',
+  padding: '1.5rem 1.5rem 1.2rem',
+  backgroundColor: '$gray650',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.1)',
 
   '@media (min-width: 480px)': {
     marginBottom: '0.5rem',
@@ -46,6 +50,8 @@ export const ProfileCardBody = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
+  padding: '1.5rem',
+  paddingTop: 0,
   width: '100%',
 })
 
