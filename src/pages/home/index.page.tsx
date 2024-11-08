@@ -216,7 +216,7 @@ export default function Home() {
                 {loggedUser && (
                   <>
                     <UserLatestReadingTitle>
-                      Your last reading
+                      Your Last Reading
                     </UserLatestReadingTitle>
                     <UserLatestReadingContainer>
                       {isLoading ? (

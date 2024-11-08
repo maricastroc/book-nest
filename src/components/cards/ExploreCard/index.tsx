@@ -10,6 +10,8 @@ import {
 import { getBookTitle } from '@/utils/getBookTitle'
 import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 import { ReadNotice } from '@/styles/shared'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 
 interface ExploreCardProps {
   book: BookProps
@@ -23,7 +25,7 @@ export function ExploreCard({ book, ...rest }: ExploreCardProps) {
       <BookInfo>
         {book.alreadyRead && (
           <ReadNotice>
-            <p>READ</p>
+            <FontAwesomeIcon icon={faBookmark} />
           </ReadNotice>
         )}
         <BookData>

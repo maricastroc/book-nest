@@ -23,6 +23,7 @@ import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { SignInModal } from '@/components/modals/SignInModal'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { ReviewWarningModal } from '@/components/modals/ReviewWarningModal'
+import { EmptyContainer } from '../EmptyContainer'
 
 export interface ReadingStatusProps {
   bookId: string
@@ -147,22 +148,26 @@ export function LateralMenu({
             />
           )}
           <RatingsList>
-            {isLoading || !bookRatings?.length
-              ? Array.from({ length: 3 }).map((_, index) => (
-                  <SkeletonRatingCard key={index} />
+            {!isLoading && !bookRatings?.length ? (
+              <EmptyContainer content="reviews" />
+            ) : isLoading ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <SkeletonRatingCard key={index} />
+              ))
+            ) : (
+              bookRatings
+                ?.filter((rating) => rating.description?.trim() !== '')
+                .map((rating) => (
+                  <UserRatingBox
+                    key={rating.id}
+                    rating={rating}
+                    onCloseUserRatingBox={onClose}
+                    handleEditReview={handleEditReview}
+                    handleDeleteReview={handleDeleteReview}
+                    handleCreateReview={handleCreateReview}
+                  />
                 ))
-              : bookRatings
-                  ?.filter((rating) => rating.description?.trim() !== '')
-                  .map((rating) => (
-                    <UserRatingBox
-                      key={rating.id}
-                      rating={rating}
-                      onCloseUserRatingBox={onClose}
-                      handleEditReview={handleEditReview}
-                      handleDeleteReview={handleDeleteReview}
-                      handleCreateReview={handleCreateReview}
-                    />
-                  ))}
+            )}
           </RatingsList>
         </RatingsWrapper>
       </MenuBody>

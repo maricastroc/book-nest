@@ -12,6 +12,7 @@ export interface BookProps {
   totalPages: number
   createdAt: Date
   publishingYear?: string | null | undefined
+  readingStatus?: string | null | undefined
 
   userId?: string | null
   user?: UserProps | null | undefined

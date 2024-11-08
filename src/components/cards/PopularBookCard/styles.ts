@@ -7,9 +7,16 @@ export const PopularBookCardBox = styled('div', {
   backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'stretch',
-  gap: '1.25rem',
+  gap: '0.7rem',
   width: '100%',
   position: 'relative',
+  height: '10rem',
+
+  '@media (min-width: 480px)': {
+    height: '11.5rem',
+    gap: '0.9rem',
+    padding: '1.2rem',
+  },
 
   '@media (min-width: 1200px)': {
     padding: '1.2rem',
@@ -38,23 +45,39 @@ export const BookTitleAndAuthor = styled('div', {
 
   h2: {
     fontSize: '0.9rem',
-    whiteSpace: 'break-spaces',
-    overflow: 'scroll',
     position: 'relative',
+    width: '85%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    whiteSpace: 'normal',
   },
 
   p: {
+    marginTop: '0.3rem',
     color: '$gray400',
     fontSize: '0.85rem',
+  },
+
+  '@media (min-width: 480px)': {
+    h2: {
+      fontSize: '0.98rem',
+    },
+
+    p: {
+      marginTop: '0.3rem',
+      fontSize: '0.9rem',
+    },
   },
 })
 
 export const BookCover = styled('img', {
-  width: '4.5rem',
+  width: '5.6rem',
   height: 'auto',
   borderRadius: 8,
-  boxShadow:
-    '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
+  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
   '@media (min-width: 480px)': {
     width: '6.5rem',

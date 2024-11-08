@@ -9,6 +9,12 @@ export default async function handler(
 ) {
   if (req.method !== 'GET') return res.status(405).end()
 
+  const session = await getServerSession(
+    req,
+    res,
+    buildNextAuthOptions(req, res),
+  )
+
   const books = await prisma.book.findMany({
     orderBy: {
       ratings: {
@@ -24,6 +30,11 @@ export default async function handler(
       categories: {
         include: {
           category: true,
+        },
+      },
+      readingStatus: {
+        where: {
+          userId: String(session?.user?.id), // Inclui o status de leitura do usuário atual
         },
       },
     },
@@ -51,12 +62,6 @@ export default async function handler(
 
   let userBooksId: string[] = []
 
-  const session = await getServerSession(
-    req,
-    res,
-    buildNextAuthOptions(req, res),
-  )
-
   if (session) {
     const userBooks = await prisma.book.findMany({
       where: {
@@ -75,12 +80,17 @@ export default async function handler(
     const bookAvgRating = booksAvgRating.find(
       (avgRating) => avgRating.bookId === book.id,
     )
+
     const { ...bookInfo } = book
+
+    const readingStatus = book.readingStatus?.[0]?.status ?? null
+
     return {
       ...bookInfo,
       ratings: book.ratings, // Todos os atributos dos ratings são mantidos
       rate: bookAvgRating?._avg.rate,
       alreadyRead: userBooksId.includes(book.id),
+      readingStatus,
     }
   })
 

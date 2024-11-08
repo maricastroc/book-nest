@@ -9,6 +9,8 @@ import {
 } from './styles'
 import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 import { ReadNotice } from '@/styles/shared'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 
 interface PopularBookCardProps {
   book: BookProps
@@ -20,9 +22,9 @@ export function PopularBookCard({ book, onOpenDetails }: PopularBookCardProps) {
     <PopularBookCardBox onClick={() => onOpenDetails()}>
       <BookCover src={book.coverUrl} />
       <BookContentWrapper>
-        {book.alreadyRead && (
+        {book?.readingStatus && (
           <ReadNotice>
-            <p>READ</p>
+            <FontAwesomeIcon icon={faBookmark} />
           </ReadNotice>
         )}
         <BookTitleAndAuthor>

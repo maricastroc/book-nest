@@ -220,7 +220,17 @@ export const PopularBooksContent = styled('div', {
   flexDirection: 'column',
   gap: '2rem',
 
-  '@media (min-width: 980px)': {
+  '@media (min-width: 680px)': {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+  },
+
+  '@media (min-width: 768px)': {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+
+  '@media (min-width: 910px)': {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
   },

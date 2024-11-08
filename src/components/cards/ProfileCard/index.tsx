@@ -1,10 +1,7 @@
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Pencil, Trash } from 'phosphor-react'
 
-import { StarsRating } from '@/components/shared/StarsRating'
-import { DeleteModal } from '@/components/modals/DeleteModal'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
 import { RatingProps } from '@/@types/rating'
@@ -12,26 +9,28 @@ import { BookProps } from '@/@types/book'
 
 import {
   BookDetailsContainer,
+  BookSummaryWrapper,
   BookCover,
-  BookDetailsContent,
-  BookInfoSection,
-  ReviewTextContainer,
-  BookInfoHeader,
   ProfileCardBody,
   DividerLine,
   ProfileCardHeader,
   ProfileCardBox,
   BookTitleAndAuthor,
+  ProfileCardWrapper,
 } from './styles'
-import { ReadNotice, UserActions } from '@/styles/shared'
-import { RatingCardForm } from '@/components/shared/RatingCardForm'
+import { UserActions } from '@/styles/shared'
 import { EditReviewData } from '@/pages/home/index.page'
+import { StarsRating } from '@/components/shared/StarsRating'
+import { DeleteModal } from '@/components/modals/DeleteModal'
+import { useScreenSize } from '@/utils/useScreenSize'
+import { TextBox } from '@/components/shared/TextBox'
+import { EditUserReviewModal } from '@/components/modals/EditUserReviewModal'
 
 interface ProfileCardProps {
   book: BookProps
   rating: RatingProps
-  handleDeleteReview?: () => void
-  handleEditReview?: (data: EditReviewData) => void
+  handleDeleteReview?: () => Promise<void>
+  handleEditReview?: (data: EditReviewData) => Promise<void>
 }
 
 export function ProfileCard({
@@ -43,81 +42,93 @@ export function ProfileCard({
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
 
-  const { data: session } = useSession()
+  const [isEditUserReviewModalOpen, setIsEditUserReviewModalOpen] =
+    useState(false)
 
-  const [isEditRatingBoxOpen, setIsEditRatingBoxOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  const { handleSetIsLoading } = useAppContext()
+  const { loggedUser } = useAppContext()
 
-  const isLoggedUser = rating.userId === session?.user.id
+  const isMobile = useScreenSize(480)
 
   const onDeleteReview = async () => {
-    if (session?.user?.id && handleDeleteReview) {
-      handleSetIsLoading(true)
-
-      handleDeleteReview()
-
-      handleSetIsLoading(false)
+    if (loggedUser && handleDeleteReview) {
+      await handleDeleteReview()
+      setIsDeleteModalOpen(false)
     }
   }
 
   return (
-    <ProfileCardBox>
-      <ProfileCardHeader>
-        <time title={dateFormatted} dateTime={dateString}>
-          {dateRelativeToNow}
-        </time>
-        {isLoggedUser && (
-          <UserActions>
-            <Dialog.Root>
-              <Dialog.Trigger asChild>
-                <Trash className="delete_icon" />
-              </Dialog.Trigger>
-              <DeleteModal onConfirm={() => onDeleteReview()} />
-            </Dialog.Root>
-            <Pencil
-              className="edit_icon"
-              onClick={() => setIsEditRatingBoxOpen(!isEditRatingBoxOpen)}
-            />
-          </UserActions>
-        )}
-      </ProfileCardHeader>
-      <ProfileCardBody>
-        {rating?.book?.alreadyRead && (
-          <ReadNotice>
-            <p>READ</p>
-          </ReadNotice>
-        )}
-        <BookDetailsContainer>
-          <BookDetailsContent>
-            <BookInfoSection>
+    <ProfileCardWrapper>
+      <time title={dateFormatted} dateTime={dateString}>
+        {dateRelativeToNow}
+      </time>
+      <ProfileCardBox>
+        <ProfileCardHeader>
+          <StarsRating variant={'secondary'} rating={rating.rate} />
+          {rating.userId === loggedUser?.id && (
+            <>
+              <UserActions style={{ paddingRight: 0, marginTop: 0 }}>
+                <Dialog.Root open={isDeleteModalOpen}>
+                  <Dialog.Trigger asChild>
+                    <Trash className="delete_icon" />
+                  </Dialog.Trigger>
+                  <DeleteModal
+                    onConfirm={() => {
+                      onDeleteReview()
+                    }}
+                  />
+                </Dialog.Root>
+                <Dialog.Root open={isEditUserReviewModalOpen}>
+                  <Dialog.Trigger asChild>
+                    <Pencil
+                      className="edit_icon"
+                      onClick={() => setIsEditUserReviewModalOpen(true)}
+                    />
+                  </Dialog.Trigger>
+                  <EditUserReviewModal
+                    rating={rating}
+                    bookId={book.id}
+                    handleEditReview={handleEditReview}
+                    onClose={() => {
+                      setIsEditUserReviewModalOpen(false)
+                    }}
+                  />
+                </Dialog.Root>
+              </UserActions>
+            </>
+          )}
+        </ProfileCardHeader>
+
+        <DividerLine className="larger" />
+
+        {book && (
+          <ProfileCardBody>
+            <BookDetailsContainer>
               <BookCover src={book.coverUrl} alt="" />
-              <BookInfoHeader>
+              <BookSummaryWrapper>
                 <BookTitleAndAuthor>
                   <h2>{book.name}</h2>
                   <p>{book.author}</p>
                 </BookTitleAndAuthor>
-                {!isEditRatingBoxOpen && <StarsRating rating={rating.rate} />}
-              </BookInfoHeader>
-            </BookInfoSection>
-            <DividerLine />
-            {isEditRatingBoxOpen ? (
-              <RatingCardForm
-                isProfileScreen
-                isEdit
-                rating={rating}
-                bookId={book.id}
-                onClose={() => setIsEditRatingBoxOpen(false)}
-                handleEditReview={handleEditReview}
-              />
-            ) : (
-              <ReviewTextContainer>
-                <p>{rating.description}</p>
-              </ReviewTextContainer>
+                {!isMobile && (
+                  <TextBox
+                    maxHeight="5.8rem"
+                    description={rating.description}
+                  />
+                )}
+              </BookSummaryWrapper>
+            </BookDetailsContainer>
+
+            {isMobile && (
+              <>
+                <DividerLine />
+                <TextBox maxHeight="5.8rem" description={rating.description} />
+              </>
             )}
-          </BookDetailsContent>
-        </BookDetailsContainer>
-      </ProfileCardBody>
-    </ProfileCardBox>
+          </ProfileCardBody>
+        )}
+      </ProfileCardBox>
+    </ProfileCardWrapper>
   )
 }

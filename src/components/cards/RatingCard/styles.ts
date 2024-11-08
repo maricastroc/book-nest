@@ -82,17 +82,17 @@ export const BookDetailsContainer = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
   width: '100%',
-  gap: '1.5rem',
+  gap: '1rem',
   margin: '1rem 0',
 
   '@media (min-width: 480px)': {
     margin: '1rem 0 0',
-    alignItems: 'center',
+    gap: '1.5rem',
   },
 })
 
 export const BookCover = styled('img', {
-  width: '5rem',
+  width: '5.8rem',
   height: 'auto',
   borderRadius: 8,
   boxShadow:
@@ -100,6 +100,7 @@ export const BookCover = styled('img', {
 
   '@media (min-width: 480px)': {
     width: '6.5rem',
+    marginTop: '1rem',
   },
 })
 
@@ -124,6 +125,12 @@ export const BookTitleAndAuthor = styled('div', {
 
   h2: {
     fontSize: '0.95rem',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
+    whiteSpace: 'normal',
   },
 
   p: {
@@ -161,11 +168,17 @@ export const RatingContainer = styled('div', {
 export const DividerLine = styled('span', {
   width: '100%',
   height: 0.5,
-  backgroundColor: '$gray500',
+  backgroundColor: 'rgba(80, 178, 192, 0.3)',
   opacity: 0.7,
+  marginBottom: '0.8rem',
+
+  '&.larger': {
+    marginBottom: 0,
+  },
 
   '@media (min-width: 480px)': {
     display: 'none',
+    marginBottom: 0,
 
     '&.larger': {
       display: 'block',

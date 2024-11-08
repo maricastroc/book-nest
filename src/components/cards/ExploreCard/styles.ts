@@ -4,7 +4,7 @@ export const Container = styled('div', {
   cursor: 'pointer',
   position: 'relative',
   display: 'flex',
-  padding: '1.5rem 1rem',
+  padding: '1.65rem 1rem',
   backgroundColor: '$gray700',
   borderRadius: 8,
   alignItems: 'stretch',
@@ -21,8 +21,7 @@ export const BookCover = styled('img', {
   width: '6.75rem',
   height: 'auto',
   borderRadius: 8,
-  boxShadow:
-    '0px 6px 12px rgba(0, 0, 0, 0.6), 0px 3px 6px rgba(255, 255, 255, 0.15)',
+  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
   opacity: 0.9,
 })
 
@@ -40,16 +39,19 @@ export const BookData = styled('div', {
   gap: '0.2rem',
 
   h2: {
-    fontSize: '0.85rem',
+    fontSize: '0.95rem',
     maxHeight: '4.5rem',
-    whiteSpace: 'break-spaces',
-    overflow: 'scroll',
-    position: 'relative',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
+    whiteSpace: 'normal',
   },
 
   p: {
     color: '$gray400',
-    fontSize: '0.8rem',
+    fontSize: '0.88rem',
   },
 
   '@media (min-width: 480px)': {

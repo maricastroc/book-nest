@@ -1,16 +1,19 @@
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { StarsRating } from '@/components/shared/StarsRating'
 import {
+  UserCardContent,
   BookCover,
-  ReviewInfoSection,
-  UserReviewContainer,
-  UserReviewWrapper,
+  BookSummaryWrapper,
   BookTitleAndAuthor,
   UserLatestReadingCardWrapper,
-  TimeAndRating,
+  UserCardHeader,
+  DividerLine,
+  BookDetailsContainer,
 } from './styles'
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
+import { TextBox } from '@/components/shared/TextBox'
+import { useScreenSize } from '@/utils/useScreenSize'
 
 interface UserLatestReadingCardProps {
   book: BookProps
@@ -24,26 +27,42 @@ export function UserLatestReadingCard({
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
 
+  const isMobile = useScreenSize(480)
+
   return (
     <UserLatestReadingCardWrapper>
-      <BookCover src={book.coverUrl} />
-      <UserReviewWrapper>
-        <ReviewInfoSection>
-          <BookTitleAndAuthor>
-            <h2>{book.name}</h2>
-            <p>{book.author}</p>
-          </BookTitleAndAuthor>
-          <UserReviewContainer>
-            <p>{rating.description}</p>
-          </UserReviewContainer>
-        </ReviewInfoSection>
-        <TimeAndRating>
-          <StarsRating rating={rating.rate} />
-          <time title={dateFormatted} dateTime={dateString}>
-            {dateRelativeToNow}
-          </time>
-        </TimeAndRating>
-      </UserReviewWrapper>
+      <UserCardHeader>
+        <time title={dateFormatted} dateTime={dateString}>
+          {dateRelativeToNow}
+        </time>
+        <StarsRating rating={rating.rate} />
+      </UserCardHeader>
+
+      <DividerLine className="larger" />
+
+      {book && (
+        <UserCardContent>
+          <BookDetailsContainer>
+            <BookCover src={book.coverUrl} alt="" />
+            <BookSummaryWrapper>
+              <BookTitleAndAuthor>
+                <h2>{book.name}</h2>
+                <p>{book.author}</p>
+              </BookTitleAndAuthor>
+              {!isMobile && (
+                <TextBox maxHeight="5.8rem" description={rating.description} />
+              )}
+            </BookSummaryWrapper>
+          </BookDetailsContainer>
+
+          {isMobile && (
+            <>
+              <DividerLine />
+              <TextBox maxHeight="5.8rem" description={rating.description} />
+            </>
+          )}
+        </UserCardContent>
+      )}
     </UserLatestReadingCardWrapper>
   )
 }

@@ -173,7 +173,7 @@ export const UserDetailsContainer = styled('div', {
 export const SearchBar = styled('div', {
   display: 'flex',
   backgroundColor: '$gray800',
-  border: 'solid 1px $gray500',
+  border: 'solid 1px $green200',
   borderRadius: 8,
   padding: '0.875rem 1.25rem',
   width: '100%',
@@ -187,10 +187,15 @@ export const SearchBar = styled('div', {
     width: '100%',
     fontSize: '0.9rem',
 
+    '&:has(input:focus)': {
+      borderColor: '$green200',
+    },
+
     '&:focus': {
       boxShadow: 'none',
       outline: 'none',
       padding: 'none',
+      border: 'none',
     },
 
     '&::placeholder': {
@@ -199,17 +204,15 @@ export const SearchBar = styled('div', {
   },
 
   svg: {
-    fontSize: '1.2rem',
-    color: '$gray500',
     cursor: 'pointer',
+    fontSize: '1.2rem',
+    color: '$green200',
   },
 
   '&:has(input:focus)': {
-    borderColor: '$green200',
-    padding: 'none',
-
+    borderColor: '$green100',
     svg: {
-      color: '$green200',
+      color: '$green100',
     },
   },
 

@@ -30,6 +30,16 @@ export const globalStyles = globalCss({
       },
     },
 
+    textarea: {
+      '&:focus': {
+        backgroundColor: 'transparent',
+        border: 'solid 1px $purple100',
+        outline: 'none',
+        boxShadow: 'none',
+        outlineColor: '$purple100',
+      },
+    },
+
     '*::-webkit-scrollbar': {
       width: 2,
       height: 2,

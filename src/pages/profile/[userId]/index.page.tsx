@@ -156,12 +156,12 @@ export default function Profile() {
                               book={rating.book}
                               rating={rating}
                               handleDeleteReview={async () => {
-                                handleDeleteReview(rating.id)
+                                await handleDeleteReview(rating.id)
                               }}
                               handleEditReview={async (
                                 data: EditReviewData,
                               ) => {
-                                handleEditReview(data)
+                                await handleEditReview(data)
                               }}
                             />
                           )

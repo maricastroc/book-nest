@@ -54,6 +54,7 @@ export function RatingCardForm({
   isProfileScreen = false,
   isEdit = false,
   rating = null,
+  ...rest
 }: RatingCardFormProps) {
   const {
     register,
@@ -115,20 +116,18 @@ export function RatingCardForm({
   return (
     loggedUser && (
       <RatingCardFormWrapper
-        className={isProfileScreen ? 'profile' : ''}
         onSubmit={handleSubmit(isEdit ? editReview : submitReview)}
+        {...rest}
       >
-        <RatingCardFormHeader>
-          {!isProfileScreen && (
-            <UserDetailsWrapper>
-              <Avatar
-                isClickable={false}
-                avatarUrl={loggedUser.avatarUrl ?? AVATAR_URL_DEFAULT}
-                variant="medium"
-              />
-              <p>{loggedUser.name}</p>
-            </UserDetailsWrapper>
-          )}
+        <RatingCardFormHeader className={isProfileScreen ? 'profile' : ''}>
+          <UserDetailsWrapper>
+            <Avatar
+              isClickable={false}
+              avatarUrl={loggedUser.avatarUrl ?? AVATAR_URL_DEFAULT}
+              variant="medium"
+            />
+            <p>{loggedUser.name}</p>
+          </UserDetailsWrapper>
           <Rating
             initialValue={rating?.rate}
             onClick={handleRating}

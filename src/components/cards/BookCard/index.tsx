@@ -17,8 +17,6 @@ import { BookProps } from '@/@types/book'
 import { useRef, useState } from 'react'
 import { TextBox } from '@/components/shared/TextBox'
 import { useClickOutside } from '@/utils/useClickOutside'
-import useRequest from '@/utils/useRequest'
-import { UserProps } from 'next-auth'
 import { DropdownMenu } from './Partials/DropdownMenu'
 import { BookStats } from './Partials/BookStats'
 import { SignInModal } from '@/components/modals/SignInModal'
@@ -59,23 +57,6 @@ export function BookCard({
 
   useClickOutside(dropdownRef, () => setIsAddToLibraryDropdownOpen(false))
 
-  const { data, mutate, isValidating } = useRequest<{
-    book: BookProps
-    user: UserProps
-    readingStatus: string | null
-  }>({
-    url: `reading_status?userId=${loggedUser?.id}&bookId=${book?.id}`,
-    method: 'GET',
-  })
-
-  const getAddToLibraryButtonLabel = () => {
-    if (isValidating) {
-      return 'Loading...'
-    }
-
-    return data?.readingStatus ? data.readingStatus : 'Add to Library'
-  }
-  console.log(data)
   return (
     <BookCardWrapper>
       <BookCardContent>
@@ -89,7 +70,7 @@ export function BookCard({
             <BookRatingAndReviews>
               <BookRatingInfo>
                 <StarsRating rating={book?.rate ?? 0} />
-                <p>{book?.rate?.toFixed(2)}</p>
+                <p>{book?.rate?.toFixed(2) ?? '0.00'}</p>
               </BookRatingInfo>
               <p>
                 (<span>{book?.ratings?.length ?? 0}</span> {''}
@@ -100,14 +81,16 @@ export function BookCard({
               <Dialog.Root open={isSignInModalOpen}>
                 <Dialog.Trigger asChild>
                   <AddToLibraryButton
-                    disabled={isValidating || isLoading}
+                    disabled={isLoading}
                     onClick={() => {
                       !loggedUser
                         ? setIsSignInModalOpen(true)
                         : setIsAddToLibraryDropdownOpen(true)
                     }}
                   >
-                    {getAddToLibraryButtonLabel()}
+                    {book?.readingStatus
+                      ? book.readingStatus
+                      : 'Add to Library'}
                   </AddToLibraryButton>
                 </Dialog.Trigger>
                 <SignInModal onClose={() => setIsSignInModalOpen(false)} />
@@ -120,19 +103,16 @@ export function BookCard({
                 <Dialog.Trigger asChild>
                   <DropdownMenu
                     isOpen={isAddToLibraryDropdownOpen}
-                    activeStatus={data?.readingStatus ?? null}
+                    activeStatus={book?.readingStatus ?? null}
                     onClose={() => setIsAddToLibraryDropdownOpen(false)}
                     dropdownRef={dropdownRef}
                     book={book}
                     handleOpenReadBookModal={() => setIsReadBookModalOpen(true)}
-                    isValidating={isValidating || isLoading}
+                    isValidating={isLoading}
                     handleSelectReadingStatus={async (value: string) => {
                       setIsLoading(true)
 
-                      await Promise.all([
-                        handleSelectReadingStatus(value),
-                        mutate(),
-                      ])
+                      handleSelectReadingStatus(value)
 
                       setIsLoading(false)
                       closeLateralMenu()

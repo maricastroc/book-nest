@@ -10,11 +10,6 @@ export const RatingCardFormWrapper = styled('form', {
   padding: '1.5rem',
   borderRadius: 8,
   width: '100%',
-
-  '&.profile': {
-    padding: 0,
-    margin: '0.5rem auto 0',
-  },
 })
 
 export const RatingCardFormHeader = styled('div', {
@@ -24,6 +19,13 @@ export const RatingCardFormHeader = styled('div', {
   gap: '1rem',
 
   '@media (min-width: 580px)': {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  '&.profile': {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
@@ -57,7 +59,8 @@ export const ReviewForm = styled('textarea', {
   height: 188,
   minHeight: 80,
   color: '$gray300',
-  lineHeight: '1.3rem',
+  lineHeight: '1.4rem',
+  fontSize: '0.9rem',
   resize: 'vertical',
 })
 

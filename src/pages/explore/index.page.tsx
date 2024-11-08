@@ -28,6 +28,7 @@ import { CreateReviewData, EditReviewData } from '../home/index.page'
 import { toast } from 'react-toastify'
 import useRequest from '@/utils/useRequest'
 import { handleApiError } from '@/utils/handleApiError'
+import { useAppContext } from '@/contexts/AppContext'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -44,6 +45,8 @@ export default function Explore() {
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  const { loggedUser } = useAppContext()
 
   const isMobile = useScreenSize(980)
 
@@ -120,6 +123,24 @@ export default function Explore() {
     }
   }
 
+  const handleSelectReadingStatus = async (book: BookProps, status: string) => {
+    if (loggedUser && book) {
+      try {
+        const payload = {
+          userId: loggedUser?.id,
+          bookId: book.id,
+          status,
+        }
+
+        await Promise.all([api.post('/reading_status', payload), mutateBooks()])
+
+        toast.success('Status successfully updated!')
+      } catch (error) {
+        handleApiError(error)
+      }
+    }
+  }
+  console.log(books)
   return (
     <>
       <NextSeo title="Explore | Book Wise" />
@@ -133,6 +154,7 @@ export default function Explore() {
               handleCreateReview={handleCreateReview}
               handleEditReview={handleEditReview}
               handleDeleteReview={handleDeleteReview}
+              handleSelectReadingStatus={handleSelectReadingStatus}
               onClose={() => {
                 handleCloseLateralMenu()
               }}
