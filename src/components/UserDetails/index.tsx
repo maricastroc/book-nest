@@ -1,6 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useEffect, useState, useMemo } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
@@ -36,7 +34,7 @@ interface UserStat {
   label: string
 }
 
-const renderUserStatItem = ({ icon, value, label }: UserStat) => (
+const UserStatItemComponent = ({ icon, value, label }: UserStat) => (
   <UserStatItem>
     {icon}
     <UserStatText>
@@ -55,9 +53,18 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
     dateString: '',
   })
 
-  const { data: session } = useSession()
-
   const { loggedUser, isLoading } = useAppContext()
+
+  const isCurrentUser = useMemo(
+    () => loggedUser?.id === userId,
+    [loggedUser, userId],
+  )
+
+  const userAvatarUrl = isCurrentUser
+    ? loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT
+    : userStatistics?.user.avatarUrl ?? AVATAR_URL_DEFAULT
+
+  const userName = isCurrentUser ? loggedUser?.name : userStatistics?.user.name
 
   const userStats: UserStat[] = [
     {
@@ -82,18 +89,6 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
     },
   ]
 
-  const getUserAvatarUrl = () => {
-    return session?.user.id === userId
-      ? loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT
-      : userStatistics?.user.avatarUrl ?? AVATAR_URL_DEFAULT
-  }
-
-  const getUserName = () => {
-    return session?.user.id === userId
-      ? loggedUser?.name
-      : userStatistics?.user.name
-  }
-
   useEffect(() => {
     if (userId && userStatistics) {
       const dateFormattedData = getDateFormattedAndRelative(
@@ -110,14 +105,14 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
       ) : (
         <>
           <UserProfileInfo>
-            <Avatar avatarUrl={getUserAvatarUrl()} variant="large" />
-            <h2>{getUserName()}</h2>
+            <Avatar avatarUrl={userAvatarUrl} variant="large" />
+            <h2>{userName}</h2>
             <time title={dateInfo.dateFormatted} dateTime={dateInfo.dateString}>
               joined {dateInfo.dateRelativeToNow}
             </time>
           </UserProfileInfo>
 
-          {session?.user.id === userId && (
+          {isCurrentUser && (
             <Dialog.Root>
               <Dialog.Trigger asChild>
                 <EditProfileButton
@@ -139,7 +134,9 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
           <DividerLine />
 
           <UserStatsWrapper>
-            {userStats.map(renderUserStatItem)}
+            {userStats.map((stat, index) => (
+              <UserStatItemComponent key={index} {...stat} />
+            ))}
           </UserStatsWrapper>
         </>
       )}

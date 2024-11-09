@@ -8,13 +8,12 @@ export const ExplorePageWrapper = styled('div', {
   maxWidth: '100%',
   alignItems: 'center',
   justifyContent: 'flex-start',
-  minHeight: '100vh',
-  overflorX: 'hidden',
+  height: '100vh',
+  overflowX: 'hidden',
   minWidth: '100vw',
 
   '@media (min-width: 980px)': {
     flexDirection: 'row',
-    height: '97vh',
     alignItems: 'stretch',
     padding: '0 2rem 0 1rem',
     gap: '2.5rem',
@@ -158,10 +157,17 @@ export const SearchBar = styled('div', {
 export const Categories = styled('div', {
   marginTop: '1rem',
   display: 'flex',
-  flexWrap: 'wrap',
+  overflowX: 'scroll',
   gap: '0.7rem',
   alignItems: 'center',
   width: '100%',
+  paddingBottom: '0.8rem',
+
+  '@media (min-width: 980px)': {
+    flexWrap: 'wrap',
+    overflowX: 'initial',
+    paddingBottom: 0,
+  },
 })
 
 export const SelectCategoryButton = styled('button', {
@@ -172,6 +178,7 @@ export const SelectCategoryButton = styled('button', {
   color: '$purple100',
   padding: '0.3rem 0.8rem',
   fontSize: '0.85rem',
+  whiteSpace: 'nowrap',
 
   '&:hover': {
     transition: '200ms',

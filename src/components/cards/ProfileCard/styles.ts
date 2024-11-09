@@ -22,7 +22,7 @@ export const ProfileCardBox = styled('div', {
   justifyContent: 'center',
   width: '100%',
   position: 'relative',
-  marginBottom: '1.5rem',
+  marginBottom: '1rem',
 
   '@media (min-width: 480px)': {
     alignItems: 'space-between',
@@ -37,7 +37,7 @@ export const ProfileCardHeader = styled('div', {
   borderTopLeftRadius: 8,
   borderTopRightRadius: 8,
   marginBottom: '1rem',
-  padding: '1.5rem 1.5rem 1.2rem',
+  padding: '1rem 1.5rem 1rem',
   backgroundColor: '$gray650',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.1)',
 
@@ -98,8 +98,9 @@ export const BookSummaryWrapper = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   gap: '1rem',
-
+  width: '100%',
   height: '100%',
+
   '@media (min-width: 480px)': {
     gap: '0.5rem',
   },
@@ -192,24 +193,74 @@ export const DividerLine = styled('span', {
 })
 
 export const EmptyCardContent = styled('div', {
-  color: '$gray300',
-  width: '100%',
+  color: '$gray400',
+  display: 'flex',
+  cursor: 'pointer',
+  gap: '0.5rem',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minWidth: '100%',
+  minHeight: '7rem',
   height: '100%',
   borderRadius: 8,
-  textAlign: 'start',
-  flexGrow: 1,
-  lineHeight: '1.4rem',
-  fontSize: '0.9rem',
+  border: '1px dashed $gray400',
 
-  span: {
-    fontSize: '0.9rem',
-    fontWeight: 700,
-    color: '$green100',
-    cursor: 'pointer',
+  svg: {
+    color: '$gray400',
+    fontSize: '1.1rem',
+  },
 
-    '&:hover': {
-      transition: '200ms all',
-      filter: 'brightness(1.3)',
+  '&:hover': {
+    color: '$gray200',
+    border: '1px dashed $gray200',
+    transition: '200ms',
+
+    svg: {
+      color: '$gray200',
+    },
+  },
+})
+
+export const ActionButton = styled('button', {
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  border: 'none',
+  borderRadius: 8,
+  padding: '0.3rem',
+  backgroundColor: 'transparent',
+
+  svg: {
+    fontSize: '1.2rem',
+  },
+
+  '&.edit': {
+    border: '1px solid $green200',
+
+    svg: {
+      color: '$green100',
+    },
+  },
+
+  '&.delete': {
+    border: '1px solid $red400',
+
+    svg: {
+      color: '$red300',
+    },
+  },
+
+  '&:hover': {
+    filter: 'brightness(1.3)',
+    transition: '200ms',
+  },
+
+  variants: {
+    disabled: {
+      true: {
+        cursor: 'not-allowed',
+      },
     },
   },
 })

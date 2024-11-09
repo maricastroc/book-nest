@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Pencil, Trash } from 'phosphor-react'
+import {
+  PencilSimple,
+  Plus,
+  TrashSimple,
+} from 'phosphor-react'
 
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
@@ -18,6 +22,7 @@ import {
   BookTitleAndAuthor,
   ProfileCardWrapper,
   EmptyCardContent,
+  ActionButton,
 } from './styles'
 import { UserActions } from '@/styles/shared'
 import { EditReviewData } from '@/pages/home/index.page'
@@ -72,7 +77,9 @@ export function ProfileCard({
               <UserActions style={{ paddingRight: 0, marginTop: 0 }}>
                 <Dialog.Root open={isDeleteModalOpen}>
                   <Dialog.Trigger asChild>
-                    <Trash className="delete_icon" />
+                    <ActionButton className="delete" type="submit">
+                      <TrashSimple />
+                    </ActionButton>
                   </Dialog.Trigger>
                   <DeleteModal
                     onConfirm={() => {
@@ -82,10 +89,9 @@ export function ProfileCard({
                 </Dialog.Root>
                 <Dialog.Root open={isEditUserReviewModalOpen}>
                   <Dialog.Trigger asChild>
-                    <Pencil
-                      className="edit_icon"
-                      onClick={() => setIsEditUserReviewModalOpen(true)}
-                    />
+                    <ActionButton className="edit" type="submit">
+                      <PencilSimple />
+                    </ActionButton>
                   </Dialog.Trigger>
                   <EditUserReviewModal
                     rating={rating}
@@ -120,9 +126,8 @@ export function ProfileCard({
                     <EmptyCardContent
                       onClick={() => setIsEditUserReviewModalOpen(true)}
                     >
-                      It looks like there’s no review for this book yet. How
-                      about sharing your thoughts on it?{' '}
-                      <span style={{ display: 'inline' }}>Click here!</span>
+                      Add your Review
+                      <Plus />
                     </EmptyCardContent>
                   ))}
               </BookSummaryWrapper>
@@ -140,10 +145,11 @@ export function ProfileCard({
               ) : (
                 <>
                   <DividerLine />
-                  <EmptyCardContent>
-                    It looks like there’s no review for this book yet. How about
-                    sharing your thoughts on it?{' '}
-                    <span style={{ display: 'inline' }}>Click here!</span>
+                  <EmptyCardContent
+                    onClick={() => setIsEditUserReviewModalOpen(true)}
+                  >
+                    Add your Review
+                    <Plus />
                   </EmptyCardContent>
                 </>
               ))}

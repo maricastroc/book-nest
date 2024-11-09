@@ -8,14 +8,20 @@ export function SkeletonCategories() {
   )
 
   const getSkeletonWidth = () => {
-    if (isSmallScreen) return '5rem'
+    if (isSmallScreen) return '5.5rem'
     if (isMediumScreen) return '7rem'
     return '9rem'
   }
 
+  const getLength = () => {
+    if (isSmallScreen) return 3
+    if (isMediumScreen) return 6
+    return 12
+  }
+
   return (
     <Container>
-      {Array.from({ length: 12 }).map((_, index) => (
+      {Array.from({ length: getLength() }).map((_, index) => (
         <Skeleton
           key={index}
           width={getSkeletonWidth()}

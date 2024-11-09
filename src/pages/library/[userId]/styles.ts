@@ -24,7 +24,7 @@ export const LibraryPageWrapper = styled('div', {
   },
 
   '@media (min-width: 1200px)': {
-    paddingLeft: '21rem',
+    paddingLeft: '19rem',
   },
 
   '@media (min-width: 1800px)': {

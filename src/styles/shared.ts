@@ -47,7 +47,7 @@ export const UserActions = styled('div', {
   justifyContent: 'flex-end',
   paddingRight: '1rem',
   width: '100%',
-  gap: '0.4rem',
+  gap: '0.6rem',
   marginTop: '0.5rem',
   borderRadius: 8,
 

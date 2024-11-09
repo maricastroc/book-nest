@@ -29,10 +29,6 @@ export const ProfilePageWrapper = styled('div', {
     paddingLeft: '19rem',
   },
 
-  '@media (min-width: 1200px)': {
-    paddingLeft: '21rem',
-  },
-
   '@media (min-width: 1800px)': {
     minWidth: 'auto',
     maxWidth: '80rem',
@@ -129,7 +125,6 @@ export const UserRatingsContainer = styled('div', {
   margin: '0 auto',
   width: '100%',
   minHeight: '100%',
-  borderTop: 'solid 2px $gray700',
   paddingTop: '2rem',
 
   '@media (min-width: 1024px)': {
@@ -149,7 +144,6 @@ export const UserRatingsContainer = styled('div', {
 export const UserDetailsContainer = styled('div', {
   alignItems: 'flex-start',
   flexDirection: 'column',
-  padding: '0 2rem',
   width: '100%',
 
   '@media (min-width: 768px)': {
@@ -157,9 +151,10 @@ export const UserDetailsContainer = styled('div', {
   },
 
   '@media (min-width: 1024px)': {
+    alignItems: 'center',
     height: '100vh',
     overflow: 'scroll',
-    padding: 0,
+    padding: '1rem',
     paddingBottom: '5rem',
     marginTop: '-2.5rem',
   },
