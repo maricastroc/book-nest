@@ -19,10 +19,6 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import useRequest from '@/utils/useRequest'
 import { UserStatistics } from '@/contexts/AppContext'
-import { api } from '@/lib/axios'
-import { toast } from 'react-toastify'
-import { handleApiError } from '@/utils/handleApiError'
-import { EditReviewData } from '@/pages/home/index.page'
 import { BooksStatusProps } from '@/@types/books-status'
 import { SkeletonStatusBox } from '@/components/skeletons/SkeletonStatusBox'
 import { StatusBoxes } from '../partials/StatusBoxes'
@@ -43,7 +39,7 @@ export default function Profile() {
       }
     : null
 
-  const { data: userStatistics, mutate } = useRequest<UserStatistics>(
+  const { data: userStatistics } = useRequest<UserStatistics>(
     requestUserStatistics,
   )
 
@@ -56,37 +52,6 @@ export default function Profile() {
 
   const { data: booksStatus, isValidating: isValidatingBooksStatus } =
     useRequest<BooksStatusProps>(requestBooksStatus)
-
-  const handleDeleteReview = async (id: string) => {
-    try {
-      const payload = { id }
-      await api.delete('/ratings', { data: payload })
-
-      toast.success('Rating successfully deleted!')
-
-      await mutate()
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
-
-  const handleEditReview = async (data: EditReviewData) => {
-    try {
-      const payload = {
-        id: data.ratingId,
-        description: data.description,
-        rate: data.rate,
-      }
-
-      await api.put('/ratings', payload)
-
-      toast.success('Rating successfully edited!')
-
-      await mutate()
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
 
   const isMobile = useScreenSize(768)
 

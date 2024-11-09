@@ -23,7 +23,7 @@ import {
   User,
 } from 'phosphor-react'
 import { useRouter } from 'next/router'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { SignInModal } from '../../modals/SignInModal'
 import { toast } from 'react-toastify'
@@ -56,8 +56,6 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
 
 export function Sidebar() {
   const router = useRouter()
-
-  const { data: session } = useSession()
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
@@ -93,12 +91,12 @@ export function Sidebar() {
                 icon={Binoculars}
                 label="Explore"
               />
-              {session?.user && (
+              {loggedUser && (
                 <>
                   <NavigationItem
                     active={router.pathname.includes('profile')}
                     onClick={() => {
-                      const targetPath = `/profile/${session.user.id}`
+                      const targetPath = `/profile/${loggedUser.id}`
                       router.push(targetPath)
                     }}
                     icon={User}
@@ -107,7 +105,7 @@ export function Sidebar() {
                   <NavigationItem
                     active={router.pathname.includes('library')}
                     onClick={() => {
-                      const targetPath = `/library/${session.user.id}`
+                      const targetPath = `/library/${loggedUser.id}`
                       router.push(targetPath)
                     }}
                     icon={Books}
@@ -117,7 +115,7 @@ export function Sidebar() {
               )}
             </ItemsContainer>
           </SidebarMain>
-          {loggedUser && session?.user.id ? (
+          {loggedUser ? (
             <ProfileContainer>
               {isLoading ? (
                 <SkeletonUserSidebar />
@@ -130,8 +128,8 @@ export function Sidebar() {
                     onClick={() => {
                       const currentPath = router.asPath
                       const targetPath = currentPath.includes('/profile/')
-                        ? `/profile/${session.user.id}`
-                        : `profile/${session.user.id}`
+                        ? `/profile/${loggedUser.id}`
+                        : `profile/${loggedUser.id}`
 
                       router.push(targetPath)
                     }}

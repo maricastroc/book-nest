@@ -1,4 +1,11 @@
-import { Binoculars, ChartLineUp, SignIn, SignOut, User } from 'phosphor-react'
+import {
+  Binoculars,
+  Books,
+  ChartLineUp,
+  SignIn,
+  SignOut,
+  User,
+} from 'phosphor-react'
 import {
   MobileModalBox,
   PageLink,
@@ -10,7 +17,7 @@ import {
   SignOutContainer,
 } from './styles'
 import { useRouter } from 'next/router'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { SignInModal } from '@/components/modals/SignInModal'
 import { Avatar } from '@/components/shared/Avatar'
@@ -76,8 +83,6 @@ export function MobileModal() {
 
   const router = useRouter()
 
-  const session = useSession()
-
   const { loggedUser, isLoading } = useAppContext()
 
   const handleLogout = async () => {
@@ -102,14 +107,29 @@ export function MobileModal() {
           <Binoculars />
           <p>Explore</p>
         </PageLink>
-        {session.data?.user && (
-          <PageLink
-            active={router.pathname.includes('profile')}
-            onClick={() => router.push(`/profile/${session.data.user.id}`)}
-          >
-            <User />
-            <p>Profile</p>
-          </PageLink>
+        {loggedUser && (
+          <>
+            <PageLink
+              active={router.pathname.includes('profile')}
+              onClick={() => {
+                const targetPath = `/profile/${loggedUser.id}`
+                router.push(targetPath)
+              }}
+            >
+              <User />
+              <p>Profile</p>
+            </PageLink>
+            <PageLink
+              active={router.pathname.includes('library')}
+              onClick={() => {
+                const targetPath = `/library/${loggedUser.id}`
+                router.push(targetPath)
+              }}
+            >
+              <Books />
+              <p>Library</p>
+            </PageLink>
+          </>
         )}
       </PagesLinksContainer>
       {loggedUser ? (
