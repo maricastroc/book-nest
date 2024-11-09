@@ -22,7 +22,7 @@ export const ProfileCardBox = styled('div', {
   justifyContent: 'center',
   width: '100%',
   position: 'relative',
-  marginBottom: '2rem',
+  marginBottom: '1.5rem',
 
   '@media (min-width: 480px)': {
     alignItems: 'space-between',

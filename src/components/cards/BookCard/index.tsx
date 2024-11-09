@@ -24,6 +24,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { ReadBookModal } from '@/components/modals/ReadBookModal'
 import { CreateReviewData } from '@/pages/home/index.page'
 import { useAppContext } from '@/contexts/AppContext'
+import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
 
 interface BookCardProps {
   book: BookProps
@@ -89,7 +90,7 @@ export function BookCard({
                     }}
                   >
                     {book?.readingStatus
-                      ? book.readingStatus
+                      ? getReadingStatusLabel(book.readingStatus)
                       : 'Add to Library'}
                   </AddToLibraryButton>
                 </Dialog.Trigger>

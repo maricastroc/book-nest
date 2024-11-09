@@ -69,6 +69,10 @@ export default async function handler(
         (status) => status.bookId === rating.book.id,
       )?.status
 
+      function toSnakeCase(text: string): string {
+        return text.toLowerCase().replace(/\s+/g, '_')
+      }
+
       return {
         ...rating,
         book: {
@@ -77,7 +81,7 @@ export default async function handler(
           categories: rating.book.categories.map(
             (category) => category.category,
           ),
-          readingStatus: readingStatus || null,
+          readingStatus: readingStatus ? toSnakeCase(readingStatus) : null,
         },
       }
     })

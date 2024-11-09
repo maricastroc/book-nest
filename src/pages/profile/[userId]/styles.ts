@@ -247,7 +247,7 @@ export const UserRatings = styled('div', {
   alignItems: 'flex-start',
   flexDirection: 'column',
   width: '100%',
-  gap: '1.5rem',
+  gap: '1rem',
 
   '@media (min-width: 768px)': {
     '&.smaller': {

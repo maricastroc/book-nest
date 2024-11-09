@@ -23,8 +23,8 @@ export function ExploreCard({ book, ...rest }: ExploreCardProps) {
     <Container {...rest}>
       <BookCover alt="" src={book.coverUrl} />
       <BookInfo>
-        {book.alreadyRead && (
-          <ReadNotice>
+        {book?.readingStatus && (
+          <ReadNotice className={book.readingStatus}>
             <FontAwesomeIcon icon={faBookmark} />
           </ReadNotice>
         )}

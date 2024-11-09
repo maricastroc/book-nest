@@ -23,7 +23,7 @@ export function PopularBookCard({ book, onOpenDetails }: PopularBookCardProps) {
       <BookCover src={book.coverUrl} />
       <BookContentWrapper>
         {book?.readingStatus && (
-          <ReadNotice>
+          <ReadNotice className={book.readingStatus}>
             <FontAwesomeIcon icon={faBookmark} />
           </ReadNotice>
         )}

@@ -89,7 +89,7 @@ export function LateralMenu({
       <span onClick={() => setIsSignInModalOpen(true)}>Review</span>
     </Dialog.Trigger>
   )
-
+  console.log(book)
   return (
     <LateralMenuWrapper>
       <OverlayBackground onClick={onClose} />

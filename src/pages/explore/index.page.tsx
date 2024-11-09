@@ -140,7 +140,7 @@ export default function Explore() {
       }
     }
   }
-  console.log(books)
+
   return (
     <>
       <NextSeo title="Explore | Book Wise" />

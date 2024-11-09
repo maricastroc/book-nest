@@ -83,11 +83,15 @@ export default async function handler(
 
     const { ...bookInfo } = book
 
-    const readingStatus = book.readingStatus?.[0]?.status ?? null
+    function toSnakeCase(text: string): string {
+      return text.toLowerCase().replace(/\s+/g, '_')
+    }
+
+    const readingStatus = toSnakeCase(book.readingStatus?.[0]?.status) ?? null
 
     return {
       ...bookInfo,
-      ratings: book.ratings, // Todos os atributos dos ratings são mantidos
+      ratings: book.ratings,
       rate: bookAvgRating?._avg.rate,
       alreadyRead: userBooksId.includes(book.id),
       readingStatus,

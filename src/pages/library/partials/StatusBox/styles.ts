@@ -10,16 +10,38 @@ export const LibraryContainerBox = styled('div', {
   marginBottom: '0.5rem',
   gap: '0.7rem',
 
-  '&.empty': {
-    padding: '1.5rem',
+  '&.smaller': {
+    paddingRight: '1.5rem',
   },
 
   '@media (min-width: 480px)': {
-    marginBottom: '3rem',
+    padding: '1.5rem 0 1.5rem 2rem',
+
+    '&.smaller': {
+      paddingRight: '2rem',
+    },
+  },
+
+  '@media (min-width: 768px)': {
+    padding: '1.5rem 0 1.5rem 1.2rem',
+
+    '&.smaller': {
+      paddingRight: '2rem',
+    },
   },
 
   '@media (min-width: 1024px)': {
+    marginBottom: '3rem',
     padding: 0,
+
+    '&.smaller': {
+      paddingRight: 0,
+
+      '*::-webkit-scrollbar': {
+        width: 2,
+        height: 0,
+      },
+    },
 
     '*::-webkit-scrollbar': {
       width: 2,
@@ -78,18 +100,26 @@ export const ContainerWrapper = styled('div', {
   justifyContent: 'flex-start',
   padding: '1.2rem 0 1.2rem 1.2rem',
   width: '100%',
-  gap: '1.1rem',
+  gap: '1.2rem',
   overflowX: 'scroll',
   background: '$gray700',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
-  '&.empty': {
+  '&.smaller': {
     padding: '1.2rem',
+  },
+
+  '@media (min-width: 680px)': {
+    gap: '1.5rem',
   },
 
   '@media (min-width: 1024px)': {
     gap: '1.8rem',
+  },
+
+  '@media (min-width: 1200px)': {
+    padding: '1.8rem',
   },
 })
 
@@ -141,6 +171,7 @@ export const BookContainer = styled('div', {
 })
 
 export const BookCover = styled('img', {
+  cursor: 'pointer',
   width: '5.45rem',
   height: 'auto',
   borderRadius: 8,
@@ -148,12 +179,18 @@ export const BookCover = styled('img', {
   filter: 'brightness(0.95)',
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
-  '@media (min-width: 1200px)': {
-    width: '5.5rem',
+  '@media (min-width: 680px)': {
+    width: '6rem',
+  },
+
+  '&:hover': {
+    filter: 'brightness(1.15)',
+    transition: '200ms',
   },
 })
 
 export const EmptyBookCover = styled('div', {
+  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -176,6 +213,15 @@ export const EmptyBookCover = styled('div', {
   svg: {
     color: '$gray400',
     fontSize: '1.5rem',
+  },
+
+  '&:hover': {
+    border: '1px dashed $gray200',
+    transition: '200ms',
+
+    svg: {
+      color: '$gray200',
+    },
   },
 })
 

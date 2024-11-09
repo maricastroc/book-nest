@@ -61,18 +61,24 @@ export default async function handler(
     },
   })
 
-  // Ajusta a estrutura de books com suas categorias
+  // Ajusta a estrutura de books com suas categorias e cálculos de média
   const booksWithCategories = books.map((book) => {
     const avgRate =
       book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
         book.ratings.length || 0
+
+    // Encontra a avaliação do usuário específico
+    const userRating =
+      book.ratings.find((rating) => rating.userId === String(userId))?.rate ||
+      null
 
     const categories = book.categories.map((cat) => cat.category)
 
     return {
       ...book,
       categories,
-      rate: avgRate,
+      rate: avgRate, // Média de avaliação de todos os usuários
+      userRating, // Avaliação do usuário específico
       ratings: book.ratings,
       readingStatus: book.readingStatus[0]?.status || undefined,
     }

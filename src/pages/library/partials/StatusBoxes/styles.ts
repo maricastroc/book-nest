@@ -9,7 +9,7 @@ export const StatusBoxesContainer = styled('div', {
     height: '100vh',
     overflow: 'scroll',
     padding: 0,
-    paddingBottom: '5rem',
+    paddingBottom: '7rem',
     paddingRight: '1rem',
   },
 

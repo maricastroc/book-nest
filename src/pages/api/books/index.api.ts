@@ -24,8 +24,14 @@ export default async function handler(
   }
 
   if (req.query.search) {
-    searchQuery = String(req.query.search).toLowerCase() // Converte para minúsculas
+    searchQuery = String(req.query.search).toLowerCase()
   }
+
+  const session = await getServerSession(
+    req,
+    res,
+    buildNextAuthOptions(req, res),
+  )
 
   const books = await prisma.book.findMany({
     where: {
@@ -36,7 +42,7 @@ export default async function handler(
               {
                 name: {
                   contains: searchQuery,
-                  mode: 'insensitive', // busca insensível a maiúsculas e minúsculas
+                  mode: 'insensitive',
                 },
               },
               {
@@ -47,7 +53,7 @@ export default async function handler(
               },
             ],
           }
-        : {}), // Se searchQuery não estiver presente, não adiciona o filtro OR
+        : {}),
     },
     include: {
       ratings: {
@@ -60,6 +66,15 @@ export default async function handler(
           category: true,
         },
       },
+      ...(session
+        ? {
+            readingStatus: {
+              where: {
+                userId: String(session?.user?.id),
+              },
+            },
+          }
+        : {}),
     },
   })
 
@@ -70,13 +85,17 @@ export default async function handler(
     }
   })
 
-  let userBooksIds: string[] = []
-
-  const session = await getServerSession(
-    req,
-    res,
-    buildNextAuthOptions(req, res),
-  )
+  const booksAvgRating = await prisma.rating.groupBy({
+    by: ['bookId'],
+    where: {
+      bookId: {
+        in: books.map((book) => book.id),
+      },
+    },
+    _avg: {
+      rate: true,
+    },
+  })
 
   if (session) {
     const userBooks = await prisma.book.findMany({
@@ -89,32 +108,30 @@ export default async function handler(
       },
     })
 
-    userBooksIds = userBooks?.map((book) => book?.id)
+    userBooks?.map((book) => book?.id)
   }
 
-  const booksWithRating = booksFixedRelationWithCategory.map((book) => {
-    let avgRate = NaN
+  const booksWithDetails = booksFixedRelationWithCategory.map((book) => {
+    const bookAvgRating = booksAvgRating.find(
+      (avgRating) => avgRating.bookId === book.id,
+    )
+    const avgRate = bookAvgRating?._avg.rate ?? NaN
 
-    if (book.ratings.length > 0) {
-      avgRate =
-        book.ratings.reduce((sum, rateObj) => {
-          return sum + rateObj.rate
-        }, 0) / book.ratings.length
+    function toSnakeCase(text: string): string {
+      return text.toLowerCase().replace(/\s+/g, '_')
     }
 
-    let alreadyRead = false
-
-    if (userBooksIds.length > 0) {
-      alreadyRead = userBooksIds.includes(book.id)
-    }
+    const readingStatus = book.readingStatus?.[0]?.status
+      ? toSnakeCase(book.readingStatus[0].status)
+      : null
 
     return {
       ...book,
       ratings: book.ratings,
       rate: avgRate,
-      alreadyRead,
+      readingStatus,
     }
   })
 
-  return res.json({ booksWithRating })
+  return res.json({ books: booksWithDetails })
 }

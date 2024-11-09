@@ -7,15 +7,11 @@ export const LibraryPageWrapper = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
 
-  '@media (min-width: 480px)': {
-    padding: '0 2rem',
-  },
-
   '@media (min-width: 768px)': {
     flexDirection: 'row',
     height: '100%',
     alignItems: 'flex-start',
-    padding: '0 2rem 0 1rem',
+    padding: '0 0 0 1rem',
     paddingLeft: '18rem',
   },
 
@@ -25,7 +21,6 @@ export const LibraryPageWrapper = styled('div', {
     justifyContent: 'flex-start',
     overflow: 'hidden',
     height: '100vh',
-    paddingLeft: '19rem',
   },
 
   '@media (min-width: 1200px)': {
@@ -43,8 +38,12 @@ export const LibraryHeaderWrapper = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '0 1rem',
+  padding: '0 0.65rem',
   width: '100%',
+
+  '@media (min-width: 480px)': {
+    padding: 0,
+  },
 })
 
 export const LibraryPageContainer = styled('div', {
@@ -58,26 +57,25 @@ export const LibraryPageContainer = styled('div', {
   height: '100%',
 
   paddingTop: '2rem',
-  maxWidth: '42rem',
 
   '@media (min-width: 480px)': {
-    padding: '1.5rem',
+    gap: '1.5rem',
   },
 
   '@media (min-width: 768px)': {
+    marginTop: '2rem',
     padding: '1.5rem 0',
-  },
-
-  '@media (min-width: 980px)': {
-    marginTop: '0.5rem',
-    padding: '1.5rem',
+    gap: '1.8rem',
   },
 
   '@media (min-width: 1024px)': {
     maxWidth: '100%',
     justifyContent: 'flex-start',
     padding: '1.5rem 0',
-    gap: '1rem',
+  },
+
+  '@media (min-width: 1200px)': {
+    marginTop: '0.5rem',
   },
 })
 
@@ -132,6 +130,15 @@ export const LibraryPageHeadingTitle = styled('div', {
     fontSize: '2rem',
     color: '$green100',
   },
+
+  '@media (min-width: 768px)': {
+    justifyContent: 'flex-start',
+    paddingLeft: '0.8rem',
+  },
+
+  '@media (min-width: 1024px)': {
+    paddingLeft: 0,
+  },
 })
 
 export const UserDetailsContainer = styled('div', {
@@ -149,7 +156,7 @@ export const UserDetailsContainer = styled('div', {
     overflow: 'scroll',
     padding: 0,
     paddingBottom: '5rem',
-    marginTop: '-2.5rem',
+    marginTop: '-3.5rem',
   },
 
   '@media (min-width: 1200px)': {
@@ -160,7 +167,6 @@ export const UserDetailsContainer = styled('div', {
 
 export const StatusBoxesContainer = styled('div', {
   width: '100%',
-  gap: '2rem',
 
   '@media (min-width: 1024px)': {
     height: '100vh',

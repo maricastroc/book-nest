@@ -18,6 +18,15 @@ export const Rating = styled('div', {
     },
   },
 
+  '&.smaller': {
+    svg: {
+      fontSize: '0.82rem',
+      marginTop: '0.35rem',
+      color: '$green100',
+      opacity: 0.75,
+    },
+  },
+
   '@media (min-width: 480px)': {
     svg: {
       fontSize: '1.1rem',

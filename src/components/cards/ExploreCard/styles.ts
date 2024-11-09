@@ -47,6 +47,7 @@ export const BookData = styled('div', {
     WebkitLineClamp: 3,
     WebkitBoxOrient: 'vertical',
     whiteSpace: 'normal',
+    width: '90%',
   },
 
   p: {
@@ -56,11 +57,11 @@ export const BookData = styled('div', {
 
   '@media (min-width: 480px)': {
     h2: {
-      fontSize: '0.9rem',
+      fontSize: '0.98rem',
     },
 
     p: {
-      fontSize: '0.85rem',
+      fontSize: '0.9rem',
     },
   },
 })
