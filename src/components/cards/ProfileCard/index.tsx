@@ -1,10 +1,6 @@
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import {
-  PencilSimple,
-  Plus,
-  TrashSimple,
-} from 'phosphor-react'
+import { PencilSimple, Plus, TrashSimple } from 'phosphor-react'
 
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
