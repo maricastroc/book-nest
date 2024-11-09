@@ -10,6 +10,10 @@ export const LibraryContainerBox = styled('div', {
   marginBottom: '0.5rem',
   gap: '0.7rem',
 
+  '&.empty': {
+    padding: '1.5rem',
+  },
+
   '@media (min-width: 480px)': {
     marginBottom: '3rem',
   },
@@ -72,16 +76,16 @@ export const ContainerWrapper = styled('div', {
   display: 'flex',
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
-  padding: '1.5rem 0 1.5rem 1.5rem',
+  padding: '1.2rem 0 1.2rem 1.2rem',
   width: '100%',
-  gap: '1.45rem',
+  gap: '1.1rem',
   overflowX: 'scroll',
-  background: '$gray750',
+  background: '$gray700',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
   '&.empty': {
-    padding: '1.5rem',
+    padding: '1.2rem',
   },
 
   '@media (min-width: 1024px)': {
@@ -137,11 +141,12 @@ export const BookContainer = styled('div', {
 })
 
 export const BookCover = styled('img', {
-  width: '5rem',
+  width: '5.45rem',
   height: 'auto',
   borderRadius: 8,
   opacity: 0.9,
   filter: 'brightness(0.95)',
+  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
   '@media (min-width: 1200px)': {
     width: '5.5rem',
