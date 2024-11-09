@@ -47,7 +47,7 @@ export default function Profile() {
     ? {
         url: `/library`,
         method: 'GET',
-        params: { userId }
+        params: { userId },
       }
     : null
 
