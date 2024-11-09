@@ -10,10 +10,6 @@ export const LibraryContainerBox = styled('div', {
   marginBottom: '0.5rem',
   gap: '0.7rem',
 
-  '&.empty': {
-    padding: '1.5rem',
-  },
-
   '@media (min-width: 480px)': {
     marginBottom: '3rem',
   },
@@ -181,7 +177,7 @@ export const EmptyBookCover = styled('div', {
 export const EmptyBooksContainer = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   width: '100%',
   height: '7rem',
   borderRadius: 8,

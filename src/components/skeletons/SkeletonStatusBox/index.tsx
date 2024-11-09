@@ -12,10 +12,9 @@ export function SkeletonStatusBox({ count = 1 }: SkeletonStatusBoxProps) {
           key={i}
           style={{
             width: '100%',
-            height: '6rem',
+            height: '10rem',
             borderRadius: '8px',
             backgroundColor: 'rgba(79, 97, 158, 0.3)',
-            marginBottom: '3rem',
           }}
         />
       ))}

@@ -47,6 +47,7 @@ export default function Profile() {
     ? {
         url: `/library`,
         method: 'GET',
+        params: { userId }
       }
     : null
 
@@ -80,12 +81,11 @@ export default function Profile() {
             <LibraryPageContent>
               {isValidatingBooksStatus ? (
                 <StatusBoxesContainer>
-                  <SkeletonStatusBox count={4} />
+                  <SkeletonStatusBox count={3} />
                 </StatusBoxesContainer>
               ) : (
                 <StatusBoxes data={booksStatus} />
               )}
-
               <UserDetailsContainer>
                 {userId && (
                   <UserDetails

@@ -1,6 +1,7 @@
 import { styled } from '@/styles'
 
 export const StatusBoxesContainer = styled('div', {
+  alignItems: 'flex-start',
   width: '100%',
   gap: '2rem',
 
