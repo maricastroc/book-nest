@@ -27,12 +27,6 @@ export default async function handler(
     searchQuery = String(req.query.search).toLowerCase() // Converte para minúsculas
   }
 
-  const session = await getServerSession(
-    req,
-    res,
-    buildNextAuthOptions(req, res),
-  )
-
   const books = await prisma.book.findMany({
     where: {
       categories: categoriesQuery,
@@ -66,11 +60,6 @@ export default async function handler(
           category: true,
         },
       },
-      readingStatus: {
-        where: {
-          userId: String(session?.user?.id), // Inclui o status de leitura do usuário atual
-        },
-      },
     },
   })
 
@@ -82,6 +71,12 @@ export default async function handler(
   })
 
   let userBooksIds: string[] = []
+
+  const session = await getServerSession(
+    req,
+    res,
+    buildNextAuthOptions(req, res),
+  )
 
   if (session) {
     const userBooks = await prisma.book.findMany({
@@ -113,15 +108,11 @@ export default async function handler(
       alreadyRead = userBooksIds.includes(book.id)
     }
 
-    // Aqui verificamos o readingStatus (associado ao usuário)
-    const readingStatus = book.readingStatus?.[0]?.status ?? null
-
     return {
       ...book,
       ratings: book.ratings,
       rate: avgRate,
       alreadyRead,
-      readingStatus, // Adiciona o status de leitura
     }
   })
 

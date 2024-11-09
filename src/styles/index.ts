@@ -34,6 +34,7 @@ export const {
       gray600: '#252D4A',
       gray650: '#20263f',
       gray700: '#181C2A',
+      gray750: '#121520',
       gray800: '#0E1116',
 
       reading: '#4F72D5',

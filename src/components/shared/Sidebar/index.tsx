@@ -14,7 +14,14 @@ import {
 import Image from 'next/image'
 import SidebarBackground from '../../../../public/assets/sidebar.svg'
 import Logo from '../../../../public/assets/logo.svg'
-import { Binoculars, ChartLineUp, SignIn, SignOut } from 'phosphor-react'
+import {
+  Binoculars,
+  Books,
+  ChartLineUp,
+  SignIn,
+  SignOut,
+  User,
+} from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -87,19 +94,26 @@ export function Sidebar() {
                 label="Explore"
               />
               {session?.user && (
-                <NavigationItem
-                  active={router.pathname.includes('profile')}
-                  onClick={() => {
-                    const currentPath = router.asPath
-                    const targetPath = currentPath.includes('/profile/')
-                      ? `/profile/${session.user.id}`
-                      : `profile/${session.user.id}`
-
-                    router.push(targetPath)
-                  }}
-                  icon={Binoculars}
-                  label="Profile"
-                />
+                <>
+                  <NavigationItem
+                    active={router.pathname.includes('profile')}
+                    onClick={() => {
+                      const targetPath = `/profile/${session.user.id}`
+                      router.push(targetPath)
+                    }}
+                    icon={User}
+                    label="Profile"
+                  />
+                  <NavigationItem
+                    active={router.pathname.includes('library')}
+                    onClick={() => {
+                      const targetPath = `/library/${session.user.id}`
+                      router.push(targetPath)
+                    }}
+                    icon={Books}
+                    label="Library"
+                  />
+                </>
               )}
             </ItemsContainer>
           </SidebarMain>

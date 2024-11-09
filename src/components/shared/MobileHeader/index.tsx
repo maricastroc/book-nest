@@ -5,11 +5,11 @@ import { List, X } from 'phosphor-react'
 import { useState } from 'react'
 import { MobileModal } from '../../modals/MobileModal'
 
-export function MobileHeader() {
+export function MobileHeader({ ...rest }) {
   const [openModal, setOpenModal] = useState(false)
 
   return (
-    <MobileHeaderBox>
+    <MobileHeaderBox {...rest}>
       <MobileHeaderContent>
         <Image
           src={Logo}

@@ -22,7 +22,10 @@ export default async function handler(
   }
 
   try {
+    const userId = String(session.user.id)
+
     const ratings = await prisma.rating.findMany({
+      where: { userId: { not: userId }, NOT: { description: '' } },
       orderBy: {
         createdAt: 'desc',
       },

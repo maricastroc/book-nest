@@ -5,6 +5,7 @@ export const ProfileCardWrapper = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '0.5rem',
+  width: '100%',
 
   time: {
     color: '$gray400',
@@ -98,6 +99,7 @@ export const BookSummaryWrapper = styled('div', {
   justifyContent: 'space-between',
   gap: '1rem',
 
+  height: '100%',
   '@media (min-width: 480px)': {
     gap: '0.5rem',
   },
@@ -185,6 +187,29 @@ export const DividerLine = styled('span', {
 
     '&.larger': {
       display: 'block',
+    },
+  },
+})
+
+export const EmptyCardContent = styled('div', {
+  color: '$gray300',
+  width: '100%',
+  height: '100%',
+  borderRadius: 8,
+  textAlign: 'start',
+  flexGrow: 1,
+  lineHeight: '1.4rem',
+  fontSize: '0.9rem',
+
+  span: {
+    fontSize: '0.9rem',
+    fontWeight: 700,
+    color: '$green100',
+    cursor: 'pointer',
+
+    '&:hover': {
+      transition: '200ms all',
+      filter: 'brightness(1.3)',
     },
   },
 })

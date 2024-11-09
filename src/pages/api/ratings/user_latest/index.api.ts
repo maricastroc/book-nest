@@ -23,7 +23,7 @@ export default async function handler(
     const userId = String(session.user.id)
 
     const userLastRating = await prisma.rating.findFirst({
-      where: { userId },
+      where: { userId, NOT: { OR: { description: '' } } },
       orderBy: { createdAt: 'desc' },
       include: {
         book: {

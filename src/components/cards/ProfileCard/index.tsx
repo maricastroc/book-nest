@@ -17,6 +17,7 @@ import {
   ProfileCardBox,
   BookTitleAndAuthor,
   ProfileCardWrapper,
+  EmptyCardContent,
 } from './styles'
 import { UserActions } from '@/styles/shared'
 import { EditReviewData } from '@/pages/home/index.page'
@@ -109,21 +110,43 @@ export function ProfileCard({
                   <h2>{book.name}</h2>
                   <p>{book.author}</p>
                 </BookTitleAndAuthor>
-                {!isMobile && (
+                {!isMobile &&
+                  (rating.description !== '' ? (
+                    <TextBox
+                      maxHeight="5.8rem"
+                      description={rating.description}
+                    />
+                  ) : (
+                    <EmptyCardContent
+                      onClick={() => setIsEditUserReviewModalOpen(true)}
+                    >
+                      It looks like there’s no review for this book yet. How
+                      about sharing your thoughts on it?{' '}
+                      <span style={{ display: 'inline' }}>Click here!</span>
+                    </EmptyCardContent>
+                  ))}
+              </BookSummaryWrapper>
+            </BookDetailsContainer>
+
+            {isMobile &&
+              (rating.description !== '' ? (
+                <>
+                  <DividerLine />
                   <TextBox
                     maxHeight="5.8rem"
                     description={rating.description}
                   />
-                )}
-              </BookSummaryWrapper>
-            </BookDetailsContainer>
-
-            {isMobile && (
-              <>
-                <DividerLine />
-                <TextBox maxHeight="5.8rem" description={rating.description} />
-              </>
-            )}
+                </>
+              ) : (
+                <>
+                  <DividerLine />
+                  <EmptyCardContent>
+                    It looks like there’s no review for this book yet. How about
+                    sharing your thoughts on it?{' '}
+                    <span style={{ display: 'inline' }}>Click here!</span>
+                  </EmptyCardContent>
+                </>
+              ))}
           </ProfileCardBody>
         )}
       </ProfileCardBox>
