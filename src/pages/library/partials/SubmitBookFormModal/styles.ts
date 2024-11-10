@@ -13,15 +13,15 @@ export const Content = styled(RadixContent, {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 'clamp(300px, 80vw, 300px)',
-  borderRadius: '4px',
+  width: 'clamp(320px, 90vw, 480px)',
+  borderRadius: 8,
   zIndex: 9999,
   overflow: 'scroll',
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
-  height: 'clamp(320px, 80vh, 40rem)',
+  height: 'clamp(320px, 90vh, 40rem)',
 
   '@media (min-width: 480px)': {
-    width: 'clamp(320px, 85vw, 460px)',
+    width: 'clamp(320px, 85vw, 700px)',
   },
 
   '@media (min-width: 768px)': {
