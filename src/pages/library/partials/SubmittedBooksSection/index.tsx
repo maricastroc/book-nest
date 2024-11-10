@@ -22,14 +22,10 @@ import { PopularBookCard } from '@/components/cards/PopularBookCard'
 import { BookProps } from '@/@types/book'
 
 interface SubmittedBooksSectionProps {
-  userBooks: BookProps[] | undefined
-  isValidating: boolean
   onOpenDetails: (book: BookProps) => void
 }
 
 export function SubmittedBooksSection({
-  userBooks,
-  isValidating,
   onOpenDetails,
 }: SubmittedBooksSectionProps) {
   const { loggedUser } = useAppContext()
@@ -40,6 +36,15 @@ export function SubmittedBooksSection({
 
   const { data: categories } = useRequest<CategoryProps[]>({
     url: '/categories',
+    method: 'GET',
+  })
+
+  const {
+    data: userBooks,
+    isValidating: isValidatingUserBooks,
+    mutate,
+  } = useRequest<BookProps[]>({
+    url: `/profile/books`,
     method: 'GET',
   })
 
@@ -73,7 +78,7 @@ export function SubmittedBooksSection({
         <SubmittedBooksHeading>
           <p>Your Submitted Books</p>
         </SubmittedBooksHeading>
-        {isValidating ? (
+        {isValidatingUserBooks ? (
           Array.from({ length: 4 }).map((_, index) => (
             <SkeletonPopularBook key={index} />
           ))
@@ -101,7 +106,10 @@ export function SubmittedBooksSection({
               {categories && (
                 <SubmitBookFormModal
                   categories={categories}
-                  onClose={() => setIsSubmitBookFormOpen(false)}
+                  onClose={async () => {
+                    setIsSubmitBookFormOpen(false)
+                    await mutate()
+                  }}
                 />
               )}
             </Dialog.Root>
@@ -118,7 +126,10 @@ export function SubmittedBooksSection({
             {categories && (
               <SubmitBookFormModal
                 categories={categories}
-                onClose={() => setIsSubmitBookFormOpen(false)}
+                onClose={async () => {
+                  setIsSubmitBookFormOpen(false)
+                  await mutate()
+                }}
               />
             )}
           </Dialog.Root>

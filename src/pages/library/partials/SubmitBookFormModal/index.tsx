@@ -32,7 +32,7 @@ import { customStyles } from '@/utils/getCustomStyles'
 import { CategoryProps } from '@/@types/category'
 
 interface SubmitBookFormModalProps {
-  onClose: () => void
+  onClose: () => Promise<void>
   categories: CategoryProps[]
 }
 
@@ -74,7 +74,6 @@ export function SubmitBookFormModal({
     control,
     watch,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<SubmitBookFormData>({
     resolver: zodResolver(submitBookFormSchema),
@@ -104,6 +103,15 @@ export function SubmitBookFormModal({
   }
 
   async function handleSubmitBook(data: SubmitBookFormData) {
+    const formDataToValidate = watch()
+
+    const validation = submitBookFormSchema.safeParse(formDataToValidate)
+
+    if (!validation.success) {
+      toast.error('Please, fill all the fields before submit.')
+      return
+    }
+
     const formData = new FormData()
 
     formData.append('coverUrl', data.coverUrl)
@@ -127,9 +135,7 @@ export function SubmitBookFormModal({
 
       toast.success('Book successfully submitted!')
 
-      reset()
-
-      onClose()
+      await onClose()
     } catch (error) {
       handleApiError(error)
     } finally {

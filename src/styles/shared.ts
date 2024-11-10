@@ -95,7 +95,7 @@ export const Overlay = styled(RadixOverlay, {
   width: '100vw',
   height: '100vh',
   inset: 0,
-  zIndex: 9998,
+  zIndex: 9997,
   backgroundColor: 'rgba(10, 10, 10, 0.7)',
 })
 

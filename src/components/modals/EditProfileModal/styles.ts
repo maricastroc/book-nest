@@ -47,7 +47,7 @@ export const Content = styled(RadixContent, {
   transform: 'translate(-50%, -50%)',
   width: 'clamp(300px, 80vw, 300px)',
   borderRadius: '4px',
-  zIndex: 9999,
+  zIndex: 9998,
   overflow: 'scroll',
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
   height: '100%',

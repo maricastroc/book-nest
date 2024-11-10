@@ -60,13 +60,6 @@ export default function Profile() {
     mutate: mutateBooksStatus,
   } = useRequest<BooksStatusProps>(requestBooksStatus)
 
-  const { data: userBooks, isValidating: isValidatingUserBooks } = useRequest<
-    BookProps[]
-  >({
-    url: `/profile/books`,
-    method: 'GET',
-  })
-
   const isMobile = useScreenSize(768)
 
   const handleDeleteReview = async (id: string) => {
@@ -194,10 +187,6 @@ export default function Profile() {
               )}
               <UserDetailsContainer>
                 <SubmittedBooksSection
-                  userBooks={userBooks}
-                  isValidating={
-                    isValidatingBooksStatus || isValidatingUserBooks
-                  }
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)
                     setOpenLateralMenu(true)

@@ -15,7 +15,7 @@ export const Content = styled(RadixContent, {
   transform: 'translate(-50%, -50%)',
   width: 'clamp(320px, 90vw, 480px)',
   borderRadius: 8,
-  zIndex: 9999,
+  zIndex: 9998,
   overflow: 'scroll',
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
   height: 'clamp(320px, 90vh, 40rem)',
@@ -100,7 +100,9 @@ export const CloseButton = styled(RadixClose, {
   },
 
   '&:focus': {
-    boxShadow: '0 0 0 2px $purple100',
+    boxShadow: 'none',
+    outline: 'none',
+    border: 'none',
   },
 
   '@media (min-width: 480px)': {
@@ -262,7 +264,7 @@ export const Textarea = styled('textarea', {
   width: '100%',
   backgroundColor: '$gray700',
   padding: '0.875rem 0.875rem 1.25rem',
-  border: 'solid 1px $gray500',
+  border: 'solid 1px rgba(131, 129, 217, 0.5)',
   borderRadius: 8,
   height: 188,
   minHeight: 80,

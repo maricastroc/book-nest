@@ -5,6 +5,7 @@ export const customStyles = {
     backgroundColor: '#181C2A',
     borderColor: 'rgba(131, 129, 217, 0.5)',
     borderRadius: 6,
+    cursor: 'pointer',
     boxShadow: 'none',
     '&:hover': {
       borderColor: '#4F47A3',
@@ -17,6 +18,7 @@ export const customStyles = {
   option: (provided: any, state: any) => ({
     ...provided,
     backgroundColor: '#121520',
+    cursor: 'pointer',
     color: state.isSelected ? '#8381D9' : '#D1D6E4',
     '&:hover': {
       backgroundColor: '#121520',

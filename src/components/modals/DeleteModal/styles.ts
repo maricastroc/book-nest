@@ -15,7 +15,7 @@ export const Content = styled(RadixContent, {
   transform: 'translate(-50%, -50%)',
   width: 'clamp(320px, 80vw, 340px)',
   borderRadius: '4px',
-  zIndex: 9999,
+  zIndex: 9998,
 
   '@media (min-width: 768px)': {
     width: 'clamp(320px, 80vw, 358px)',

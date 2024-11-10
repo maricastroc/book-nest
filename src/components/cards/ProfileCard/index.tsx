@@ -73,7 +73,11 @@ export function ProfileCard({
               <UserActions style={{ paddingRight: 0, marginTop: 0 }}>
                 <Dialog.Root open={isDeleteModalOpen}>
                   <Dialog.Trigger asChild>
-                    <ActionButton className="delete" type="submit">
+                    <ActionButton
+                      className="delete"
+                      type="button"
+                      onClick={() => setIsDeleteModalOpen(true)}
+                    >
                       <TrashSimple />
                     </ActionButton>
                   </Dialog.Trigger>
@@ -85,7 +89,11 @@ export function ProfileCard({
                 </Dialog.Root>
                 <Dialog.Root open={isEditUserReviewModalOpen}>
                   <Dialog.Trigger asChild>
-                    <ActionButton className="edit" type="submit">
+                    <ActionButton
+                      className="edit"
+                      type="button"
+                      onClick={() => setIsEditUserReviewModalOpen(true)}
+                    >
                       <PencilSimple />
                     </ActionButton>
                   </Dialog.Trigger>
