@@ -2,26 +2,25 @@ import { MobileHeader } from '@/components/shared/MobileHeader'
 import { NextSeo } from 'next-seo'
 import { Sidebar } from '@/components/shared/Sidebar'
 import {
-  LibraryPageContent,
-  LibraryPageHeading,
-  LibraryPageHeadingTitle,
-  LibraryPageContainer,
-  LibraryPageWrapper,
-  LibraryHeaderWrapper,
+  UserLibraryContent,
+  UserLibraryHeading,
+  UserLibraryHeadingTitle,
+  UserLibraryBody,
+  UserLibraryPageWrapper,
+  UserLibraryHeader,
   UserDetailsContainer,
-  StatusBoxesContainer,
+  ListByBookStatusContainer,
 } from './styles'
 import { Books } from 'phosphor-react'
-import { UserDetails } from '@/components/UserDetails'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { useRouter } from 'next/router'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import useRequest from '@/utils/useRequest'
-import { useAppContext, UserStatistics } from '@/contexts/AppContext'
+import { useAppContext } from '@/contexts/AppContext'
 import { BooksStatusProps } from '@/@types/books-status'
 import { SkeletonStatusBox } from '@/components/skeletons/SkeletonStatusBox'
-import { StatusBoxes } from '../partials/StatusBoxes'
+
 import { useState } from 'react'
 import { BookProps } from '@/@types/book'
 import { api } from '@/lib/axios'
@@ -29,6 +28,8 @@ import { handleApiError } from '@/utils/handleApiError'
 import { toast } from 'react-toastify'
 import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { LateralMenu } from '@/components/shared/LateralMenu'
+import { BookStatusListContainer } from '../partials/BookStatusListContainer'
+import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
 
 export default function Profile() {
   const isRouteLoading = useLoadingOnRouteChange()
@@ -45,19 +46,6 @@ export default function Profile() {
     ? router.query.userId[0]
     : router.query.userId
 
-  const requestUserStatistics = userId
-    ? {
-        url: `/profile/${userId}`,
-        method: 'GET',
-      }
-    : null
-
-  const {
-    data: userStatistics,
-    isValidating: isValidatingUserStatistics,
-    mutate: mutateUserStatistics,
-  } = useRequest<UserStatistics>(requestUserStatistics)
-
   const requestBooksStatus = userId
     ? {
         url: `/library`,
@@ -72,6 +60,13 @@ export default function Profile() {
     mutate: mutateBooksStatus,
   } = useRequest<BooksStatusProps>(requestBooksStatus)
 
+  const { data: userBooks, isValidating: isValidatingUserBooks } = useRequest<
+    BookProps[]
+  >({
+    url: `/profile/books`,
+    method: 'GET',
+  })
+
   const isMobile = useScreenSize(768)
 
   const handleDeleteReview = async (id: string) => {
@@ -81,7 +76,6 @@ export default function Profile() {
       await Promise.all([
         api.delete('/ratings', { data: payload }),
         mutateBooksStatus(),
-        mutateUserStatistics(),
       ])
 
       toast.success('Rating successfully deleted!')
@@ -101,7 +95,6 @@ export default function Profile() {
       await Promise.all([
         await api.put('/ratings', payload),
         mutateBooksStatus(),
-        mutateUserStatistics(),
       ])
 
       toast.success('Rating successfully edited!')
@@ -122,7 +115,6 @@ export default function Profile() {
       await Promise.all([
         await api.post(`/ratings`, { data: payload }),
         mutateBooksStatus(),
-        mutateUserStatistics(),
       ])
 
       toast.success('Rating successfully submitted!')
@@ -143,7 +135,6 @@ export default function Profile() {
         await Promise.all([
           api.post('/reading_status', payload),
           mutateBooksStatus(),
-          mutateUserStatistics(),
         ])
 
         toast.success('Status successfully updated!')
@@ -159,11 +150,11 @@ export default function Profile() {
       {isRouteLoading ? (
         <LoadingPage />
       ) : (
-        <LibraryPageWrapper>
+        <UserLibraryPageWrapper>
           {isMobile ? (
-            <LibraryHeaderWrapper>
+            <UserLibraryHeader>
               <MobileHeader />
-            </LibraryHeaderWrapper>
+            </UserLibraryHeader>
           ) : (
             <Sidebar />
           )}
@@ -177,21 +168,23 @@ export default function Profile() {
               onClose={() => setOpenLateralMenu(false)}
             />
           )}
-          <LibraryPageContainer>
-            <LibraryPageHeading>
-              <LibraryPageHeadingTitle>
+          <UserLibraryBody>
+            <UserLibraryHeading>
+              <UserLibraryHeadingTitle>
                 <Books />
                 <h2>My Library</h2>
-              </LibraryPageHeadingTitle>
-            </LibraryPageHeading>
+              </UserLibraryHeadingTitle>
+            </UserLibraryHeading>
 
-            <LibraryPageContent>
-              {isValidatingBooksStatus || isValidatingUserStatistics ? (
-                <StatusBoxesContainer>
-                  <SkeletonStatusBox count={3} />
-                </StatusBoxesContainer>
+            <UserLibraryContent>
+              {isValidatingBooksStatus ? (
+                <ListByBookStatusContainer>
+                  {Array.from({ length: 3 }, (_, index) => (
+                    <SkeletonStatusBox key={index} />
+                  ))}
+                </ListByBookStatusContainer>
               ) : (
-                <StatusBoxes
+                <BookStatusListContainer
                   data={booksStatus}
                   onSelect={(book: BookProps) => {
                     setSelectedBook(book)
@@ -200,16 +193,20 @@ export default function Profile() {
                 />
               )}
               <UserDetailsContainer>
-                {userId && (
-                  <UserDetails
-                    userStatistics={userStatistics}
-                    userId={userId as string}
-                  />
-                )}
+                <SubmittedBooksSection
+                  userBooks={userBooks}
+                  isValidating={
+                    isValidatingBooksStatus || isValidatingUserBooks
+                  }
+                  onOpenDetails={(book: BookProps) => {
+                    setSelectedBook(book)
+                    setOpenLateralMenu(true)
+                  }}
+                />
               </UserDetailsContainer>
-            </LibraryPageContent>
-          </LibraryPageContainer>
-        </LibraryPageWrapper>
+            </UserLibraryContent>
+          </UserLibraryBody>
+        </UserLibraryPageWrapper>
       )}
     </>
   )

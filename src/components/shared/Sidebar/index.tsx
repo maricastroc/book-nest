@@ -159,7 +159,7 @@ export function Sidebar() {
         </SidebarContent>
         <Image
           src={SidebarBackground}
-          width={232}
+          width={0}
           alt=""
           quality={100}
           fetchPriority="high"

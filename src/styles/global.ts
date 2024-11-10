@@ -47,6 +47,15 @@ export const globalStyles = globalCss({
       boxShadow: 'inset 0 0 0px 6px $gray500',
       border: '10px solid transparent',
     },
+
+    'input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button':
+      {
+        WebkitAppearance: 'none',
+        margin: 0,
+      },
+    'input[type=number]': {
+      MozAppearance: 'textfield',
+    },
   },
 
   'body, input, textarea, button': {

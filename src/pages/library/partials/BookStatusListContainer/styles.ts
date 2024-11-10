@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const StatusBoxesContainer = styled('div', {
+export const BookStatusListWrapper = styled('div', {
   alignItems: 'flex-start',
   width: '100%',
   gap: '2rem',

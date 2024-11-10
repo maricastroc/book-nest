@@ -15,25 +15,30 @@ import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 interface PopularBookCardProps {
   book: BookProps
   onOpenDetails: () => void
+  size?: string
 }
 
-export function PopularBookCard({ book, onOpenDetails }: PopularBookCardProps) {
+export function PopularBookCard({
+  book,
+  onOpenDetails,
+  size = '',
+}: PopularBookCardProps) {
   return (
-    <PopularBookCardBox onClick={() => onOpenDetails()}>
-      <BookCover src={book.coverUrl} />
+    <PopularBookCardBox className={size} onClick={() => onOpenDetails()}>
+      <BookCover className={size} src={book.coverUrl} />
       <BookContentWrapper>
         {book?.readingStatus && (
           <ReadNotice className={book.readingStatus}>
             <FontAwesomeIcon icon={faBookmark} />
           </ReadNotice>
         )}
-        <BookTitleAndAuthor>
+        <BookTitleAndAuthor className={size}>
           <h2>{book.name}</h2>
           <p>{book.author}</p>
         </BookTitleAndAuthor>
         <RatingWrapper>
           <p>{getBookRatingsNumber(book)}</p>
-          <StarsRating rating={book?.rate ?? 0} />
+          <StarsRating size={size} rating={book?.rate ?? 0} />
         </RatingWrapper>
       </BookContentWrapper>
     </PopularBookCardBox>

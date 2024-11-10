@@ -20,7 +20,7 @@ export const Rating = styled('div', {
 
   '&.smaller': {
     svg: {
-      fontSize: '0.82rem',
+      fontSize: '0.85rem',
       marginTop: '0.35rem',
       color: '$green100',
       opacity: 0.75,

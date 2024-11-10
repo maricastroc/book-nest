@@ -26,6 +26,14 @@ export const PopularBookCardBox = styled('div', {
     backgroundColor: '$gray600',
     transition: '200ms ease-in-out',
   },
+
+  '&.smaller': {
+    height: '10rem',
+
+    '@media (min-width: 1024px)': {
+      height: '9.2rem',
+    },
+  },
 })
 
 export const BookContentWrapper = styled('div', {
@@ -42,6 +50,7 @@ export const BookTitleAndAuthor = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   width: '100%',
+  textAlign: 'left',
 
   h2: {
     fontSize: '0.95rem',
@@ -71,6 +80,16 @@ export const BookTitleAndAuthor = styled('div', {
       fontSize: '0.9rem',
     },
   },
+
+  '&.smaller': {
+    h2: {
+      fontSize: '0.9rem',
+    },
+
+    p: {
+      fontSize: '0.82rem',
+    },
+  },
 })
 
 export const BookCover = styled('img', {
@@ -78,6 +97,16 @@ export const BookCover = styled('img', {
   height: 'auto',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
+
+  '&.smaller': {
+    '@media (min-width: 480px)': {
+      width: '5.5rem',
+    },
+
+    '@media (min-width: 1024px)': {
+      width: '4.5rem',
+    },
+  },
 
   '@media (min-width: 480px)': {
     width: '6.5rem',

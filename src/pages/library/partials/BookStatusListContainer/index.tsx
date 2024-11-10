@@ -1,18 +1,22 @@
 import { BookProps } from '@/@types/book'
-import { StatusBox } from '../StatusBox'
-import { StatusBoxesContainer } from './styles'
+
+import { BookStatusListWrapper } from './styles'
 
 import { BooksStatusProps } from '@/@types/books-status'
+import { BookStatusList } from '../BookStatusList'
 
-interface StatusBoxesProps {
+interface BookStatusListContainerProps {
   data: BooksStatusProps | undefined | null
   onSelect: (book: BookProps) => void
 }
 
-export function StatusBoxes({ data, onSelect }: StatusBoxesProps) {
+export function BookStatusListContainer({
+  data,
+  onSelect,
+}: BookStatusListContainerProps) {
   return (
-    <StatusBoxesContainer>
-      <StatusBox
+    <BookStatusListWrapper>
+      <BookStatusList
         className="read"
         status="read"
         statusLabel="I've already read"
@@ -20,7 +24,7 @@ export function StatusBoxes({ data, onSelect }: StatusBoxesProps) {
         onSelect={onSelect}
         emptyBoxMessage="This is where the books you've already read will be."
       />
-      <StatusBox
+      <BookStatusList
         className="reading"
         status="reading"
         statusLabel="I am reading"
@@ -28,7 +32,7 @@ export function StatusBoxes({ data, onSelect }: StatusBoxesProps) {
         onSelect={onSelect}
         emptyBoxMessage="This is where the books you're currently reading will be."
       />
-      <StatusBox
+      <BookStatusList
         className="want_to_read"
         status="want_to_read"
         statusLabel="I want to read"
@@ -36,7 +40,7 @@ export function StatusBoxes({ data, onSelect }: StatusBoxesProps) {
         onSelect={onSelect}
         emptyBoxMessage="This is where the books you want to read will be."
       />
-      <StatusBox
+      <BookStatusList
         className="did_not_finish"
         status="did_not_finish"
         statusLabel="I didn't finish"
@@ -44,6 +48,6 @@ export function StatusBoxes({ data, onSelect }: StatusBoxesProps) {
         onSelect={onSelect}
         emptyBoxMessage="This is where the books you didn't finish will be."
       />
-    </StatusBoxesContainer>
+    </BookStatusListWrapper>
   )
 }

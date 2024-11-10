@@ -4,7 +4,7 @@ export const LibraryContainerBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  padding: '1.5rem 0 1.5rem 1.5rem',
+  padding: '1.2rem 0 1.5rem 1.5rem',
   marginRight: '-1rem',
   width: '100%',
   marginBottom: '0.5rem',

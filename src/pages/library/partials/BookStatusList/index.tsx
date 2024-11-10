@@ -16,7 +16,7 @@ import { Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useRouter } from 'next/router'
 
-interface StatusBoxProps {
+interface BookStatusListProps {
   status: string
   statusLabel: string
   books: BookProps[] | undefined
@@ -25,14 +25,14 @@ interface StatusBoxProps {
   onSelect: (book: BookProps) => void
 }
 
-export function StatusBox({
+export function BookStatusList({
   status,
   statusLabel,
   books,
   className,
   emptyBoxMessage,
   onSelect,
-}: StatusBoxProps) {
+}: BookStatusListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [isOverflowing, setIsOverflowing] = useState(false)

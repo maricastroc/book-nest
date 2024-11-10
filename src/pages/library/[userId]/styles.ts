@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const LibraryPageWrapper = styled('div', {
+export const UserLibraryPageWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '100vw',
@@ -34,7 +34,7 @@ export const LibraryPageWrapper = styled('div', {
   },
 })
 
-export const LibraryHeaderWrapper = styled('div', {
+export const UserLibraryHeader = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -46,7 +46,7 @@ export const LibraryHeaderWrapper = styled('div', {
   },
 })
 
-export const LibraryPageContainer = styled('div', {
+export const UserLibraryBody = styled('div', {
   display: 'flex',
   width: '100%',
   gap: '2.5rem',
@@ -79,7 +79,7 @@ export const LibraryPageContainer = styled('div', {
   },
 })
 
-export const LibraryPageContent = styled('div', {
+export const UserLibraryContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: 0,
@@ -98,7 +98,7 @@ export const LibraryPageContent = styled('div', {
   },
 })
 
-export const LibraryPageHeading = styled('div', {
+export const UserLibraryHeading = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
@@ -117,7 +117,7 @@ export const LibraryPageHeading = styled('div', {
   },
 })
 
-export const LibraryPageHeadingTitle = styled('div', {
+export const UserLibraryHeadingTitle = styled('div', {
   display: 'flex',
   justifyContent: 'center',
   gap: '0.8rem',
@@ -155,7 +155,7 @@ export const UserDetailsContainer = styled('div', {
     height: '100vh',
     overflow: 'scroll',
     padding: 0,
-    paddingBottom: '5rem',
+    paddingBottom: '2.5rem',
     marginTop: '-3.5rem',
   },
 
@@ -165,14 +165,13 @@ export const UserDetailsContainer = styled('div', {
   },
 })
 
-export const StatusBoxesContainer = styled('div', {
+export const ListByBookStatusContainer = styled('div', {
   width: '100%',
 
   '@media (min-width: 1024px)': {
     height: '100vh',
     overflow: 'scroll',
     padding: 0,
-    paddingBottom: '5rem',
     paddingRight: '1rem',
   },
 
