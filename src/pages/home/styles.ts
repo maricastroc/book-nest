@@ -27,7 +27,7 @@ export const HomePageWrapper = styled('div', {
 
   '@media (min-width: 1440px)': {
     gap: '5rem',
-    paddingRight: '5rem',
+    paddingRight: '2rem',
   },
 })
 
@@ -65,10 +65,6 @@ export const HomePageContainer = styled('div', {
     padding: '0 0 0 2rem',
     maxWidth: '100%',
     paddingLeft: '18rem',
-  },
-
-  '@media (min-width: 1400px)': {
-    paddingLeft: '21rem',
   },
 })
 
@@ -118,7 +114,7 @@ export const HomePageContent = styled('div', {
   },
 
   '@media (min-width: 1440px)': {
-    gap: '4rem',
+    gap: '3rem',
   },
 })
 

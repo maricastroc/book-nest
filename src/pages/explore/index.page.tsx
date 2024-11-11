@@ -13,7 +13,6 @@ import {
 import { useState } from 'react'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Sidebar } from '@/components/shared/Sidebar'
-import { ExploreCard } from '@/pages/explore/partials/ExploreCard'
 import { api } from '@/lib/axios'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { NextSeo } from 'next-seo'
@@ -29,6 +28,7 @@ import { toast } from 'react-toastify'
 import useRequest from '@/utils/useRequest'
 import { handleApiError } from '@/utils/handleApiError'
 import { useAppContext } from '@/contexts/AppContext'
+import { BookCard } from '@/components/cards/BookCard'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -215,10 +215,10 @@ export default function Explore() {
                       <SkeletonBookCard key={index} />
                     ))
                   : books?.map((book) => (
-                      <ExploreCard
+                      <BookCard
                         key={book.id}
                         book={book}
-                        onClick={() => {
+                        onOpenDetails={() => {
                           setSelectedBook(book)
                           setOpenLateralMenu(true)
                         }}

@@ -96,6 +96,10 @@ export const UserLibraryContent = styled('div', {
 
     padding: '0 1.25rem 0 0',
   },
+
+  '@media (min-width: 1200px)': {
+    padding: '0 3em 0 0',
+  },
 })
 
 export const UserLibraryHeading = styled('div', {

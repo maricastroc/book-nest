@@ -23,7 +23,6 @@ export const ExplorePageWrapper = styled('div', {
 
   '@media (min-width: 1024px)': {
     gap: '5rem',
-    paddingLeft: '18rem',
   },
 })
 
@@ -59,6 +58,10 @@ export const ExplorePageHeading = styled('div', {
   marginBottom: '1rem',
   width: '100%',
 
+  '@media (min-width: 980px)': {
+    marginTop: '2rem',
+  },
+
   '@media (min-width: 1024px)': {
     marginTop: '1.5rem',
     flexDirection: 'row',
@@ -89,7 +92,7 @@ export const ExplorePageContent = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
 
-  '@media (min-width: 768px)': {
+  '@media (min-width: 980px)': {
     paddingRight: '1rem',
     justifyContent: 'flex-start',
     overflowY: 'scroll',
@@ -227,7 +230,7 @@ export const BooksContainer = styled('div', {
     gap: '1.5rem',
   },
 
-  '@media (min-width: 768px)': {
+  '@media (min-width: 580px)': {
     gridTemplateColumns: '1fr 1fr',
   },
 

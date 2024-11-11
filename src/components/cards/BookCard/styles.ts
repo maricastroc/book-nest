@@ -118,7 +118,6 @@ export const RatingWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '0.2rem',
 
   p: {
     color: '$gray400',
