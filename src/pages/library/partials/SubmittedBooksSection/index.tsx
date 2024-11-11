@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
@@ -23,10 +24,16 @@ import { BookProps } from '@/@types/book'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
+  userBooks: BookProps[] | undefined
+  isValidating: boolean
+  mutate: any
 }
 
 export function SubmittedBooksSection({
   onOpenDetails,
+  userBooks,
+  isValidating,
+  mutate,
 }: SubmittedBooksSectionProps) {
   const { loggedUser } = useAppContext()
 
@@ -36,15 +43,6 @@ export function SubmittedBooksSection({
 
   const { data: categories } = useRequest<CategoryProps[]>({
     url: '/categories',
-    method: 'GET',
-  })
-
-  const {
-    data: userBooks,
-    isValidating: isValidatingUserBooks,
-    mutate,
-  } = useRequest<BookProps[]>({
-    url: `/profile/books`,
     method: 'GET',
   })
 
@@ -78,7 +76,7 @@ export function SubmittedBooksSection({
         <SubmittedBooksHeading>
           <p>Your Submitted Books</p>
         </SubmittedBooksHeading>
-        {isValidatingUserBooks ? (
+        {isValidating ? (
           Array.from({ length: 4 }).map((_, index) => (
             <SkeletonPopularBook key={index} />
           ))

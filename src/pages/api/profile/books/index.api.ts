@@ -39,14 +39,14 @@ export default async function handler(
   }
 
   let searchQuery
+
   if (search) {
     searchQuery = String(search).toLowerCase()
   }
 
-  // Buscando os livros que pertencem ao usuário logado
   const books = await prisma.book.findMany({
     where: {
-      userId: String(userId), // Filtra os livros de acordo com o userId do livro
+      userId: String(userId),
       categories: categoriesQuery,
       ...(searchQuery
         ? {
@@ -60,21 +60,24 @@ export default async function handler(
     include: {
       ratings: {
         include: {
-          user: true, // Inclui os usuários que deram rating
+          user: true,
         },
       },
       categories: {
         include: {
-          category: true, // Inclui as categorias associadas
+          category: true,
         },
       },
       readingStatus: {
-        where: { userId: String(userId) }, // Inclui o status de leitura do usuário logado
+        where: { userId: String(userId) },
       },
     },
   })
 
-  // Processando os livros para calcular a média de avaliações e incluir categorias
+  function toSnakeCase(text: string): string {
+    return text.toLowerCase().replace(/\s+/g, '_')
+  }
+
   const booksWithCategories = books.map((book) => {
     const avgRate =
       book.ratings.length > 0
@@ -82,20 +85,22 @@ export default async function handler(
           book.ratings.length
         : 0
 
-    // Encontra a avaliação do usuário específico
     const userRating =
       book.ratings.find((rating) => rating.userId === String(userId))?.rate ||
       null
 
     const categories = book.categories.map((cat) => cat.category)
 
+    const formattedReadingStatus = book.readingStatus?.[0]?.status
+      ? toSnakeCase(book.readingStatus[0].status)
+      : null
+
     return {
       ...book,
       categories,
-      averageRate: avgRate, // Média das avaliações
-      userRating, // Avaliação do usuário específico
-      ratings: book.ratings,
-      readingStatus: book.readingStatus[0]?.status || undefined, // Status de leitura do usuário
+      rate: avgRate,
+      userRating,
+      readingStatus: formattedReadingStatus,
     }
   })
 

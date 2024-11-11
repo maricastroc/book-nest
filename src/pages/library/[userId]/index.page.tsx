@@ -46,6 +46,15 @@ export default function Profile() {
     ? router.query.userId[0]
     : router.query.userId
 
+  const {
+    data: userBooks,
+    isValidating: isValidatingUserBooks,
+    mutate: mutateUserBooks,
+  } = useRequest<BookProps[]>({
+    url: `/profile/books`,
+    method: 'GET',
+  })
+
   const requestBooksStatus = userId
     ? {
         url: `/library`,
@@ -69,6 +78,7 @@ export default function Profile() {
       await Promise.all([
         api.delete('/ratings', { data: payload }),
         mutateBooksStatus(),
+        mutateUserBooks(),
       ])
 
       toast.success('Rating successfully deleted!')
@@ -88,6 +98,7 @@ export default function Profile() {
       await Promise.all([
         await api.put('/ratings', payload),
         mutateBooksStatus(),
+        mutateUserBooks(),
       ])
 
       toast.success('Rating successfully edited!')
@@ -108,6 +119,7 @@ export default function Profile() {
       await Promise.all([
         await api.post(`/ratings`, { data: payload }),
         mutateBooksStatus(),
+        mutateUserBooks(),
       ])
 
       toast.success('Rating successfully submitted!')
@@ -128,6 +140,7 @@ export default function Profile() {
         await Promise.all([
           api.post('/reading_status', payload),
           mutateBooksStatus(),
+          mutateUserBooks(),
         ])
 
         toast.success('Status successfully updated!')
@@ -191,6 +204,9 @@ export default function Profile() {
                     setSelectedBook(book)
                     setOpenLateralMenu(true)
                   }}
+                  mutate={mutateUserBooks}
+                  userBooks={userBooks}
+                  isValidating={isValidatingUserBooks}
                 />
               </UserDetailsContainer>
             </UserLibraryContent>

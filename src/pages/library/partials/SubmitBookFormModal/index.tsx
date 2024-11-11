@@ -124,6 +124,7 @@ export function SubmitBookFormModal({
     const categoryValues = data.categories.map(
       (category: any) => category.value,
     )
+
     formData.append('categories', JSON.stringify(categoryValues))
 
     try {
