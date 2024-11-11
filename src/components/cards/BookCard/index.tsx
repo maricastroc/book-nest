@@ -18,11 +18,7 @@ interface BookCardProps {
   size?: string
 }
 
-export function BookCard({
-  book,
-  onOpenDetails,
-  size = '',
-}: BookCardProps) {
+export function BookCard({ book, onOpenDetails, size = '' }: BookCardProps) {
   return (
     <BookCardBox className={size} onClick={() => onOpenDetails()}>
       <BookCover className={size} src={book.coverUrl} />
