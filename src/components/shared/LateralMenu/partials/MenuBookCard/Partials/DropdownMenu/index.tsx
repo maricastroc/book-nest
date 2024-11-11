@@ -1,3 +1,4 @@
+import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import {
   AddToLibraryDropdown,
   ReadingStatusItem,
@@ -39,14 +40,25 @@ export const DropdownMenu = ({
           <ReadingStatusItem
             className={
               activeStatus
-                ? activeStatus === status.label
+                ? formatToSnakeCase(activeStatus) ===
+                  formatToSnakeCase(status.label)
                   ? 'selected'
                   : ''
                 : ''
             }
             disabled={isValidating}
             onClick={async () => {
-              if (status.label === 'Read' && activeStatus !== 'Read') {
+              if (
+                formatToSnakeCase(activeStatus ?? '') ===
+                formatToSnakeCase(status.label)
+              ) {
+                return
+              }
+
+              if (
+                formatToSnakeCase(status.label) === 'read' &&
+                formatToSnakeCase(activeStatus ?? '') !== 'read'
+              ) {
                 handleOpenReadBookModal()
                 return
               }
