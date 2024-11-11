@@ -16,13 +16,13 @@ import {
   RatingsList,
   RatingsListHeader,
 } from './styles'
-import { BookCard } from '../../cards/BookCard'
-import { UserRatingBox } from '../UserRatingBox'
+import { MenuBookCard } from './partials/MenuBookCard'
+import { UserRatingBox } from './partials/UserRatingBox'
 import { RatingCardForm } from '../RatingCardForm'
 import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { SignInModal } from '@/components/modals/SignInModal'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { ReviewWarningModal } from '@/components/modals/ReviewWarningModal'
+import { ReviewWarningModal } from '@/components/shared/LateralMenu/partials/ReviewWarningModal'
 import { EmptyContainer } from '../EmptyContainer'
 
 export interface ReadingStatusProps {
@@ -98,7 +98,7 @@ export function LateralMenu({
       </CloseButton>
       <MenuBody>
         {book && (
-          <BookCard
+          <MenuBookCard
             key={book.id}
             book={book}
             categories={book.categories as CategoryProps[]}

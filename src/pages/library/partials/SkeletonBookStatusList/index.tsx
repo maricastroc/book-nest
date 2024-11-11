@@ -1,7 +1,7 @@
 import { Skeleton } from '@mui/material'
 import { Container } from './styles'
 
-export function SkeletonStatusBox() {
+export function SkeletonBookStatusList() {
   return (
     <Container>
       <Skeleton

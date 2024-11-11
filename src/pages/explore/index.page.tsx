@@ -13,15 +13,15 @@ import {
 import { useState } from 'react'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Sidebar } from '@/components/shared/Sidebar'
-import { ExploreCard } from '@/components/cards/ExploreCard'
+import { ExploreCard } from '@/pages/explore/partials/ExploreCard'
 import { api } from '@/lib/axios'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { NextSeo } from 'next-seo'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
-import { SkeletonPopularBook } from '@/components/skeletons/SkeletonPopularBook'
-import { SkeletonCategories } from '@/components/skeletons/SkeletonCategories'
+import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
+import { SkeletonCategories } from '@/pages/explore/partials/SkeletonCategories'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { CreateReviewData, EditReviewData } from '../home/index.page'
@@ -212,7 +212,7 @@ export default function Explore() {
               <BooksContainer>
                 {isValidating || !books?.length
                   ? Array.from({ length: 9 }).map((_, index) => (
-                      <SkeletonPopularBook key={index} />
+                      <SkeletonBookCard key={index} />
                     ))
                   : books?.map((book) => (
                       <ExploreCard

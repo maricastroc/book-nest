@@ -26,7 +26,7 @@ import { StarsRating } from '@/components/shared/StarsRating'
 import { DeleteModal } from '@/components/modals/DeleteModal'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { TextBox } from '@/components/shared/TextBox'
-import { EditUserReviewModal } from '@/components/modals/EditUserReviewModal'
+import { EditUserReviewModal } from '@/pages/profile/partials/EditUserReviewModal'
 
 interface ProfileCardProps {
   book: BookProps

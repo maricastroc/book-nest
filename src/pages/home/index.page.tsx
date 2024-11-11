@@ -17,7 +17,7 @@ import {
 } from './styles'
 import { RatingCard } from '@/components/cards/RatingCard'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
-import { PopularBookCard } from '@/components/cards/PopularBookCard'
+import { BookCard } from '@/components/cards/BookCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
@@ -25,8 +25,8 @@ import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
-import { UserLatestReadingCard } from '@/components/cards/UserLatestReadingCard'
-import { SkeletonPopularBook } from '@/components/skeletons/SkeletonPopularBook'
+import { UserLatestReadingCard } from '@/pages/home/partials/UserLatestReadingCard'
+import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { RatingProps } from '@/@types/rating'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
@@ -276,11 +276,11 @@ export default function Home() {
                 <PopularBooksContent>
                   {isLoading || !popularBooks?.length
                     ? Array.from({ length: 12 }).map((_, index) => (
-                        <SkeletonPopularBook key={index} />
+                        <SkeletonBookCard key={index} />
                       ))
                     : popularBooks?.length > 0 &&
                       popularBooks?.map((book) => (
-                        <PopularBookCard
+                        <BookCard
                           key={book.id}
                           book={book}
                           onOpenDetails={() => {

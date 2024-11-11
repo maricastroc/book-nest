@@ -18,8 +18,8 @@ import { useState } from 'react'
 import { SubmitBookFormModal } from '../SubmitBookFormModal'
 import useRequest from '@/utils/useRequest'
 import { CategoryProps } from '@/@types/category'
-import { SkeletonPopularBook } from '@/components/skeletons/SkeletonPopularBook'
-import { PopularBookCard } from '@/components/cards/PopularBookCard'
+import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
+import { BookCard } from '@/components/cards/BookCard'
 import { BookProps } from '@/@types/book'
 
 interface SubmittedBooksSectionProps {
@@ -78,12 +78,12 @@ export function SubmittedBooksSection({
         </SubmittedBooksHeading>
         {isValidating ? (
           Array.from({ length: 4 }).map((_, index) => (
-            <SkeletonPopularBook key={index} />
+            <SkeletonBookCard key={index} />
           ))
         ) : userBooks && userBooks.length ? (
           <>
             {userBooks.map((book) => (
-              <PopularBookCard
+              <BookCard
                 size="smaller"
                 key={book.id}
                 book={book}

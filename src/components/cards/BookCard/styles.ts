@@ -1,181 +1,127 @@
 import { styled } from '@/styles'
 
-export const BookCardWrapper = styled('div', {
+export const BookCardBox = styled('div', {
+  cursor: 'pointer',
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
+  padding: '1rem',
   backgroundColor: '$gray700',
-  padding: '1.5rem',
   borderRadius: 8,
+  alignItems: 'stretch',
+  gap: '0.7rem',
   width: '100%',
-
-  '@media (min-width: 580px)': {
-    padding: '1.5rem 2rem',
-  },
-})
-
-export const BookCardContent = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '100%',
-  gap: '1.5rem',
-
-  '@media (min-width: 580px)': {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    gap: '2rem',
-  },
-})
-
-export const BookCover = styled('img', {
-  width: 120,
-  height: 'auto',
-  borderRadius: 8,
-  opacity: 0.9,
+  position: 'relative',
+  height: '10rem',
 
   '@media (min-width: 480px)': {
-    width: 135,
+    height: '11.5rem',
+    gap: '0.9rem',
+    padding: '1.2rem',
   },
 
-  '@media (min-width: 580px)': {
-    width: 140,
+  '@media (min-width: 1200px)': {
+    padding: '1.2rem',
+  },
+
+  '&:hover': {
+    backgroundColor: '$gray600',
+    transition: '200ms ease-in-out',
+  },
+
+  '&.smaller': {
+    height: '10rem',
+
+    '@media (min-width: 1024px)': {
+      height: '9.2rem',
+    },
   },
 })
 
-export const BookDetailsWrapper = styled('div', {
+export const BookContentWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'space-between',
-  height: '100%',
   width: '100%',
-  gap: '1.5rem',
-
-  '@media (min-width: 580px)': {
-    flexDirection: 'flex-start',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    height: '100%',
-    marginTop: 0,
-  },
 })
 
 export const BookTitleAndAuthor = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  width: '100%',
+  textAlign: 'left',
 
   h2: {
-    fontSize: '1.15rem',
-    maxHeight: '4.5rem',
-    whiteSpace: 'break-spaces',
-    overflow: 'scroll',
+    fontSize: '0.95rem',
     position: 'relative',
+    width: '85%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    whiteSpace: 'normal',
   },
 
   p: {
-    color: '$gray300',
-    fontSize: '0.95rem',
-  },
-
-  '@media (min-width: 580px)': {
-    alignItems: 'flex-start',
-    textAlign: 'left',
-
-    h2: {
-      fontSize: '1.5rem',
-      maxHeight: '100%',
-    },
-
-    p: {
-      color: '$gray300',
-      fontSize: '1.1rem',
-    },
-  },
-})
-
-export const BookOtherInfo = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  width: '100%',
-})
-
-export const BookRatingInfo = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.5rem',
-
-  p: {
-    color: '$gray100',
-    fontSize: '0.95rem',
-    fontWeight: 700,
-  },
-})
-
-export const BookRatingAndReviews = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '0.6rem',
-
-  p: {
-    color: '$gray300',
+    marginTop: '0.3rem',
+    color: '$gray400',
     fontSize: '0.85rem',
   },
 
-  '@media (min-width: 580px)': {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+  '@media (min-width: 480px)': {
+    h2: {
+      fontSize: '0.98rem',
+    },
 
     p: {
+      marginTop: '0.3rem',
       fontSize: '0.9rem',
+    },
+  },
+
+  '&.smaller': {
+    h2: {
+      fontSize: '0.9rem',
+    },
+
+    p: {
+      fontSize: '0.82rem',
     },
   },
 })
 
-export const DividerLine = styled('span', {
-  width: '100%',
-  height: 0.5,
-  backgroundColor: '$gray600',
-  margin: '1rem 0',
-})
+export const BookCover = styled('img', {
+  width: '5.6rem',
+  height: 'auto',
+  borderRadius: 8,
+  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
-export const AddToLibrarySection = styled('div', {
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  gap: '0.5rem',
-})
+  '&.smaller': {
+    '@media (min-width: 480px)': {
+      width: '5.5rem',
+    },
 
-export const AddToLibraryButton = styled('button', {
-  color: '$green100',
-  width: '100%',
-  textAlign: 'center',
-  padding: '0.5rem',
-  cursor: 'pointer',
-  backgroundColor: 'transparent',
-  border: '1px solid $green100',
-  fontSize: '0.9rem',
-
-  '&:not(:disabled):hover': {
-    backgroundColor: '$green200',
-    transition: 'all 200ms',
-    border: '1px solid $green200',
-    color: '$gray100',
+    '@media (min-width: 1024px)': {
+      width: '4.5rem',
+    },
   },
 
-  '&:disabled': {
-    backgroundColor: '$gray400',
-    cursor: 'not-allowed !important',
-    border: '1px solid $gray400',
-    color: '$gray100',
+  '@media (min-width: 480px)': {
+    width: '6.5rem',
+  },
+})
+
+export const RatingWrapper = styled('div', {
+  marginTop: '0.5rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '0.2rem',
+
+  p: {
+    color: '$gray400',
+    fontSize: '0.8rem',
   },
 })

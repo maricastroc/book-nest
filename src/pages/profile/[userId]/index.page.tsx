@@ -17,9 +17,9 @@ import {
   UserRatingsTitle,
 } from './styles'
 import { MagnifyingGlass, User, X } from 'phosphor-react'
-import { ProfileCard } from '@/components/cards/ProfileCard'
+import { ProfileCard } from '@/pages/profile/partials/ProfileCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { UserDetails } from '@/components/UserDetails'
+import { UserDetails } from '@/pages/profile/partials/UserDetails'
 import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { useRouter } from 'next/router'

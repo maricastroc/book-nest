@@ -19,7 +19,7 @@ import { LoadingPage } from '@/components/shared/LoadingPage'
 import useRequest from '@/utils/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
 import { BooksStatusProps } from '@/@types/books-status'
-import { SkeletonStatusBox } from '@/components/skeletons/SkeletonStatusBox'
+import { SkeletonBookStatusList } from '@/pages/library/partials/SkeletonBookStatusList'
 
 import { useState } from 'react'
 import { BookProps } from '@/@types/book'
@@ -186,7 +186,7 @@ export default function Profile() {
               {isValidatingBooksStatus ? (
                 <ListByBookStatusContainer>
                   {Array.from({ length: 3 }, (_, index) => (
-                    <SkeletonStatusBox key={index} />
+                    <SkeletonBookStatusList key={index} />
                   ))}
                 </ListByBookStatusContainer>
               ) : (

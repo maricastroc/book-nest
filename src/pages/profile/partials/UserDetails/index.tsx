@@ -12,9 +12,9 @@ import {
   UserStatsWrapper,
   UserStatItem,
 } from './styles'
-import { Avatar } from '../shared/Avatar'
-import { EditProfileModal } from '../modals/EditProfileModal'
-import { SkeletonUserDetails } from '../skeletons/SkeletonUserDetails'
+import { Avatar } from '../../../../components/shared/Avatar'
+import { EditProfileModal } from '../../../../components/modals/EditProfileModal'
+import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import {
   BookOpen,
   BookmarkSimple,

@@ -1,7 +1,7 @@
 import { Container, Content, Main } from './styles'
 import { Skeleton } from '@mui/material'
 
-export function SkeletonPopularBook() {
+export function SkeletonBookCard() {
   return (
     <Container>
       <Main>
