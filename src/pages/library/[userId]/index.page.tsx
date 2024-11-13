@@ -112,7 +112,7 @@ export default function Profile() {
             <UserLibraryHeading>
               <UserLibraryHeadingTitle>
                 <Books />
-                <h2>My Library</h2>
+                <h2>Library</h2>
               </UserLibraryHeadingTitle>
             </UserLibraryHeading>
 
@@ -138,6 +138,7 @@ export default function Profile() {
                   onUpdate={async () => {
                     await loadUserSubmittedBooks()
                   }}
+                  userId={userId}
                   userInfo={userInfo}
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)

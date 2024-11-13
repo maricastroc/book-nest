@@ -26,6 +26,7 @@ import { SkeletonUserDetails } from '../SkeletonUserDetails'
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
   onUpdate: () => Promise<void>
+  userId: string | undefined
   userInfo: UserInfo | undefined
   submittedBooks: BookProps[] | undefined
 }
@@ -33,6 +34,7 @@ interface SubmittedBooksSectionProps {
 export function SubmittedBooksSection({
   onOpenDetails,
   onUpdate,
+  userId,
   userInfo,
   submittedBooks,
 }: SubmittedBooksSectionProps) {
@@ -99,6 +101,8 @@ export function SubmittedBooksSection({
               <>
                 {submittedBooks.map((book) => (
                   <BookCard
+                    isLibraryPage
+                    libraryPageUserId={userId}
                     size="smaller"
                     key={book.id}
                     book={book}
@@ -154,7 +158,7 @@ export function SubmittedBooksSection({
                     onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
                     onClose={async () => {
                       setIsSubmitBookFormOpen(false)
-                      await onUpdate
+                      await onUpdate()
                     }}
                   />
                 )}

@@ -11,23 +11,41 @@ import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 import { ReadNotice } from '@/styles/shared'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface BookCardProps {
+  isLibraryPage?: boolean
+  userId?: string | undefined
   book: BookProps
   onOpenDetails: () => void
   size?: string
 }
 
-export function BookCard({ book, onOpenDetails, size = '' }: BookCardProps) {
+export function BookCard({
+  book,
+  onOpenDetails,
+  userId,
+  size = '',
+  isLibraryPage = false,
+}: BookCardProps) {
+  const { loggedUser } = useAppContext()
+
   return (
     <BookCardBox className={size} onClick={() => onOpenDetails()}>
       <BookCover className={size} src={book.coverUrl} />
       <BookContentWrapper>
-        {book?.readingStatus && (
-          <ReadNotice className={book.readingStatus}>
-            <FontAwesomeIcon icon={faBookmark} />
-          </ReadNotice>
-        )}
+        {isLibraryPage
+          ? userId === loggedUser?.id &&
+            book?.readingStatus && (
+              <ReadNotice className={book.readingStatus}>
+                <FontAwesomeIcon icon={faBookmark} />
+              </ReadNotice>
+            )
+          : book?.readingStatus && (
+              <ReadNotice className={book.readingStatus}>
+                <FontAwesomeIcon icon={faBookmark} />
+              </ReadNotice>
+            )}
         <BookTitleAndAuthor className={size}>
           <h2>{book.name}</h2>
           <p>{book.author}</p>
