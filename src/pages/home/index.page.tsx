@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import {
   HomePageWrapper,
@@ -20,7 +19,7 @@ import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { BookCard } from '@/components/cards/BookCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { NextSeo } from 'next-seo'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookProps } from '@/@types/book'
@@ -31,10 +30,6 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { RatingProps } from '@/@types/rating'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import useRequest from '@/utils/useRequest'
-import { api } from '@/lib/axios'
-import { toast } from 'react-toastify'
-import { handleApiError } from '@/utils/handleApiError'
 import { useAppContext } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
 
@@ -58,138 +53,17 @@ export default function Home() {
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
-  const [openLateralMenu, setOpenLateralMenu] = useState(false)
-
-  const { loggedUser } = useAppContext()
-
-  const {
-    data: popularBooks,
-    isValidating: isValidatingPopularBooks,
-    mutate: mutatePopularBooks,
-  } = useRequest<BookProps[]>({
-    url: '/books/popular',
-    method: 'GET',
-  })
-
-  const {
-    data: latestRatings,
-    isValidating: isValidatingLatestRatings,
-    mutate: mutateLatestRatings,
-  } = useRequest<RatingProps[]>({
-    url: '/ratings/latest',
-    method: 'GET',
-  })
-
-  const { data: userLatestRatingData, mutate: mutateUserLatestRating } =
-    useRequest<RatingProps | null>({
-      url: '/ratings/user_latest',
-      method: 'GET',
-      params: { userId: loggedUser?.id },
-    })
+  const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
   const isMobile = useScreenSize(768)
 
-  async function handleCloseLateralMenu() {
-    setOpenLateralMenu(false)
-  }
-
-  const handleDeleteReview = async (id: string) => {
-    try {
-      const payload = { id }
-
-      await api.delete('/ratings', { data: payload })
-
-      toast.success('Rating successfully deleted!')
-
-      await Promise.all([
-        mutateUserLatestRating(),
-        mutateLatestRatings(),
-        mutatePopularBooks(),
-      ])
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
-
-  const handleEditReview = async (data: EditReviewData) => {
-    try {
-      const payload = {
-        id: data.ratingId,
-        description: data.description,
-        rate: data.rate,
-      }
-
-      await api.put('/ratings', payload)
-
-      toast.success('Rating successfully edited!')
-
-      await Promise.all([
-        mutateUserLatestRating(),
-        mutateLatestRatings(),
-        mutatePopularBooks(),
-      ])
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
-  console.log(latestRatings)
-  const handleCreateReview = async (data: CreateReviewData) => {
-    try {
-      const payload = {
-        bookId: data.bookId,
-        userId: data.userId,
-        description: data.description,
-        rate: data.rate,
-      }
-
-      await api.post(`/ratings`, { data: payload })
-
-      toast.success('Rating successfully submitted!')
-
-      await Promise.all([
-        mutateUserLatestRating(),
-        mutateLatestRatings(),
-        mutatePopularBooks(),
-      ])
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
-
-  const handleSelectReadingStatus = async (book: BookProps, status: string) => {
-    if (loggedUser && book) {
-      try {
-        const payload = {
-          userId: loggedUser?.id,
-          bookId: book.id,
-          status,
-        }
-
-        await Promise.all([
-          api.post('/reading_status', payload),
-          mutateUserLatestRating(),
-          mutateLatestRatings(),
-          mutatePopularBooks(),
-        ])
-
-        toast.success('Status successfully updated!')
-      } catch (error) {
-        handleApiError(error)
-      }
-    }
-  }
-
-  useEffect(() => {
-    const loadUserLatestRating = async () => {
-      if (!loggedUser) return
-
-      mutateUserLatestRating()
-    }
-
-    loadUserLatestRating()
-  }, [loggedUser])
-
-  const isLoading = isValidatingPopularBooks || isValidatingLatestRatings
+  const {
+    loggedUser,
+    userLatestRatingData,
+    isValidatingHomePage,
+    popularBooks,
+    latestRatings,
+  } = useAppContext()
 
   return (
     <>
@@ -198,14 +72,10 @@ export default function Home() {
         <LoadingPage />
       ) : (
         <HomePageWrapper>
-          {openLateralMenu && (
+          {isLateralMenuOpen && (
             <LateralMenu
-              handleDeleteReview={handleDeleteReview}
-              handleCreateReview={handleCreateReview}
-              handleEditReview={handleEditReview}
-              handleSelectReadingStatus={handleSelectReadingStatus}
               book={selectedBook}
-              onClose={handleCloseLateralMenu}
+              onClose={() => setIsLateralMenuOpen(false)}
             />
           )}
           {isMobile ? <MobileHeader /> : <Sidebar />}
@@ -222,7 +92,7 @@ export default function Home() {
                       Your Last Review
                     </UserLatestReadingTitle>
                     <UserLatestReadingContainer>
-                      {isLoading ? (
+                      {isValidatingHomePage ? (
                         <SkeletonRatingCard withMarginBottom />
                       ) : userLatestRatingData && userLatestRatingData?.book ? (
                         <UserLatestReadingCard
@@ -233,7 +103,7 @@ export default function Home() {
                             setSelectedBook(
                               userLatestRatingData.book as BookProps,
                             )
-                            setOpenLateralMenu(true)
+                            setIsLateralMenuOpen(true)
                           }}
                         />
                       ) : (
@@ -245,7 +115,7 @@ export default function Home() {
                 <LastRatingsContainer>
                   <LastRatingsTitle>Last Ratings</LastRatingsTitle>
                   <LastRatingsContent>
-                    {isLoading || !latestRatings?.length
+                    {!latestRatings?.length || isValidatingHomePage
                       ? Array.from({ length: 9 }).map((_, index) => (
                           <SkeletonRatingCard key={index} />
                         ))
@@ -256,7 +126,7 @@ export default function Home() {
                             onOpenDetails={() => {
                               if (rating?.book) {
                                 setSelectedBook(rating.book as BookProps)
-                                setOpenLateralMenu(true)
+                                setIsLateralMenuOpen(true)
                               }
                             }}
                           />
@@ -274,7 +144,7 @@ export default function Home() {
                   </span>
                 </PopularBooksTitle>
                 <PopularBooksContent>
-                  {isLoading || !popularBooks?.length
+                  {!popularBooks?.length || isValidatingHomePage
                     ? Array.from({ length: 12 }).map((_, index) => (
                         <SkeletonBookCard key={index} />
                       ))
@@ -285,7 +155,7 @@ export default function Home() {
                           book={book}
                           onOpenDetails={() => {
                             setSelectedBook(book)
-                            setOpenLateralMenu(true)
+                            setIsLateralMenuOpen(true)
                           }}
                         />
                       ))}

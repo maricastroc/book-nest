@@ -16,6 +16,7 @@ export default async function handler(
   }
 
   let categoriesQuery
+
   if (category) {
     categoriesQuery = {
       some: {
@@ -25,8 +26,25 @@ export default async function handler(
   }
 
   let searchQuery
+
   if (search) {
     searchQuery = String(search).toLowerCase()
+  }
+
+  // Busca o usuário para obter `avatarUrl` e `name`
+  const user = await prisma.user.findUnique({
+    where: {
+      id: String(userId),
+    },
+    select: {
+      avatarUrl: true,
+      name: true,
+      id: true,
+    },
+  })
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' })
   }
 
   const books = await prisma.book.findMany({
@@ -61,13 +79,11 @@ export default async function handler(
     },
   })
 
-  // Ajusta a estrutura de books com suas categorias e cálculos de média
   const booksWithCategories = books.map((book) => {
     const avgRate =
       book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
         book.ratings.length || 0
 
-    // Encontra a avaliação do usuário específico
     const userRating =
       book.ratings.find((rating) => rating.userId === String(userId))?.rate ||
       null
@@ -77,8 +93,8 @@ export default async function handler(
     return {
       ...book,
       categories,
-      rate: avgRate, // Média de avaliação de todos os usuários
-      userRating, // Avaliação do usuário específico
+      rate: avgRate,
+      userRating,
       ratings: book.ratings,
       readingStatus: book.readingStatus[0]?.status || undefined,
     }
@@ -100,5 +116,12 @@ export default async function handler(
     return acc
   }, {} as { [status: string]: typeof booksWithCategories })
 
-  return res.json({ booksByStatus })
+  return res.json({
+    user: {
+      avatarUrl: user.avatarUrl,
+      name: user.name,
+      id: user.id,
+    },
+    booksByStatus,
+  })
 }

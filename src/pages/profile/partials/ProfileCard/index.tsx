@@ -21,7 +21,6 @@ import {
   ActionButton,
 } from './styles'
 import { UserActions } from '@/styles/shared'
-import { EditReviewData } from '@/pages/home/index.page'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { DeleteModal } from '@/components/modals/DeleteModal'
 import { useScreenSize } from '@/utils/useScreenSize'
@@ -31,15 +30,13 @@ import { EditUserReviewModal } from '@/pages/profile/partials/EditUserReviewModa
 interface ProfileCardProps {
   book: BookProps
   rating: RatingProps
-  handleDeleteReview?: () => Promise<void>
-  handleEditReview?: (data: EditReviewData) => Promise<void>
+  updateUserRatings: () => Promise<void>
 }
 
 export function ProfileCard({
   book,
   rating,
-  handleDeleteReview,
-  handleEditReview,
+  updateUserRatings,
 }: ProfileCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
@@ -49,13 +46,14 @@ export function ProfileCard({
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  const { loggedUser } = useAppContext()
+  const { loggedUser, handleDeleteReview } = useAppContext()
 
   const isMobile = useScreenSize(480)
 
   const onDeleteReview = async () => {
     if (loggedUser && handleDeleteReview) {
-      await handleDeleteReview()
+      await handleDeleteReview(rating.id)
+      await updateUserRatings()
       setIsDeleteModalOpen(false)
     }
   }
@@ -100,7 +98,7 @@ export function ProfileCard({
                   <EditUserReviewModal
                     rating={rating}
                     bookId={book.id}
-                    handleEditReview={handleEditReview}
+                    updateUserRatings={updateUserRatings}
                     onClose={() => {
                       setIsEditUserReviewModalOpen(false)
                     }}

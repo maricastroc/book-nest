@@ -29,17 +29,15 @@ import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
 interface MenuBookCardProps {
   book: BookProps
   categories: CategoryProps[]
-  handleCreateReview: (data: CreateReviewData) => Promise<void>
-  handleSelectReadingStatus: (status: string) => Promise<void>
   closeLateralMenu: () => void
+  loadRatings: () => void
 }
 
 export function MenuBookCard({
   closeLateralMenu,
+  loadRatings,
   book,
   categories,
-  handleCreateReview,
-  handleSelectReadingStatus,
 }: MenuBookCardProps) {
   const categoryNames = categories.map((category) => category?.name)
 
@@ -50,9 +48,7 @@ export function MenuBookCard({
 
   const [isReadBookModalOpen, setIsReadBookModalOpen] = useState(false)
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  const { loggedUser } = useAppContext()
+  const { loggedUser, isValidating, handleCreateReview } = useAppContext()
 
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
@@ -82,7 +78,7 @@ export function MenuBookCard({
               <Dialog.Root open={isSignInModalOpen}>
                 <Dialog.Trigger asChild>
                   <AddToLibraryButton
-                    disabled={isLoading}
+                    disabled={isValidating}
                     onClick={() => {
                       !loggedUser
                         ? setIsSignInModalOpen(true)
@@ -109,15 +105,7 @@ export function MenuBookCard({
                     dropdownRef={dropdownRef}
                     book={book}
                     handleOpenReadBookModal={() => setIsReadBookModalOpen(true)}
-                    isValidating={isLoading}
-                    handleSelectReadingStatus={async (value: string) => {
-                      setIsLoading(true)
-
-                      handleSelectReadingStatus(value)
-
-                      setIsLoading(false)
-                      closeLateralMenu()
-                    }}
+                    closeLateralMenu={closeLateralMenu}
                   />
                 </Dialog.Trigger>
                 {loggedUser && (
@@ -128,6 +116,7 @@ export function MenuBookCard({
                     closeLateralMenu={() => closeLateralMenu()}
                     handleCreateReview={async (data: CreateReviewData) => {
                       await handleCreateReview(data)
+                      loadRatings()
                       closeLateralMenu()
                     }}
                   />

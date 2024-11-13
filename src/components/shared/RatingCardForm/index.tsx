@@ -22,7 +22,6 @@ import { AVATAR_URL_DEFAULT, REVIEW_MAX_LENGTH } from '@/utils/constants'
 import { FormErrors } from '@/components/shared/FormErrors'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
-import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
 
@@ -32,8 +31,7 @@ interface RatingCardFormProps {
   rating?: RatingProps | null
   bookId: string
   onClose: () => void
-  handleEditReview?: (data: EditReviewData) => void
-  handleCreateReview?: (data: CreateReviewData) => void
+  closeLateralMenu?: () => void
 }
 
 const ratingCardFormSchema = z.object({
@@ -49,8 +47,7 @@ type RatingCardFormData = z.infer<typeof ratingCardFormSchema>
 export function RatingCardForm({
   bookId,
   onClose,
-  handleEditReview,
-  handleCreateReview,
+  closeLateralMenu,
   isProfileScreen = false,
   isEdit = false,
   rating = null,
@@ -72,7 +69,7 @@ export function RatingCardForm({
 
   const session = useSession()
 
-  const { loggedUser } = useAppContext()
+  const { loggedUser, handleCreateReview, handleEditReview } = useAppContext()
 
   const handleRating = (rate: number) => {
     setValue('rate', rate)
@@ -91,7 +88,8 @@ export function RatingCardForm({
         bookId: bookId.toString(),
       }
 
-      handleCreateReview(payload)
+      await handleCreateReview(payload)
+      closeLateralMenu && closeLateralMenu()
 
       onClose()
     }
@@ -107,7 +105,8 @@ export function RatingCardForm({
         ratingId: rating.id,
       }
 
-      handleEditReview(payload)
+      await handleEditReview(payload)
+      closeLateralMenu && closeLateralMenu()
 
       onClose()
     }

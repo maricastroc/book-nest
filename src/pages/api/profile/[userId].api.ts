@@ -51,6 +51,15 @@ export default async function handler(
                   category: true,
                 },
               },
+              readingStatus: {
+                where: {
+                  userId,
+                  status: {
+                    equals: 'read',
+                    mode: 'insensitive',
+                  },
+                },
+              },
             },
           },
         },
@@ -61,28 +70,53 @@ export default async function handler(
     },
   })
 
+  const readBooks = await prisma.book.findMany({
+    where: {
+      readingStatus: {
+        some: {
+          userId,
+          status: {
+            equals: 'read',
+            mode: 'insensitive',
+          },
+        },
+      },
+      ...(searchQuery
+        ? {
+            OR: [
+              { name: { contains: searchQuery, mode: 'insensitive' } },
+              { author: { contains: searchQuery, mode: 'insensitive' } },
+            ],
+          }
+        : {}),
+    },
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
+  })
+
   if (!profile) {
     return res.status(404).json({ message: 'User does not exist.' })
   }
 
-  const readPages = profile.ratings.reduce(
-    (acc, rating) => acc + rating.book.totalPages,
-    0,
-  )
-  const ratedBooks = profile.ratings.length
+  const readPages = readBooks.reduce((acc, book) => acc + book.totalPages, 0)
 
-  const authorsCount = profile.ratings.reduce((acc, rating) => {
-    if (!acc.includes(rating.book.author)) {
-      acc.push(rating.book.author)
+  const authorsCount = readBooks.reduce((acc, book) => {
+    if (!acc.includes(book.author)) {
+      acc.push(book.author)
     }
     return acc
-  }, [] as string[])
+  }, [] as string[]).length
 
-  const categories = profile.ratings?.flatMap((rating) =>
-    rating?.book?.categories?.flatMap((category) => category?.category?.name),
+  const categories = readBooks.flatMap((book) =>
+    book.categories.map((cat) => cat.category.name),
   )
 
-  const bestGenre = categories ? getMostFrequentString(categories) : null
+  const bestGenre = categories.length ? getMostFrequentString(categories) : null
 
   const profileData = {
     user: {
@@ -94,8 +128,8 @@ export default async function handler(
     },
     ratings: profile.ratings,
     readPages,
-    ratedBooks,
-    authorsCount: authorsCount?.length,
+    ratedBooks: profile.ratings.length,
+    authorsCount,
     bestGenre,
   }
 

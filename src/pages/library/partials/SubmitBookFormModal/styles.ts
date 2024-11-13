@@ -110,7 +110,7 @@ export const CloseButton = styled(RadixClose, {
   },
 })
 
-export const FormContainer = styled('div', {
+export const FormContainer = styled('form', {
   display: 'flex',
   flexDirection: 'column',
   gap: '1.5rem',

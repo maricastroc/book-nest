@@ -29,7 +29,7 @@ export const UserProfileInfo = styled('div', {
   },
 })
 
-export const EditProfileButton = styled('button', {
+export const ActionButton = styled('button', {
   backgroundColor: 'transparent',
   display: 'flex',
   alignItems: 'center',
@@ -37,11 +37,11 @@ export const EditProfileButton = styled('button', {
   gap: '0.7rem',
   cursor: 'pointer',
   color: '$green100',
-  padding: '0.3rem',
+  padding: '0.4rem 0.6rem',
   fontSize: '0.85rem',
   borderRadius: 10,
   border: 'solid 1px $green100',
-  width: '7rem',
+  width: 'auto',
   marginTop: '1rem',
 
   svg: {

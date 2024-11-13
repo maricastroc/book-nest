@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { NextSeo } from 'next-seo'
 import { Sidebar } from '@/components/shared/Sidebar'
@@ -16,20 +17,21 @@ import { useScreenSize } from '@/utils/useScreenSize'
 import { useRouter } from 'next/router'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import useRequest from '@/utils/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
 import { BooksStatusProps } from '@/@types/books-status'
 import { SkeletonBookStatusList } from '@/pages/library/partials/SkeletonBookStatusList'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BookProps } from '@/@types/book'
-import { api } from '@/lib/axios'
-import { handleApiError } from '@/utils/handleApiError'
-import { toast } from 'react-toastify'
-import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
+
+export interface UserInfo {
+  avatarUrl: string
+  name: string
+  id: string
+}
 
 export default function Profile() {
   const isRouteLoading = useLoadingOnRouteChange()
@@ -38,7 +40,12 @@ export default function Profile() {
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const { loggedUser } = useAppContext()
+  const [booksStatus, setBooksStatus] = useState<BooksStatusProps | undefined>()
+
+  const [userInfo, setUserInfo] = useState<UserInfo | undefined>()
+
+  const { isValidatingLibraryPage, handleFetchBooksByStatus, handleSetUserId } =
+    useAppContext()
 
   const router = useRouter()
 
@@ -46,109 +53,21 @@ export default function Profile() {
     ? router.query.userId[0]
     : router.query.userId
 
-  const {
-    data: userBooks,
-    isValidating: isValidatingUserBooks,
-    mutate: mutateUserBooks,
-  } = useRequest<BookProps[]>({
-    url: `/profile/books`,
-    method: 'GET',
-  })
-
-  const requestBooksStatus = userId
-    ? {
-        url: `/library`,
-        method: 'GET',
-        params: { userId },
-      }
-    : null
-
-  const {
-    data: booksStatus,
-    isValidating: isValidatingBooksStatus,
-    mutate: mutateBooksStatus,
-  } = useRequest<BooksStatusProps>(requestBooksStatus)
-
   const isMobile = useScreenSize(768)
 
-  const handleDeleteReview = async (id: string) => {
-    try {
-      const payload = { id }
+  const loadBooksStatus = async () => {
+    const data = await handleFetchBooksByStatus(userId)
 
-      await Promise.all([
-        api.delete('/ratings', { data: payload }),
-        mutateBooksStatus(),
-        mutateUserBooks(),
-      ])
-
-      toast.success('Rating successfully deleted!')
-    } catch (error) {
-      handleApiError(error)
-    }
+    setBooksStatus(data?.booksByStatus)
+    setUserInfo(data?.userInfo)
   }
 
-  const handleEditReview = async (data: EditReviewData) => {
-    try {
-      const payload = {
-        id: data.ratingId,
-        description: data.description,
-        rate: data.rate,
-      }
-
-      await Promise.all([
-        await api.put('/ratings', payload),
-        mutateBooksStatus(),
-        mutateUserBooks(),
-      ])
-
-      toast.success('Rating successfully edited!')
-    } catch (error) {
-      handleApiError(error)
+  useEffect(() => {
+    if (userId) {
+      handleSetUserId(userId)
+      loadBooksStatus()
     }
-  }
-
-  const handleCreateReview = async (data: CreateReviewData) => {
-    try {
-      const payload = {
-        bookId: data.bookId,
-        userId: data.userId,
-        description: data.description,
-        rate: data.rate,
-      }
-
-      await Promise.all([
-        await api.post(`/ratings`, { data: payload }),
-        mutateBooksStatus(),
-        mutateUserBooks(),
-      ])
-
-      toast.success('Rating successfully submitted!')
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
-
-  const handleSelectReadingStatus = async (book: BookProps, status: string) => {
-    if (loggedUser && book) {
-      try {
-        const payload = {
-          userId: loggedUser?.id,
-          bookId: book.id,
-          status,
-        }
-
-        await Promise.all([
-          api.post('/reading_status', payload),
-          mutateBooksStatus(),
-          mutateUserBooks(),
-        ])
-
-        toast.success('Status successfully updated!')
-      } catch (error) {
-        handleApiError(error)
-      }
-    }
-  }
+  }, [userId])
 
   return (
     <>
@@ -166,12 +85,11 @@ export default function Profile() {
           )}
           {openLateralMenu && (
             <LateralMenu
-              handleDeleteReview={handleDeleteReview}
-              handleCreateReview={handleCreateReview}
-              handleEditReview={handleEditReview}
-              handleSelectReadingStatus={handleSelectReadingStatus}
               book={selectedBook}
-              onClose={() => setOpenLateralMenu(false)}
+              onClose={async () => {
+                setOpenLateralMenu(false)
+                await loadBooksStatus()
+              }}
             />
           )}
           <UserLibraryBody>
@@ -183,7 +101,7 @@ export default function Profile() {
             </UserLibraryHeading>
 
             <UserLibraryContent>
-              {isValidatingBooksStatus ? (
+              {isValidatingLibraryPage ? (
                 <ListByBookStatusContainer>
                   {Array.from({ length: 3 }, (_, index) => (
                     <SkeletonBookStatusList key={index} />
@@ -200,13 +118,12 @@ export default function Profile() {
               )}
               <UserDetailsContainer>
                 <SubmittedBooksSection
+                  userInfo={userInfo}
+                  userId={userId}
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)
                     setOpenLateralMenu(true)
                   }}
-                  mutate={mutateUserBooks}
-                  userBooks={userBooks}
-                  isValidating={isValidatingUserBooks}
                 />
               </UserDetailsContainer>
             </UserLibraryContent>

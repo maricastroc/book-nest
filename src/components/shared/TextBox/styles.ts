@@ -4,6 +4,7 @@ export const TextBoxWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
+  width: '100%',
 })
 
 export const TextBoxContent = styled('div', {
@@ -14,6 +15,7 @@ export const TextBoxContent = styled('div', {
   justifyContent: 'flex-start',
   transition: 'max-height 0.3s ease',
   color: '$gray200',
+  width: '100%',
 
   p: {
     color: '$gray300',
@@ -41,4 +43,15 @@ export const ViewMoreButton = styled('button', {
     outline: 'hidden',
     border: 'transparent',
   },
+})
+
+export const EmptyRating = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minWidth: '100%',
+  color: '$gray400',
+  border: '1px dashed $gray400',
+  borderRadius: 8,
+  padding: '0.9rem',
 })

@@ -1,3 +1,3 @@
 export function formatToSnakeCase(text: string): string {
-  return text.toLowerCase().replace(/\s+/g, '_')
+  return text?.toLowerCase()?.replace(/\s+/g, '_')
 }

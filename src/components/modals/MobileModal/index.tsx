@@ -83,7 +83,7 @@ export function MobileModal() {
 
   const router = useRouter()
 
-  const { loggedUser, isLoading } = useAppContext()
+  const { loggedUser, isValidatingLoggedUser } = useAppContext()
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' })
@@ -137,7 +137,7 @@ export function MobileModal() {
           <DividerLine />
           <UserProfile
             loggedUser={loggedUser}
-            isLoading={isLoading}
+            isLoading={isValidatingLoggedUser}
             handleLogout={handleLogout}
           />
         </>

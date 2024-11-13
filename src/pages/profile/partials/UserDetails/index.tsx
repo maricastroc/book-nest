@@ -5,7 +5,7 @@ import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import {
   UserProfileContainer,
-  EditProfileButton,
+  ActionButton,
   UserStatText,
   DividerLine,
   UserProfileInfo,
@@ -22,10 +22,12 @@ import {
   PencilSimple,
   UserList,
 } from 'phosphor-react'
+import { useRouter } from 'next/router'
 
 interface UserDetailsProps {
   userId: string
   userStatistics: UserStatistics | undefined
+  isLoading: boolean
 }
 
 interface UserStat {
@@ -44,8 +46,14 @@ const UserStatItemComponent = ({ icon, value, label }: UserStat) => (
   </UserStatItem>
 )
 
-export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
+export function UserDetails({
+  userId,
+  userStatistics,
+  isLoading,
+}: UserDetailsProps) {
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
+
+  const router = useRouter()
 
   const [dateInfo, setDateInfo] = useState({
     dateFormatted: '',
@@ -53,7 +61,7 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
     dateString: '',
   })
 
-  const { loggedUser, isLoading } = useAppContext()
+  const { loggedUser } = useAppContext()
 
   const isCurrentUser = useMemo(
     () => loggedUser?.id === userId,
@@ -112,16 +120,16 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
             </time>
           </UserProfileInfo>
 
-          {isCurrentUser && (
+          {isCurrentUser ? (
             <Dialog.Root>
               <Dialog.Trigger asChild>
-                <EditProfileButton
+                <ActionButton
                   type="button"
                   onClick={() => setIsEditProfileModalOpen(true)}
                 >
                   <PencilSimple />
                   Edit Info
-                </EditProfileButton>
+                </ActionButton>
               </Dialog.Trigger>
               {isEditProfileModalOpen && (
                 <EditProfileModal
@@ -129,6 +137,10 @@ export function UserDetails({ userId, userStatistics }: UserDetailsProps) {
                 />
               )}
             </Dialog.Root>
+          ) : (
+            <ActionButton
+              onClick={() => router.push(`/library/${userId}`)}
+            >{`View ${userName?.split(' ')[0]}'s Library`}</ActionButton>
           )}
 
           <DividerLine />

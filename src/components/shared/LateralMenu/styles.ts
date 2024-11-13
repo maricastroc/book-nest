@@ -109,11 +109,16 @@ export const RatingsList = styled('div', {
   flexDirection: 'column-reverse',
   minWidth: '100%',
   gap: '1.5rem',
+
+  '&.reverse': {
+    flexDirection: 'column',
+  },
 })
 
 export const RatingsListHeader = styled('div', {
+  position: 'relative',
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'space-between',
   justifyContent: 'space-between',
   width: '100%',
 

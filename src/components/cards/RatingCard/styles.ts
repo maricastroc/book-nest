@@ -107,7 +107,7 @@ export const BookCover = styled('img', {
 
   '@media (min-width: 480px)': {
     width: '6.5rem',
-    marginTop: '1rem',
+    marginTop: '0.5rem',
   },
 
   '&:hover': {

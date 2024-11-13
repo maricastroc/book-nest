@@ -26,12 +26,7 @@ import { useRouter } from 'next/router'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import useRequest from '@/utils/useRequest'
-import { UserStatistics } from '@/contexts/AppContext'
-import { api } from '@/lib/axios'
-import { toast } from 'react-toastify'
-import { handleApiError } from '@/utils/handleApiError'
-import { EditReviewData } from '@/pages/home/index.page'
+import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 
 export default function Profile() {
   const isRouteLoading = useLoadingOnRouteChange()
@@ -42,54 +37,20 @@ export default function Profile() {
     ? router.query.userId[0]
     : router.query.userId
 
-  const [search, setSearch] = useState('')
+  const [userStatistics, setUserStatistics] = useState<
+    UserStatistics | undefined
+  >(undefined)
 
   const [userRatings, setUserRatings] = useState<RatingProps[]>([])
 
-  const requestConfig = userId
-    ? {
-        url: `/profile/${userId}`,
-        method: 'GET',
-        params: { search },
-      }
-    : null
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
-    data: userStatistics,
-    isValidating,
-    mutate,
-  } = useRequest<UserStatistics>(requestConfig)
-
-  const handleDeleteReview = async (id: string) => {
-    try {
-      const payload = { id }
-      await api.delete('/ratings', { data: payload })
-
-      toast.success('Rating successfully deleted!')
-
-      await mutate()
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
-
-  const handleEditReview = async (data: EditReviewData) => {
-    try {
-      const payload = {
-        id: data.ratingId,
-        description: data.description,
-        rate: data.rate,
-      }
-
-      await api.put('/ratings', payload)
-
-      toast.success('Rating successfully edited!')
-
-      await mutate()
-    } catch (error) {
-      handleApiError(error)
-    }
-  }
+    handleFetchUserStatistics,
+    handleSetUserId,
+    search,
+    handleSetSearch,
+  } = useAppContext()
 
   const isMobile = useScreenSize(768)
 
@@ -98,6 +59,25 @@ export default function Profile() {
       setUserRatings(userStatistics.ratings ?? [])
     }
   }, [userStatistics])
+
+  const loadUserStatistics = async () => {
+    setIsLoading(true)
+
+    const data = await handleFetchUserStatistics(userId, search)
+
+    if (data) {
+      setUserStatistics(data)
+    }
+
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    if (userId) {
+      handleSetUserId(userId)
+      loadUserStatistics()
+    }
+  }, [userId])
 
   return (
     <>
@@ -122,28 +102,26 @@ export default function Profile() {
                     type="text"
                     placeholder="Search for author or title"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => handleSetSearch(e.target.value)}
                     spellCheck={false}
                   />
                   {search === '' ? (
                     <MagnifyingGlass />
                   ) : (
-                    <X onClick={() => setSearch('')} />
+                    <X onClick={() => handleSetSearch('')} />
                   )}
                 </SearchBar>
-                {!userStatistics?.ratings?.length && !isValidating && (
+                {!userStatistics?.ratings?.length && !isLoading && (
                   <EmptyWrapper>
                     <EmptyContainer />
                   </EmptyWrapper>
                 )}
                 <UserRatings
                   className={
-                    isValidating || (userRatings?.length ?? 0) > 1
-                      ? 'smaller'
-                      : ''
+                    isLoading || (userRatings?.length ?? 0) > 1 ? 'smaller' : ''
                   }
                 >
-                  {isValidating
+                  {isLoading
                     ? Array.from({ length: 4 }).map((_, index) => (
                         <SkeletonRatingCard key={index} />
                       ))
@@ -155,14 +133,9 @@ export default function Profile() {
                               key={rating.id}
                               book={rating.book}
                               rating={rating}
-                              handleDeleteReview={async () => {
-                                await handleDeleteReview(rating.id)
-                              }}
-                              handleEditReview={async (
-                                data: EditReviewData,
-                              ) => {
-                                await handleEditReview(data)
-                              }}
+                              updateUserRatings={async () =>
+                                await loadUserStatistics()
+                              }
                             />
                           )
                         }
@@ -176,6 +149,7 @@ export default function Profile() {
                   <UserDetails
                     userStatistics={userStatistics}
                     userId={userId as string}
+                    isLoading={isLoading}
                   />
                 )}
               </UserDetailsContainer>

@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { ViewMoreButton, TextBoxContent, TextBoxWrapper } from './styles'
+import {
+  ViewMoreButton,
+  TextBoxContent,
+  TextBoxWrapper,
+  EmptyRating,
+} from './styles'
 
 interface TextBoxProps {
   maxHeight?: string
@@ -43,9 +48,13 @@ export function TextBox({
           overflowY: isExpanded ? 'visible' : 'hidden',
         }}
       >
-        <p>{description}</p>
+        {description && description?.length ? (
+          <p>{description}</p>
+        ) : (
+          <EmptyRating>No description available</EmptyRating>
+        )}
       </TextBoxContent>
-      {isOverflowing && (
+      {isOverflowing && description && description?.length && (
         <ViewMoreButton
           className={variant}
           onClick={() => setIsExpanded(!isExpanded)}

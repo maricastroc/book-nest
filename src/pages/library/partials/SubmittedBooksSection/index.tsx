@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
@@ -14,75 +14,96 @@ import {
 } from './styles'
 import { PencilSimple, Plus } from 'phosphor-react'
 import { EditProfileModal } from '@/components/modals/EditProfileModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitBookFormModal } from '../SubmitBookFormModal'
-import useRequest from '@/utils/useRequest'
-import { CategoryProps } from '@/@types/category'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { BookCard } from '@/components/cards/BookCard'
 import { BookProps } from '@/@types/book'
+import { UserInfo } from '../../[userId]/index.page'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
-  userBooks: BookProps[] | undefined
-  isValidating: boolean
-  mutate: any
+  userId: string | undefined
+  userInfo: UserInfo | undefined
 }
 
 export function SubmittedBooksSection({
+  userId,
   onOpenDetails,
-  userBooks,
-  isValidating,
-  mutate,
+  userInfo,
 }: SubmittedBooksSectionProps) {
-  const { loggedUser } = useAppContext()
+  const {
+    loggedUser,
+    isValidating,
+    categories,
+    handleFetchUserSubmittedBooks,
+  } = useAppContext()
 
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
 
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
 
-  const { data: categories } = useRequest<CategoryProps[]>({
-    url: '/categories',
-    method: 'GET',
-  })
+  const [submittedBooks, setSubmittedBooks] = useState<
+    BookProps[] | undefined
+  >()
+
+  const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
+
+  const loadUserSubmittedBooks = async () => {
+    const data = await handleFetchUserSubmittedBooks(userId)
+
+    setSubmittedBooks(data)
+  }
+
+  useEffect(() => {
+    if (userId) {
+      loadUserSubmittedBooks()
+    }
+  }, [userId])
 
   return (
     <SubmittedBooksSectionWrapper>
       <UserProfileInfo>
         <Avatar
-          avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
+          avatarUrl={userInfo?.avatarUrl ?? AVATAR_URL_DEFAULT}
           variant="large"
         />
-        <h2>{loggedUser?.name}</h2>
-        <Dialog.Root>
-          <Dialog.Trigger asChild>
-            <EditProfileButton
-              type="button"
-              onClick={() => setIsEditProfileModalOpen(true)}
-            >
-              <PencilSimple />
-              Edit Info
-            </EditProfileButton>
-          </Dialog.Trigger>
-          {isEditProfileModalOpen && (
-            <EditProfileModal
-              onClose={() => setIsEditProfileModalOpen(false)}
-            />
-          )}
-        </Dialog.Root>
+        <h2>{userInfo?.name}</h2>
+        {isLoggedUser && (
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <EditProfileButton
+                type="button"
+                onClick={() => setIsEditProfileModalOpen(true)}
+              >
+                <PencilSimple />
+                Edit Info
+              </EditProfileButton>
+            </Dialog.Trigger>
+            {isEditProfileModalOpen && (
+              <EditProfileModal
+                onClose={() => setIsEditProfileModalOpen(false)}
+              />
+            )}
+          </Dialog.Root>
+        )}
+        <DividerLine />
       </UserProfileInfo>
-      <DividerLine />
       <SubmittedBooksWrapper>
         <SubmittedBooksHeading>
-          <p>Your Submitted Books</p>
+          <p>{`${
+            isLoggedUser
+              ? 'Your Submitted Books'
+              : `${userInfo?.name?.split(' ')[0]}'s Submitted Books`
+          }`}</p>
         </SubmittedBooksHeading>
         {isValidating ? (
           Array.from({ length: 4 }).map((_, index) => (
             <SkeletonBookCard key={index} />
           ))
-        ) : userBooks && userBooks.length ? (
+        ) : submittedBooks && submittedBooks.length ? (
           <>
-            {userBooks.map((book) => (
+            {submittedBooks.map((book) => (
               <BookCard
                 size="smaller"
                 key={book.id}
@@ -95,8 +116,12 @@ export function SubmittedBooksSection({
             <Dialog.Root open={isSubmitBookFormOpen}>
               <Dialog.Trigger asChild>
                 <EmptyBooksContainer
-                  className="variant"
-                  onClick={() => setIsSubmitBookFormOpen(true)}
+                  className={`variant ${!isLoggedUser && 'disabled'}`}
+                  onClick={
+                    isLoggedUser
+                      ? () => setIsSubmitBookFormOpen(true)
+                      : () => null
+                  }
                 >
                   <Plus />
                 </EmptyBooksContainer>
@@ -105,8 +130,8 @@ export function SubmittedBooksSection({
                 <SubmitBookFormModal
                   categories={categories}
                   onClose={async () => {
+                    await loadUserSubmittedBooks()
                     setIsSubmitBookFormOpen(false)
-                    await mutate()
                   }}
                 />
               )}
@@ -116,7 +141,12 @@ export function SubmittedBooksSection({
           <Dialog.Root open={isSubmitBookFormOpen}>
             <Dialog.Trigger asChild>
               <EmptyBooksContainer
-                onClick={() => setIsSubmitBookFormOpen(true)}
+                className={`${!isLoggedUser && 'disabled'}`}
+                onClick={
+                  isLoggedUser
+                    ? () => setIsSubmitBookFormOpen(true)
+                    : () => null
+                }
               >
                 <Plus />
               </EmptyBooksContainer>
@@ -125,8 +155,8 @@ export function SubmittedBooksSection({
               <SubmitBookFormModal
                 categories={categories}
                 onClose={async () => {
+                  await loadUserSubmittedBooks()
                   setIsSubmitBookFormOpen(false)
-                  await mutate()
                 }}
               />
             )}

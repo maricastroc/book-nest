@@ -19,23 +19,19 @@ import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { RatingCardForm } from '../../../RatingCardForm'
 import { Avatar } from '@/components/shared/Avatar'
 import { UserActions } from '@/styles/shared'
-import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { TextBox } from '@/components/shared/TextBox'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface UserRatingBoxProps {
   rating: RatingProps
   onCloseUserRatingBox: () => void
-  handleDeleteReview: (value: string) => void
-  handleEditReview: (data: EditReviewData) => void
-  handleCreateReview: (data: CreateReviewData) => void
+  closeLateralMenu: () => void
 }
 
 export function UserRatingBox({
   rating,
   onCloseUserRatingBox,
-  handleDeleteReview,
-  handleEditReview,
-  handleCreateReview,
+  closeLateralMenu,
 }: UserRatingBoxProps) {
   const router = useRouter()
 
@@ -43,6 +39,8 @@ export function UserRatingBox({
     getDateFormattedAndRelative(rating.createdAt)
 
   const [openEditReviewBox, setOpenEditReviewBox] = useState(false)
+
+  const { handleDeleteReview } = useAppContext()
 
   const session = useSession()
 
@@ -52,8 +50,7 @@ export function UserRatingBox({
       rating={rating}
       bookId={rating.bookId}
       onClose={onCloseUserRatingBox}
-      handleEditReview={handleEditReview}
-      handleCreateReview={handleCreateReview}
+      closeLateralMenu={closeLateralMenu}
     />
   ) : (
     <UserRatingBoxWrapper>
@@ -81,8 +78,7 @@ export function UserRatingBox({
           <RatingCardForm
             bookId={rating.bookId}
             onClose={onCloseUserRatingBox}
-            handleEditReview={handleEditReview}
-            handleCreateReview={handleCreateReview}
+            closeLateralMenu={closeLateralMenu}
           />
         ) : (
           <TextBox description={rating.description ?? ''} />

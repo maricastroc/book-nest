@@ -84,10 +84,12 @@ export default async function handler(
     const { ...bookInfo } = book
 
     function toSnakeCase(text: string): string {
-      return text.toLowerCase().replace(/\s+/g, '_')
+      return text?.toLowerCase().replace(/\s+/g, '_') ?? ''
     }
 
-    const readingStatus = toSnakeCase(book.readingStatus?.[0]?.status) ?? null
+    const readingStatus = book.readingStatus?.[0]?.status
+      ? toSnakeCase(book.readingStatus[0].status)
+      : null
 
     return {
       ...bookInfo,

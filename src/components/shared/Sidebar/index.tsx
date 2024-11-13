@@ -59,7 +59,7 @@ export function Sidebar() {
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
-  const { loggedUser, isLoading } = useAppContext()
+  const { loggedUser, isValidatingLoggedUser } = useAppContext()
 
   const handleLogout = useCallback(() => {
     signOut({ callbackUrl: '/' })
@@ -117,13 +117,13 @@ export function Sidebar() {
           </SidebarMain>
           {loggedUser ? (
             <ProfileContainer>
-              {isLoading ? (
+              {isValidatingLoggedUser ? (
                 <SkeletonUserSidebar />
               ) : (
                 <>
                   <Avatar
                     isClickable
-                    isLoading={isLoading}
+                    isLoading={isValidatingLoggedUser}
                     avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
                     onClick={() => {
                       const currentPath = router.asPath

@@ -5,27 +5,29 @@ import {
   DividerDropdown,
 } from './styles'
 import { BookProps } from '@/@types/book'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface DropdownMenuProps {
   isOpen: boolean
   onClose: () => void
   book: BookProps
-  handleSelectReadingStatus: (status: string) => Promise<void>
   activeStatus: string | null
   dropdownRef: React.RefObject<HTMLDivElement>
   handleOpenReadBookModal: () => void
-  isValidating: boolean
+  closeLateralMenu: () => void
 }
 
 export const DropdownMenu = ({
   isOpen,
   activeStatus,
+  book,
   handleOpenReadBookModal,
+  closeLateralMenu,
   onClose,
-  handleSelectReadingStatus,
   dropdownRef,
-  isValidating,
 }: DropdownMenuProps) => {
+  const { handleSelectReadingStatus, isValidating } = useAppContext()
+
   const statuses = [
     { label: 'Read', className: 'read' },
     { label: 'Reading', className: 'reading' },
@@ -63,7 +65,9 @@ export const DropdownMenu = ({
                 return
               }
 
-              await handleSelectReadingStatus(status.label)
+              await handleSelectReadingStatus(book, status.label)
+
+              closeLateralMenu()
               onClose()
             }}
           >

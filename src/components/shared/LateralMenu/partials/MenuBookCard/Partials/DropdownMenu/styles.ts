@@ -39,7 +39,7 @@ export const ReadingStatusItem = styled('button', {
   '&:disabled': {
     color: '$gray400',
     cursor: 'not-allowed !important',
-    border: '1px solid $gray400',
+    border: 'none',
   },
 })
 

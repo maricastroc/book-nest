@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as Dialog from '@radix-ui/react-dialog'
 import { Book, Pencil, X } from 'phosphor-react'
 import Select from 'react-select'
@@ -6,7 +7,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Title,
   Content,
@@ -30,6 +31,7 @@ import { Description, Overlay } from '@/styles/shared'
 import { CustomButton } from '@/components/shared/Button'
 import { customStyles } from '@/utils/getCustomStyles'
 import { CategoryProps } from '@/@types/category'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface SubmitBookFormModalProps {
   onClose: () => Promise<void>
@@ -37,7 +39,7 @@ interface SubmitBookFormModalProps {
 }
 
 const submitBookFormSchema = z.object({
-  userId: z.number(),
+  userId: z.string(),
   author: z
     .string()
     .min(3, { message: 'Author must have at least 3 characters.' }),
@@ -53,7 +55,12 @@ const submitBookFormSchema = z.object({
     message: 'Cover image is required.',
   }),
   categories: z
-    .array(z.string())
+    .array(
+      z.object({
+        value: z.string(), // Ajusta o campo 'value' que vem do react-select
+        label: z.string(), // Ajusta o campo 'label' que vem do react-select
+      }),
+    )
     .min(1, { message: 'At least one category is required.' }),
 })
 
@@ -69,9 +76,12 @@ export function SubmitBookFormModal({
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const { loggedUser } = useAppContext()
+
   const {
     register,
     control,
+    handleSubmit,
     watch,
     setValue,
     formState: { errors },
@@ -102,16 +112,12 @@ export function SubmitBookFormModal({
     inputFileRef.current?.click()
   }
 
+  const onInvalid = (errors: any) => {
+    console.error('Erro de validação:', errors)
+    toast.error('Por favor, corrija os erros antes de enviar o formulário.')
+  }
+
   async function handleSubmitBook(data: SubmitBookFormData) {
-    const formDataToValidate = watch()
-
-    const validation = submitBookFormSchema.safeParse(formDataToValidate)
-
-    if (!validation.success) {
-      toast.error('Please, fill all the fields before submit.')
-      return
-    }
-
     const formData = new FormData()
 
     formData.append('coverUrl', data.coverUrl)
@@ -121,7 +127,7 @@ export function SubmitBookFormModal({
     formData.append('totalPages', String(data.totalPages))
     formData.append('publishingYear', String(data.publishingYear))
 
-    const categoryValues = data.categories.map(
+    const categoryValues = data?.categories?.map(
       (category: any) => category.value,
     )
 
@@ -148,6 +154,12 @@ export function SubmitBookFormModal({
     value: category.id,
     label: category.name,
   }))
+  console.log(watch())
+  useEffect(() => {
+    if (loggedUser) {
+      setValue('userId', loggedUser.id)
+    }
+  }, [loggedUser])
 
   return (
     <Dialog.Portal>
@@ -166,7 +178,7 @@ export function SubmitBookFormModal({
           </CloseButton>
         </Header>
         <Description className="DialogDescription">
-          <FormContainer>
+          <FormContainer onSubmit={handleSubmit(handleSubmitBook, onInvalid)}>
             <CoverSectionContainer>
               <PreviewContainer>
                 <ImagePreview>
@@ -261,6 +273,7 @@ export function SubmitBookFormModal({
                       isMulti
                       options={options as any}
                       styles={customStyles}
+                      onChange={(selected) => field.onChange(selected)}
                     />
                   )}
                 />
@@ -271,7 +284,7 @@ export function SubmitBookFormModal({
             )}
 
             <CustomButton
-              onClick={() => handleSubmitBook(watch())}
+              type="submit"
               content="Submit New Book"
               disabled={isSubmitting}
             />

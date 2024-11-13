@@ -35,6 +35,7 @@ export const UserProfileInfo = styled('div', {
   textAlign: 'center',
 
   h2: {
+    position: 'relative',
     fontSize: '1.25rem',
     color: '$white',
   },
@@ -139,5 +140,17 @@ export const EmptyBooksContainer = styled('div', {
   '&.variant': {
     width: '100%',
     height: '9rem',
+  },
+
+  '&.disabled': {
+    cursor: 'default',
+
+    '&:hover': {
+      border: 'dashed 1px $gray400',
+
+      svg: {
+        color: '$gray400',
+      },
+    },
   },
 })

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { useAppContext } from '@/contexts/AppContext'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -19,11 +20,11 @@ import {
 import { MenuBookCard } from './partials/MenuBookCard'
 import { UserRatingBox } from './partials/UserRatingBox'
 import { RatingCardForm } from '../RatingCardForm'
-import { CreateReviewData, EditReviewData } from '@/pages/home/index.page'
 import { SignInModal } from '@/components/modals/SignInModal'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { ReviewWarningModal } from '@/components/shared/LateralMenu/partials/ReviewWarningModal'
 import { EmptyContainer } from '../EmptyContainer'
+import { READ_STATUS } from '@/utils/constants'
 
 export interface ReadingStatusProps {
   bookId: string
@@ -32,20 +33,14 @@ export interface ReadingStatusProps {
 }
 
 interface BookReviewsSidebarProps {
-  handleDeleteReview: (value: string) => Promise<void>
-  handleEditReview: (data: EditReviewData) => Promise<void>
-  handleCreateReview: (data: CreateReviewData) => Promise<void>
-  handleSelectReadingStatus: (book: BookProps, status: string) => Promise<void>
+  isOpen?: boolean
   book: BookProps | null
   onClose: () => void
 }
 
 export function LateralMenu({
+  isOpen,
   book,
-  handleDeleteReview,
-  handleCreateReview,
-  handleEditReview,
-  handleSelectReadingStatus,
   onClose,
 }: BookReviewsSidebarProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
@@ -63,7 +58,11 @@ export function LateralMenu({
     undefined,
   )
 
-  const { isLoading, loggedUser } = useAppContext()
+  const { isValidating, loggedUser } = useAppContext()
+
+  const shouldShowReviewOption = loggedUser && !userRating
+
+  const shouldShowSignInOption = !loggedUser && !userRating
 
   useEffect(() => {
     if (book) {
@@ -71,25 +70,19 @@ export function LateralMenu({
     }
   }, [book])
 
-  useEffect(() => {
+  const loadRatings = () => {
     if (book && book.ratings && loggedUser) {
       const foundUserRating = book.ratings.find(
         (rating) => rating.user.id === loggedUser.id,
       )
       setUserRating(foundUserRating)
     }
-  }, [book, loggedUser])
-
-  const handleOpenReviewForm = () => {
-    userRating ? setIsReviewFormOpen(true) : setIsReviewWarningModalOpen(true)
   }
 
-  const renderDialogTrigger = () => (
-    <Dialog.Trigger asChild>
-      <span onClick={() => setIsSignInModalOpen(true)}>Review</span>
-    </Dialog.Trigger>
-  )
-  console.log(book)
+  useEffect(() => {
+    loadRatings()
+  }, [book, loggedUser, isOpen])
+
   return (
     <LateralMenuWrapper>
       <OverlayBackground onClick={onClose} />
@@ -102,71 +95,68 @@ export function LateralMenu({
             key={book.id}
             book={book}
             categories={book.categories as CategoryProps[]}
-            handleCreateReview={handleCreateReview}
-            handleSelectReadingStatus={async (status: string) => {
-              await handleSelectReadingStatus(book, status)
-            }}
-            closeLateralMenu={() => onClose()}
+            loadRatings={() => loadRatings()}
+            closeLateralMenu={onClose}
           />
         )}
         <RatingsWrapper>
           <RatingsListHeader>
             <p>Ratings</p>
-            {loggedUser && userRating?.description === '' ? (
-              <Dialog.Root open={isReviewWarningModalOpen}>
-                <Dialog.Trigger asChild>
-                  <span onClick={handleOpenReviewForm}>Review</span>
-                </Dialog.Trigger>
-                <ReviewWarningModal
-                  onClose={() => setIsReviewWarningModalOpen(false)}
-                />
-              </Dialog.Root>
-            ) : (
-              !userRating &&
-              !loggedUser && (
-                <Dialog.Root open={isSignInModalOpen}>
-                  {renderDialogTrigger()}
-                  <SignInModal onClose={() => setIsSignInModalOpen(false)} />
+            {shouldShowReviewOption &&
+              (book?.readingStatus === READ_STATUS ? (
+                <Dialog.Root open={isReviewFormOpen}>
+                  <Dialog.Trigger asChild>
+                    <span onClick={() => setIsReviewFormOpen(true)}>
+                      Review
+                    </span>
+                  </Dialog.Trigger>
                 </Dialog.Root>
-              )
+              ) : (
+                <Dialog.Root open={isReviewWarningModalOpen}>
+                  <Dialog.Trigger asChild>
+                    <span onClick={() => setIsReviewWarningModalOpen(true)}>
+                      Review
+                    </span>
+                  </Dialog.Trigger>
+                  <ReviewWarningModal
+                    onClose={() => setIsReviewWarningModalOpen(false)}
+                  />
+                </Dialog.Root>
+              ))}
+            {shouldShowSignInOption && (
+              <Dialog.Root open={isSignInModalOpen}>
+                <Dialog.Trigger asChild>
+                  <span onClick={() => setIsSignInModalOpen(true)}>Review</span>
+                </Dialog.Trigger>
+                <SignInModal onClose={() => setIsSignInModalOpen(false)} />
+              </Dialog.Root>
             )}
           </RatingsListHeader>
-          {loggedUser && isReviewFormOpen && book && userRating && (
-            <RatingCardForm
-              isEdit
-              rating={userRating}
-              onClose={() => setIsReviewFormOpen(false)}
-              bookId={book.id}
-              handleEditReview={(data: EditReviewData) => {
-                handleEditReview(data)
-                onClose()
-              }}
-              handleCreateReview={(data: CreateReviewData) => {
-                handleCreateReview(data)
-                onClose()
-              }}
-            />
-          )}
-          <RatingsList>
-            {!isLoading && !bookRatings?.length ? (
+          <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
+            {book && isReviewFormOpen && (
+              <RatingCardForm
+                isEdit={!!userRating}
+                rating={userRating}
+                onClose={() => setIsReviewFormOpen(false)}
+                closeLateralMenu={onClose}
+                bookId={book?.id}
+              />
+            )}
+            {!isValidating && !bookRatings?.length ? (
               <EmptyContainer content="reviews" />
-            ) : isLoading ? (
+            ) : isValidating ? (
               Array.from({ length: 3 }).map((_, index) => (
                 <SkeletonRatingCard key={index} />
               ))
             ) : (
-              bookRatings
-                ?.filter((rating) => rating.description?.trim() !== '')
-                .map((rating) => (
-                  <UserRatingBox
-                    key={rating.id}
-                    rating={rating}
-                    onCloseUserRatingBox={onClose}
-                    handleEditReview={handleEditReview}
-                    handleDeleteReview={handleDeleteReview}
-                    handleCreateReview={handleCreateReview}
-                  />
-                ))
+              bookRatings?.map((rating) => (
+                <UserRatingBox
+                  key={rating.id}
+                  rating={rating}
+                  onCloseUserRatingBox={onClose}
+                  closeLateralMenu={onClose}
+                />
+              ))
             )}
           </RatingsList>
         </RatingsWrapper>
