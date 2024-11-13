@@ -36,12 +36,14 @@ interface BookReviewsSidebarProps {
   isOpen?: boolean
   book: BookProps | null
   onClose: () => void
+  onCloseWithoutUpdate?: () => void
 }
 
 export function LateralMenu({
   isOpen,
   book,
   onClose,
+  onCloseWithoutUpdate,
 }: BookReviewsSidebarProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
@@ -85,8 +87,8 @@ export function LateralMenu({
 
   return (
     <LateralMenuWrapper>
-      <OverlayBackground onClick={onClose} />
-      <CloseButton onClick={onClose}>
+      <OverlayBackground onClick={onCloseWithoutUpdate ?? onClose} />
+      <CloseButton onClick={onCloseWithoutUpdate ?? onClose}>
         <X />
       </CloseButton>
       <MenuBody>

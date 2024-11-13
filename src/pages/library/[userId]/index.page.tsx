@@ -86,6 +86,7 @@ export default function Profile() {
           {openLateralMenu && (
             <LateralMenu
               book={selectedBook}
+              onCloseWithoutUpdate={() => setOpenLateralMenu(false)}
               onClose={async () => {
                 setOpenLateralMenu(false)
                 await loadBooksStatus()
