@@ -164,4 +164,8 @@ export const EmptyBooksContainer = styled('div', {
       },
     },
   },
+
+  '@media (min-width: 1024px)': {
+    marginBottom: '6rem',
+  },
 })

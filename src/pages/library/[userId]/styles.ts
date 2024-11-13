@@ -164,9 +164,9 @@ export const UserDetailsContainer = styled('div', {
   },
 
   '@media (min-width: 1200px)': {
-    height: '100vh',
+    height: '100%',
     overflow: 'scroll',
-    paddingBottom: '10rem',
+    paddingBottom: '15rem',
   },
 })
 
