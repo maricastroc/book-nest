@@ -15,7 +15,7 @@ import { useAppContext } from '@/contexts/AppContext'
 
 interface BookCardProps {
   isLibraryPage?: boolean
-  userId?: string | undefined
+  libraryPageUserId?: string | undefined
   book: BookProps
   onOpenDetails: () => void
   size?: string
@@ -24,7 +24,7 @@ interface BookCardProps {
 export function BookCard({
   book,
   onOpenDetails,
-  userId,
+  libraryPageUserId,
   size = '',
   isLibraryPage = false,
 }: BookCardProps) {
@@ -35,7 +35,7 @@ export function BookCard({
       <BookCover className={size} src={book.coverUrl} />
       <BookContentWrapper>
         {isLibraryPage
-          ? userId === loggedUser?.id &&
+          ? libraryPageUserId === loggedUser?.id &&
             book?.readingStatus && (
               <ReadNotice className={book.readingStatus}>
                 <FontAwesomeIcon icon={faBookmark} />
