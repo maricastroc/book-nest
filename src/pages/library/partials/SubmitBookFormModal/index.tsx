@@ -35,6 +35,7 @@ import { useAppContext } from '@/contexts/AppContext'
 
 interface SubmitBookFormModalProps {
   onClose: () => Promise<void>
+  onCloseWithoutUpdate: () => void
   categories: CategoryProps[]
 }
 
@@ -69,6 +70,7 @@ type SubmitBookFormData = z.infer<typeof submitBookFormSchema>
 export function SubmitBookFormModal({
   categories,
   onClose,
+  onCloseWithoutUpdate,
 }: SubmitBookFormModalProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
@@ -163,7 +165,7 @@ export function SubmitBookFormModal({
 
   return (
     <Dialog.Portal>
-      <Overlay className="DialogOverlay" onClick={onClose} />
+      <Overlay className="DialogOverlay" onClick={onCloseWithoutUpdate} />
       <Content className="DialogContent">
         <Header>
           <Title className="DialogTitle">
@@ -173,7 +175,7 @@ export function SubmitBookFormModal({
               fields above:
             </p>
           </Title>
-          <CloseButton onClick={onClose}>
+          <CloseButton onClick={onCloseWithoutUpdate}>
             <X alt="Close" />
           </CloseButton>
         </Header>

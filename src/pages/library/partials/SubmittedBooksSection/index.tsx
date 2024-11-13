@@ -142,6 +142,9 @@ export function SubmittedBooksSection({
                   {categories && (
                     <SubmitBookFormModal
                       categories={categories}
+                      onCloseWithoutUpdate={() =>
+                        setIsSubmitBookFormOpen(false)
+                      }
                       onClose={async () => {
                         await loadUserSubmittedBooks()
                         setIsSubmitBookFormOpen(false)
@@ -167,6 +170,7 @@ export function SubmittedBooksSection({
                 {categories && (
                   <SubmitBookFormModal
                     categories={categories}
+                    onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
                     onClose={async () => {
                       await loadUserSubmittedBooks()
                       setIsSubmitBookFormOpen(false)
