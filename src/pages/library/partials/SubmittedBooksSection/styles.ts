@@ -1,5 +1,16 @@
 import { styled } from '@/styles'
 
+export const SkeletonContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  width: '100%',
+  gap: '1rem',
+  height: '100%',
+  padding: '0 2rem',
+})
+
 export const SubmittedBooksSectionWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
