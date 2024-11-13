@@ -9,6 +9,7 @@ export default async function handler(
   if (req.method !== 'GET') return res.status(405).end()
 
   const userId = String(req.query.userId)
+
   let searchQuery
 
   if (req.query.search) {

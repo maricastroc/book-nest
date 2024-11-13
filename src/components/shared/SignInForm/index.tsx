@@ -74,21 +74,22 @@ export default function SignInForm({ onClose }: SignInFormProps) {
   }
 
   async function onSubmit(data: SignInFormData) {
-    const result = await signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    })
+    try {
+      const result = await signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      })
 
-    if (result?.error) {
-      console.error('Login failed', result.error)
-    } else {
-      toast.success('Welcome to the Book Wise!')
-      router.push('/home')
-    }
-
-    if (onClose) {
-      onClose()
+      if (result?.error) {
+        toast.error(result?.error)
+      } else {
+        toast.success('Welcome to the Book Wise!')
+        router.push('/home')
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred. Please try again later.')
+      console.error(error)
     }
   }
 

@@ -77,7 +77,7 @@ export default function Profile() {
       handleSetUserId(userId)
       loadUserStatistics()
     }
-  }, [userId])
+  }, [userId, search])
 
   return (
     <>

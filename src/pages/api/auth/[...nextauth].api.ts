@@ -64,21 +64,24 @@ export function buildNextAuthOptions(
             where: { email: credentials?.email },
           })
 
-          if (
-            user &&
-            (await bcrypt.compare(
-              credentials?.password ?? '',
-              user.password ?? '',
-            ))
-          ) {
-            return {
-              id: user.id,
-              name: user.name,
-              email: user.email,
-              avatarUrl: user.avatarUrl,
-            }
-          } else {
-            return null
+          if (!user) {
+            throw new Error('Incorrect email or password.')
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials?.password ?? '',
+            user.password ?? '',
+          )
+
+          if (!isPasswordValid) {
+            throw new Error('Incorrect email or password.')
+          }
+
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            avatarUrl: user.avatarUrl,
           }
         },
       }),

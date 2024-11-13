@@ -44,8 +44,16 @@ export default function Profile() {
 
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>()
 
-  const { isValidatingLibraryPage, handleFetchBooksByStatus, handleSetUserId } =
-    useAppContext()
+  const {
+    handleFetchUserSubmittedBooks,
+    isValidatingLibraryPage,
+    handleFetchBooksByStatus,
+    handleSetUserId,
+  } = useAppContext()
+
+  const [submittedBooks, setSubmittedBooks] = useState<
+    BookProps[] | undefined
+  >()
 
   const router = useRouter()
 
@@ -62,10 +70,17 @@ export default function Profile() {
     setUserInfo(data?.userInfo)
   }
 
+  const loadUserSubmittedBooks = async () => {
+    const data = await handleFetchUserSubmittedBooks(userId)
+
+    setSubmittedBooks(data)
+  }
+
   useEffect(() => {
     if (userId) {
       handleSetUserId(userId)
       loadBooksStatus()
+      loadUserSubmittedBooks()
     }
   }, [userId])
 
@@ -89,7 +104,7 @@ export default function Profile() {
               onCloseWithoutUpdate={() => setOpenLateralMenu(false)}
               onClose={async () => {
                 setOpenLateralMenu(false)
-                await loadBooksStatus()
+                await Promise.all([loadBooksStatus(), loadUserSubmittedBooks()])
               }}
             />
           )}
@@ -119,8 +134,11 @@ export default function Profile() {
               )}
               <UserDetailsContainer>
                 <SubmittedBooksSection
+                  submittedBooks={submittedBooks}
+                  onUpdate={async () => {
+                    await loadUserSubmittedBooks()
+                  }}
                   userInfo={userInfo}
-                  userId={userId}
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)
                     setOpenLateralMenu(true)

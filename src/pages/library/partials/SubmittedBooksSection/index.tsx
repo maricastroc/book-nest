@@ -15,7 +15,7 @@ import {
 } from './styles'
 import { PencilSimple, Plus } from 'phosphor-react'
 import { EditProfileModal } from '@/components/modals/EditProfileModal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { SubmitBookFormModal } from '../SubmitBookFormModal'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { BookCard } from '@/components/cards/BookCard'
@@ -25,43 +25,24 @@ import { SkeletonUserDetails } from '../SkeletonUserDetails'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
-  userId: string | undefined
+  onUpdate: () => Promise<void>
   userInfo: UserInfo | undefined
+  submittedBooks: BookProps[] | undefined
 }
 
 export function SubmittedBooksSection({
-  userId,
   onOpenDetails,
+  onUpdate,
   userInfo,
+  submittedBooks,
 }: SubmittedBooksSectionProps) {
-  const {
-    loggedUser,
-    isValidating,
-    categories,
-    handleFetchUserSubmittedBooks,
-  } = useAppContext()
+  const { loggedUser, isValidating, categories } = useAppContext()
 
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
 
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
 
-  const [submittedBooks, setSubmittedBooks] = useState<
-    BookProps[] | undefined
-  >()
-
   const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
-
-  const loadUserSubmittedBooks = async () => {
-    const data = await handleFetchUserSubmittedBooks(userId)
-
-    setSubmittedBooks(data)
-  }
-
-  useEffect(() => {
-    if (userId) {
-      loadUserSubmittedBooks()
-    }
-  }, [userId])
 
   return (
     <SubmittedBooksSectionWrapper>
@@ -146,8 +127,8 @@ export function SubmittedBooksSection({
                         setIsSubmitBookFormOpen(false)
                       }
                       onClose={async () => {
-                        await loadUserSubmittedBooks()
                         setIsSubmitBookFormOpen(false)
+                        await onUpdate()
                       }}
                     />
                   )}
@@ -172,8 +153,8 @@ export function SubmittedBooksSection({
                     categories={categories}
                     onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
                     onClose={async () => {
-                      await loadUserSubmittedBooks()
                       setIsSubmitBookFormOpen(false)
+                      await onUpdate
                     }}
                   />
                 )}
