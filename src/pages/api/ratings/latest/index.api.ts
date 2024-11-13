@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
+import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 
 export default async function handler(
   req: NextApiRequest,
@@ -69,10 +70,6 @@ export default async function handler(
         (status) => status.bookId === rating.book.id,
       )?.status
 
-      function toSnakeCase(text: string): string {
-        return text.toLowerCase().replace(/\s+/g, '_')
-      }
-
       return {
         ...rating,
         book: {
@@ -81,7 +78,9 @@ export default async function handler(
           categories: rating.book.categories.map(
             (category) => category.category,
           ),
-          readingStatus: readingStatus ? toSnakeCase(readingStatus) : null,
+          readingStatus: readingStatus
+            ? formatToSnakeCase(readingStatus)
+            : null,
         },
       }
     })

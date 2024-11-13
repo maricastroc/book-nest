@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
@@ -100,13 +101,9 @@ export default async function handler(
     }
   })
 
-  function toSnakeCase(text: string): string {
-    return text.toLowerCase().replace(/\s+/g, '_')
-  }
-
   const booksByStatus = booksWithCategories.reduce((acc, book) => {
     const status = book.readingStatus
-      ? toSnakeCase(book.readingStatus)
+      ? formatToSnakeCase(book.readingStatus)
       : 'unknown'
 
     if (!acc[status]) {
