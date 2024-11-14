@@ -5,9 +5,7 @@ import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import {
   UserProfileContainer,
-  ActionButton,
   UserStatText,
-  DividerLine,
   UserProfileInfo,
   UserStatsWrapper,
   UserStatItem,
@@ -23,6 +21,7 @@ import {
   UserList,
 } from 'phosphor-react'
 import { useRouter } from 'next/router'
+import { ActionButton, DividerLine } from '@/styles/shared'
 
 interface UserDetailsProps {
   userId: string

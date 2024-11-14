@@ -32,6 +32,8 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
+import { MobileFooter } from '@/components/shared/MobileFooter'
+import { TabletHeader } from '@/components/shared/TabletHeader'
 
 export interface EditReviewData {
   ratingId: string
@@ -55,7 +57,8 @@ export default function Home() {
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
-  const isMobile = useScreenSize(768)
+  const isSmallSize = useScreenSize(480)
+  const isMediumSize = useScreenSize(768)
 
   const {
     loggedUser,
@@ -78,7 +81,13 @@ export default function Home() {
               onClose={() => setIsLateralMenuOpen(false)}
             />
           )}
-          {isMobile ? <MobileHeader /> : <Sidebar />}
+          {isSmallSize ? (
+            <MobileHeader />
+          ) : isMediumSize ? (
+            <TabletHeader />
+          ) : (
+            <Sidebar />
+          )}
           <HomePageContainer>
             <HomePageHeading>
               <ChartLineUp />
@@ -163,6 +172,7 @@ export default function Home() {
               </PopularBooksWrapper>
             </HomePageContent>
           </HomePageContainer>
+          {isSmallSize && <MobileFooter />}
         </HomePageWrapper>
       )}
     </>

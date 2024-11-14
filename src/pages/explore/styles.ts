@@ -1,6 +1,7 @@
 import { styled } from '@/styles'
 
 export const ExplorePageWrapper = styled('div', {
+  marginTop: '3rem',
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
@@ -11,8 +12,15 @@ export const ExplorePageWrapper = styled('div', {
   height: '100vh',
   overflowX: 'hidden',
   minWidth: '100vw',
+  paddingBottom: '5rem',
 
-  '@media (min-width: 980px)': {
+  '@media (min-width: 480px)': {
+    marginTop: '5rem',
+    paddingBottom: 0,
+  },
+
+  '@media (min-width: 768px)': {
+    marginTop: 0,
     flexDirection: 'row',
     alignItems: 'stretch',
     padding: '0 2rem 0 1rem',
@@ -40,10 +48,12 @@ export const ExplorePageContainer = styled('div', {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     maxWidth: '100%',
+    marginTop: '2rem',
+    padding: 0,
   },
 
   '@media (min-width: 980px)': {
-    marginTop: '0.5rem',
+    paddingLeft: '1rem',
   },
 })
 
@@ -58,14 +68,28 @@ export const ExplorePageHeading = styled('div', {
   marginBottom: '1rem',
   width: '100%',
 
-  '@media (min-width: 980px)': {
-    marginTop: '2rem',
+  '@media (min-width: 1024px)': {
+    marginTop: 0,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+})
+
+export const TitleAndSearch = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  width: '100%',
+
+  '@media (min-width: 768px)': {
+    alignItems: 'flex-start',
+    marginTop: '0.5rem',
   },
 
   '@media (min-width: 1024px)': {
-    marginTop: '1.5rem',
+    marginTop: 0,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
 })
@@ -74,14 +98,36 @@ export const HeadingTitle = styled('div', {
   display: 'flex',
   alignItems: 'flex-start',
   gap: '0.8rem',
+  marginBottom: '1.5rem',
+  paddingTop: '1.5rem',
+  textAlign: 'left',
 
   h2: {
-    fontSize: '1.5rem',
+    fontSize: '1.3rem',
   },
 
   svg: {
-    fontSize: '2rem',
+    fontSize: '1.8rem',
     color: '$green100',
+  },
+
+  '@media (min-width: 480px)': {
+    h2: {
+      fontSize: '1.5rem',
+    },
+
+    svg: {
+      fontSize: '2rem',
+      color: '$green100',
+    },
+  },
+
+  '@media (min-width: 768px)': {
+    paddingTop: 0,
+  },
+
+  '@media (min-width: 1024px)': {
+    marginBottom: 0,
   },
 })
 
@@ -92,7 +138,7 @@ export const ExplorePageContent = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
 
-  '@media (min-width: 980px)': {
+  '@media (min-width: 768px)': {
     paddingRight: '1rem',
     justifyContent: 'flex-start',
     overflowY: 'scroll',
@@ -166,10 +212,20 @@ export const Categories = styled('div', {
   width: '100%',
   paddingBottom: '0.8rem',
 
-  '@media (min-width: 980px)': {
-    flexWrap: 'wrap',
-    overflowX: 'initial',
-    paddingBottom: 0,
+  '@media (min-width: 1024px)': {
+    paddingBottom: '1.2rem',
+
+    '&::-webkit-scrollbar': {
+      width: 2,
+      height: 8,
+      opacity: 0.6,
+    },
+
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '$gray700',
+      boxShadow: 'inset 0 0 0px 6px $gray700',
+      opacity: 0.6,
+    },
   },
 })
 
@@ -222,7 +278,7 @@ export const BooksContainer = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr',
   gap: '2rem',
-  marginTop: '2rem',
+  marginTop: '1rem',
   width: '100%',
   marginBottom: '2rem',
 
@@ -231,6 +287,14 @@ export const BooksContainer = styled('div', {
   },
 
   '@media (min-width: 580px)': {
+    gridTemplateColumns: '1fr 1fr',
+  },
+
+  '@media (min-width: 768px)': {
+    gridTemplateColumns: '1fr',
+  },
+
+  '@media (min-width: 910px)': {
     gridTemplateColumns: '1fr 1fr',
   },
 

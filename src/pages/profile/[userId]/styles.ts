@@ -46,8 +46,9 @@ export const ProfilePageContainer = styled('div', {
   margin: '0 auto',
   maxHeight: '100%',
   padding: '1rem',
-  paddingTop: '2rem',
+  paddingTop: '7rem',
   maxWidth: '42rem',
+  paddingBottom: '4rem',
 
   '@media (min-width: 480px)': {
     padding: '1.5rem',

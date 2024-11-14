@@ -1,15 +1,9 @@
 import {
   BackgroundContainer,
   Container,
-  Item,
   ItemsContainer,
-  SignInButton,
-  SignInContainer,
-  PageBtn,
-  ProfileContainer,
   SidebarContent,
   SidebarMain,
-  SignOutContainer,
 } from './styles'
 import Image from 'next/image'
 import SidebarBackground from '../../../../public/assets/sidebar.svg'
@@ -32,6 +26,14 @@ import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { Avatar } from '../Avatar'
 import { useAppContext } from '@/contexts/AppContext'
 import { SkeletonUserSidebar } from '@/components/skeletons/SkeletonUserSidebar'
+import {
+  PageBtn,
+  PageBtnWrapper,
+  SignInButton,
+  SignOutContainer,
+  SignInContainer,
+  SidebarProfileContainer,
+} from '@/styles/shared'
 
 interface NavigationItemProps {
   active: boolean
@@ -46,12 +48,16 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
   icon: Icon,
   label,
 }) => (
-  <Item>
-    <PageBtn active={active} onClick={onClick}>
+  <PageBtnWrapper>
+    <PageBtn
+      style={{ paddingLeft: '1.5rem' }}
+      active={active}
+      onClick={onClick}
+    >
       <Icon />
       <p>{label}</p>
     </PageBtn>
-  </Item>
+  </PageBtnWrapper>
 )
 
 export function Sidebar() {
@@ -116,7 +122,7 @@ export function Sidebar() {
             </ItemsContainer>
           </SidebarMain>
           {loggedUser ? (
-            <ProfileContainer>
+            <SidebarProfileContainer>
               {isValidatingLoggedUser ? (
                 <SkeletonUserSidebar />
               ) : (
@@ -140,7 +146,7 @@ export function Sidebar() {
                   </SignOutContainer>
                 </>
               )}
-            </ProfileContainer>
+            </SidebarProfileContainer>
           ) : (
             <SignInContainer>
               <Dialog.Root>

@@ -18,15 +18,14 @@ export default async function handler(
     buildNextAuthOptions(req, res),
   )
 
-  if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' })
-  }
-
   try {
-    const userId = String(session.user.id)
+    const userId = String(session?.user.id)
 
     const ratings = await prisma.rating.findMany({
-      where: { userId: { not: userId }, NOT: { description: '' } },
+      where: {
+        ...(userId && { userId: { not: userId } }),
+        NOT: { description: '' },
+      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -56,7 +55,7 @@ export default async function handler(
 
     const userReadingStatus = await prisma.readingStatus.findMany({
       where: {
-        userId: String(session.user.id),
+        userId: String(session?.user.id),
         bookId: { in: bookIds },
       },
     })

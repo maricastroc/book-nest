@@ -9,6 +9,7 @@ import {
   BooksContainer,
   ExplorePageContent,
   HeadingTitle,
+  TitleAndSearch,
 } from './styles'
 import { useState } from 'react'
 import { MobileHeader } from '@/components/shared/MobileHeader'
@@ -24,6 +25,8 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext } from '@/contexts/AppContext'
 import { BookCard } from '@/components/cards/BookCard'
+import { TabletHeader } from '@/components/shared/TabletHeader'
+import { MobileFooter } from '@/components/shared/MobileFooter'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -47,7 +50,8 @@ export default function Explore() {
     handleSetSearch,
   } = useAppContext()
 
-  const isMobile = useScreenSize(980)
+  const isSmallSize = useScreenSize(480)
+  const isMediumSize = useScreenSize(768)
 
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
@@ -69,29 +73,35 @@ export default function Explore() {
               }}
             />
           )}
-          {isMobile ? <MobileHeader /> : <Sidebar />}
+          {isSmallSize ? (
+            <MobileHeader />
+          ) : isMediumSize ? (
+            <TabletHeader />
+          ) : (
+            <Sidebar />
+          )}
           <ExplorePageContainer>
             <ExplorePageHeading>
-              <HeadingTitle>
-                <Binoculars />
-                <h2>Explore</h2>
-              </HeadingTitle>
-              <SearchBar>
-                <input
-                  type="text"
-                  placeholder="Search for author or title"
-                  value={search}
-                  onChange={(e) => handleSetSearch(e.target.value)}
-                  spellCheck={false}
-                />
-                {search === '' ? (
-                  <MagnifyingGlass />
-                ) : (
-                  <X onClick={() => handleSetSearch('')} />
-                )}
-              </SearchBar>
-            </ExplorePageHeading>
-            <ExplorePageContent>
+              <TitleAndSearch>
+                <HeadingTitle>
+                  <Binoculars />
+                  <h2>Explore</h2>
+                </HeadingTitle>
+                <SearchBar>
+                  <input
+                    type="text"
+                    placeholder="Search for author or title"
+                    value={search}
+                    onChange={(e) => handleSetSearch(e.target.value)}
+                    spellCheck={false}
+                  />
+                  {search === '' ? (
+                    <MagnifyingGlass />
+                  ) : (
+                    <X onClick={() => handleSetSearch('')} />
+                  )}
+                </SearchBar>
+              </TitleAndSearch>
               <Categories>
                 {!categories?.length ? (
                   <SkeletonCategories />
@@ -119,6 +129,8 @@ export default function Explore() {
                   </>
                 )}
               </Categories>
+            </ExplorePageHeading>
+            <ExplorePageContent>
               <BooksContainer>
                 {isValidatingExplorePage || !books?.length
                   ? Array.from({ length: 9 }).map((_, index) => (
@@ -137,6 +149,7 @@ export default function Explore() {
               </BooksContainer>
             </ExplorePageContent>
           </ExplorePageContainer>
+          {isSmallSize && <MobileFooter />}
         </ExplorePageWrapper>
       )}
     </>

@@ -8,8 +8,7 @@ import {
   UserLibraryHeadingTitle,
   UserLibraryBody,
   UserLibraryPageWrapper,
-  UserLibraryHeader,
-  UserDetailsContainer,
+  SubmittedBooksContainer,
   ListByBookStatusContainer,
 } from './styles'
 import { Books } from 'phosphor-react'
@@ -26,6 +25,8 @@ import { BookProps } from '@/@types/book'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
+import { MobileFooter } from '@/components/shared/MobileFooter'
+import { TabletHeader } from '@/components/shared/TabletHeader'
 
 export interface UserInfo {
   avatarUrl: string
@@ -61,7 +62,8 @@ export default function Profile() {
     ? router.query.userId[0]
     : router.query.userId
 
-  const isMobile = useScreenSize(768)
+  const isSmallSize = useScreenSize(480)
+  const isMediumSize = useScreenSize(768)
 
   const loadBooksStatus = async () => {
     const data = await handleFetchBooksByStatus(userId)
@@ -91,10 +93,10 @@ export default function Profile() {
         <LoadingPage />
       ) : (
         <UserLibraryPageWrapper>
-          {isMobile ? (
-            <UserLibraryHeader>
-              <MobileHeader />
-            </UserLibraryHeader>
+          {isSmallSize ? (
+            <MobileHeader />
+          ) : isMediumSize ? (
+            <TabletHeader />
           ) : (
             <Sidebar />
           )}
@@ -132,7 +134,7 @@ export default function Profile() {
                   }}
                 />
               )}
-              <UserDetailsContainer>
+              <SubmittedBooksContainer>
                 <SubmittedBooksSection
                   submittedBooks={submittedBooks}
                   onUpdate={async () => {
@@ -145,9 +147,10 @@ export default function Profile() {
                     setOpenLateralMenu(true)
                   }}
                 />
-              </UserDetailsContainer>
+              </SubmittedBooksContainer>
             </UserLibraryContent>
           </UserLibraryBody>
+          {isSmallSize && <MobileFooter />}
         </UserLibraryPageWrapper>
       )}
     </>

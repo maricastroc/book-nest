@@ -4,8 +4,6 @@ import { useAppContext } from '@/contexts/AppContext'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import * as Dialog from '@radix-ui/react-dialog'
 import {
-  DividerLine,
-  EditProfileButton,
   EmptyBooksContainer,
   SkeletonContainer,
   SubmittedBooksHeading,
@@ -22,6 +20,8 @@ import { BookCard } from '@/components/cards/BookCard'
 import { BookProps } from '@/@types/book'
 import { UserInfo } from '../../[userId]/index.page'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
+import { ActionButton, DividerLine } from '@/styles/shared'
+import { useRouter } from 'next/router'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
@@ -38,6 +38,8 @@ export function SubmittedBooksSection({
   userInfo,
   submittedBooks,
 }: SubmittedBooksSectionProps) {
+  const router = useRouter()
+
   const { loggedUser, isValidating, categories } = useAppContext()
 
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
@@ -65,16 +67,16 @@ export function SubmittedBooksSection({
               />
               <h2>{userInfo?.name}</h2>
             </>
-            {isLoggedUser && (
+            {isLoggedUser ? (
               <Dialog.Root>
                 <Dialog.Trigger asChild>
-                  <EditProfileButton
+                  <ActionButton
                     type="button"
                     onClick={() => setIsEditProfileModalOpen(true)}
                   >
                     <PencilSimple />
                     Edit Info
-                  </EditProfileButton>
+                  </ActionButton>
                 </Dialog.Trigger>
                 {isEditProfileModalOpen && (
                   <EditProfileModal
@@ -82,6 +84,12 @@ export function SubmittedBooksSection({
                   />
                 )}
               </Dialog.Root>
+            ) : (
+              <ActionButton
+                onClick={() => router.push(`/profile/${userId}`)}
+              >{`View ${
+                userInfo?.name?.split(' ')[0]
+              }'s Profile`}</ActionButton>
             )}
             <DividerLine />
           </UserProfileInfo>
@@ -111,10 +119,36 @@ export function SubmittedBooksSection({
                     }}
                   />
                 ))}
+                {isLoggedUser && (
+                  <Dialog.Root open={isSubmitBookFormOpen}>
+                    <Dialog.Trigger asChild>
+                      <EmptyBooksContainer
+                        className={`variant ${!isLoggedUser && 'disabled'}`}
+                        onClick={() => setIsSubmitBookFormOpen(true)}
+                      >
+                        <Plus />
+                      </EmptyBooksContainer>
+                    </Dialog.Trigger>
+                    {categories && (
+                      <SubmitBookFormModal
+                        categories={categories}
+                        onCloseWithoutUpdate={() =>
+                          setIsSubmitBookFormOpen(false)
+                        }
+                        onClose={async () => {
+                          setIsSubmitBookFormOpen(false)
+                          await onUpdate()
+                        }}
+                      />
+                    )}
+                  </Dialog.Root>
+                )}
+              </>
+            ) : (
+              isLoggedUser && (
                 <Dialog.Root open={isSubmitBookFormOpen}>
                   <Dialog.Trigger asChild>
                     <EmptyBooksContainer
-                      className={`variant ${!isLoggedUser && 'disabled'}`}
                       onClick={
                         isLoggedUser
                           ? () => setIsSubmitBookFormOpen(true)
@@ -137,32 +171,7 @@ export function SubmittedBooksSection({
                     />
                   )}
                 </Dialog.Root>
-              </>
-            ) : (
-              <Dialog.Root open={isSubmitBookFormOpen}>
-                <Dialog.Trigger asChild>
-                  <EmptyBooksContainer
-                    className={`${!isLoggedUser && 'disabled'}`}
-                    onClick={
-                      isLoggedUser
-                        ? () => setIsSubmitBookFormOpen(true)
-                        : () => null
-                    }
-                  >
-                    <Plus />
-                  </EmptyBooksContainer>
-                </Dialog.Trigger>
-                {categories && (
-                  <SubmitBookFormModal
-                    categories={categories}
-                    onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
-                    onClose={async () => {
-                      setIsSubmitBookFormOpen(false)
-                      await onUpdate()
-                    }}
-                  />
-                )}
-              </Dialog.Root>
+              )
             )}
           </SubmittedBooksWrapper>
         </>

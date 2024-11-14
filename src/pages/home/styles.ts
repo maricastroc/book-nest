@@ -10,6 +10,11 @@ export const HomePageWrapper = styled('div', {
   justifyContent: 'center',
   maxWidth: '100vw',
   overflowX: 'hidden',
+  paddingBottom: '5rem',
+
+  '@media (min-width: 480px)': {
+    paddingBottom: 0,
+  },
 
   '@media (min-width: 768px)': {
     flexDirection: 'row',
@@ -42,10 +47,6 @@ export const HomePageContainer = styled('div', {
   marginTop: '2rem',
   overflowY: 'hidden',
 
-  '@media (min-width: 480px)': {
-    padding: '0 2rem',
-  },
-
   '@media (min-width: 768px)': {
     marginTop: '2.5rem',
     alignItems: 'flex-start',
@@ -77,14 +78,31 @@ export const HomePageHeading = styled('div', {
   textAlign: 'left',
   marginBottom: '2.5rem',
   width: '100%',
+  paddingTop: '4.5rem',
 
   h2: {
-    fontSize: '1.5rem',
+    fontSize: '1.3rem',
   },
 
   svg: {
-    fontSize: '2rem',
+    fontSize: '1.8rem',
     color: '$green100',
+  },
+
+  '@media (min-width: 480px)': {
+    paddingTop: '6.5rem',
+
+    h2: {
+      fontSize: '1.5rem',
+    },
+
+    svg: {
+      fontSize: '2rem',
+    },
+  },
+
+  '@media (min-width: 768px)': {
+    paddingTop: 0,
   },
 })
 

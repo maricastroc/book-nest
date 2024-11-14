@@ -6,6 +6,7 @@ export const UserLibraryPageWrapper = styled('div', {
   maxWidth: '100vw',
   alignItems: 'center',
   justifyContent: 'center',
+  paddingBottom: '4rem',
 
   '@media (min-width: 768px)': {
     flexDirection: 'row',
@@ -34,22 +35,10 @@ export const UserLibraryPageWrapper = styled('div', {
   },
 })
 
-export const UserLibraryHeader = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '0 0.65rem',
-  width: '100%',
-
-  '@media (min-width: 480px)': {
-    padding: 0,
-  },
-})
-
 export const UserLibraryBody = styled('div', {
   display: 'flex',
   width: '100%',
-  gap: '2.5rem',
+  gap: '1rem',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
@@ -59,19 +48,19 @@ export const UserLibraryBody = styled('div', {
   paddingTop: '2rem',
 
   '@media (min-width: 480px)': {
-    gap: '1.5rem',
+    gap: 0,
   },
 
   '@media (min-width: 768px)': {
     marginTop: '2rem',
-    padding: '1.5rem 0',
-    gap: '1.8rem',
+    padding: '0.5rem 0 1.5rem',
   },
 
   '@media (min-width: 1024px)': {
     maxWidth: '100%',
     justifyContent: 'flex-start',
     padding: '1.5rem 0',
+    gap: '1.8rem',
   },
 
   '@media (min-width: 1200px)': {
@@ -123,21 +112,37 @@ export const UserLibraryHeading = styled('div', {
 
 export const UserLibraryHeadingTitle = styled('div', {
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
+  paddingLeft: '2rem',
   gap: '0.8rem',
 
+  paddingTop: '4.5rem',
+
   h2: {
-    fontSize: '1.5rem',
+    fontSize: '1.3rem',
   },
 
   svg: {
-    fontSize: '2rem',
+    fontSize: '1.8rem',
     color: '$green100',
   },
 
+  '@media (min-width: 480px)': {
+    paddingTop: '5.5rem',
+
+    h2: {
+      fontSize: '1.5rem',
+    },
+
+    svg: {
+      fontSize: '2rem',
+    },
+  },
+
   '@media (min-width: 768px)': {
+    paddingTop: 0,
     justifyContent: 'flex-start',
-    paddingLeft: '0.8rem',
+    paddingLeft: 0,
   },
 
   '@media (min-width: 1024px)': {
@@ -145,7 +150,7 @@ export const UserLibraryHeadingTitle = styled('div', {
   },
 })
 
-export const UserDetailsContainer = styled('div', {
+export const SubmittedBooksContainer = styled('div', {
   alignItems: 'flex-start',
   flexDirection: 'column',
   padding: '0 2rem',
@@ -172,12 +177,16 @@ export const UserDetailsContainer = styled('div', {
 
 export const ListByBookStatusContainer = styled('div', {
   width: '100%',
+  paddingRight: '1rem',
+  paddingLeft: '1rem',
+
+  '@media (min-width: 768px)': {
+    paddingLeft: 0,
+  },
 
   '@media (min-width: 1024px)': {
     height: '100vh',
     overflow: 'scroll',
-    padding: 0,
-    paddingRight: '1rem',
   },
 
   '@media (min-width: 1200px)': {

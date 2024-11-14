@@ -27,6 +27,8 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
+import { TabletHeader } from '@/components/shared/TabletHeader'
+import { MobileFooter } from '@/components/shared/MobileFooter'
 
 export default function Profile() {
   const isRouteLoading = useLoadingOnRouteChange()
@@ -52,7 +54,8 @@ export default function Profile() {
     handleSetSearch,
   } = useAppContext()
 
-  const isMobile = useScreenSize(768)
+  const isSmallSize = useScreenSize(480)
+  const isMediumSize = useScreenSize(768)
 
   useEffect(() => {
     if (userStatistics) {
@@ -86,7 +89,13 @@ export default function Profile() {
         <LoadingPage />
       ) : (
         <ProfilePageWrapper>
-          {isMobile ? <MobileHeader /> : <Sidebar />}
+          {isSmallSize ? (
+            <MobileHeader />
+          ) : isMediumSize ? (
+            <TabletHeader />
+          ) : (
+            <Sidebar />
+          )}
           <ProfilePageContainer>
             <ProfilePageHeading>
               <ProfilePageHeadingTitle>
@@ -155,6 +164,7 @@ export default function Profile() {
               </UserDetailsContainer>
             </ProfilePageContent>
           </ProfilePageContainer>
+          {isSmallSize && <MobileFooter />}
         </ProfilePageWrapper>
       )}
     </>

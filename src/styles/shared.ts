@@ -107,3 +107,183 @@ export const Description = styled(RadixDescription, {
   color: '$gray300',
   lineHeight: '180%',
 })
+
+export const ActionButton = styled('button', {
+  backgroundColor: 'transparent',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.7rem',
+  cursor: 'pointer',
+  color: '$green100',
+  padding: '0.4rem 0.6rem',
+  fontSize: '0.85rem',
+  borderRadius: 10,
+  border: 'solid 1px $green100',
+  width: 'auto',
+  marginTop: '1rem',
+
+  svg: {
+    color: '$green100',
+  },
+
+  '&:hover': {
+    backgroundColor: '$green200',
+    color: '#FFFFFF',
+    transition: '200ms',
+    border: 'solid 1px $green200',
+
+    svg: {
+      color: '#FFFFFF',
+    },
+  },
+
+  '&:focus': {
+    outline: '1px solid $green200',
+  },
+})
+
+export const DividerLine = styled('span', {
+  width: 30,
+  background: '$gradient-horizontal',
+  borderRadius: 8,
+  height: 4,
+  margin: '2.4rem 0',
+})
+
+export const PageBtn = styled('button', {
+  cursor: 'pointer',
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.8rem',
+  backgroundColor: 'transparent',
+  color: '$gray400',
+  border: 'none',
+
+  p: {
+    fontSize: '1rem',
+  },
+
+  svg: {
+    fontSize: '1.5rem',
+    color: '$gray400',
+  },
+
+  '&.active': {
+    p: {
+      color: '$green100',
+      fontWeight: 'bold',
+    },
+
+    svg: {
+      color: '$green100',
+    },
+  },
+
+  '&:hover': {
+    p: {
+      color: '$gray100',
+    },
+
+    svg: {
+      color: '$gray100',
+    },
+  },
+
+  variants: {
+    active: {
+      true: {
+        p: {
+          color: '$gray100',
+          fontWeight: 'bold',
+        },
+
+        svg: {
+          color: '$gray100',
+        },
+
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: '4px',
+          background: '$gradient-vertical',
+          borderRadius: 8,
+        },
+      },
+    },
+  },
+})
+
+export const SignOutContainer = styled('div', {
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.7rem',
+
+  svg: {
+    color: '#F75A68',
+    fontSize: '1.5rem',
+  },
+
+  p: {
+    fontSize: '0.95rem',
+    color: '$gray100',
+  },
+})
+
+export const SignInContainer = styled('div', {
+  cursor: 'pointer',
+  display: 'flex',
+  justifySelf: 'flex-end',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.8rem',
+})
+
+export const SignInButton = styled('button', {
+  display: 'flex',
+  cursor: 'pointer',
+  border: 'none',
+  backgroundColor: 'transparent',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '$white',
+  gap: '0.8rem',
+
+  svg: {
+    color: '$green100',
+    fontSize: '1.5rem',
+  },
+
+  p: {
+    fontSize: '1rem',
+    color: '$gray300',
+  },
+})
+
+export const SidebarProfileContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.8rem',
+})
+
+export const PageBtnWrapper = styled('div', {
+  cursor: 'pointer',
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.8rem',
+  backgroundColor: 'transparent',
+  border: 'none',
+
+  '&:focus': {
+    outline: 'none',
+    boxShadow: 'none',
+  },
+})
