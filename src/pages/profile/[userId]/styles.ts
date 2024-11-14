@@ -7,6 +7,7 @@ export const ProfilePageWrapper = styled('div', {
   maxWidth: '100vw',
   alignItems: 'center',
   justifyContent: 'center',
+  overflowX: 'hidden',
 
   '@media (min-width: 480px)': {
     padding: '0 2rem',

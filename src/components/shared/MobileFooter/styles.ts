@@ -21,6 +21,7 @@ export const MobileFooterBox = styled('div', {
   width: '100%',
   marginTop: '1rem',
   padding: '0.5rem 1rem',
+  overflowX: 'hidden',
 
   transition: '200ms',
   animation: `${entranceAnimation} 1s`,
@@ -31,6 +32,7 @@ export const PagesLinksContainer = styled('div', {
   alignItems: 'center',
   justifyContent: 'space-between',
   width: '100%',
+  overflowX: 'hidden',
 
   '@media (min-width: 360px)': {
     justifyContent: 'space-between',

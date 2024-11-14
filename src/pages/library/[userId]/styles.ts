@@ -7,6 +7,7 @@ export const UserLibraryPageWrapper = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   paddingBottom: '4rem',
+  overflowX: 'hidden',
 
   '@media (min-width: 768px)': {
     flexDirection: 'row',
