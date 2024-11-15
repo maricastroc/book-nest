@@ -45,6 +45,12 @@ export default function Profile() {
 
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>()
 
+  const { loggedUser } = useAppContext()
+
+  const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
+
+  const userName = userInfo?.name?.split(' ')[0] || ''
+
   const {
     handleFetchUserSubmittedBooks,
     isValidatingLibraryPage,
@@ -114,7 +120,13 @@ export default function Profile() {
             <UserLibraryHeading>
               <UserLibraryHeadingTitle>
                 <Books />
-                <h2>Library</h2>
+                <h2>
+                  {!userInfo
+                    ? 'Library'
+                    : isLoggedUser
+                    ? 'My Library'
+                    : `${userName}'s Library`}
+                </h2>
               </UserLibraryHeadingTitle>
             </UserLibraryHeading>
 
@@ -128,6 +140,7 @@ export default function Profile() {
               ) : (
                 <BookStatusListContainer
                   data={booksStatus}
+                  userInfo={userInfo}
                   onSelect={(book: BookProps) => {
                     setSelectedBook(book)
                     setOpenLateralMenu(true)
