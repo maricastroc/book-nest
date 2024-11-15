@@ -52,6 +52,7 @@ interface AppContextType {
   handleSetUserId: (value: string) => void
   handleSetLoggedUser: (data: UserProps) => void
   books: BookProps[] | undefined | null
+  users: UserProps[] | undefined | null
   popularBooks: BookProps[] | null | undefined
   latestRatings: RatingProps[] | undefined
   categories: CategoryProps[] | null | undefined
@@ -76,6 +77,7 @@ interface AppContextType {
   isValidatingExplorePage: boolean
   isValidatingLibraryPage: boolean
   isValidatingUserStatistics: boolean
+  isValidatingUsers: boolean
   isValidatingLoggedUser: boolean
   isValidating: boolean
   search: string
@@ -145,6 +147,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
   }
+
+  const { data: users, isValidating: isValidatingUsers } = useRequest<
+    UserProps[]
+  >({
+    url: '/user/search',
+    method: 'GET',
+    params: {
+      search,
+    },
+  })
 
   const {
     data: popularBooks,
@@ -415,6 +427,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       selectedCategory,
       handleSetLoggedUser,
       books,
+      users,
       categories,
       popularBooks,
       latestRatings,
@@ -425,6 +438,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       isValidatingExplorePage,
       isValidatingUserStatistics,
       isValidatingLoggedUser,
+      isValidatingUsers,
       handleSelectReadingStatus,
       handleCreateReview,
       handleEditReview,

@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const ExplorePageWrapper = styled('div', {
+export const UsersPageWrapper = styled('div', {
   marginTop: '3rem',
   position: 'relative',
   display: 'flex',
@@ -34,7 +34,7 @@ export const ExplorePageWrapper = styled('div', {
   },
 })
 
-export const ExplorePageContainer = styled('div', {
+export const UsersPageContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   padding: '0 1rem',
@@ -57,7 +57,7 @@ export const ExplorePageContainer = styled('div', {
   },
 })
 
-export const ExplorePageHeading = styled('div', {
+export const UsersPageHeading = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -131,7 +131,7 @@ export const HeadingTitle = styled('div', {
   },
 })
 
-export const ExplorePageContent = styled('div', {
+export const UsersPageContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -145,102 +145,23 @@ export const ExplorePageContent = styled('div', {
   },
 })
 
-export const Categories = styled('div', {
-  marginTop: '1rem',
-  display: 'flex',
-  overflowX: 'scroll',
-  gap: '0.7rem',
-  alignItems: 'center',
-  width: '100%',
-  paddingBottom: '0.8rem',
-
-  '@media (min-width: 1024px)': {
-    paddingBottom: '1.2rem',
-
-    '&::-webkit-scrollbar': {
-      width: 2,
-      height: 8,
-      opacity: 0.6,
-    },
-
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '$gray700',
-      boxShadow: 'inset 0 0 0px 6px $gray700',
-      opacity: 0.6,
-    },
-  },
-})
-
-export const SelectCategoryButton = styled('button', {
-  cursor: 'pointer',
-  backgroundColor: 'transparent',
-  borderRadius: 16,
-  border: 'solid 1px $purple100',
-  color: '$purple100',
-  padding: '0.3rem 0.8rem',
-  fontSize: '0.85rem',
-  whiteSpace: 'nowrap',
-
-  '&:hover': {
-    transition: '200ms',
-    border: 'solid 1px $purple300',
-    backgroundColor: '$purple300',
-    color: '$white',
-  },
-
-  '&.loading': {
-    cursor: 'not-allowed',
-    opacity: 0.7,
-
-    '&:hover': {
-      backgroundColor: 'transparent',
-      border: 'solid 1px $purple100',
-      color: '$purple100',
-      opacity: 0.7,
-    },
-  },
-
-  variants: {
-    selected: {
-      true: {
-        border: 'solid 1px $purple300',
-        backgroundColor: '$purple300',
-        color: '$white',
-      },
-    },
-  },
-
-  '@media (min-width: 768px)': {
-    padding: '0.4rem 1rem',
-    fontSize: '0.95rem',
-  },
-})
-
-export const BooksContainer = styled('div', {
+export const UsersContainer = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr',
-  gap: '2rem',
+  gap: '0.8rem',
   marginTop: '1rem',
   width: '100%',
-  marginBottom: '2rem',
+  marginBottom: '1rem',
 
-  '@media (min-width: 480px)': {
-    gap: '1.5rem',
+  '@media (min-width: 460px)': {
+    gridTemplateColumns: '1fr 1fr',
   },
 
   '@media (min-width: 580px)': {
-    gridTemplateColumns: '1fr 1fr',
+    gap: '1.5rem',
   },
 
-  '@media (min-width: 768px)': {
-    gridTemplateColumns: '1fr',
-  },
-
-  '@media (min-width: 910px)': {
-    gridTemplateColumns: '1fr 1fr',
-  },
-
-  '@media (min-width: 1400px)': {
+  '@media (min-width: 1050px)': {
     gridTemplateColumns: '1fr 1fr 1fr',
   },
 })

@@ -3,16 +3,14 @@ import {
   Books,
   ChartLineUp,
   SignIn,
-  SignOut,
   User,
+  Users,
 } from 'phosphor-react'
 import { MobileFooterBox, PageLink, PagesLinksContainer } from './styles'
 import { useRouter } from 'next/router'
-import { signOut } from 'next-auth/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { SignInModal } from '@/components/modals/SignInModal'
 import { useState } from 'react'
-import { toast } from 'react-toastify'
 import { useAppContext } from '@/contexts/AppContext'
 
 export function MobileFooter() {
@@ -21,11 +19,6 @@ export function MobileFooter() {
   const router = useRouter()
 
   const { loggedUser } = useAppContext()
-
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: '/' })
-    toast.success('See you soon!')
-  }
 
   return (
     <MobileFooterBox>
@@ -43,6 +36,13 @@ export function MobileFooter() {
         >
           <Binoculars />
           <p>Explore</p>
+        </PageLink>
+        <PageLink
+          className={`${router.pathname.includes('readers') ? 'active' : ''}`}
+          onClick={() => router.push('/readers')}
+        >
+          <Users />
+          <p>Readers</p>
         </PageLink>
         <Dialog.Root>
           <Dialog.Trigger asChild></Dialog.Trigger>
@@ -87,14 +87,6 @@ export function MobileFooter() {
             >
               <Books />
               <p>Library</p>
-            </PageLink>
-            <PageLink
-              onClick={() => {
-                handleLogout()
-              }}
-            >
-              <SignOut />
-              <p>Sign Out</p>
             </PageLink>
           </>
         )}

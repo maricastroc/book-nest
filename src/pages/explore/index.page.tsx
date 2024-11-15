@@ -5,7 +5,6 @@ import {
   ExplorePageWrapper,
   ExplorePageContainer,
   ExplorePageHeading,
-  SearchBar,
   BooksContainer,
   ExplorePageContent,
   HeadingTitle,
@@ -27,6 +26,7 @@ import { useAppContext } from '@/contexts/AppContext'
 import { BookCard } from '@/components/cards/BookCard'
 import { TabletHeader } from '@/components/shared/TabletHeader'
 import { MobileFooter } from '@/components/shared/MobileFooter'
+import { SearchBar } from '@/styles/shared'
 
 export interface ExploreProps {
   categories: CategoryProps[]

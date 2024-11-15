@@ -15,6 +15,7 @@ import {
   SignIn,
   SignOut,
   User,
+  Users,
 } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
@@ -96,6 +97,12 @@ export function Sidebar() {
                 onClick={() => router.push('/explore')}
                 icon={Binoculars}
                 label="Explore"
+              />
+              <NavigationItem
+                active={router.pathname === '/readers'}
+                onClick={() => router.push('/readers')}
+                icon={Users}
+                label="Readers"
               />
               {loggedUser && (
                 <>

@@ -4,7 +4,7 @@ export const MobileHeaderBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-  padding: '1.2rem',
+  padding: '1.2rem 1.7rem',
   position: 'fixed',
   backgroundColor: '$gray800',
   borderBottom: '1px solid $gray700',
@@ -30,5 +30,39 @@ export const MobileHeaderContent = styled('header', {
   img: {
     width: '8.8rem',
     height: 'auto',
+  },
+})
+
+export const LogoAndIcon = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+
+  img: {
+    width: '8.8rem',
+    height: 'auto',
+  },
+})
+
+export const SignOutButton = styled('button', {
+  display: 'flex',
+  cursor: 'pointer',
+  border: 'none',
+  backgroundColor: 'transparent',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '$white',
+  gap: '0.8rem',
+
+  svg: {
+    color: '$red300',
+    fontSize: '1.5rem',
+  },
+
+  p: {
+    fontSize: '0.95rem',
+    fontWeight: 700,
+    color: '$gray300',
   },
 })
