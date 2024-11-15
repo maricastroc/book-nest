@@ -81,6 +81,12 @@ export const LinksContainer = styled('div', {
       filter: 'brightness(1.2)',
       transition: '200ms ease-in-out',
     },
+
+    '&:focus': {
+      border: 'none',
+      outline: 'none',
+      boxShadow: 'none',
+    },
   },
 
   p: {

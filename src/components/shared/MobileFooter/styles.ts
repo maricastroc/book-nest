@@ -42,7 +42,7 @@ export const PagesLinksContainer = styled('div', {
 
   '&.unauthorized': {
     justifyContent: 'center',
-    gap: '4rem',
+    gap: '2.5rem',
   },
 })
 
