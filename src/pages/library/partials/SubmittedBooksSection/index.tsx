@@ -117,6 +117,11 @@ export function SubmittedBooksSection({
                     onOpenDetails={() => {
                       onOpenDetails(book)
                     }}
+                    onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
+                    onClose={async () => {
+                      setIsSubmitBookFormOpen(false)
+                      await onUpdate()
+                    }}
                   />
                 ))}
                 {isLoggedUser && (
@@ -131,7 +136,6 @@ export function SubmittedBooksSection({
                     </Dialog.Trigger>
                     {categories && (
                       <SubmitBookFormModal
-                        categories={categories}
                         onCloseWithoutUpdate={() =>
                           setIsSubmitBookFormOpen(false)
                         }
@@ -160,7 +164,6 @@ export function SubmittedBooksSection({
                   </Dialog.Trigger>
                   {categories && (
                     <SubmitBookFormModal
-                      categories={categories}
                       onCloseWithoutUpdate={() =>
                         setIsSubmitBookFormOpen(false)
                       }

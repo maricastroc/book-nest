@@ -113,6 +113,13 @@ export const BookCover = styled('img', {
   },
 })
 
+export const FooterWrapper = styled('div', {
+  display: 'flex',
+  alignItems: 'flex-end',
+  justifyContent: 'space-between',
+  width: '100%',
+})
+
 export const RatingWrapper = styled('div', {
   marginTop: '0.5rem',
   display: 'flex',
@@ -122,5 +129,49 @@ export const RatingWrapper = styled('div', {
   p: {
     color: '$gray400',
     fontSize: '0.8rem',
+  },
+})
+
+export const ActionButton = styled('button', {
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  border: 'none',
+  borderRadius: 8,
+  padding: '0.3rem',
+  backgroundColor: 'transparent',
+
+  svg: {
+    fontSize: '1.2rem',
+  },
+
+  '&.edit': {
+    border: '1px solid $green200',
+
+    svg: {
+      color: '$green100',
+    },
+  },
+
+  '&.delete': {
+    border: '1px solid $red400',
+
+    svg: {
+      color: '$red300',
+    },
+  },
+
+  '&:hover': {
+    filter: 'brightness(1.3)',
+    transition: '200ms',
+  },
+
+  variants: {
+    disabled: {
+      true: {
+        cursor: 'not-allowed',
+      },
+    },
   },
 })

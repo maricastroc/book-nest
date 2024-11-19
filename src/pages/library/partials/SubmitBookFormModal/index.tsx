@@ -32,11 +32,13 @@ import { CustomButton } from '@/components/shared/Button'
 import { customStyles } from '@/utils/getCustomStyles'
 import { CategoryProps } from '@/@types/category'
 import { useAppContext } from '@/contexts/AppContext'
+import { BookProps } from '@/@types/book'
 
 interface SubmitBookFormModalProps {
+  isEdit?: boolean
+  book?: BookProps | null
   onClose: () => Promise<void>
   onCloseWithoutUpdate: () => void
-  categories: CategoryProps[]
 }
 
 const submitBookFormSchema = z.object({
@@ -52,14 +54,14 @@ const submitBookFormSchema = z.object({
     .min(20, { message: 'Summary must have at least 20 characters.' }),
   publishingYear: z.string().min(3, { message: 'Invalid year.' }),
   totalPages: z.string().min(1, { message: 'Pages number is required.' }),
-  coverUrl: z.custom<File>((file) => file instanceof File && file.size > 0, {
-    message: 'Cover image is required.',
-  }),
+  coverUrl: z
+    .custom<File>((file) => file instanceof File && file.size > 0)
+    .optional(),
   categories: z
     .array(
       z.object({
-        value: z.string(), // Ajusta o campo 'value' que vem do react-select
-        label: z.string(), // Ajusta o campo 'label' que vem do react-select
+        value: z.string(),
+        label: z.string(),
       }),
     )
     .min(1, { message: 'At least one category is required.' }),
@@ -68,17 +70,22 @@ const submitBookFormSchema = z.object({
 type SubmitBookFormData = z.infer<typeof submitBookFormSchema>
 
 export function SubmitBookFormModal({
-  categories,
   onClose,
   onCloseWithoutUpdate,
+  isEdit = false,
+  book = null,
 }: SubmitBookFormModalProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
   const [coverPreview, setCoverPreview] = useState<string | null>(null)
 
+  const [coverUrl, setCoverUrl] = useState<string | null>(null)
+
+  const [showErrors, setShowErrors] = useState(false)
+
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { loggedUser } = useAppContext()
+  const { loggedUser, categories } = useAppContext()
 
   const {
     register,
@@ -114,20 +121,23 @@ export function SubmitBookFormModal({
     inputFileRef.current?.click()
   }
 
-  const onInvalid = (errors: any) => {
-    console.error('Erro de validação:', errors)
-    toast.error('Por favor, corrija os erros antes de enviar o formulário.')
+  const onInvalid = () => {
+    setShowErrors(true)
+    toast.error('Please correct any errors before submitting the form.')
   }
 
   async function handleSubmitBook(data: SubmitBookFormData) {
+    setShowErrors(true)
+
     const formData = new FormData()
 
-    formData.append('coverUrl', data.coverUrl)
     formData.append('author', data.author)
     formData.append('name', data.name)
     formData.append('summary', data.summary)
     formData.append('totalPages', String(data.totalPages))
     formData.append('publishingYear', String(data.publishingYear))
+
+    if (data.coverUrl) formData.append('coverUrl', data.coverUrl)
 
     const categoryValues = data?.categories?.map(
       (category: any) => category.value,
@@ -137,18 +147,22 @@ export function SubmitBookFormModal({
 
     try {
       setIsSubmitting(true)
+      console.log(data.coverUrl)
+      const requestUrl = isEdit ? `/books/edit/${book?.id}` : '/books/create'
+      const method = isEdit ? 'put' : 'post'
 
-      await api.post('/books/create', formData, {
+      const response = await api[method](requestUrl, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
 
-      toast.success('Book successfully submitted!')
+      toast.success(response.data.message)
 
       await onClose()
     } catch (error) {
       handleApiError(error)
     } finally {
       setIsSubmitting(false)
+      setShowErrors(false)
     }
   }
 
@@ -156,12 +170,44 @@ export function SubmitBookFormModal({
     value: category.id,
     label: category.name,
   }))
-  console.log(watch())
+
   useEffect(() => {
     if (loggedUser) {
       setValue('userId', loggedUser.id)
     }
   }, [loggedUser])
+
+  useEffect(() => {
+    if (isEdit && book) {
+      setValue('author', book.author)
+      setValue('summary', book.summary)
+      setValue('name', book.name)
+
+      if (book?.publishingYear) {
+        setValue('publishingYear', book.publishingYear.toString())
+      }
+
+      if (book?.totalPages) {
+        setValue('totalPages', book.totalPages.toString())
+      }
+
+      if (book?.categories) {
+        const formattedCategories = (book.categories as CategoryProps[]).map(
+          (category) => ({
+            value: category.id,
+            label: category.name,
+          }),
+        )
+
+        setValue('categories', formattedCategories)
+      }
+
+      setCoverPreview(book.coverUrl)
+      setCoverUrl(book.coverUrl)
+    }
+  }, [isEdit, book])
+
+  const form = watch()
 
   return (
     <Dialog.Portal>
@@ -206,10 +252,14 @@ export function SubmitBookFormModal({
                   <button type="button" onClick={handleCoverChangeClick}>
                     Choose File
                   </button>
-                  <span>{watch('coverUrl')?.name}</span>
+                  <span>
+                    {watch('coverUrl')?.name
+                      ? watch('coverUrl')?.name
+                      : coverUrl}
+                  </span>
                 </ImageInput>
-                {errors.coverUrl && (
-                  <FormErrors error={errors.coverUrl.message} />
+                {showErrors && !isEdit && !form.coverUrl && (
+                  <FormErrors error={'Cover Image is required.'} />
                 )}
               </InputContainer>
             </CoverSectionContainer>
@@ -287,7 +337,7 @@ export function SubmitBookFormModal({
 
             <CustomButton
               type="submit"
-              content="Submit New Book"
+              content={isEdit ? 'Save Changes' : 'Submit New Book'}
               disabled={isSubmitting}
             />
           </FormContainer>

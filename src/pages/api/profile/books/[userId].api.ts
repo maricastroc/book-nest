@@ -19,6 +19,7 @@ export default async function handler(
   const { category, search } = req.query
 
   let categoriesQuery
+
   if (category) {
     categoriesQuery = {
       some: {
