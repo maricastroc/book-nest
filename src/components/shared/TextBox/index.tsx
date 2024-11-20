@@ -22,7 +22,7 @@ export function TextBox({
   const [isOverflowing, setIsOverflowing] = useState(false)
 
   const summaryRef = useRef<HTMLDivElement | null>(null)
-
+  console.log(description)
   const checkOverflow = () => {
     const el = summaryRef.current
     if (el) {
@@ -49,7 +49,14 @@ export function TextBox({
         }}
       >
         {description && description?.length ? (
-          <p>{description}</p>
+          <p>
+            {description.split('\n').map((line, index) => (
+              <span key={index}>
+                {line}
+                <br />
+              </span>
+            ))}
+          </p>
         ) : (
           <EmptyRating>No description available</EmptyRating>
         )}

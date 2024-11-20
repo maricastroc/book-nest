@@ -17,6 +17,7 @@ type UpdateBookData = {
   name?: string
   author?: string
   summary?: string
+  publisher?: string
   totalPages?: number
   publishingYear?: string
   coverUrl?: string
@@ -60,6 +61,7 @@ export default async function handler(
     try {
       const name = getSingleString(fields.name)
       const author = getSingleString(fields.author)
+      const publisher = getSingleString(fields.publisher)
       const summary = getSingleString(fields.summary)
       const totalPages = parseInt(getSingleString(fields.totalPages), 10)
       const publishingYear = parseInt(
@@ -90,6 +92,7 @@ export default async function handler(
       if (name) updateData.name = name
       if (author) updateData.author = author
       if (summary) updateData.summary = summary
+      if (publisher) updateData.publisher = publisher
       if (totalPages) updateData.totalPages = totalPages
       if (publishingYear) updateData.publishingYear = publishingYear.toString()
 

@@ -21,6 +21,7 @@ import {
   PreviewContainer,
   ImagePreview,
   EditBtn,
+  DividerLine,
 } from './styles'
 import { CustomLabel } from '@/components/shared/Label'
 import { FormErrors } from '@/components/shared/FormErrors'
@@ -33,12 +34,25 @@ import { customStyles } from '@/utils/getCustomStyles'
 import { CategoryProps } from '@/@types/category'
 import { useAppContext } from '@/contexts/AppContext'
 import { BookProps } from '@/@types/book'
+import { formatDate } from '@/utils/formatDate'
+import { disabledCustomStyles } from '@/utils/getDisabledCustomStyles'
 
 interface SubmitBookFormModalProps {
   isEdit?: boolean
   book?: BookProps | null
   onClose: () => Promise<void>
   onCloseWithoutUpdate: () => void
+}
+
+export interface GoogleBookProps extends BookProps {
+  volumeInfo: {
+    language: string
+    title: string
+    authors: string[]
+    description: string
+    pageCount: number
+    publishedDate: string
+  }
 }
 
 const submitBookFormSchema = z.object({
@@ -53,6 +67,7 @@ const submitBookFormSchema = z.object({
     .string()
     .min(20, { message: 'Summary must have at least 20 characters.' }),
   publishingYear: z.string().min(3, { message: 'Invalid year.' }),
+  publisher: z.string().optional(),
   totalPages: z.string().min(1, { message: 'Pages number is required.' }),
   coverUrl: z
     .custom<File>((file) => file instanceof File && file.size > 0)
@@ -84,6 +99,10 @@ export function SubmitBookFormModal({
   const [showErrors, setShowErrors] = useState(false)
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [isValidBook, setIsValidBook] = useState(false)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const { loggedUser, categories } = useAppContext()
 
@@ -126,7 +145,95 @@ export function SubmitBookFormModal({
     toast.error('Please correct any errors before submitting the form.')
   }
 
+  async function getBookInfoWithGoogleBooks(title: string, author: string) {
+    try {
+      setIsLoading(true)
+
+      const response = await api.get(
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
+          title,
+        )}+inauthor:${encodeURIComponent(author)}&langRestrict=en`,
+      )
+
+      const books = response.data.items.filter((book: GoogleBookProps) => {
+        return book.volumeInfo.language === 'en'
+      })
+
+      if (books && books.length > 0) {
+        const foundBook = books[0].volumeInfo
+
+        setValue('name', foundBook.title)
+        setValue('author', foundBook.authors[0])
+        setValue('summary', foundBook.description)
+        setValue('totalPages', foundBook.pageCount)
+        setValue('publisher', foundBook.publisher)
+        setValue('publishingYear', formatDate(foundBook.publishedDate))
+
+        setIsValidBook(true)
+
+        return
+      }
+
+      toast.error(
+        'The book information could not be verified. Please check the title and author.',
+      )
+
+      setIsValidBook(false)
+    } catch (error) {
+      toast.error(
+        'The book information could not be verified. Please check the title and author.',
+      )
+
+      setIsValidBook(false)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function validateBookWithGoogleBooks(
+    title: string,
+    author: string,
+  ): Promise<boolean> {
+    try {
+      const response = await api.get(
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
+          title,
+        )}+inauthor:${encodeURIComponent(author)}&langRestrict=en`,
+      )
+
+      const books = response.data.items.filter((book: GoogleBookProps) => {
+        return book.volumeInfo.language === 'en'
+      })
+
+      if (books && books.length > 0) {
+        const book = books[0].volumeInfo
+        return (
+          book.title.toLowerCase() === title.toLowerCase() &&
+          book.authors?.some(
+            (a: string) => a.toLowerCase() === author.toLowerCase(),
+          )
+        )
+      }
+      return false
+    } catch (error) {
+      console.error('Error validating book with Google Books API:', error)
+      return false
+    }
+  }
+
   async function handleSubmitBook(data: SubmitBookFormData) {
+    const isValidBook = await validateBookWithGoogleBooks(
+      data.name,
+      data.author,
+    )
+
+    if (!isValidBook) {
+      toast.error(
+        'The book information could not be verified. Please check the title and author.',
+      )
+      return
+    }
+
     setShowErrors(true)
 
     const formData = new FormData()
@@ -135,6 +242,7 @@ export function SubmitBookFormModal({
     formData.append('name', data.name)
     formData.append('summary', data.summary)
     formData.append('totalPages', String(data.totalPages))
+    formData.append('publisher', String(data.publisher || ''))
     formData.append('publishingYear', String(data.publishingYear))
 
     if (data.coverUrl) formData.append('coverUrl', data.coverUrl)
@@ -182,6 +290,8 @@ export function SubmitBookFormModal({
       setValue('author', book.author)
       setValue('summary', book.summary)
       setValue('name', book.name)
+
+      setIsValidBook(true)
 
       if (book?.publishingYear) {
         setValue('publishingYear', book.publishingYear.toString())
@@ -271,19 +381,29 @@ export function SubmitBookFormModal({
               />
               {errors.name && <FormErrors error={errors.name.message} />}
             </InputContainer>
-
             <InputContainer>
               <CustomLabel>Book Author</CustomLabel>
               <Input
+                disabled={!isValidBook}
                 type="text"
                 placeholder="e.g. J.R.R. Tolkien"
                 {...register('author')}
               />
               {errors.author && <FormErrors error={errors.author.message} />}
             </InputContainer>
+
+            <CustomButton
+              type="button"
+              content={isLoading ? 'Loading...' : 'Get Book Information'}
+              onClick={() => getBookInfoWithGoogleBooks(form.name, form.author)}
+              disabled={isSubmitting || !form.name || !form.author || isLoading}
+            />
+
+            <DividerLine />
             <InputContainer>
               <CustomLabel>Book Summary</CustomLabel>
               <Textarea
+                disabled={!isValidBook}
                 placeholder="e.g. The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien’s extensive knowledge of philology and folklore."
                 {...register('summary')}
               />
@@ -292,6 +412,7 @@ export function SubmitBookFormModal({
             <InputContainer>
               <CustomLabel>Pages Number</CustomLabel>
               <Input
+                disabled={!isValidBook}
                 type="number"
                 placeholder="e.g. 1137"
                 {...register('totalPages')}
@@ -303,12 +424,25 @@ export function SubmitBookFormModal({
             <InputContainer>
               <CustomLabel>Publishing Year</CustomLabel>
               <Input
-                type="number"
+                disabled={!isValidBook}
+                type="text"
                 placeholder="e.g. 1954"
                 {...register('publishingYear')}
               />
               {errors.publishingYear && (
                 <FormErrors error={errors.publishingYear.message} />
+              )}
+            </InputContainer>
+            <InputContainer>
+              <CustomLabel>Publisher</CustomLabel>
+              <Input
+                disabled={!isValidBook}
+                type="text"
+                placeholder="e.g. Raincoast Books"
+                {...register('publisher')}
+              />
+              {errors.publisher && (
+                <FormErrors error={errors.publisher.message} />
               )}
             </InputContainer>
 
@@ -324,7 +458,9 @@ export function SubmitBookFormModal({
                       {...field}
                       isMulti
                       options={options as any}
-                      styles={customStyles}
+                      styles={
+                        !isValidBook ? disabledCustomStyles : customStyles
+                      }
                       onChange={(selected) => field.onChange(selected)}
                     />
                   )}
@@ -338,7 +474,7 @@ export function SubmitBookFormModal({
             <CustomButton
               type="submit"
               content={isEdit ? 'Save Changes' : 'Submit New Book'}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isValidBook}
             />
           </FormContainer>
         </Description>

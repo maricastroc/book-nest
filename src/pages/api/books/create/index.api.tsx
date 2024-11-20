@@ -55,6 +55,8 @@ export default async function handler(
 
       const summary = getSingleString(fields.summary)
 
+      const publisher = getSingleString(fields.publisher)
+
       const totalPages = parseInt(getSingleString(fields.totalPages), 10)
 
       const publishingYear = parseInt(
@@ -94,6 +96,7 @@ export default async function handler(
         author,
         summary,
         totalPages,
+        publisher,
         publishingYear,
         categories,
       })
@@ -112,6 +115,7 @@ export default async function handler(
           name,
           author,
           summary,
+          publisher,
           totalPages,
           publishingYear: publishingYear.toString(),
           coverUrl: `/images/books/${coverFile.originalFilename}`,

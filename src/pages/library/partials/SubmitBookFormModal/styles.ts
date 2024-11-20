@@ -258,6 +258,18 @@ export const Input = styled('input', {
   padding: '0.6rem',
   fontSize: '0.95rem',
   borderRadius: 10,
+
+  '&:disabled': {
+    backgroundColor: '$gray400',
+    border: 'solid 1px $gray400',
+    color: '$gray100',
+    cursor: 'not-allowed !important',
+    pointerEvents: 'none',
+
+    '&::placeholder': {
+      color: '$gray100',
+    },
+  },
 })
 
 export const Textarea = styled('textarea', {
@@ -276,6 +288,18 @@ export const Textarea = styled('textarea', {
   '&:focus': {
     outline: 'none',
     boxShadow: 'none',
+  },
+
+  '&:disabled': {
+    backgroundColor: '$gray400',
+    border: 'solid 1px $gray400',
+    color: '$gray100',
+    cursor: 'not-allowed !important',
+    pointerEvents: 'none',
+
+    '&::placeholder': {
+      color: '$gray100',
+    },
   },
 })
 
@@ -304,4 +328,11 @@ export const ChangePasswordInputContainer = styled('div', {
   gap: '0.6rem',
   width: '100%',
   alignItems: 'center',
+})
+
+export const DividerLine = styled('span', {
+  width: '100%',
+  background: '$gray600',
+  height: 1,
+  margin: '0.6rem 0',
 })

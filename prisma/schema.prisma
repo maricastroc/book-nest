@@ -33,6 +33,7 @@ model Book {
   summary     String          @db.Text
   coverUrl    String
   publishingYear String?
+  publisher String?
   totalPages  Int
   createdAt   DateTime        @default(now())
   updatedAt   DateTime?       @updatedAt

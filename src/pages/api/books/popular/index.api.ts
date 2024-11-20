@@ -25,7 +25,7 @@ export default async function handler(
     include: {
       ratings: {
         include: {
-          user: true, // Inclui os detalhes do usuário associado ao rating
+          user: true,
         },
       },
       categories: {
@@ -35,7 +35,7 @@ export default async function handler(
       },
       readingStatus: {
         where: {
-          userId: String(session?.user?.id), // Inclui o status de leitura do usuário atual
+          userId: String(session?.user?.id),
         },
       },
     },
