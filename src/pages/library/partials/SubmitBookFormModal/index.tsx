@@ -384,7 +384,6 @@ export function SubmitBookFormModal({
             <InputContainer>
               <CustomLabel>Book Author</CustomLabel>
               <Input
-                disabled={!isValidBook}
                 type="text"
                 placeholder="e.g. J.R.R. Tolkien"
                 {...register('author')}
