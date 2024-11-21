@@ -2,6 +2,14 @@ import { prisma } from '@/lib/prisma'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { NextApiRequest, NextApiResponse } from 'next'
 
+interface BookWithStatus {
+  id: string
+  name: string
+  author: string
+  coverUrl: string
+  userRating: null | number
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -10,38 +18,15 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { userId, category, search } = req.query
+  const { userId } = req.query
 
   if (!userId) {
     return res.status(400).json({ message: 'UserId is required' })
   }
 
-  let categoriesQuery
-
-  if (category) {
-    categoriesQuery = {
-      some: {
-        categoryId: String(category),
-      },
-    }
-  }
-
-  let searchQuery
-
-  if (search) {
-    searchQuery = String(search).toLowerCase()
-  }
-
-  // Busca o usuário para obter `avatarUrl` e `name`
   const user = await prisma.user.findUnique({
-    where: {
-      id: String(userId),
-    },
-    select: {
-      avatarUrl: true,
-      name: true,
-      id: true,
-    },
+    where: { id: String(userId) },
+    select: { avatarUrl: true, name: true, id: true },
   })
 
   if (!user) {
@@ -50,68 +35,85 @@ export default async function handler(
 
   const books = await prisma.book.findMany({
     where: {
-      categories: categoriesQuery,
-      ...(searchQuery
-        ? {
-            OR: [
-              { name: { contains: searchQuery, mode: 'insensitive' } },
-              { author: { contains: searchQuery, mode: 'insensitive' } },
-            ],
-          }
-        : {}),
-      readingStatus: {
-        some: { userId: String(userId) },
-      },
+      OR: [
+        {
+          readingStatus: {
+            some: { userId: String(userId) },
+          },
+        },
+        {
+          userId: String(userId),
+        },
+      ],
     },
-    include: {
-      ratings: {
-        include: {
-          user: true,
-        },
-      },
-      categories: {
-        include: {
-          category: true,
-        },
-      },
+    select: {
+      id: true,
+      name: true,
+      author: true,
+      coverUrl: true,
       readingStatus: {
         where: { userId: String(userId) },
+        select: { status: true },
+      },
+      ratings: {
+        where: { userId: String(userId) },
+        select: { rate: true },
       },
     },
   })
 
-  const booksWithCategories = books.map((book) => {
-    const avgRate =
-      book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
-        book.ratings.length || 0
+  const booksByStatus = books.reduce((acc, book) => {
+    const userRating = book.ratings.length > 0 ? book.ratings[0].rate : null
+    const status = formatToSnakeCase(book.readingStatus[0]?.status || 'unknown')
 
-    const userRating =
-      book.ratings.find((rating) => rating.userId === String(userId))?.rate ||
-      null
-
-    const categories = book.categories.map((cat) => cat.category)
-
-    return {
-      ...book,
-      categories,
-      rate: avgRate,
+    const bookWithDetails = {
+      id: book.id,
+      name: book.name,
+      author: book.author,
+      coverUrl: book.coverUrl,
       userRating,
-      ratings: book.ratings,
-      readingStatus: book.readingStatus[0]?.status || undefined,
     }
-  })
-
-  const booksByStatus = booksWithCategories.reduce((acc, book) => {
-    const status = book.readingStatus
-      ? formatToSnakeCase(book.readingStatus)
-      : 'unknown'
 
     if (!acc[status]) {
       acc[status] = []
     }
-    acc[status].push(book)
+
+    acc[status].push(bookWithDetails)
     return acc
-  }, {} as { [status: string]: typeof booksWithCategories })
+  }, {} as { [status: string]: BookWithStatus[] })
+
+  const submittedBooks = await prisma.book.findMany({
+    where: { userId: String(userId) },
+    select: {
+      id: true,
+      name: true,
+      author: true,
+      coverUrl: true,
+      _count: {
+        select: { ratings: true },
+      },
+      ratings: {
+        select: {
+          rate: true,
+        },
+      },
+    },
+  })
+
+  const submittedBooksWithDetails = submittedBooks.map((book) => {
+    const ratingsCount = book._count.ratings
+    const avgRate =
+      ratingsCount > 0
+        ? book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
+          ratingsCount
+        : 0
+
+    return {
+      ...book,
+      ratingsCount,
+      rate: avgRate,
+    }
+  })
 
   return res.json({
     user: {
@@ -120,5 +122,6 @@ export default async function handler(
       id: user.id,
     },
     booksByStatus,
+    submittedBooks: submittedBooksWithDetails,
   })
 }

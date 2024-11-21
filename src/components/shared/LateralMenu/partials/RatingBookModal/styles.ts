@@ -50,7 +50,7 @@ export const Title = styled(RadixTitle, {
   textAlign: 'left',
 })
 
-export const ReadBookModalHeader = styled('div', {
+export const RatingBookModalHeader = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '0.5rem',
@@ -64,7 +64,7 @@ export const ReadBookModalHeader = styled('div', {
   },
 })
 
-export const ReadBookModalContent = styled('div', {
+export const RatingBookModalContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',

@@ -163,16 +163,9 @@ export const SubmittedBooksContainer = styled('div', {
 
   '@media (min-width: 1024px)': {
     height: '100vh',
-    overflow: 'scroll',
     padding: 0,
     paddingBottom: '2.5rem',
     marginTop: '-3.5rem',
-  },
-
-  '@media (min-width: 1200px)': {
-    height: '100%',
-    overflow: 'scroll',
-    paddingBottom: '15rem',
   },
 })
 

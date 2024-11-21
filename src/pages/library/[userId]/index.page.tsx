@@ -51,12 +51,8 @@ export default function Profile() {
 
   const userName = userInfo?.name?.split(' ')[0] || ''
 
-  const {
-    handleFetchUserSubmittedBooks,
-    isValidatingLibraryPage,
-    handleFetchBooksByStatus,
-    handleSetUserId,
-  } = useAppContext()
+  const { isValidatingLibraryPage, handleFetchBooksByStatus, handleSetUserId } =
+    useAppContext()
 
   const [submittedBooks, setSubmittedBooks] = useState<
     BookProps[] | undefined
@@ -71,24 +67,18 @@ export default function Profile() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const loadBooksStatus = async () => {
-    const data = await handleFetchBooksByStatus(userId)
+  const loadBooksByStatus = async () => {
+    const books = await handleFetchBooksByStatus(userId)
 
-    setBooksStatus(data?.booksByStatus)
-    setUserInfo(data?.userInfo)
-  }
-
-  const loadUserSubmittedBooks = async () => {
-    const data = await handleFetchUserSubmittedBooks(userId)
-
-    setSubmittedBooks(data)
+    setBooksStatus(books?.booksByStatus)
+    setUserInfo(books?.userInfo)
+    setSubmittedBooks(books?.submittedBooks)
   }
 
   useEffect(() => {
     if (userId) {
       handleSetUserId(userId)
-      loadBooksStatus()
-      loadUserSubmittedBooks()
+      loadBooksByStatus()
     }
   }, [userId])
 
@@ -106,13 +96,13 @@ export default function Profile() {
           ) : (
             <Sidebar />
           )}
-          {openLateralMenu && (
+          {openLateralMenu && selectedBook && (
             <LateralMenu
-              book={selectedBook}
+              bookId={selectedBook.id}
               onCloseWithoutUpdate={() => setOpenLateralMenu(false)}
               onClose={async () => {
                 setOpenLateralMenu(false)
-                await Promise.all([loadBooksStatus(), loadUserSubmittedBooks()])
+                await loadBooksByStatus()
               }}
             />
           )}
@@ -151,7 +141,7 @@ export default function Profile() {
                 <SubmittedBooksSection
                   submittedBooks={submittedBooks}
                   onUpdate={async () => {
-                    await loadUserSubmittedBooks()
+                    await loadBooksByStatus()
                   }}
                   userId={userId}
                   userInfo={userInfo}

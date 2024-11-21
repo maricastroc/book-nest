@@ -29,11 +29,11 @@ export const SubmittedBooksSectionWrapper = styled('div', {
   },
 
   '@media (min-width: 1024px)': {
-    height: '100vh',
-
+    minHeight: '100%',
+    overflowY: 'scroll',
     maxWidth: '100%',
     minWidth: '12rem',
-    paddingBottom: 0,
+    paddingBottom: '2rem',
   },
 })
 

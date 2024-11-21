@@ -56,7 +56,7 @@ export default function Explore() {
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
-
+  console.log(books)
   return (
     <>
       <NextSeo title="Explore | Book Wise" />
@@ -64,10 +64,10 @@ export default function Explore() {
         <LoadingPage />
       ) : (
         <ExplorePageWrapper>
-          {openLateralMenu && (
+          {openLateralMenu && selectedBook && (
             <LateralMenu
               isOpen={openLateralMenu}
-              book={selectedBook}
+              bookId={selectedBook.id}
               onClose={async () => {
                 handleCloseLateralMenu()
               }}

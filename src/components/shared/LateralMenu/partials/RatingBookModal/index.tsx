@@ -2,8 +2,8 @@ import * as Dialog from '@radix-ui/react-dialog'
 import {
   Content,
   CloseButton,
-  ReadBookModalHeader,
-  ReadBookModalContent,
+  RatingBookModalHeader,
+  RatingBookModalContent,
   Title,
 } from './styles'
 import { Star, X } from 'phosphor-react'
@@ -14,21 +14,23 @@ import { CreateReviewData } from '@/pages/home/index.page'
 import { CustomButton } from '@/components/shared/Button'
 import { Overlay } from '@/styles/shared'
 
-interface SignInModalProps {
+interface RatingBookModalProps {
   onClose: () => void
   bookId: string
   userId: string
   handleCreateReview: (data: CreateReviewData) => Promise<void>
+  bookStatus: string
   closeLateralMenu: () => void
 }
 
-export function ReadBookModal({
+export function RatingBookModal({
   closeLateralMenu,
   handleCreateReview,
   bookId,
   userId,
+  bookStatus,
   onClose,
-}: SignInModalProps) {
+}: RatingBookModalProps) {
   const [rate, setRate] = useState<number | undefined>()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -45,6 +47,7 @@ export function ReadBookModal({
         rate,
         userId,
         bookId,
+        status: bookStatus,
         description: '',
       }
 
@@ -55,19 +58,19 @@ export function ReadBookModal({
       closeLateralMenu()
     }
   }
-
+  console.log(bookStatus)
   return (
     <Dialog.Portal>
       <Overlay className="DialogOverlay" />
       <Content className="DialogContent">
-        <ReadBookModalHeader>
+        <RatingBookModalHeader>
           <Title className="DialogTitle">Rate your reading!</Title>
           <p>{rate !== undefined && getRatingMessage(rate)}</p>
           <CloseButton onClick={() => onClose()}>
             <X alt="Close" />
           </CloseButton>
-        </ReadBookModalHeader>
-        <ReadBookModalContent>
+        </RatingBookModalHeader>
+        <RatingBookModalContent>
           <Rating
             allowFraction
             initialValue={rate}
@@ -77,7 +80,7 @@ export function ReadBookModal({
             emptyColor="#8381D9"
             fillColor="#8381D9"
           />
-        </ReadBookModalContent>
+        </RatingBookModalContent>
         <CustomButton
           hasRoundedBorder={false}
           style={{ marginTop: '2rem' }}

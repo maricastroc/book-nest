@@ -13,6 +13,7 @@ export interface BookProps {
   createdAt: Date
   publishingYear?: string | null | undefined
   readingStatus?: string | null | undefined
+  ratingCount?: number | null | undefined
   userRating?: number
 
   userId?: string | null

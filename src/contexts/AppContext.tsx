@@ -45,6 +45,7 @@ export interface CreateReviewData {
 export interface BooksByStatusResponse {
   userInfo: { avatarUrl: string; name: string; id: string }
   booksByStatus: BooksStatusProps
+  submittedBooks: BookProps[]
 }
 
 interface AppContextType {
@@ -69,9 +70,6 @@ interface AppContextType {
     userId: string | undefined,
     search: string | undefined,
   ) => Promise<UserStatistics | undefined>
-  handleFetchUserSubmittedBooks: (
-    userId: string | undefined,
-  ) => Promise<BookProps[] | undefined>
   userLatestRatingData: RatingProps | null | undefined
   isValidatingHomePage: boolean
   isValidatingExplorePage: boolean
@@ -107,9 +105,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     useState<boolean>(false)
 
   const [isValidatingUserStatistics, setIsValidatingUserStatistics] =
-    useState<boolean>(false)
-
-  const [isValidatingUserSubmittedBooks, setIsValidatingUserSubmittedBooks] =
     useState<boolean>(false)
 
   const session = useSession()
@@ -225,10 +220,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       if (router.pathname.includes('library')) {
-        updates.push(
-          userId && handleFetchBooksByStatus(userId),
-          userId && handleFetchUserSubmittedBooks(userId),
-        )
+        updates.push(userId && handleFetchBooksByStatus(userId))
       }
 
       await Promise.all(updates)
@@ -262,10 +254,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       if (router.pathname.includes('library')) {
-        updates.push(
-          userId && handleFetchUserSubmittedBooks(userId),
-          userId && handleFetchBooksByStatus(userId),
-        )
+        updates.push(userId && handleFetchBooksByStatus(userId))
       }
     } catch (error) {
       handleApiError(error)
@@ -293,10 +282,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       if (router.pathname.includes('library')) {
-        updates.push(
-          userId && handleFetchUserSubmittedBooks(userId),
-          userId && handleFetchBooksByStatus(userId),
-        )
+        updates.push(userId && handleFetchBooksByStatus(userId))
       }
     } catch (error) {
       handleApiError(error)
@@ -329,10 +315,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         }
 
         if (router.pathname.includes('library')) {
-          updates.push(
-            userId && handleFetchUserSubmittedBooks(userId),
-            userId && handleFetchBooksByStatus(userId),
-          )
+          updates.push(userId && handleFetchBooksByStatus(userId))
         }
 
         await Promise.all(updates)
@@ -351,6 +334,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const formattedResponse = {
           booksByStatus: response.data.booksByStatus,
+          submittedBooks: response.data.submittedBooks,
           userInfo: response.data.user,
         }
 
@@ -382,20 +366,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  const handleFetchUserSubmittedBooks = async (userId: string | undefined) => {
-    try {
-      setIsValidatingUserSubmittedBooks(true)
-
-      const response = await api.get(`/profile/books/${userId}`)
-
-      return response.data.books
-    } catch (error) {
-      handleApiError(error)
-    } finally {
-      setIsValidatingUserSubmittedBooks(false)
-    }
-  }
-
   useEffect(() => {
     if (session?.data?.user) {
       fetchLoggedUser()
@@ -406,7 +376,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     isValidatingLatestRatings ||
     isValidatingPopularBooks ||
     isValidatingUserLatestReading ||
-    isValidatingUserSubmittedBooks ||
     isValidatingBooks ||
     isValidatingBooksStatus
 
@@ -417,8 +386,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const isValidatingExplorePage = isValidatingBooks
 
-  const isValidatingLibraryPage =
-    isValidatingBooksStatus || isValidatingUserSubmittedBooks
+  const isValidatingLibraryPage = isValidatingBooksStatus
 
   const contextValue = useMemo(
     () => ({
@@ -448,7 +416,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       handleFetchBooksByStatus,
       handleSetUserId,
       handleFetchUserStatistics,
-      handleFetchUserSubmittedBooks,
       userId,
     }),
     [

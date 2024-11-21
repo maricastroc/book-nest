@@ -90,6 +90,7 @@ model Rating {
   description String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
 
   book    Book   @relation(fields: [bookId], references: [id])
   bookId  String

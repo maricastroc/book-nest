@@ -100,10 +100,14 @@ export default async function handler(
       return res.status(500).json({ message: 'Error updating rating', error })
     }
   } else if (req.method === 'POST') {
-    const { bookId, userId, description, rate } = req.body.data
+    const { bookId, userId, description, rate, status } = req.body.data
 
     if (!rate) {
       return res.status(400).json({ message: 'Rating is required.' })
+    }
+
+    if (!status) {
+      return res.status(400).json({ message: 'Book status is required.' })
     }
 
     const newRating = await prisma.rating.create({
@@ -119,11 +123,19 @@ export default async function handler(
       where: {
         userId_bookId: { userId, bookId },
       },
-      update: { status: 'Read' },
-      create: { userId, bookId, status: 'Read' },
+      update: {
+        status,
+      },
+      create: {
+        userId,
+        bookId,
+        status,
+      },
     })
 
-    return res.status(201).json(newRating)
+    return res
+      .status(201)
+      .json({ rating: newRating, message: 'Rating successfully created!' })
   } else {
     return res.status(405).end()
   }

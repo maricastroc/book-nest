@@ -25,6 +25,9 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { ReviewWarningModal } from '@/components/shared/LateralMenu/partials/ReviewWarningModal'
 import { EmptyContainer } from '../EmptyContainer'
 import { READ_STATUS } from '@/utils/constants'
+import { api } from '@/lib/axios'
+import { handleApiError } from '@/utils/handleApiError'
+import { SkeletonLateralMenu } from './partials/SkeletonLateralMenu'
 
 export interface ReadingStatusProps {
   bookId: string
@@ -33,19 +36,19 @@ export interface ReadingStatusProps {
 }
 
 interface BookReviewsSidebarProps {
-  isOpen?: boolean
-  book: BookProps | null
+  bookId: string
   onClose: () => void
   onCloseWithoutUpdate?: () => void
 }
 
 export function LateralMenu({
-  isOpen,
-  book,
+  bookId,
   onClose,
   onCloseWithoutUpdate,
 }: BookReviewsSidebarProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
+
+  const [book, setBook] = useState<BookProps | null>(null)
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
@@ -55,6 +58,8 @@ export function LateralMenu({
   const [userRating, setUserRating] = useState<RatingProps | undefined>(
     undefined,
   )
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const [bookRatings, setBookRatings] = useState<RatingProps[] | undefined>(
     undefined,
@@ -66,24 +71,41 @@ export function LateralMenu({
 
   const shouldShowSignInOption = !loggedUser && !userRating
 
-  useEffect(() => {
+  const handleGetBookInfo = async (bookId: string) => {
+    try {
+      setIsLoading(true)
+
+      const response = await api.get(`/books/${bookId}`)
+
+      setBook(response.data.book)
+
+      if (response.data.book) {
+        const foundUserRating = response.data.book.ratings.find(
+          (rating: RatingProps) => rating.user.id === loggedUser?.id,
+        )
+
+        setBookRatings(response.data.book.ratings)
+
+        setUserRating(foundUserRating)
+      }
+    } catch (error) {
+      handleApiError(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadBookRatings = async () => {
     if (book) {
       setBookRatings(book.ratings)
-    }
-  }, [book])
-
-  const loadRatings = () => {
-    if (book && book.ratings && loggedUser) {
-      const foundUserRating = book.ratings.find(
-        (rating) => rating.user.id === loggedUser.id,
-      )
-      setUserRating(foundUserRating)
     }
   }
 
   useEffect(() => {
-    loadRatings()
-  }, [book, loggedUser, isOpen])
+    if (bookId) {
+      handleGetBookInfo(bookId)
+    }
+  }, [bookId])
 
   return (
     <LateralMenuWrapper>
@@ -92,76 +114,84 @@ export function LateralMenu({
         <X />
       </CloseButton>
       <MenuBody>
-        {book && (
-          <MenuBookCard
-            key={book.id}
-            book={book}
-            categories={book.categories as CategoryProps[]}
-            loadRatings={() => loadRatings()}
-            closeLateralMenu={onClose}
-          />
-        )}
-        <RatingsWrapper>
-          <RatingsListHeader>
-            <p>Ratings</p>
-            {shouldShowReviewOption &&
-              (book?.readingStatus === READ_STATUS ? (
-                <Dialog.Root open={isReviewFormOpen}>
-                  <Dialog.Trigger asChild>
-                    <span onClick={() => setIsReviewFormOpen(true)}>
-                      Review
-                    </span>
-                  </Dialog.Trigger>
-                </Dialog.Root>
-              ) : (
-                <Dialog.Root open={isReviewWarningModalOpen}>
-                  <Dialog.Trigger asChild>
-                    <span onClick={() => setIsReviewWarningModalOpen(true)}>
-                      Review
-                    </span>
-                  </Dialog.Trigger>
-                  <ReviewWarningModal
-                    onClose={() => setIsReviewWarningModalOpen(false)}
-                  />
-                </Dialog.Root>
-              ))}
-            {shouldShowSignInOption && (
-              <Dialog.Root open={isSignInModalOpen}>
-                <Dialog.Trigger asChild>
-                  <span onClick={() => setIsSignInModalOpen(true)}>Review</span>
-                </Dialog.Trigger>
-                <SignInModal onClose={() => setIsSignInModalOpen(false)} />
-              </Dialog.Root>
-            )}
-          </RatingsListHeader>
-          <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
-            {book && isReviewFormOpen && (
-              <RatingCardForm
-                isEdit={!!userRating}
-                rating={userRating}
-                onClose={() => setIsReviewFormOpen(false)}
+        {isLoading ? (
+          <SkeletonLateralMenu />
+        ) : (
+          <>
+            {book && (
+              <MenuBookCard
+                key={book.id}
+                book={book}
+                categories={book.categories as CategoryProps[]}
+                loadRatings={() => loadBookRatings()}
                 closeLateralMenu={onClose}
-                bookId={book?.id}
               />
             )}
-            {!isValidating && !bookRatings?.length ? (
-              <EmptyContainer content="reviews" />
-            ) : isValidating ? (
-              Array.from({ length: 3 }).map((_, index) => (
-                <SkeletonRatingCard key={index} />
-              ))
-            ) : (
-              bookRatings?.map((rating) => (
-                <UserRatingBox
-                  key={rating.id}
-                  rating={rating}
-                  onCloseUserRatingBox={onClose}
-                  closeLateralMenu={onClose}
-                />
-              ))
-            )}
-          </RatingsList>
-        </RatingsWrapper>
+            <RatingsWrapper>
+              <RatingsListHeader>
+                <p>Ratings</p>
+                {shouldShowReviewOption &&
+                  (book?.readingStatus === READ_STATUS ? (
+                    <Dialog.Root open={isReviewFormOpen}>
+                      <Dialog.Trigger asChild>
+                        <span onClick={() => setIsReviewFormOpen(true)}>
+                          Review
+                        </span>
+                      </Dialog.Trigger>
+                    </Dialog.Root>
+                  ) : (
+                    <Dialog.Root open={isReviewWarningModalOpen}>
+                      <Dialog.Trigger asChild>
+                        <span onClick={() => setIsReviewWarningModalOpen(true)}>
+                          Review
+                        </span>
+                      </Dialog.Trigger>
+                      <ReviewWarningModal
+                        onClose={() => setIsReviewWarningModalOpen(false)}
+                      />
+                    </Dialog.Root>
+                  ))}
+                {shouldShowSignInOption && (
+                  <Dialog.Root open={isSignInModalOpen}>
+                    <Dialog.Trigger asChild>
+                      <span onClick={() => setIsSignInModalOpen(true)}>
+                        Review
+                      </span>
+                    </Dialog.Trigger>
+                    <SignInModal onClose={() => setIsSignInModalOpen(false)} />
+                  </Dialog.Root>
+                )}
+              </RatingsListHeader>
+              <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
+                {bookId && isReviewFormOpen && (
+                  <RatingCardForm
+                    isEdit={!!userRating}
+                    rating={userRating}
+                    onClose={() => setIsReviewFormOpen(false)}
+                    closeLateralMenu={onClose}
+                    bookId={bookId}
+                  />
+                )}
+                {!isValidating && !bookRatings?.length ? (
+                  <EmptyContainer content="reviews" />
+                ) : isValidating ? (
+                  Array.from({ length: 3 }).map((_, index) => (
+                    <SkeletonRatingCard key={index} />
+                  ))
+                ) : (
+                  bookRatings?.map((rating) => (
+                    <UserRatingBox
+                      key={rating.id}
+                      rating={rating}
+                      onCloseUserRatingBox={onClose}
+                      closeLateralMenu={onClose}
+                    />
+                  ))
+                )}
+              </RatingsList>
+            </RatingsWrapper>
+          </>
+        )}
       </MenuBody>
     </LateralMenuWrapper>
   )

@@ -71,27 +71,28 @@ export default async function handler(
         .json({ message: 'UserId, BookId, and Status are required.' })
     }
 
-    // Pega o status de leitura atual para verificar a necessidade de exclusão da review
-    const existingStatus = await prisma.readingStatus.findUnique({
-      where: {
-        userId_bookId: { userId, bookId },
-      },
-      select: {
-        status: true,
-      },
-    })
-
-    // Se o status anterior era 'Read' e o novo status não é 'Read', apaga a review
-    if (existingStatus?.status === 'Read' && status !== 'Read') {
-      await prisma.rating.deleteMany({
+    if (status === 'Read' || status === 'Did not Finish') {
+      await prisma.rating.updateMany({
         where: {
           userId,
           bookId,
         },
+        data: {
+          deletedAt: null,
+        },
+      })
+    } else {
+      await prisma.rating.updateMany({
+        where: {
+          userId,
+          bookId,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
       })
     }
 
-    // Usa upsert para atualizar ou criar o novo status de leitura
     const updatedStatus = await prisma.readingStatus.upsert({
       where: {
         userId_bookId: {

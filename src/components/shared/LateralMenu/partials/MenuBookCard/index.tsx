@@ -21,7 +21,7 @@ import { DropdownMenu } from './Partials/DropdownMenu'
 import { BookStats } from './Partials/BookStats'
 import { SignInModal } from '@/components/modals/SignInModal'
 import * as Dialog from '@radix-ui/react-dialog'
-import { ReadBookModal } from '@/components/shared/LateralMenu/partials/ReadBookModal'
+import { RatingBookModal } from '@/components/shared/LateralMenu/partials/RatingBookModal'
 import { CreateReviewData } from '@/pages/home/index.page'
 import { useAppContext } from '@/contexts/AppContext'
 import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
@@ -46,7 +46,9 @@ export function MenuBookCard({
   const [isAddToLibraryDropdownOpen, setIsAddToLibraryDropdownOpen] =
     useState(false)
 
-  const [isReadBookModalOpen, setIsReadBookModalOpen] = useState(false)
+  const [isRatingBookModalOpen, setIsRatingBookModalOpen] = useState(false)
+
+  const [selectedStatus, setSelectedStatus] = useState('')
 
   const { loggedUser, isValidating, handleCreateReview } = useAppContext()
 
@@ -94,8 +96,8 @@ export function MenuBookCard({
               </Dialog.Root>
 
               <Dialog.Root
-                open={isReadBookModalOpen}
-                onOpenChange={setIsReadBookModalOpen}
+                open={isRatingBookModalOpen}
+                onOpenChange={setIsRatingBookModalOpen}
               >
                 <Dialog.Trigger asChild>
                   <DropdownMenu
@@ -104,16 +106,20 @@ export function MenuBookCard({
                     onClose={() => setIsAddToLibraryDropdownOpen(false)}
                     dropdownRef={dropdownRef}
                     book={book}
-                    handleOpenReadBookModal={() => setIsReadBookModalOpen(true)}
+                    handleOpenRatingBookModal={(status: string) => {
+                      setSelectedStatus(status)
+                      setIsRatingBookModalOpen(true)
+                    }}
                     closeLateralMenu={closeLateralMenu}
                   />
                 </Dialog.Trigger>
                 {loggedUser && (
-                  <ReadBookModal
+                  <RatingBookModal
                     userId={loggedUser.id}
                     bookId={book.id}
-                    onClose={() => setIsReadBookModalOpen(false)}
+                    onClose={() => setIsRatingBookModalOpen(false)}
                     closeLateralMenu={() => closeLateralMenu()}
+                    bookStatus={selectedStatus}
                     handleCreateReview={async (data: CreateReviewData) => {
                       await handleCreateReview(data)
                       loadRatings()

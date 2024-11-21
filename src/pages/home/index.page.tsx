@@ -75,9 +75,9 @@ export default function Home() {
         <LoadingPage />
       ) : (
         <HomePageWrapper>
-          {isLateralMenuOpen && (
+          {isLateralMenuOpen && selectedBook && (
             <LateralMenu
-              book={selectedBook}
+              bookId={selectedBook.id}
               onClose={() => setIsLateralMenuOpen(false)}
             />
           )}

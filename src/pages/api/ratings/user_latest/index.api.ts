@@ -27,19 +27,17 @@ export default async function handler(
       orderBy: { createdAt: 'desc' },
       include: {
         book: {
-          include: {
-            ratings: {
-              include: { user: true },
-            },
-            categories: {
-              include: { category: true },
-            },
+          select: {
+            id: true,
+            name: true,
+            author: true,
+            coverUrl: true,
             readingStatus: {
               where: { userId },
+              select: { status: true },
             },
           },
         },
-        user: true,
       },
     })
 
@@ -49,33 +47,23 @@ export default async function handler(
         .json({ message: 'No ratings found for this user.' })
     }
 
-    const bookId = userLastRating.book.id
+    const { book } = userLastRating
+    const readingStatus = book.readingStatus?.[0]?.status ?? null
 
-    const bookAvgRating = await prisma.rating.groupBy({
-      by: ['bookId'],
-      where: { bookId },
-      _avg: { rate: true },
+    return res.json({
+      rating: {
+        book: {
+          id: book.id,
+          name: book.name,
+          author: book.author,
+          coverUrl: book.coverUrl,
+        },
+        description: userLastRating.description,
+        rate: userLastRating.rate,
+        createdAt: userLastRating.createdAt,
+        readingStatus,
+      },
     })
-
-    const avgRating =
-      bookAvgRating.length > 0 ? bookAvgRating[0]._avg.rate : null
-    const readingStatus = userLastRating.book.readingStatus?.[0]?.status ?? null
-
-    const bookWithFixedCategories = {
-      ...userLastRating.book,
-      categories: userLastRating.book.categories.map(
-        (category) => category.category,
-      ),
-      rate: avgRating,
-      readingStatus,
-    }
-
-    const userLastRatingWithAvg = {
-      ...userLastRating,
-      book: bookWithFixedCategories,
-    }
-
-    return res.json({ rating: userLastRatingWithAvg })
   } catch (error) {
     console.error('Error fetching user last rating:', error)
     return res.status(500).json({ message: 'Internal Server Error' })

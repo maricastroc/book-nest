@@ -16,86 +16,51 @@ export default async function handler(
     buildNextAuthOptions(req, res),
   )
 
-  const books = await prisma.book.findMany({
-    orderBy: {
-      ratings: {
-        _count: 'desc',
-      },
-    },
+  const booksWithRatingsAndStatus = await prisma.book.findMany({
     include: {
       ratings: {
-        include: {
-          user: true,
-        },
-      },
-      categories: {
-        include: {
-          category: true,
+        select: {
+          rate: true,
         },
       },
       readingStatus: {
         where: {
           userId: String(session?.user?.id),
         },
-      },
-    },
-    take: 6,
-  })
-
-  const booksFixedRelationWithCategory = books.map((book) => {
-    return {
-      ...book,
-      categories: book.categories.map((category) => category.category),
-    }
-  })
-
-  const booksAvgRating = await prisma.rating.groupBy({
-    by: ['bookId'],
-    where: {
-      bookId: {
-        in: books.map((book) => book.id),
-      },
-    },
-    _avg: {
-      rate: true,
-    },
-  })
-
-  let userBooksId: string[] = []
-
-  if (session) {
-    const userBooks = await prisma.book.findMany({
-      where: {
-        ratings: {
-          some: {
-            userId: String(session.user.id),
-          },
+        select: {
+          status: true,
         },
       },
-    })
+    },
+    orderBy: {
+      ratings: {
+        _count: 'desc',
+      },
+    },
+  })
 
-    userBooksId = userBooks.map((book) => book.id)
-  }
+  const booksWithDetails = booksWithRatingsAndStatus.map((book) => {
+    const ratingCount = book.ratings.length
 
-  const booksWithAvgRating = booksFixedRelationWithCategory.map((book) => {
-    const bookAvgRating = booksAvgRating.find(
-      (avgRating) => avgRating.bookId === book.id,
-    )
-
-    const { ...bookInfo } = book
+    const avgRating =
+      ratingCount > 0
+        ? book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
+          ratingCount
+        : 0
 
     const readingStatus = book.readingStatus?.[0]?.status
       ? formatToSnakeCase(book.readingStatus[0].status)
       : null
 
     return {
-      ...bookInfo,
-      ratings: book.ratings,
-      rate: bookAvgRating?._avg.rate,
-      alreadyRead: userBooksId.includes(book.id),
+      ...book,
+      ratingCount,
+      rate: avgRating,
       readingStatus,
     }
   })
 
-  return res.json({ books: booksWithAvgRating })
+  const top6Books = booksWithDetails.slice(0, 6)
+
+  return res.json({ books: top6Books })
 }

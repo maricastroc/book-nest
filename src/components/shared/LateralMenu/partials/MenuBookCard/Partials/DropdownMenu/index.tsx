@@ -6,6 +6,7 @@ import {
 } from './styles'
 import { BookProps } from '@/@types/book'
 import { useAppContext } from '@/contexts/AppContext'
+import { shouldOpenRatingModal } from '@/utils/shouldOpenRatingModal'
 
 interface DropdownMenuProps {
   isOpen: boolean
@@ -13,7 +14,7 @@ interface DropdownMenuProps {
   book: BookProps
   activeStatus: string | null
   dropdownRef: React.RefObject<HTMLDivElement>
-  handleOpenReadBookModal: () => void
+  handleOpenRatingBookModal: (status: string) => void
   closeLateralMenu: () => void
 }
 
@@ -21,7 +22,7 @@ export const DropdownMenu = ({
   isOpen,
   activeStatus,
   book,
-  handleOpenReadBookModal,
+  handleOpenRatingBookModal,
   closeLateralMenu,
   onClose,
   dropdownRef,
@@ -57,11 +58,8 @@ export const DropdownMenu = ({
                 return
               }
 
-              if (
-                formatToSnakeCase(status.label) === 'read' &&
-                formatToSnakeCase(activeStatus ?? '') !== 'read'
-              ) {
-                handleOpenReadBookModal()
+              if (shouldOpenRatingModal(status.label, activeStatus)) {
+                handleOpenRatingBookModal(status.label)
                 return
               }
 
