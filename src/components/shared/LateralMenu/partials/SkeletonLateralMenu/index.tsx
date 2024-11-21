@@ -18,7 +18,7 @@ export function SkeletonLateralMenu() {
           <Book>
             <Skeleton
               width={'100%'}
-              height={'17rem'}
+              height={'13rem'}
               variant="rounded"
               style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
             />

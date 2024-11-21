@@ -68,6 +68,8 @@ const submitBookFormSchema = z.object({
     .min(20, { message: 'Summary must have at least 20 characters.' }),
   publishingYear: z.string().min(3, { message: 'Invalid year.' }),
   publisher: z.string().optional(),
+  language: z.string().optional(),
+  isbn: z.string().optional(),
   totalPages: z.string().min(1, { message: 'Pages number is required.' }),
   coverUrl: z
     .custom<File>((file) => file instanceof File && file.size > 0)
@@ -162,12 +164,14 @@ export function SubmitBookFormModal({
       if (books && books.length > 0) {
         const foundBook = books[0].volumeInfo
 
-        setValue('name', foundBook.title)
-        setValue('author', foundBook.authors[0])
-        setValue('summary', foundBook.description)
-        setValue('totalPages', foundBook.pageCount)
-        setValue('publisher', foundBook.publisher)
-        setValue('publishingYear', formatDate(foundBook.publishedDate))
+        setValue('name', foundBook?.title)
+        setValue('author', foundBook?.authors?.[0])
+        setValue('summary', foundBook?.description)
+        setValue('totalPages', foundBook.pageCount?.toString())
+        setValue('publisher', foundBook?.publisher)
+        setValue('publishingYear', formatDate(foundBook?.publishedDate))
+        setValue('isbn', foundBook?.industryIdentifiers[0]?.identifier)
+        setValue('language', foundBook?.language)
 
         setIsValidBook(true)
 
@@ -190,50 +194,7 @@ export function SubmitBookFormModal({
     }
   }
 
-  async function validateBookWithGoogleBooks(
-    title: string,
-    author: string,
-  ): Promise<boolean> {
-    try {
-      const response = await api.get(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
-          title,
-        )}+inauthor:${encodeURIComponent(author)}&langRestrict=en`,
-      )
-
-      const books = response.data.items.filter((book: GoogleBookProps) => {
-        return book.volumeInfo.language === 'en'
-      })
-
-      if (books && books.length > 0) {
-        const book = books[0].volumeInfo
-        return (
-          book.title.toLowerCase() === title.toLowerCase() &&
-          book.authors?.some(
-            (a: string) => a.toLowerCase() === author.toLowerCase(),
-          )
-        )
-      }
-      return false
-    } catch (error) {
-      console.error('Error validating book with Google Books API:', error)
-      return false
-    }
-  }
-
   async function handleSubmitBook(data: SubmitBookFormData) {
-    const isValidBook = await validateBookWithGoogleBooks(
-      data.name,
-      data.author,
-    )
-
-    if (!isValidBook) {
-      toast.error(
-        'The book information could not be verified. Please check the title and author.',
-      )
-      return
-    }
-
     setShowErrors(true)
 
     const formData = new FormData()
@@ -243,6 +204,8 @@ export function SubmitBookFormModal({
     formData.append('summary', data.summary)
     formData.append('totalPages', String(data.totalPages))
     formData.append('publisher', String(data.publisher || ''))
+    formData.append('language', String(data.language || ''))
+    formData.append('isbn', String(data.isbn || ''))
     formData.append('publishingYear', String(data.publishingYear))
 
     if (data.coverUrl) formData.append('coverUrl', data.coverUrl)
@@ -255,8 +218,9 @@ export function SubmitBookFormModal({
 
     try {
       setIsSubmitting(true)
-      console.log(data.coverUrl)
+
       const requestUrl = isEdit ? `/books/edit/${book?.id}` : '/books/create'
+
       const method = isEdit ? 'put' : 'post'
 
       const response = await api[method](requestUrl, formData, {
@@ -290,6 +254,9 @@ export function SubmitBookFormModal({
       setValue('author', book.author)
       setValue('summary', book.summary)
       setValue('name', book.name)
+      setValue('publisher', book.publisher || '')
+      setValue('language', book.language || '')
+      setValue('isbn', book.isbn || '')
 
       setIsValidBook(true)
 
@@ -443,6 +410,28 @@ export function SubmitBookFormModal({
               {errors.publisher && (
                 <FormErrors error={errors.publisher.message} />
               )}
+            </InputContainer>
+            <InputContainer>
+              <CustomLabel>Language</CustomLabel>
+              <Input
+                disabled={!isValidBook}
+                type="text"
+                placeholder="e.g. English"
+                {...register('language')}
+              />
+              {errors.language && (
+                <FormErrors error={errors.language.message} />
+              )}
+            </InputContainer>
+            <InputContainer>
+              <CustomLabel>ISBN</CustomLabel>
+              <Input
+                disabled={!isValidBook}
+                type="text"
+                placeholder="e.g. 978-316148410"
+                {...register('isbn')}
+              />
+              {errors.isbn && <FormErrors error={errors.isbn.message} />}
             </InputContainer>
 
             {options && options.length && (

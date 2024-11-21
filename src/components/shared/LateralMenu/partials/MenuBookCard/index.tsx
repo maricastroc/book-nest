@@ -139,6 +139,9 @@ export function MenuBookCard({
         categoryNames={categoryNames}
         totalPages={book.totalPages}
         publishingYear={book.publishingYear ?? '-'}
+        publisher={book.publisher || ''}
+        language={book.language || ''}
+        isbn={book.isbn || ''}
       />
     </BookCardWrapper>
   )

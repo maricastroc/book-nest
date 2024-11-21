@@ -89,6 +89,12 @@ export default async function handler(
       name: true,
       author: true,
       coverUrl: true,
+      publisher: true,
+      isbn: true,
+      language: true,
+      summary: true,
+      totalPages: true,
+      publishingYear: true,
       _count: {
         select: { ratings: true },
       },
@@ -97,20 +103,26 @@ export default async function handler(
           rate: true,
         },
       },
+      categories: {
+        include: {
+          category: true,
+        },
+      },
     },
   })
 
   const submittedBooksWithDetails = submittedBooks.map((book) => {
-    const ratingsCount = book._count.ratings
+    const ratingCount = book._count.ratings
     const avgRate =
-      ratingsCount > 0
+      ratingCount > 0
         ? book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
-          ratingsCount
+          ratingCount
         : 0
 
     return {
       ...book,
-      ratingsCount,
+      categories: book.categories.map((category) => category.category),
+      ratingCount,
       rate: avgRate,
     }
   })

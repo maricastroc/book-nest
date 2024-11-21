@@ -76,7 +76,7 @@ export function BookCard({
           <p>{book.author}</p>
         </BookTitleAndAuthor>
         <FooterWrapper>
-          <RatingWrapper>
+          <RatingWrapper className={isLibraryPage ? 'smaller' : ''}>
             <p>{getBookRatingsNumber(book)}</p>
             <StarsRating size={size} rating={book?.rate ?? 0} />
           </RatingWrapper>

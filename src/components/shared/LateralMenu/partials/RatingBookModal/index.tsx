@@ -58,7 +58,7 @@ export function RatingBookModal({
       closeLateralMenu()
     }
   }
-  console.log(bookStatus)
+
   return (
     <Dialog.Portal>
       <Overlay className="DialogOverlay" />

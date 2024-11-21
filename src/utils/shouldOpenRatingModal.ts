@@ -1,3 +1,4 @@
+import { DID_NOT_FINISH_STATUS, READ_STATUS } from './constants'
 import { formatToSnakeCase } from './formatToSnakeCase'
 
 export function shouldOpenRatingModal(
@@ -8,8 +9,11 @@ export function shouldOpenRatingModal(
   const formattedActiveStatus = formatToSnakeCase(activeStatus ?? '')
 
   return (
-    (formattedStatus === 'read' && formattedActiveStatus !== 'read') ||
-    (formattedStatus === 'did_not_finish' &&
-      formattedActiveStatus !== 'did_not_finish')
+    (formattedStatus === READ_STATUS &&
+      formattedActiveStatus !== READ_STATUS &&
+      formattedActiveStatus !== DID_NOT_FINISH_STATUS) ||
+    (formattedStatus === DID_NOT_FINISH_STATUS &&
+      formattedActiveStatus !== DID_NOT_FINISH_STATUS &&
+      formattedActiveStatus !== READ_STATUS)
   )
 }

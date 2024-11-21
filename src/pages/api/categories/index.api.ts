@@ -1,6 +1,3 @@
-// === Retorna as Categorias ===
-// /api/categories
-
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 

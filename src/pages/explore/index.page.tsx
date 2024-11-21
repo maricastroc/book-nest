@@ -56,7 +56,7 @@ export default function Explore() {
   function handleCloseLateralMenu() {
     setOpenLateralMenu(false)
   }
-  console.log(books)
+
   return (
     <>
       <NextSeo title="Explore | Book Wise" />

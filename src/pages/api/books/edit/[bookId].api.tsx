@@ -63,6 +63,8 @@ export default async function handler(
       const author = getSingleString(fields.author)
       const publisher = getSingleString(fields.publisher)
       const summary = getSingleString(fields.summary)
+      const language = getSingleString(fields.language)
+      const isbn = getSingleString(fields.isbn)
       const totalPages = parseInt(getSingleString(fields.totalPages), 10)
       const publishingYear = parseInt(
         getSingleString(fields.publishingYear),
@@ -93,6 +95,8 @@ export default async function handler(
       if (author) updateData.author = author
       if (summary) updateData.summary = summary
       if (publisher) updateData.publisher = publisher
+      if (language) updateData.publisher = language
+      if (isbn) updateData.publisher = isbn
       if (totalPages) updateData.totalPages = totalPages
       if (publishingYear) updateData.publishingYear = publishingYear.toString()
 

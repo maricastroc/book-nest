@@ -15,6 +15,9 @@ export interface BookProps {
   readingStatus?: string | null | undefined
   ratingCount?: number | null | undefined
   userRating?: number
+  publisher?: string | null | undefined
+  language?: string | null | undefined
+  isbn?: string | null | undefined
 
   userId?: string | null
   user?: UserProps | null | undefined

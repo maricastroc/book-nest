@@ -22,17 +22,27 @@ export const BookWrapper = styled('div', {
 })
 
 export const BookSection = styled('div', {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1.5fr',
+  display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   gap: '1.5rem',
   width: '100%',
+
+  '@media (min-width: 580px)': {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1.5fr',
+  },
 })
 
 export const Book = styled('div', {
   height: 'auto',
-  width: '100%',
+  width: '50%',
+  maxWidth: '10rem',
+
+  '@media (min-width: 580px)': {
+    width: '100%',
+  },
 })
 
 export const BookData = styled('div', {
@@ -49,6 +59,7 @@ export const TitleAndAuthor = styled('div', {
   flexDirection: 'column',
   gap: '1.5rem',
   width: '100%',
+  marginBottom: '1.5rem',
 })
 
 export const Main = styled('div', {

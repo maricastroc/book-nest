@@ -2,40 +2,27 @@ import { styled } from '@/styles'
 
 export const BookStatsWrapper = styled('footer', {
   display: 'flex',
-  flexDirection: 'column',
+  flexWrap: 'wrap',
   alignItems: 'flex-start',
-  gap: '1rem',
-
-  '@media (min-width: 480px)': {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr',
-    width: '100%',
-  },
+  gap: '0.7rem',
 })
 
 export const StatWrapper = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  gap: '1rem',
+  gap: '0.4rem',
+  backgroundColor: 'rgba(131, 129, 217, 0.1)',
+  padding: '0.4rem 0.7rem',
+  borderRadius: 4,
 
   svg: {
-    fontSize: '1.5rem',
-    color: '$green100',
+    fontSize: '1rem',
+    color: '$purple100',
   },
 
   '@media (min-width: 480px)': {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    gap: '0.5rem',
-
     svg: {
-      fontSize: '1.7rem',
-    },
-  },
-
-  '@media (min-width: 680px)': {
-    svg: {
-      fontSize: '1.9rem',
+      fontSize: '1.2rem',
     },
   },
 })
@@ -45,26 +32,16 @@ export const StatText = styled('div', {
   flexDirection: 'column',
   gap: '0.2rem',
   alignItems: 'flex-start',
+  fontWeight: 700,
 
   p: {
-    fontSize: '$sm',
-    color: '$gray300',
-  },
-
-  h2: {
-    fontSize: '0.95rem',
-    color: '$white',
+    fontSize: '0.8rem',
+    color: '$gray200',
   },
 
   '@media (min-width: 480px)': {
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-
-  '@media (min-width: 680px)': {
-    h2: {
-      fontSize: '1.1rem',
-      color: '$white',
+    p: {
+      fontSize: '0.85rem',
     },
   },
 })

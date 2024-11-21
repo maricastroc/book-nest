@@ -50,22 +50,17 @@ export default async function handler(
 
     try {
       const name = getSingleString(fields.name)
-
       const author = getSingleString(fields.author)
-
       const summary = getSingleString(fields.summary)
-
       const publisher = getSingleString(fields.publisher)
-
+      const language = getSingleString(fields.language)
+      const isbn = getSingleString(fields.isbn)
       const totalPages = parseInt(getSingleString(fields.totalPages), 10)
-
       const publishingYear = parseInt(
         getSingleString(fields.publishingYear),
         10,
       )
-
       const categories = JSON.parse(getSingleString(fields.categories) || '[]')
-
       const coverFile = files.coverUrl?.[0]
 
       if (!coverFile) {
@@ -95,6 +90,8 @@ export default async function handler(
         name,
         author,
         summary,
+        language,
+        isbn,
         totalPages,
         publisher,
         publishingYear,
@@ -117,6 +114,8 @@ export default async function handler(
           summary,
           publisher,
           totalPages,
+          language,
+          isbn,
           publishingYear: publishingYear.toString(),
           coverUrl: `/images/books/${coverFile.originalFilename}`,
           userId: session.user.id.toString(),

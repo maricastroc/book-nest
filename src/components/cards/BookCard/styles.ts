@@ -125,10 +125,15 @@ export const RatingWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
+  gap: '0.4rem',
 
   p: {
     color: '$gray400',
     fontSize: '0.8rem',
+  },
+
+  '&.smaller': {
+    gap: '0.05rem',
   },
 })
 

@@ -22,7 +22,7 @@ export function TextBox({
   const [isOverflowing, setIsOverflowing] = useState(false)
 
   const summaryRef = useRef<HTMLDivElement | null>(null)
-  console.log(description)
+
   const checkOverflow = () => {
     const el = summaryRef.current
     if (el) {

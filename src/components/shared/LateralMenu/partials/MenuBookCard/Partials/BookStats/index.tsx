@@ -1,14 +1,29 @@
-import { BookmarkSimple, BookOpen, CalendarBlank } from 'phosphor-react'
+import {
+  Barcode,
+  BookmarkSimple,
+  BookOpen,
+  CalendarBlank,
+  Clock,
+  GlobeHemisphereEast,
+  House,
+} from 'phosphor-react'
 import { BookStatsWrapper, StatText, StatWrapper } from './styles'
+import { calculateReadingTime } from '@/utils/calculateReadingTime'
 
 export const BookStats = ({
   categoryNames,
   totalPages,
   publishingYear,
+  publisher,
+  language,
+  isbn,
 }: {
   categoryNames: string[]
   totalPages: number
   publishingYear: string
+  publisher: string | undefined
+  language: string | undefined
+  isbn: string | undefined
 }) => {
   const stats = [
     {
@@ -16,8 +31,12 @@ export const BookStats = ({
       label: 'Category',
       value: categoryNames.join(', '),
     },
-    { icon: <BookOpen />, label: 'Pages', value: totalPages },
-    { icon: <CalendarBlank />, label: 'Published on', value: publishingYear },
+    { icon: <BookOpen />, value: `${totalPages} pages` },
+    { icon: <CalendarBlank />, value: `${publishingYear}` },
+    { icon: <Clock />, value: `${calculateReadingTime(totalPages)}` },
+    { icon: <GlobeHemisphereEast />, value: `${language}` },
+    { icon: <House />, value: `${publisher}` },
+    { icon: <Barcode />, value: `${isbn}` },
   ]
 
   return (
@@ -26,8 +45,7 @@ export const BookStats = ({
         <StatWrapper key={index}>
           {stat.icon}
           <StatText>
-            <p>{stat.label}</p>
-            <h2>{stat.value}</h2>
+            <p>{stat.value}</p>
           </StatText>
         </StatWrapper>
       ))}
