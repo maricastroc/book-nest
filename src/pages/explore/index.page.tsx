@@ -66,7 +66,6 @@ export default function Explore() {
         <ExplorePageWrapper>
           {openLateralMenu && selectedBook && (
             <LateralMenu
-              isOpen={openLateralMenu}
               bookId={selectedBook.id}
               onClose={async () => {
                 handleCloseLateralMenu()
