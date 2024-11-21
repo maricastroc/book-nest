@@ -22,6 +22,7 @@ import { UserInfo } from '../../[userId]/index.page'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { ActionButton, DividerLine } from '@/styles/shared'
 import { useRouter } from 'next/router'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
@@ -148,33 +149,31 @@ export function SubmittedBooksSection({
                   </Dialog.Root>
                 )}
               </>
+            ) : isLoggedUser ? (
+              <Dialog.Root open={isSubmitBookFormOpen}>
+                <Dialog.Trigger asChild>
+                  <EmptyBooksContainer
+                    onClick={
+                      isLoggedUser
+                        ? () => setIsSubmitBookFormOpen(true)
+                        : () => null
+                    }
+                  >
+                    <Plus />
+                  </EmptyBooksContainer>
+                </Dialog.Trigger>
+                {categories && (
+                  <SubmitBookFormModal
+                    onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
+                    onClose={async () => {
+                      setIsSubmitBookFormOpen(false)
+                      await onUpdate()
+                    }}
+                  />
+                )}
+              </Dialog.Root>
             ) : (
-              isLoggedUser && (
-                <Dialog.Root open={isSubmitBookFormOpen}>
-                  <Dialog.Trigger asChild>
-                    <EmptyBooksContainer
-                      onClick={
-                        isLoggedUser
-                          ? () => setIsSubmitBookFormOpen(true)
-                          : () => null
-                      }
-                    >
-                      <Plus />
-                    </EmptyBooksContainer>
-                  </Dialog.Trigger>
-                  {categories && (
-                    <SubmitBookFormModal
-                      onCloseWithoutUpdate={() =>
-                        setIsSubmitBookFormOpen(false)
-                      }
-                      onClose={async () => {
-                        setIsSubmitBookFormOpen(false)
-                        await onUpdate()
-                      }}
-                    />
-                  )}
-                </Dialog.Root>
-              )
+              <EmptyContainer content="submitted" />
             )}
           </SubmittedBooksWrapper>
         </>
