@@ -104,7 +104,7 @@ export default function Profile() {
     })
   }
 
-  const onUpdateBook = (updatedBook: BookProps) => {
+  const onUpdateBookByStatus = (updatedBook: BookProps) => {
     setBooksByStatus((prevStatus) => {
       if (!prevStatus) return prevStatus
 
@@ -167,9 +167,8 @@ export default function Profile() {
           {openLateralMenu && selectedBook && (
             <LateralMenu
               bookId={selectedBook.id}
-              onCloseWithoutUpdate={() => setOpenLateralMenu(false)}
               onUpdateBook={(book: BookProps) => {
-                onUpdateBook(book)
+                onUpdateBookByStatus(book)
                 onUpdateSubmittedBook(book)
               }}
               onClose={() => setOpenLateralMenu(false)}

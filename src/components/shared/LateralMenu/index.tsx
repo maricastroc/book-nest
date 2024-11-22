@@ -38,14 +38,12 @@ export interface ReadingStatusProps {
 interface LateralMenuProps {
   bookId: string
   onClose: () => void
-  onCloseWithoutUpdate?: () => void
   onUpdateBook: (book: BookProps) => void
 }
 
 export function LateralMenu({
   bookId,
   onClose,
-  onCloseWithoutUpdate,
   onUpdateBook,
 }: LateralMenuProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
@@ -236,8 +234,8 @@ export function LateralMenu({
 
   return (
     <LateralMenuWrapper>
-      <OverlayBackground onClick={onCloseWithoutUpdate ?? onClose} />
-      <CloseButton onClick={onCloseWithoutUpdate ?? onClose}>
+      <OverlayBackground onClick={onClose} />
+      <CloseButton onClick={onClose}>
         <X />
       </CloseButton>
       <MenuBody>
