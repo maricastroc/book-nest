@@ -29,6 +29,8 @@ import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import { TabletHeader } from '@/components/shared/TabletHeader'
 import { MobileFooter } from '@/components/shared/MobileFooter'
+import { api } from '@/lib/axios'
+import { handleApiError } from '@/utils/handleApiError'
 
 export default function Profile() {
   const isRouteLoading = useLoadingOnRouteChange()
@@ -45,17 +47,32 @@ export default function Profile() {
 
   const [userRatings, setUserRatings] = useState<RatingProps[]>([])
 
+  const [search, setSearch] = useState('')
+
   const [isLoading, setIsLoading] = useState(false)
 
-  const {
-    handleFetchUserStatistics,
-    handleSetUserId,
-    search,
-    handleSetSearch,
-  } = useAppContext()
+  const { handleSetUserId } = useAppContext()
 
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
+
+  const handleFetchUserStatistics = async (
+    userId: string | undefined,
+    search: string | undefined,
+  ) => {
+    try {
+      setIsLoading(true)
+
+      const response = await api.get(`/profile/${userId}`, {
+        params: { search },
+      })
+      return response.data.profile
+    } catch (error) {
+      handleApiError(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const onUpdateReview = async (updatedReview: RatingProps) => {
     setUserRatings((prevRatings) =>
@@ -135,13 +152,13 @@ export default function Profile() {
                     type="text"
                     placeholder="Search for author or title"
                     value={search}
-                    onChange={(e) => handleSetSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                     spellCheck={false}
                   />
                   {search === '' ? (
                     <MagnifyingGlass />
                   ) : (
-                    <X onClick={() => handleSetSearch('')} />
+                    <X onClick={() => setSearch('')} />
                   )}
                 </SearchBar>
                 {!userStatistics?.ratings?.length && !isLoading && (

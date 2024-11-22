@@ -22,11 +22,11 @@ import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { SkeletonCategories } from '@/pages/explore/partials/SkeletonCategories'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { useAppContext } from '@/contexts/AppContext'
 import { BookCard } from '@/components/cards/BookCard'
 import { TabletHeader } from '@/components/shared/TabletHeader'
 import { MobileFooter } from '@/components/shared/MobileFooter'
 import { SearchBar } from '@/styles/shared'
+import useRequest from '@/utils/useRequest'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -40,17 +40,25 @@ export default function Explore() {
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
+  const [search, setSearch] = useState('')
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>('')
+
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const {
-    books,
-    categories,
-    isValidatingExplorePage,
-    selectedCategory,
-    handleSetSelectedCategory,
-    search,
-    handleSetSearch,
-  } = useAppContext()
+  const { data: books, isValidating } = useRequest<BookProps[] | null>({
+    url: '/books',
+    method: 'GET',
+    params: {
+      category: selectedCategory,
+      ...(search?.length ? { search } : {}),
+    },
+  })
+
+  const { data: categories } = useRequest<CategoryProps[] | null>({
+    url: '/categories',
+    method: 'GET',
+  })
 
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
@@ -112,13 +120,13 @@ export default function Explore() {
                     type="text"
                     placeholder="Search for author or title"
                     value={search}
-                    onChange={(e) => handleSetSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                     spellCheck={false}
                   />
                   {search === '' ? (
                     <MagnifyingGlass />
                   ) : (
-                    <X onClick={() => handleSetSearch('')} />
+                    <X onClick={() => setSearch('')} />
                   )}
                 </SearchBar>
               </TitleAndSearch>
@@ -129,19 +137,18 @@ export default function Explore() {
                   <>
                     <SelectCategoryButton
                       selected={!selectedCategory}
-                      onClick={() => handleSetSelectedCategory(null)}
+                      onClick={() => setSelectedCategory(null)}
                     >
                       All
                     </SelectCategoryButton>
                     {categories?.map((category) => (
                       <SelectCategoryButton
                         selected={
-                          !isValidatingExplorePage &&
-                          selectedCategory === category.id
+                          !isValidating && selectedCategory === category.id
                         }
                         key={category.id}
-                        onClick={() => handleSetSelectedCategory(category.id)}
-                        className={isValidatingExplorePage ? 'loading' : ''}
+                        onClick={() => setSelectedCategory(category.id)}
+                        className={isValidating ? 'loading' : ''}
                       >
                         {category.name}
                       </SelectCategoryButton>
@@ -152,7 +159,7 @@ export default function Explore() {
             </ExplorePageHeading>
             <ExplorePageContent>
               <BooksContainer>
-                {isValidatingExplorePage || !updatedBooks?.length
+                {isValidating || !updatedBooks?.length
                   ? Array.from({ length: 9 }).map((_, index) => (
                       <SkeletonBookCard key={index} />
                     ))

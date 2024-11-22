@@ -9,6 +9,8 @@ import { useAppContext } from '@/contexts/AppContext'
 import { RatingProps } from '@/@types/rating'
 import { useEffect, useState } from 'react'
 import { api } from '@/lib/axios'
+import { toast } from 'react-toastify'
+import { handleApiError } from '@/utils/handleApiError'
 
 interface DropdownMenuProps {
   isOpen: boolean
@@ -33,9 +35,9 @@ export const DropdownMenu = ({
   onClose,
   dropdownRef,
 }: DropdownMenuProps) => {
-  const { handleSelectReadingStatus, isValidating } = useAppContext()
-
   const [userRating, setUserRating] = useState<RatingProps | null>(null)
+
+  const { loggedUser } = useAppContext()
 
   const statuses = [
     { label: 'Read', className: 'read' },
@@ -43,6 +45,22 @@ export const DropdownMenu = ({
     { label: 'Did not Finish', className: 'dnf' },
     { label: 'Want to Read', className: 'wantread' },
   ]
+
+  const handleSelectReadingStatus = async (book: BookProps, status: string) => {
+    if (loggedUser && book) {
+      try {
+        await api.post('/reading_status', {
+          userId: loggedUser.id,
+          bookId: book.id,
+          status,
+        })
+
+        toast.success('Status successfully updated!')
+      } catch (error) {
+        handleApiError(error)
+      }
+    }
+  }
 
   useEffect(() => {
     async function fetchUserRating(bookId: string): Promise<void> {
@@ -79,7 +97,6 @@ export const DropdownMenu = ({
                   : ''
                 : ''
             }
-            disabled={isValidating}
             onClick={async () => {
               if (
                 formatToSnakeCase(activeStatus ?? '') ===

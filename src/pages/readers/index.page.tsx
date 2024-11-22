@@ -16,12 +16,14 @@ import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { useAppContext } from '@/contexts/AppContext'
 import { TabletHeader } from '@/components/shared/TabletHeader'
 import { MobileFooter } from '@/components/shared/MobileFooter'
 import { UserCard } from './partials/UserCard'
 import { SearchBar } from '@/styles/shared'
 import { SkeletonUserCard } from './partials/SkeletonUserCard'
+import useRequest from '@/utils/useRequest'
+import { UserProps } from 'next-auth'
+import { useState } from 'react'
 
 export interface UsersProps {
   categories: CategoryProps[]
@@ -31,10 +33,20 @@ export interface UsersProps {
 export default function Users() {
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const { isValidatingUsers, search, handleSetSearch, users } = useAppContext()
+  const [search, setSearch] = useState('')
 
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
+
+  const { data: users, isValidating: isValidatingUsers } = useRequest<
+    UserProps[]
+  >({
+    url: '/user/search',
+    method: 'GET',
+    params: {
+      search,
+    },
+  })
 
   return (
     <>
@@ -62,13 +74,13 @@ export default function Users() {
                     type="text"
                     placeholder="Search for reader's name"
                     value={search}
-                    onChange={(e) => handleSetSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                     spellCheck={false}
                   />
                   {search === '' ? (
                     <MagnifyingGlass />
                   ) : (
-                    <X onClick={() => handleSetSearch('')} />
+                    <X onClick={() => setSearch('')} />
                   )}
                 </SearchBar>
               </TitleAndSearch>

@@ -211,6 +211,7 @@ export default function Profile() {
                   submittedBooks={submittedBooks}
                   userId={userId}
                   userInfo={userInfo}
+                  isValidating={isValidating}
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)
                     setOpenLateralMenu(true)

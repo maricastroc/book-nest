@@ -16,7 +16,7 @@ interface UserCardProps {
 
 export function UserCard({ user }: UserCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
-    getDateFormattedAndRelative(user.createdAt)
+    getDateFormattedAndRelative(user?.createdAt || '')
 
   return (
     <UserCardBox>

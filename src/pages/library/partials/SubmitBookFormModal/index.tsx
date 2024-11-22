@@ -36,6 +36,7 @@ import { useAppContext } from '@/contexts/AppContext'
 import { BookProps } from '@/@types/book'
 import { formatDate } from '@/utils/formatDate'
 import { disabledCustomStyles } from '@/utils/getDisabledCustomStyles'
+import useRequest from '@/utils/useRequest'
 
 interface SubmitBookFormModalProps {
   isEdit?: boolean
@@ -108,7 +109,12 @@ export function SubmitBookFormModal({
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const { loggedUser, categories } = useAppContext()
+  const { loggedUser } = useAppContext()
+
+  const { data: categories } = useRequest<CategoryProps[] | null>({
+    url: '/categories',
+    method: 'GET',
+  })
 
   const {
     register,
@@ -251,7 +257,7 @@ export function SubmitBookFormModal({
 
   useEffect(() => {
     if (loggedUser) {
-      setValue('userId', loggedUser.id)
+      setValue('userId', loggedUser?.id?.toString())
     }
   }, [loggedUser])
 

@@ -34,6 +34,7 @@ import { useAppContext } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
 import { MobileFooter } from '@/components/shared/MobileFooter'
 import { TabletHeader } from '@/components/shared/TabletHeader'
+import useRequest from '@/utils/useRequest'
 
 export interface EditReviewData {
   ratingId: string
@@ -61,10 +62,32 @@ export default function Home() {
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
+  const { loggedUser } = useAppContext()
+
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const onUpdateBook = (updatedBook: BookProps) => {
+  const { data: popularBooks } = useRequest<BookProps[]>({
+    url: '/books/popular',
+    method: 'GET',
+  })
+
+  const { data: latestRatings } = useRequest<RatingProps[]>({
+    url: '/ratings/latest',
+    method: 'GET',
+  })
+
+  const {
+    data: userLatestRatingData,
+    mutate: mutateUserLatestRating,
+    isValidating: isValidatingUserLatestReading,
+  } = useRequest<RatingProps | null>({
+    url: '/ratings/user_latest',
+    method: 'GET',
+    params: { userId: loggedUser?.id },
+  })
+
+  const onUpdateBook = async (updatedBook: BookProps) => {
     setUpdatedPopularBooks((prevBooks) => {
       if (!prevBooks) return prevBooks
 
@@ -74,16 +97,9 @@ export default function Home() {
 
       return updatedBooks
     })
-  }
 
-  const {
-    loggedUser,
-    userLatestRatingData,
-    isValidatingHomePage,
-    isValidatingUserLatestReading,
-    popularBooks,
-    latestRatings,
-  } = useAppContext()
+    await mutateUserLatestRating()
+  }
 
   useEffect(() => {
     if (popularBooks) {
@@ -125,7 +141,7 @@ export default function Home() {
                       Your Last Review
                     </UserLatestReadingTitle>
                     <UserLatestReadingContainer>
-                      {isValidatingHomePage || isValidatingUserLatestReading ? (
+                      {isValidatingUserLatestReading ? (
                         <SkeletonRatingCard withMarginBottom />
                       ) : userLatestRatingData && userLatestRatingData?.book ? (
                         <UserLatestReadingCard
@@ -148,7 +164,7 @@ export default function Home() {
                 <LastRatingsContainer>
                   <LastRatingsTitle>Last Ratings</LastRatingsTitle>
                   <LastRatingsContent>
-                    {!latestRatings?.length || isValidatingHomePage
+                    {!latestRatings?.length
                       ? Array.from({ length: 9 }).map((_, index) => (
                           <SkeletonRatingCard key={index} />
                         ))
@@ -177,7 +193,7 @@ export default function Home() {
                   </span>
                 </PopularBooksTitle>
                 <PopularBooksContent>
-                  {!updatedPopularBooks?.length || isValidatingHomePage
+                  {!updatedPopularBooks?.length
                     ? Array.from({ length: 12 }).map((_, index) => (
                         <SkeletonBookCard key={index} />
                       ))

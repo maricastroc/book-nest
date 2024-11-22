@@ -4,10 +4,10 @@ import { RatingProps } from './rating'
 import { SessionProps } from './session'
 
 export interface UserProps {
-  id: string
+  id: string | number
   name: string
   avatarUrl?: string | null | undefined
-  createdAt: Date
+  createdAt?: Date
   password?: string | null
   email?: string
 

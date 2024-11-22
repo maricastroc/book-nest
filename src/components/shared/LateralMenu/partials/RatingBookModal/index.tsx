@@ -18,7 +18,7 @@ import { useAppContext } from '@/contexts/AppContext'
 interface RatingBookModalProps {
   onClose: () => void
   bookId: string
-  userId: string
+  userId: string | number
   onCreateReview: (newRating: RatingProps) => void
   bookStatus: string
 }

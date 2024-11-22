@@ -1,12 +1,12 @@
 import { BookProps } from '@/@types/book'
 import { BookStatusListWrapper } from './styles'
-import { BooksStatusProps } from '@/@types/books-status'
+import { BooksByStatusProps } from '@/@types/books-status'
 import { BookStatusList } from '../BookStatusList'
 import { useAppContext } from '@/contexts/AppContext'
 import { UserInfo } from '../../[userId]/index.page'
 
 interface BookStatusListContainerProps {
-  data: BooksStatusProps | undefined | null
+  data: BooksByStatusProps | undefined | null
   userInfo: UserInfo | undefined
   onSelect: (book: BookProps) => void
 }

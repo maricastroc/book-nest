@@ -56,7 +56,7 @@ export function MenuBookCard({
 
   const [selectedStatus, setSelectedStatus] = useState('')
 
-  const { loggedUser, isValidating } = useAppContext()
+  const { loggedUser } = useAppContext()
 
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
@@ -92,7 +92,6 @@ export function MenuBookCard({
               <Dialog.Root open={isSignInModalOpen}>
                 <Dialog.Trigger asChild>
                   <AddToLibraryButton
-                    disabled={isValidating}
                     onClick={() => {
                       !loggedUser
                         ? setIsSignInModalOpen(true)

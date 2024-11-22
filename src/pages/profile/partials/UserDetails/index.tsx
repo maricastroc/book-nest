@@ -97,7 +97,7 @@ export function UserDetails({
   ]
 
   useEffect(() => {
-    if (userId && userStatistics) {
+    if (userId && userStatistics && userStatistics?.user?.createdAt) {
       const dateFormattedData = getDateFormattedAndRelative(
         userStatistics.user.createdAt,
       )

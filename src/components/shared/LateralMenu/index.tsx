@@ -67,7 +67,7 @@ export function LateralMenu({
     undefined,
   )
 
-  const { isValidating, loggedUser } = useAppContext()
+  const { loggedUser } = useAppContext()
 
   const shouldShowReviewOption = loggedUser && !userRating
 
@@ -300,9 +300,9 @@ export function LateralMenu({
                     book={book}
                   />
                 )}
-                {!isValidating && !bookRatings?.length ? (
+                {!isLoading && !bookRatings?.length ? (
                   <EmptyContainer content="reviews" />
-                ) : isValidating ? (
+                ) : isLoading ? (
                   Array.from({ length: 3 }).map((_, index) => (
                     <SkeletonRatingCard key={index} />
                   ))

@@ -29,17 +29,19 @@ interface SubmittedBooksSectionProps {
   userId: string | undefined
   userInfo: UserInfo | undefined
   submittedBooks: BookProps[] | undefined
+  isValidating: boolean
 }
 
 export function SubmittedBooksSection({
   onOpenDetails,
+  isValidating,
   userId,
   userInfo,
   submittedBooks,
 }: SubmittedBooksSectionProps) {
   const router = useRouter()
 
-  const { loggedUser, isValidating } = useAppContext()
+  const { loggedUser } = useAppContext()
 
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
 
@@ -70,9 +72,9 @@ export function SubmittedBooksSection({
 
   const onCreateBook = (createdBook: BookProps) => {
     setUpdatedSubmittedBooks((prevBooks) => {
-      if (!prevBooks) return [createdBook] // Caso seja a primeira vez que a lista é criada, criamos um novo array
+      if (!prevBooks) return [createdBook]
 
-      return [...prevBooks, createdBook] // Cria um novo array com os livros antigos e o novo livro
+      return [...prevBooks, createdBook]
     })
   }
 
