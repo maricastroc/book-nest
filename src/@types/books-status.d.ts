@@ -1,6 +1,6 @@
 import { BookProps } from './book'
 
-export interface BooksStatusProps {
+export interface BooksByStatusProps {
   read: BookProps[] | undefined
   reading: BookProps[] | undefined
   want_to_read: BookProps[] | undefined

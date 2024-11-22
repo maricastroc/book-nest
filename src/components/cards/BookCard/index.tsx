@@ -24,8 +24,8 @@ interface BookCardProps {
   book: BookProps
   onOpenDetails: () => void
   size?: string
-  onClose?: () => Promise<void>
-  onCloseWithoutUpdate?: () => void
+  onClose?: () => void
+  onUpdateBook?: (book: BookProps) => void
 }
 
 export function BookCard({
@@ -34,8 +34,7 @@ export function BookCard({
   libraryPageUserId,
   size = '',
   isLibraryPage = false,
-  onClose,
-  onCloseWithoutUpdate,
+  onUpdateBook,
 }: BookCardProps) {
   const { loggedUser } = useAppContext()
 
@@ -90,22 +89,14 @@ export function BookCard({
                 </ActionButton>
               )}
             </Dialog.Trigger>
-            <SubmitBookFormModal
-              isEdit
-              book={book}
-              onClose={async () => {
-                if (onClose) {
-                  await onClose()
-                }
-                setIsEditBookFormOpen(false)
-              }}
-              onCloseWithoutUpdate={() => {
-                if (onCloseWithoutUpdate) {
-                  onCloseWithoutUpdate()
-                }
-                setIsEditBookFormOpen(false)
-              }}
-            />
+            {isEditBookFormOpen && (
+              <SubmitBookFormModal
+                isEdit
+                book={book}
+                onUpdateBook={onUpdateBook}
+                onClose={() => setIsEditBookFormOpen(false)}
+              />
+            )}
           </Dialog.Root>
         </FooterWrapper>
       </BookContentWrapper>

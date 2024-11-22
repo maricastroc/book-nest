@@ -16,7 +16,6 @@ import useRequest from '@/utils/useRequest'
 import { BookProps } from '@/@types/book'
 import { toast } from 'react-toastify'
 import { CategoryProps } from '@/@types/category'
-import { BooksStatusProps } from '@/@types/books-status'
 import useDebounce from '@/utils/useDebounce' // Assumindo um hook de debounce
 import { useRouter } from 'next/router'
 
@@ -42,12 +41,6 @@ export interface CreateReviewData {
   rate: number
 }
 
-export interface BooksByStatusResponse {
-  userInfo: { avatarUrl: string; name: string; id: string }
-  booksByStatus: BooksStatusProps
-  submittedBooks: BookProps[]
-}
-
 interface AppContextType {
   loggedUser: UserProps | null
   handleSetUserId: (value: string) => void
@@ -63,9 +56,6 @@ interface AppContextType {
   handleDeleteReview: (id: string) => Promise<void>
   handleSetSearch: (value: string) => void
   handleSetSelectedCategory: (value: string | null) => void
-  handleFetchBooksByStatus: (
-    userId: string | undefined,
-  ) => Promise<BooksByStatusResponse | undefined>
   handleFetchUserStatistics: (
     userId: string | undefined,
     search: string | undefined,
@@ -73,7 +63,6 @@ interface AppContextType {
   userLatestRatingData: RatingProps | null | undefined
   isValidatingHomePage: boolean
   isValidatingExplorePage: boolean
-  isValidatingLibraryPage: boolean
   isValidatingUserStatistics: boolean
   isValidatingUserLatestReading: boolean
   isValidatingUsers: boolean
@@ -101,9 +90,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [isValidatingLoggedUser, setIsValidatingLoggedUser] = useState(false)
   useState<boolean>(false)
-
-  const [isValidatingBooksStatus, setIsValidatingBooksStatus] =
-    useState<boolean>(false)
 
   const [isValidatingUserStatistics, setIsValidatingUserStatistics] =
     useState<boolean>(false)
@@ -266,29 +252,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  const handleFetchBooksByStatus = useCallback(
-    async (userId: string | undefined) => {
-      try {
-        setIsValidatingBooksStatus(true)
-
-        const response = await api.get('/library', { params: { userId } })
-
-        const formattedResponse = {
-          booksByStatus: response.data.booksByStatus,
-          submittedBooks: response.data.submittedBooks,
-          userInfo: response.data.user,
-        }
-
-        return formattedResponse
-      } catch (error) {
-        handleApiError(error)
-      } finally {
-        setIsValidatingBooksStatus(false)
-      }
-    },
-    [],
-  )
-
   const handleFetchUserStatistics = async (
     userId: string | undefined,
     search: string | undefined,
@@ -317,8 +280,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     isValidatingLatestRatings ||
     isValidatingPopularBooks ||
     isValidatingUserLatestReading ||
-    isValidatingBooks ||
-    isValidatingBooksStatus
+    isValidatingBooks
 
   const isValidatingHomePage =
     isValidatingPopularBooks ||
@@ -326,8 +288,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     isValidatingUserLatestReading
 
   const isValidatingExplorePage = isValidatingBooks
-
-  const isValidatingLibraryPage = isValidatingBooksStatus
 
   const contextValue = useMemo(
     () => ({
@@ -343,7 +303,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       userLatestRatingData,
       isValidating,
       isValidatingHomePage,
-      isValidatingLibraryPage,
       isValidatingExplorePage,
       isValidatingUserStatistics,
       isValidatingLoggedUser,
@@ -354,7 +313,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       handleDeleteReview,
       handleSetSearch,
       handleSetSelectedCategory,
-      handleFetchBooksByStatus,
       handleSetUserId,
       handleFetchUserStatistics,
       isValidatingUserLatestReading,

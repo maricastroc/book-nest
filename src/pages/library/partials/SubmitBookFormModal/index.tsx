@@ -40,8 +40,9 @@ import { disabledCustomStyles } from '@/utils/getDisabledCustomStyles'
 interface SubmitBookFormModalProps {
   isEdit?: boolean
   book?: BookProps | null
-  onClose: () => Promise<void>
-  onCloseWithoutUpdate: () => void
+  onClose: () => void
+  onUpdateBook?: (book: BookProps) => void
+  onCreateBook?: (book: BookProps) => void
 }
 
 export interface GoogleBookProps extends BookProps {
@@ -88,7 +89,8 @@ type SubmitBookFormData = z.infer<typeof submitBookFormSchema>
 
 export function SubmitBookFormModal({
   onClose,
-  onCloseWithoutUpdate,
+  onUpdateBook,
+  onCreateBook,
   isEdit = false,
   book = null,
 }: SubmitBookFormModalProps) {
@@ -162,6 +164,8 @@ export function SubmitBookFormModal({
       })
 
       if (books && books.length > 0) {
+        setIsValidBook(true)
+
         const foundBook = books[0].volumeInfo
 
         setValue('name', foundBook?.title)
@@ -172,23 +176,15 @@ export function SubmitBookFormModal({
         setValue('publishingYear', formatDate(foundBook?.publishedDate))
         setValue('isbn', foundBook?.industryIdentifiers[0]?.identifier)
         setValue('language', foundBook?.language)
-
-        setIsValidBook(true)
-
-        return
       }
-
-      toast.error(
-        'The book information could not be verified. Please check the title and author.',
-      )
-
-      setIsValidBook(false)
     } catch (error) {
-      toast.error(
-        'The book information could not be verified. Please check the title and author.',
-      )
+      if (error) {
+        toast.error(
+          'The book information could not be verified. Please check the title and author.',
+        )
 
-      setIsValidBook(false)
+        setIsValidBook(false)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -229,7 +225,17 @@ export function SubmitBookFormModal({
 
       toast.success(response.data.message)
 
-      await onClose()
+      if (isEdit && onUpdateBook) {
+        onUpdateBook(response.data.book)
+
+        onClose()
+      }
+
+      if (!isEdit && onCreateBook) {
+        onCreateBook(response.data.book)
+
+        onClose()
+      }
     } catch (error) {
       handleApiError(error)
     } finally {
@@ -288,7 +294,7 @@ export function SubmitBookFormModal({
 
   return (
     <Dialog.Portal>
-      <Overlay className="DialogOverlay" onClick={onCloseWithoutUpdate} />
+      <Overlay className="DialogOverlay" onClick={onClose} />
       <Content className="DialogContent">
         <Header>
           <Title className="DialogTitle">
@@ -298,7 +304,7 @@ export function SubmitBookFormModal({
               fields above:
             </p>
           </Title>
-          <CloseButton onClick={onCloseWithoutUpdate}>
+          <CloseButton onClick={onClose}>
             <X alt="Close" />
           </CloseButton>
         </Header>

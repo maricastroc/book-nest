@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext } from '@/contexts/AppContext'
-import { BooksStatusProps } from '@/@types/books-status'
+import { BooksByStatusProps } from '@/@types/books-status'
 import { SkeletonBookStatusList } from '@/pages/library/partials/SkeletonBookStatusList'
 
 import { useEffect, useState } from 'react'
@@ -28,6 +28,8 @@ import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
 import { MobileFooter } from '@/components/shared/MobileFooter'
 import { TabletHeader } from '@/components/shared/TabletHeader'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
+import { api } from '@/lib/axios'
+import { handleApiError } from '@/utils/handleApiError'
 
 export interface UserInfo {
   avatarUrl: string
@@ -42,18 +44,19 @@ export default function Profile() {
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const [booksStatus, setBooksStatus] = useState<BooksStatusProps | undefined>()
+  const [booksByStatus, setBooksByStatus] = useState<
+    BooksByStatusProps | undefined
+  >()
 
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>()
+
+  const [isValidating, setIsValidating] = useState(false)
 
   const { loggedUser } = useAppContext()
 
   const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
 
   const userName = userInfo?.name?.split(' ')[0] || ''
-
-  const { isValidatingLibraryPage, handleFetchBooksByStatus, handleSetUserId } =
-    useAppContext()
 
   const [submittedBooks, setSubmittedBooks] = useState<
     BookProps[] | undefined
@@ -68,12 +71,25 @@ export default function Profile() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const loadBooksByStatus = async () => {
-    const books = await handleFetchBooksByStatus(userId)
+  const handleFetchBooksByStatus = async (userId: string | undefined) => {
+    try {
+      setIsValidating(true)
 
-    setBooksStatus(books?.booksByStatus)
-    setUserInfo(books?.userInfo)
-    setSubmittedBooks(books?.submittedBooks)
+      const response = await api.get('/library', { params: { userId } })
+
+      if (response?.data) {
+        setBooksByStatus(response.data.booksByStatus)
+        setSubmittedBooks(response.data.submittedBooks)
+
+        if (!loggedUser) {
+          setUserInfo(response.data.user)
+        }
+      }
+    } catch (error) {
+      handleApiError(error)
+    } finally {
+      setIsValidating(false)
+    }
   }
 
   const onUpdateSubmittedBook = (updatedBook: BookProps) => {
@@ -89,20 +105,20 @@ export default function Profile() {
   }
 
   const onUpdateBook = (updatedBook: BookProps) => {
-    setBooksStatus((prevStatus) => {
+    setBooksByStatus((prevStatus) => {
       if (!prevStatus) return prevStatus
 
       const oldStatus = Object.keys(prevStatus).find((status) =>
-        prevStatus[status as keyof BooksStatusProps]?.some(
+        prevStatus[status as keyof BooksByStatusProps]?.some(
           (book) => book.id === updatedBook.id,
         ),
-      ) as keyof BooksStatusProps
+      ) as keyof BooksByStatusProps
 
       if (!oldStatus) return prevStatus
 
       const newStatus = formatToSnakeCase(
         updatedBook?.readingStatus,
-      ) as keyof BooksStatusProps
+      ) as keyof BooksByStatusProps
       if (oldStatus === newStatus) {
         return {
           ...prevStatus,
@@ -124,10 +140,15 @@ export default function Profile() {
 
   useEffect(() => {
     if (userId) {
-      handleSetUserId(userId)
-      loadBooksByStatus()
+      handleFetchBooksByStatus(userId)
     }
   }, [userId])
+
+  useEffect(() => {
+    if (loggedUser) {
+      setUserInfo(loggedUser as UserInfo)
+    }
+  }, [loggedUser])
 
   return (
     <>
@@ -151,10 +172,7 @@ export default function Profile() {
                 onUpdateBook(book)
                 onUpdateSubmittedBook(book)
               }}
-              onClose={async () => {
-                setOpenLateralMenu(false)
-                await loadBooksByStatus()
-              }}
+              onClose={() => setOpenLateralMenu(false)}
             />
           )}
           <UserLibraryBody>
@@ -172,7 +190,7 @@ export default function Profile() {
             </UserLibraryHeading>
 
             <UserLibraryContent>
-              {isValidatingLibraryPage ? (
+              {isValidating ? (
                 <ListByBookStatusContainer>
                   {Array.from({ length: 3 }, (_, index) => (
                     <SkeletonBookStatusList key={index} />
@@ -180,7 +198,7 @@ export default function Profile() {
                 </ListByBookStatusContainer>
               ) : (
                 <BookStatusListContainer
-                  data={booksStatus}
+                  data={booksByStatus}
                   userInfo={userInfo}
                   onSelect={(book: BookProps) => {
                     setSelectedBook(book)
@@ -191,9 +209,6 @@ export default function Profile() {
               <SubmittedBooksContainer>
                 <SubmittedBooksSection
                   submittedBooks={submittedBooks}
-                  onUpdate={async () => {
-                    await loadBooksByStatus()
-                  }}
                   userId={userId}
                   userInfo={userInfo}
                   onOpenDetails={(book: BookProps) => {

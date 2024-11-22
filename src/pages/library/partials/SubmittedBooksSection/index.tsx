@@ -13,7 +13,7 @@ import {
 } from './styles'
 import { PencilSimple, Plus } from 'phosphor-react'
 import { EditProfileModal } from '@/components/modals/EditProfileModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitBookFormModal } from '../SubmitBookFormModal'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { BookCard } from '@/components/cards/BookCard'
@@ -26,7 +26,6 @@ import { EmptyContainer } from '@/components/shared/EmptyContainer'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
-  onUpdate: () => Promise<void>
   userId: string | undefined
   userInfo: UserInfo | undefined
   submittedBooks: BookProps[] | undefined
@@ -34,20 +33,54 @@ interface SubmittedBooksSectionProps {
 
 export function SubmittedBooksSection({
   onOpenDetails,
-  onUpdate,
   userId,
   userInfo,
   submittedBooks,
 }: SubmittedBooksSectionProps) {
   const router = useRouter()
 
-  const { loggedUser, isValidating, categories } = useAppContext()
+  const { loggedUser, isValidating } = useAppContext()
 
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
 
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
 
+  const [updatedSubmittedBooks, setUpdatedSubmittedBooks] = useState<
+    BookProps[] | null
+  >([])
+
   const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
+
+  const onUpdateBook = (updatedBook: BookProps) => {
+    setUpdatedSubmittedBooks((prevBooks) => {
+      if (!prevBooks) return prevBooks
+
+      return prevBooks.map((book) =>
+        book.id === updatedBook.id
+          ? {
+              ...book,
+              coverUrl: updatedBook.coverUrl,
+              name: updatedBook.name,
+              author: updatedBook.author,
+            }
+          : book,
+      )
+    })
+  }
+
+  const onCreateBook = (createdBook: BookProps) => {
+    setUpdatedSubmittedBooks((prevBooks) => {
+      if (!prevBooks) return [createdBook] // Caso seja a primeira vez que a lista é criada, criamos um novo array
+
+      return [...prevBooks, createdBook] // Cria um novo array com os livros antigos e o novo livro
+    })
+  }
+
+  useEffect(() => {
+    if (submittedBooks) {
+      setUpdatedSubmittedBooks(submittedBooks)
+    }
+  }, [submittedBooks])
 
   return (
     <SubmittedBooksSectionWrapper>
@@ -106,23 +139,20 @@ export function SubmittedBooksSection({
               Array.from({ length: 4 }).map((_, index) => (
                 <SkeletonBookCard key={index} />
               ))
-            ) : submittedBooks && submittedBooks.length ? (
+            ) : updatedSubmittedBooks && updatedSubmittedBooks.length ? (
               <>
-                {submittedBooks.map((book) => (
+                {updatedSubmittedBooks.map((book) => (
                   <BookCard
                     isLibraryPage
                     libraryPageUserId={userId}
                     size="smaller"
                     key={book.id}
                     book={book}
+                    onUpdateBook={onUpdateBook}
                     onOpenDetails={() => {
                       onOpenDetails(book)
                     }}
-                    onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
-                    onClose={async () => {
-                      setIsSubmitBookFormOpen(false)
-                      await onUpdate()
-                    }}
+                    onClose={() => setIsSubmitBookFormOpen(false)}
                   />
                 ))}
                 {isLoggedUser && (
@@ -135,17 +165,11 @@ export function SubmittedBooksSection({
                         <Plus />
                       </EmptyBooksContainer>
                     </Dialog.Trigger>
-                    {categories && (
-                      <SubmitBookFormModal
-                        onCloseWithoutUpdate={() =>
-                          setIsSubmitBookFormOpen(false)
-                        }
-                        onClose={async () => {
-                          setIsSubmitBookFormOpen(false)
-                          await onUpdate()
-                        }}
-                      />
-                    )}
+                    <SubmitBookFormModal
+                      onUpdateBook={onUpdateBook}
+                      onCreateBook={onCreateBook}
+                      onClose={() => setIsSubmitBookFormOpen(false)}
+                    />
                   </Dialog.Root>
                 )}
               </>
@@ -162,15 +186,10 @@ export function SubmittedBooksSection({
                     <Plus />
                   </EmptyBooksContainer>
                 </Dialog.Trigger>
-                {categories && (
-                  <SubmitBookFormModal
-                    onCloseWithoutUpdate={() => setIsSubmitBookFormOpen(false)}
-                    onClose={async () => {
-                      setIsSubmitBookFormOpen(false)
-                      await onUpdate()
-                    }}
-                  />
-                )}
+                <SubmitBookFormModal
+                  onUpdateBook={onUpdateBook}
+                  onClose={() => setIsSubmitBookFormOpen(false)}
+                />
               </Dialog.Root>
             ) : (
               <EmptyContainer content="submitted" />
