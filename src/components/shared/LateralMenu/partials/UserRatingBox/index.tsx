@@ -21,17 +21,22 @@ import { Avatar } from '@/components/shared/Avatar'
 import { UserActions } from '@/styles/shared'
 import { TextBox } from '@/components/shared/TextBox'
 import { useAppContext } from '@/contexts/AppContext'
+import { BookProps } from '@/@types/book'
 
 interface UserRatingBoxProps {
   rating: RatingProps
-  onCloseUserRatingBox: () => void
-  closeLateralMenu: () => void
+  book: BookProps
+  onUpdateReview: (updatedReview: RatingProps) => Promise<void>
+  onCreateReview: (newRating: RatingProps) => void
+  onDeleteReview: (ratingId: string) => void
 }
 
 export function UserRatingBox({
   rating,
-  onCloseUserRatingBox,
-  closeLateralMenu,
+  book,
+  onUpdateReview,
+  onCreateReview,
+  onDeleteReview,
 }: UserRatingBoxProps) {
   const router = useRouter()
 
@@ -48,9 +53,10 @@ export function UserRatingBox({
     <RatingCardForm
       isEdit
       rating={rating}
-      bookId={rating.bookId}
-      onClose={onCloseUserRatingBox}
-      closeLateralMenu={closeLateralMenu}
+      book={book}
+      onClose={() => setOpenEditReviewBox(false)}
+      onUpdateReview={onUpdateReview}
+      onCreateReview={onCreateReview}
     />
   ) : (
     <UserRatingBoxWrapper>
@@ -76,9 +82,10 @@ export function UserRatingBox({
         </UserRatingBoxHeader>
         {openEditReviewBox ? (
           <RatingCardForm
-            bookId={rating.bookId}
-            onClose={onCloseUserRatingBox}
-            closeLateralMenu={closeLateralMenu}
+            book={book}
+            onClose={() => setOpenEditReviewBox(false)}
+            onUpdateReview={onUpdateReview}
+            onCreateReview={onCreateReview}
           />
         ) : (
           <TextBox description={rating.description ?? ''} />
@@ -94,7 +101,7 @@ export function UserRatingBox({
               <DeleteModal
                 onConfirm={() => {
                   handleDeleteReview(rating.id)
-                  onCloseUserRatingBox()
+                  onDeleteReview(rating.id)
                 }}
               />
             </Dialog.Root>

@@ -15,6 +15,7 @@ import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import { Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useRouter } from 'next/router'
+import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 
 interface BookStatusListProps {
   status: string
@@ -75,7 +76,8 @@ export function BookStatusList({
                 <BookDetailsWrapper>
                   <p>{book.name}</p>
                   <h2>{book.author}</h2>
-                  {status === 'read' && (
+                  {(status === READ_STATUS ||
+                    status === DID_NOT_FINISH_STATUS) && (
                     <StarsRating
                       size={'smaller'}
                       rating={book?.userRating ?? 0}

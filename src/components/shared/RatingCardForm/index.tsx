@@ -24,14 +24,16 @@ import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
+import { BookProps } from '@/@types/book'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean
   isEdit?: boolean
   rating?: RatingProps | null
-  bookId: string
+  book: BookProps
   onClose: () => void
-  closeLateralMenu?: () => void
+  onUpdateReview: (updatedReview: RatingProps) => Promise<void>
+  onCreateReview: (newRating: RatingProps) => void
 }
 
 const ratingCardFormSchema = z.object({
@@ -45,12 +47,13 @@ const ratingCardFormSchema = z.object({
 type RatingCardFormData = z.infer<typeof ratingCardFormSchema>
 
 export function RatingCardForm({
-  bookId,
+  book,
   onClose,
-  closeLateralMenu,
   isProfileScreen = false,
   isEdit = false,
   rating = null,
+  onUpdateReview,
+  onCreateReview,
   ...rest
 }: RatingCardFormProps) {
   const {
@@ -85,12 +88,12 @@ export function RatingCardForm({
         rate: data.rate,
         description: data?.description || '',
         userId: session.data.user.id.toString(),
-        bookId: bookId.toString(),
+        bookId: book.id.toString(),
+        status: book.readingStatus,
       }
 
-      await handleCreateReview(payload)
-      closeLateralMenu && closeLateralMenu()
-
+      const createdRating = await handleCreateReview(payload)
+      onCreateReview(createdRating)
       onClose()
     }
   }
@@ -105,9 +108,8 @@ export function RatingCardForm({
         ratingId: rating.id,
       }
 
-      await handleEditReview(payload)
-      closeLateralMenu && closeLateralMenu()
-
+      const updatedRating = await handleEditReview(payload)
+      await onUpdateReview(updatedRating)
       onClose()
     }
   }

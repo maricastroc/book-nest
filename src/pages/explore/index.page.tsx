@@ -10,7 +10,7 @@ import {
   HeadingTitle,
   TitleAndSearch,
 } from './styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
@@ -36,6 +36,8 @@ export interface ExploreProps {
 export default function Explore() {
   const isRouteLoading = useLoadingOnRouteChange()
 
+  const [updatedBooks, setUpdatedBooks] = useState<BookProps[] | []>([])
+
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
@@ -57,6 +59,24 @@ export default function Explore() {
     setOpenLateralMenu(false)
   }
 
+  const onUpdateBook = (updatedBook: BookProps) => {
+    setUpdatedBooks((prevBooks) => {
+      if (!prevBooks) return prevBooks
+
+      const updatedBooks = prevBooks.map((book) =>
+        book.id === updatedBook.id ? updatedBook : book,
+      )
+
+      return updatedBooks
+    })
+  }
+
+  useEffect(() => {
+    if (books) {
+      setUpdatedBooks(books)
+    }
+  }, [books])
+
   return (
     <>
       <NextSeo title="Explore | Book Wise" />
@@ -67,6 +87,7 @@ export default function Explore() {
           {openLateralMenu && selectedBook && (
             <LateralMenu
               bookId={selectedBook.id}
+              onUpdateBook={onUpdateBook}
               onClose={async () => {
                 handleCloseLateralMenu()
               }}
@@ -131,11 +152,11 @@ export default function Explore() {
             </ExplorePageHeading>
             <ExplorePageContent>
               <BooksContainer>
-                {isValidatingExplorePage || !books?.length
+                {isValidatingExplorePage || !updatedBooks?.length
                   ? Array.from({ length: 9 }).map((_, index) => (
                       <SkeletonBookCard key={index} />
                     ))
-                  : books?.map((book) => (
+                  : updatedBooks?.map((book) => (
                       <BookCard
                         key={book.id}
                         book={book}

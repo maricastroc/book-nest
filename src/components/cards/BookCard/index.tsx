@@ -11,13 +11,12 @@ import {
 } from './styles'
 import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 import * as Dialog from '@radix-ui/react-dialog'
-import { ReadNotice } from '@/styles/shared'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import { useAppContext } from '@/contexts/AppContext'
 import { PencilSimple } from 'phosphor-react'
 import { useState } from 'react'
 import { SubmitBookFormModal } from '@/pages/library/partials/SubmitBookFormModal'
+import { ReadNotice } from '@/components/shared/ReadNotice'
+import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 
 interface BookCardProps {
   isLibraryPage?: boolean
@@ -62,14 +61,14 @@ export function BookCard({
         {isLibraryPage
           ? libraryPageUserId === loggedUser?.id &&
             book?.readingStatus && (
-              <ReadNotice className={book.readingStatus}>
-                <FontAwesomeIcon icon={faBookmark} />
-              </ReadNotice>
+              <ReadNotice
+                readingStatus={formatToSnakeCase(book.readingStatus)}
+              />
             )
           : book?.readingStatus && (
-              <ReadNotice className={book.readingStatus}>
-                <FontAwesomeIcon icon={faBookmark} />
-              </ReadNotice>
+              <ReadNotice
+                readingStatus={formatToSnakeCase(book.readingStatus)}
+              />
             )}
         <BookTitleAndAuthor className={size}>
           <h2>{book.name}</h2>

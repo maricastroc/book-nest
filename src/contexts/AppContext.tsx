@@ -58,8 +58,8 @@ interface AppContextType {
   latestRatings: RatingProps[] | undefined
   categories: CategoryProps[] | null | undefined
   handleSelectReadingStatus: (book: BookProps, status: string) => Promise<void>
-  handleEditReview: (data: EditReviewData) => Promise<void>
-  handleCreateReview: (data: CreateReviewData) => Promise<void>
+  handleEditReview: (data: EditReviewData) => Promise<RatingProps>
+  handleCreateReview: (data: CreateReviewData) => Promise<RatingProps>
   handleDeleteReview: (id: string) => Promise<void>
   handleSetSearch: (value: string) => void
   handleSetSelectedCategory: (value: string | null) => void
@@ -75,6 +75,7 @@ interface AppContextType {
   isValidatingExplorePage: boolean
   isValidatingLibraryPage: boolean
   isValidatingUserStatistics: boolean
+  isValidatingUserLatestReading: boolean
   isValidatingUsers: boolean
   isValidatingLoggedUser: boolean
   isValidating: boolean
@@ -153,29 +154,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     },
   })
 
-  const {
-    data: popularBooks,
-    isValidating: isValidatingPopularBooks,
-    mutate: mutatePopularBooks,
-  } = useRequest<BookProps[]>({
-    url: '/books/popular',
-    method: 'GET',
-  })
+  const { data: popularBooks, isValidating: isValidatingPopularBooks } =
+    useRequest<BookProps[]>({
+      url: '/books/popular',
+      method: 'GET',
+    })
 
-  const {
-    data: latestRatings,
-    isValidating: isValidatingLatestRatings,
-    mutate: mutateLatestRatings,
-  } = useRequest<RatingProps[]>({
-    url: '/ratings/latest',
-    method: 'GET',
-  })
+  const { data: latestRatings, isValidating: isValidatingLatestRatings } =
+    useRequest<RatingProps[]>({
+      url: '/ratings/latest',
+      method: 'GET',
+    })
 
-  const {
-    data: books,
-    mutate: mutateBooks,
-    isValidating: isValidatingBooks,
-  } = useRequest<BookProps[] | null>({
+  const { data: books, isValidating: isValidatingBooks } = useRequest<
+    BookProps[] | null
+  >({
     url: '/books',
     method: 'GET',
     params: {
@@ -201,26 +194,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleDeleteReview = async (id: string) => {
     try {
-      await api.delete('/ratings', { data: { id } })
+      const response = await api.delete('/ratings', { data: { id } })
 
-      toast.success('Rating successfully deleted!')
+      toast.success(response?.data?.message)
 
       const updates = []
 
       if (router.pathname === '/home') {
-        updates.push(
-          mutateUserLatestRating(),
-          mutateLatestRatings(),
-          mutatePopularBooks(),
-        )
-      }
-
-      if (router.pathname === '/explore') {
-        updates.push(mutateBooks())
-      }
-
-      if (router.pathname.includes('library')) {
-        updates.push(userId && handleFetchBooksByStatus(userId))
+        updates.push(mutateUserLatestRating())
       }
 
       await Promise.all(updates)
@@ -231,31 +212,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleEditReview = async (data: EditReviewData) => {
     try {
-      await api.put('/ratings', {
+      const response = await api.put('/ratings', {
         id: data.ratingId,
         description: data.description,
         rate: data.rate,
       })
 
-      toast.success('Rating successfully edited!')
+      toast.success(response?.data?.message)
 
       const updates = []
 
       if (router.pathname === '/home') {
-        updates.push(
-          mutateUserLatestRating(),
-          mutateLatestRatings(),
-          mutatePopularBooks(),
-        )
+        updates.push(mutateUserLatestRating())
       }
 
-      if (router.pathname === '/explore') {
-        updates.push(mutateBooks())
-      }
-
-      if (router.pathname.includes('library')) {
-        updates.push(userId && handleFetchBooksByStatus(userId))
-      }
+      return response.data.rating
     } catch (error) {
       handleApiError(error)
     }
@@ -263,27 +234,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleCreateReview = async (data: CreateReviewData) => {
     try {
-      await api.post(`/ratings`, { data: { ...data } })
+      const response = await api.post(`/ratings`, { data: { ...data } })
 
-      toast.success('Rating successfully submitted!')
+      toast.success(response?.data?.message)
 
       const updates = []
 
       if (router.pathname === '/home') {
-        updates.push(
-          mutateUserLatestRating(),
-          mutateLatestRatings(),
-          mutatePopularBooks(),
-        )
+        updates.push(mutateUserLatestRating())
       }
 
-      if (router.pathname === '/explore') {
-        updates.push(mutateBooks())
-      }
-
-      if (router.pathname.includes('library')) {
-        updates.push(userId && handleFetchBooksByStatus(userId))
-      }
+      return response.data.rating
     } catch (error) {
       handleApiError(error)
     }
@@ -299,26 +260,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         })
 
         toast.success('Status successfully updated!')
-
-        const updates = []
-
-        if (router.pathname === '/home') {
-          updates.push(
-            mutateUserLatestRating(),
-            mutateLatestRatings(),
-            mutatePopularBooks(),
-          )
-        }
-
-        if (router.pathname === '/explore') {
-          updates.push(mutateBooks())
-        }
-
-        if (router.pathname.includes('library')) {
-          updates.push(userId && handleFetchBooksByStatus(userId))
-        }
-
-        await Promise.all(updates)
       } catch (error) {
         handleApiError(error)
       }
@@ -416,6 +357,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       handleFetchBooksByStatus,
       handleSetUserId,
       handleFetchUserStatistics,
+      isValidatingUserLatestReading,
       userId,
     }),
     [

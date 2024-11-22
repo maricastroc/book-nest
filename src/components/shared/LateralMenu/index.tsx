@@ -35,17 +35,19 @@ export interface ReadingStatusProps {
   status: string
 }
 
-interface BookReviewsSidebarProps {
+interface LateralMenuProps {
   bookId: string
   onClose: () => void
   onCloseWithoutUpdate?: () => void
+  onUpdateBook: (book: BookProps) => void
 }
 
 export function LateralMenu({
   bookId,
   onClose,
   onCloseWithoutUpdate,
-}: BookReviewsSidebarProps) {
+  onUpdateBook,
+}: LateralMenuProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
   const [book, setBook] = useState<BookProps | null>(null)
@@ -95,10 +97,135 @@ export function LateralMenu({
     }
   }
 
-  const loadBookRatings = async () => {
-    if (book) {
-      setBookRatings(book.ratings)
-    }
+  const onUpdateReview = async (updatedReview: RatingProps) => {
+    setBookRatings((prevRatings) => {
+      const updatedRatings = prevRatings?.map((rating) =>
+        rating.id === updatedReview.id ? updatedReview : rating,
+      )
+      return updatedRatings
+    })
+
+    setBook((prevBook) => {
+      if (!prevBook) return prevBook
+
+      const updatedRatings = bookRatings?.map((rating) =>
+        rating.id === updatedReview.id ? updatedReview : rating,
+      )
+
+      const ratingCount = updatedRatings?.length ?? 0
+
+      let averageRating
+
+      if (updatedRatings) {
+        averageRating =
+          updatedRatings?.reduce((acc, rating) => acc + rating.rate, 0) /
+          ratingCount
+      }
+
+      const updatedBook = {
+        ...prevBook,
+        rate: averageRating,
+        userRating: updatedReview.rate,
+        ratingCount: updatedRatings?.length,
+        ratings: updatedRatings,
+      }
+
+      onUpdateBook(updatedBook)
+
+      return updatedBook
+    })
+  }
+
+  const onCreateReview = (newRating: RatingProps) => {
+    const updatedRatings = setBookRatings((prevRatings) => [
+      ...(prevRatings || []),
+      newRating,
+    ])
+
+    setBook((prevBook) => {
+      if (!prevBook) return prevBook
+
+      const updatedRatings = [...(bookRatings || []), newRating]
+
+      const ratingCount = updatedRatings.length
+
+      const averageRating =
+        updatedRatings.reduce((acc, rating) => acc + rating.rate, 0) /
+        ratingCount
+
+      const updatedBook = {
+        ...prevBook,
+        userRating: newRating.rate,
+        ratings: updatedRatings,
+        ratingCount,
+        rate: averageRating,
+      }
+
+      onUpdateBook(updatedBook)
+
+      return updatedBook
+    })
+
+    return updatedRatings
+  }
+
+  const onDeleteReview = (ratingId: string) => {
+    const updatedRatings = setBookRatings((prevRatings) =>
+      prevRatings?.filter((rating) => rating.id !== ratingId),
+    )
+
+    setBook((prevBook) => {
+      if (!prevBook) return prevBook
+
+      const updatedRatings = bookRatings?.filter(
+        (rating) => rating.id !== ratingId,
+      )
+
+      const ratingCount = updatedRatings?.length ?? 0
+
+      let averageRating
+
+      if (updatedRatings) {
+        averageRating =
+          updatedRatings?.reduce((acc, rating) => acc + rating.rate, 0) /
+          ratingCount
+      }
+
+      const updatedBook = {
+        ...prevBook,
+        userRating: undefined,
+        ratings: updatedRatings,
+        ratingCount,
+        averageRating,
+      }
+
+      onUpdateBook(updatedBook)
+
+      return updatedBook
+    })
+
+    return updatedRatings
+  }
+
+  const onUpdateStatus = (
+    book: BookProps,
+    newStatus: string,
+    userRating: number,
+  ) => {
+    setBook((prevBook) => {
+      if (!prevBook) return prevBook
+
+      const updatedBook = {
+        ...prevBook,
+        userRating,
+        ratingCount: book?.ratings?.length,
+        readingStatus: newStatus,
+      }
+
+      onUpdateBook(updatedBook)
+
+      return updatedBook
+    })
   }
 
   useEffect(() => {
@@ -123,8 +250,8 @@ export function LateralMenu({
                 key={book.id}
                 book={book}
                 categories={book.categories as CategoryProps[]}
-                loadRatings={() => loadBookRatings()}
-                closeLateralMenu={onClose}
+                onUpdateStatus={onUpdateStatus}
+                onCreateReview={onCreateReview}
               />
             )}
             <RatingsWrapper>
@@ -163,13 +290,14 @@ export function LateralMenu({
                 )}
               </RatingsListHeader>
               <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
-                {bookId && isReviewFormOpen && (
+                {book && isReviewFormOpen && (
                   <RatingCardForm
                     isEdit={!!userRating}
                     rating={userRating}
                     onClose={() => setIsReviewFormOpen(false)}
-                    closeLateralMenu={onClose}
-                    bookId={bookId}
+                    onUpdateReview={onUpdateReview}
+                    onCreateReview={onCreateReview}
+                    book={book}
                   />
                 )}
                 {!isValidating && !bookRatings?.length ? (
@@ -179,12 +307,15 @@ export function LateralMenu({
                     <SkeletonRatingCard key={index} />
                   ))
                 ) : (
+                  book &&
                   bookRatings?.map((rating) => (
                     <UserRatingBox
                       key={rating.id}
+                      book={book}
                       rating={rating}
-                      onCloseUserRatingBox={onClose}
-                      closeLateralMenu={onClose}
+                      onUpdateReview={onUpdateReview}
+                      onCreateReview={onCreateReview}
+                      onDeleteReview={onDeleteReview}
                     />
                   ))
                 )}

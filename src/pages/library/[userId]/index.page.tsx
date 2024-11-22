@@ -27,6 +27,7 @@ import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
 import { MobileFooter } from '@/components/shared/MobileFooter'
 import { TabletHeader } from '@/components/shared/TabletHeader'
+import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 
 export interface UserInfo {
   avatarUrl: string
@@ -75,6 +76,52 @@ export default function Profile() {
     setSubmittedBooks(books?.submittedBooks)
   }
 
+  const onUpdateSubmittedBook = (updatedBook: BookProps) => {
+    setSubmittedBooks((prevBooks) => {
+      if (!prevBooks) return prevBooks
+
+      const updatedBooks = prevBooks.map((book) =>
+        book.id === updatedBook.id ? updatedBook : book,
+      )
+
+      return updatedBooks
+    })
+  }
+
+  const onUpdateBook = (updatedBook: BookProps) => {
+    setBooksStatus((prevStatus) => {
+      if (!prevStatus) return prevStatus
+
+      const oldStatus = Object.keys(prevStatus).find((status) =>
+        prevStatus[status as keyof BooksStatusProps]?.some(
+          (book) => book.id === updatedBook.id,
+        ),
+      ) as keyof BooksStatusProps
+
+      if (!oldStatus) return prevStatus
+
+      const newStatus = formatToSnakeCase(
+        updatedBook?.readingStatus,
+      ) as keyof BooksStatusProps
+      if (oldStatus === newStatus) {
+        return {
+          ...prevStatus,
+          [oldStatus]: prevStatus[oldStatus]?.map((book) =>
+            book.id === updatedBook.id ? updatedBook : book,
+          ),
+        }
+      }
+
+      return {
+        ...prevStatus,
+        [oldStatus]: prevStatus[oldStatus]?.filter(
+          (book) => book.id !== updatedBook.id,
+        ),
+        [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
+      }
+    })
+  }
+
   useEffect(() => {
     if (userId) {
       handleSetUserId(userId)
@@ -100,6 +147,10 @@ export default function Profile() {
             <LateralMenu
               bookId={selectedBook.id}
               onCloseWithoutUpdate={() => setOpenLateralMenu(false)}
+              onUpdateBook={(book: BookProps) => {
+                onUpdateBook(book)
+                onUpdateSubmittedBook(book)
+              }}
               onClose={async () => {
                 setOpenLateralMenu(false)
                 await loadBooksByStatus()

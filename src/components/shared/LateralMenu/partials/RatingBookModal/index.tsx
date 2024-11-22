@@ -10,22 +10,21 @@ import { Star, X } from 'phosphor-react'
 import { useState } from 'react'
 import { Rating } from 'react-simple-star-rating'
 import { getRatingMessage } from '@/utils/getRatingMessage'
-import { CreateReviewData } from '@/pages/home/index.page'
 import { CustomButton } from '@/components/shared/Button'
 import { Overlay } from '@/styles/shared'
+import { RatingProps } from '@/@types/rating'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface RatingBookModalProps {
   onClose: () => void
   bookId: string
   userId: string
-  handleCreateReview: (data: CreateReviewData) => Promise<void>
+  onCreateReview: (newRating: RatingProps) => void
   bookStatus: string
-  closeLateralMenu: () => void
 }
 
 export function RatingBookModal({
-  closeLateralMenu,
-  handleCreateReview,
+  onCreateReview,
   bookId,
   userId,
   bookStatus,
@@ -35,12 +34,14 @@ export function RatingBookModal({
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const { handleCreateReview } = useAppContext()
+
   const handleRating = (rate: number) => {
     setRate(rate)
   }
 
   async function submitReview() {
-    if (handleCreateReview && rate) {
+    if (rate) {
       setIsLoading(true)
 
       const payload = {
@@ -51,11 +52,11 @@ export function RatingBookModal({
         description: '',
       }
 
-      await handleCreateReview(payload)
+      const createdRating = await handleCreateReview(payload)
+      onCreateReview(createdRating)
+      onClose()
 
       setIsLoading(false)
-
-      closeLateralMenu()
     }
   }
 

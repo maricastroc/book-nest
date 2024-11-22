@@ -93,9 +93,14 @@ export default async function handler(
           description,
           rate,
         },
+        include: {
+          user: true,
+        },
       })
 
-      return res.status(200).json(updatedPost)
+      return res
+        .status(200)
+        .json({ rating: updatedPost, message: 'Rating successfully updated!.' })
     } catch (error) {
       return res.status(500).json({ message: 'Error updating rating', error })
     }
@@ -116,6 +121,9 @@ export default async function handler(
         userId,
         description,
         rate,
+      },
+      include: {
+        user: true,
       },
     })
 

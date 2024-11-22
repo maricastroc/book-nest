@@ -14,7 +14,7 @@ import {
 } from './styles'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TextBox } from '@/components/shared/TextBox'
 import { useClickOutside } from '@/utils/useClickOutside'
 import { DropdownMenu } from './Partials/DropdownMenu'
@@ -22,23 +22,29 @@ import { BookStats } from './Partials/BookStats'
 import { SignInModal } from '@/components/modals/SignInModal'
 import * as Dialog from '@radix-ui/react-dialog'
 import { RatingBookModal } from '@/components/shared/LateralMenu/partials/RatingBookModal'
-import { CreateReviewData } from '@/pages/home/index.page'
 import { useAppContext } from '@/contexts/AppContext'
 import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
+import { RatingProps } from '@/@types/rating'
 
 interface MenuBookCardProps {
   book: BookProps
   categories: CategoryProps[]
-  closeLateralMenu: () => void
-  loadRatings: () => void
+  onUpdateStatus: (
+    book: BookProps,
+    newStatus: string,
+    userRating: number,
+  ) => void
+  onCreateReview: (newRating: RatingProps) => void
 }
 
 export function MenuBookCard({
-  closeLateralMenu,
-  loadRatings,
+  onUpdateStatus,
+  onCreateReview,
   book,
   categories,
 }: MenuBookCardProps) {
+  const [updatedBook, setUpdatedBook] = useState(book)
+
   const categoryNames = categories.map((category) => category?.name)
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
@@ -50,30 +56,36 @@ export function MenuBookCard({
 
   const [selectedStatus, setSelectedStatus] = useState('')
 
-  const { loggedUser, isValidating, handleCreateReview } = useAppContext()
+  const { loggedUser, isValidating } = useAppContext()
 
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
   useClickOutside(dropdownRef, () => setIsAddToLibraryDropdownOpen(false))
 
+  useEffect(() => {
+    if (book) {
+      setUpdatedBook(book)
+    }
+  }, [book])
+
   return (
     <BookCardWrapper>
       <BookCardContent>
-        <BookCover alt="" src={book.coverUrl} />
+        <BookCover alt="" src={updatedBook.coverUrl} />
         <BookDetailsWrapper>
           <BookTitleAndAuthor>
-            <h2>{book.name}</h2>
-            <p>{book.author}</p>
+            <h2>{updatedBook.name}</h2>
+            <p>{updatedBook.author}</p>
           </BookTitleAndAuthor>
           <BookOtherInfo>
             <BookRatingAndReviews>
               <BookRatingInfo>
-                <StarsRating rating={book?.rate ?? 0} />
-                <p>{book?.rate?.toFixed(2) ?? '0.00'}</p>
+                <StarsRating rating={updatedBook?.rate ?? 0} />
+                <p>{updatedBook?.rate?.toFixed(2) ?? '0.00'}</p>
               </BookRatingInfo>
               <p>
-                (<span>{book?.ratings?.length ?? 0}</span> {''}
-                {book?.ratings?.length === 1 ? 'rating' : 'ratings'})
+                (<span>{updatedBook?.ratings?.length ?? 0}</span> {''}
+                {updatedBook?.ratings?.length === 1 ? 'rating' : 'ratings'})
               </p>
             </BookRatingAndReviews>
             <AddToLibrarySection>
@@ -87,8 +99,8 @@ export function MenuBookCard({
                         : setIsAddToLibraryDropdownOpen(true)
                     }}
                   >
-                    {book?.readingStatus
-                      ? getReadingStatusLabel(book.readingStatus)
+                    {updatedBook?.readingStatus
+                      ? getReadingStatusLabel(updatedBook.readingStatus)
                       : 'Add to Library'}
                   </AddToLibraryButton>
                 </Dialog.Trigger>
@@ -106,11 +118,11 @@ export function MenuBookCard({
                     onClose={() => setIsAddToLibraryDropdownOpen(false)}
                     dropdownRef={dropdownRef}
                     book={book}
+                    onUpdateStatus={onUpdateStatus}
                     handleOpenRatingBookModal={(status: string) => {
                       setSelectedStatus(status)
                       setIsRatingBookModalOpen(true)
                     }}
-                    closeLateralMenu={closeLateralMenu}
                   />
                 </Dialog.Trigger>
                 {loggedUser && (
@@ -118,13 +130,8 @@ export function MenuBookCard({
                     userId={loggedUser.id}
                     bookId={book.id}
                     onClose={() => setIsRatingBookModalOpen(false)}
-                    closeLateralMenu={() => closeLateralMenu()}
                     bookStatus={selectedStatus}
-                    handleCreateReview={async (data: CreateReviewData) => {
-                      await handleCreateReview(data)
-                      loadRatings()
-                      closeLateralMenu()
-                    }}
+                    onCreateReview={onCreateReview}
                   />
                 )}
               </Dialog.Root>

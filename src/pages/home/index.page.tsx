@@ -19,7 +19,7 @@ import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { BookCard } from '@/components/cards/BookCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { NextSeo } from 'next-seo'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookProps } from '@/@types/book'
@@ -53,6 +53,10 @@ export default function Home() {
 
   const isRouteLoading = useLoadingOnRouteChange()
 
+  const [updatedPopularBooks, setUpdatedPopularBooks] = useState<
+    BookProps[] | []
+  >([])
+
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
@@ -60,13 +64,32 @@ export default function Home() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
+  const onUpdateBook = (updatedBook: BookProps) => {
+    setUpdatedPopularBooks((prevBooks) => {
+      if (!prevBooks) return prevBooks
+
+      const updatedBooks = prevBooks.map((book) =>
+        book.id === updatedBook.id ? updatedBook : book,
+      )
+
+      return updatedBooks
+    })
+  }
+
   const {
     loggedUser,
     userLatestRatingData,
     isValidatingHomePage,
+    isValidatingUserLatestReading,
     popularBooks,
     latestRatings,
   } = useAppContext()
+
+  useEffect(() => {
+    if (popularBooks) {
+      setUpdatedPopularBooks(popularBooks)
+    }
+  }, [popularBooks])
 
   return (
     <>
@@ -79,6 +102,7 @@ export default function Home() {
             <LateralMenu
               bookId={selectedBook.id}
               onClose={() => setIsLateralMenuOpen(false)}
+              onUpdateBook={onUpdateBook}
             />
           )}
           {isSmallSize ? (
@@ -101,7 +125,7 @@ export default function Home() {
                       Your Last Review
                     </UserLatestReadingTitle>
                     <UserLatestReadingContainer>
-                      {isValidatingHomePage ? (
+                      {isValidatingHomePage || isValidatingUserLatestReading ? (
                         <SkeletonRatingCard withMarginBottom />
                       ) : userLatestRatingData && userLatestRatingData?.book ? (
                         <UserLatestReadingCard
@@ -153,12 +177,12 @@ export default function Home() {
                   </span>
                 </PopularBooksTitle>
                 <PopularBooksContent>
-                  {!popularBooks?.length || isValidatingHomePage
+                  {!updatedPopularBooks?.length || isValidatingHomePage
                     ? Array.from({ length: 12 }).map((_, index) => (
                         <SkeletonBookCard key={index} />
                       ))
-                    : popularBooks?.length > 0 &&
-                      popularBooks?.map((book) => (
+                    : updatedPopularBooks?.length > 0 &&
+                      updatedPopularBooks?.map((book) => (
                         <BookCard
                           key={book.id}
                           book={book}
