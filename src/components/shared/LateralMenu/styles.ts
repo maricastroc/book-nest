@@ -102,6 +102,7 @@ export const RatingsWrapper = styled('div', {
   width: '100%',
   gap: '0.5rem',
   marginTop: '3rem',
+  paddingBottom: '2.5rem',
 })
 
 export const RatingsList = styled('div', {

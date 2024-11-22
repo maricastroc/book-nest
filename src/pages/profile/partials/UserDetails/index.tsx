@@ -137,9 +137,9 @@ export function UserDetails({
               )}
             </Dialog.Root>
           ) : (
-            <ActionButton
-              onClick={() => router.push(`/library/${userId}`)}
-            >{`View ${userName?.split(' ')[0]}'s Library`}</ActionButton>
+            <ActionButton onClick={() => router.push(`/library/${userId}`)}>
+              View Library
+            </ActionButton>
           )}
 
           <DividerLine />

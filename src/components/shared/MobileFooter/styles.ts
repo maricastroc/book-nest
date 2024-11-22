@@ -19,7 +19,7 @@ export const MobileFooterBox = styled('div', {
   justifyContent: 'center',
   backgroundColor: '$gray800',
   width: '100%',
-  marginTop: '1rem',
+  marginTop: '5rem',
   padding: '0.5rem 1rem',
   overflowX: 'hidden',
 

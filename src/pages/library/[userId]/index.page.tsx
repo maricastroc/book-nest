@@ -80,10 +80,7 @@ export default function Profile() {
       if (response?.data) {
         setBooksByStatus(response.data.booksByStatus)
         setSubmittedBooks(response.data.submittedBooks)
-
-        if (!loggedUser) {
-          setUserInfo(response.data.user)
-        }
+        setUserInfo(response.data.user)
       }
     } catch (error) {
       handleApiError(error)
@@ -143,12 +140,6 @@ export default function Profile() {
       handleFetchBooksByStatus(userId)
     }
   }, [userId])
-
-  useEffect(() => {
-    if (loggedUser) {
-      setUserInfo(loggedUser as UserInfo)
-    }
-  }, [loggedUser])
 
   return (
     <>

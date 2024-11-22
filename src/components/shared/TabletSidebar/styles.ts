@@ -29,7 +29,7 @@ export const Content = styled(RadixContent, {
 
   '@media (min-width: 480px)': {
     padding: '2.5rem 2.5rem 2rem',
-    width: 'clamp(300px, 85vw, 460px)',
+    width: 'clamp(300px, 100vw, 460px)',
   },
 
   '@media (min-width: 768px)': {

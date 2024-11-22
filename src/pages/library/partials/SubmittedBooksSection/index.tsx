@@ -11,8 +11,7 @@ import {
   SubmittedBooksWrapper,
   UserProfileInfo,
 } from './styles'
-import { PencilSimple, Plus } from 'phosphor-react'
-import { EditProfileModal } from '@/components/modals/EditProfileModal'
+import { Plus } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { SubmitBookFormModal } from '../SubmitBookFormModal'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
@@ -42,8 +41,6 @@ export function SubmittedBooksSection({
   const router = useRouter()
 
   const { loggedUser } = useAppContext()
-
-  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
 
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
 
@@ -103,30 +100,9 @@ export function SubmittedBooksSection({
               />
               <h2>{userInfo?.name}</h2>
             </>
-            {isLoggedUser ? (
-              <Dialog.Root>
-                <Dialog.Trigger asChild>
-                  <ActionButton
-                    type="button"
-                    onClick={() => setIsEditProfileModalOpen(true)}
-                  >
-                    <PencilSimple />
-                    Edit Info
-                  </ActionButton>
-                </Dialog.Trigger>
-                {isEditProfileModalOpen && (
-                  <EditProfileModal
-                    onClose={() => setIsEditProfileModalOpen(false)}
-                  />
-                )}
-              </Dialog.Root>
-            ) : (
-              <ActionButton
-                onClick={() => router.push(`/profile/${userId}`)}
-              >{`View ${
-                userInfo?.name?.split(' ')[0]
-              }'s Profile`}</ActionButton>
-            )}
+            <ActionButton onClick={() => router.push(`/profile/${userId}`)}>
+              View Profile
+            </ActionButton>
             <DividerLine />
           </UserProfileInfo>
           <SubmittedBooksWrapper>
