@@ -32,7 +32,7 @@ interface RatingCardFormProps {
   rating?: RatingProps | null
   book: BookProps
   onClose: () => void
-  onUpdateReview: (updatedReview: RatingProps) => Promise<void>
+  onUpdateReview: (updatedReview: RatingProps) => void
   onCreateReview: (newRating: RatingProps) => void
 }
 

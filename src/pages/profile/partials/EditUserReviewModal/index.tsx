@@ -3,19 +3,22 @@ import { Overlay } from '@/styles/shared'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
 import { RatingProps } from '@/@types/rating'
 import { Content } from './styles'
+import { BookProps } from '@/@types/book'
 
 interface EditUserReviewModalProps {
   rating: RatingProps
-  bookId: string
+  book: BookProps
   onClose: () => void
-  updateUserRatings: () => Promise<void>
+  onUpdateReview: (updatedReview: RatingProps) => void
+  onCreateReview: (newRating: RatingProps) => void
 }
 
 export function EditUserReviewModal({
   rating,
-  bookId,
+  book,
   onClose,
-  updateUserRatings,
+  onUpdateReview,
+  onCreateReview,
 }: EditUserReviewModalProps) {
   return (
     <Dialog.Portal>
@@ -23,13 +26,12 @@ export function EditUserReviewModal({
       <Content className="DialogContent">
         <RatingCardForm
           isEdit
-          onClose={() => {
-            updateUserRatings()
-            onClose()
-          }}
-          rating={rating}
-          bookId={bookId}
           isProfileScreen
+          onClose={onClose}
+          rating={rating}
+          book={book}
+          onUpdateReview={onUpdateReview}
+          onCreateReview={onCreateReview}
         />
       </Content>
     </Dialog.Portal>

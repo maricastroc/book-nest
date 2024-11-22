@@ -57,6 +57,30 @@ export default function Profile() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
+  const onUpdateReview = async (updatedReview: RatingProps) => {
+    setUserRatings((prevRatings) =>
+      prevRatings.map((rating) =>
+        rating.id === updatedReview.id
+          ? {
+              ...rating,
+              rate: updatedReview.rate,
+              description: updatedReview.description,
+            }
+          : rating,
+      ),
+    )
+  }
+
+  const onCreateReview = (newRating: RatingProps) => {
+    setUserRatings((prevRatings) => [...(prevRatings || []), newRating])
+  }
+
+  const onDeleteReview = (ratingId: string) => {
+    setUserRatings((prevRatings) =>
+      prevRatings?.filter((rating) => rating.id !== ratingId),
+    )
+  }
+
   useEffect(() => {
     if (userStatistics) {
       setUserRatings(userStatistics.ratings ?? [])
@@ -142,9 +166,9 @@ export default function Profile() {
                               key={rating.id}
                               book={rating.book}
                               rating={rating}
-                              updateUserRatings={async () =>
-                                await loadUserStatistics()
-                              }
+                              onUpdateReview={onUpdateReview}
+                              onCreateReview={onCreateReview}
+                              onDeleteReview={onDeleteReview}
                             />
                           )
                         }

@@ -30,13 +30,17 @@ import { EditUserReviewModal } from '@/pages/profile/partials/EditUserReviewModa
 interface ProfileCardProps {
   book: BookProps
   rating: RatingProps
-  updateUserRatings: () => Promise<void>
+  onUpdateReview: (updatedReview: RatingProps) => void
+  onCreateReview: (newRating: RatingProps) => void
+  onDeleteReview: (ratingId: string) => void
 }
 
 export function ProfileCard({
   book,
   rating,
-  updateUserRatings,
+  onUpdateReview,
+  onCreateReview,
+  onDeleteReview,
 }: ProfileCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
@@ -50,14 +54,14 @@ export function ProfileCard({
 
   const isMobile = useScreenSize(480)
 
-  const onDeleteReview = async () => {
-    if (loggedUser && handleDeleteReview) {
+  const deleteReview = async () => {
+    if (loggedUser) {
       await handleDeleteReview(rating.id)
-      await updateUserRatings()
+      onDeleteReview(rating.id)
       setIsDeleteModalOpen(false)
     }
   }
-
+  console.log(rating, book)
   return (
     <ProfileCardWrapper>
       <time title={dateFormatted} dateTime={dateString}>
@@ -81,7 +85,7 @@ export function ProfileCard({
                   </Dialog.Trigger>
                   <DeleteModal
                     onConfirm={() => {
-                      onDeleteReview()
+                      deleteReview()
                     }}
                   />
                 </Dialog.Root>
@@ -97,8 +101,9 @@ export function ProfileCard({
                   </Dialog.Trigger>
                   <EditUserReviewModal
                     rating={rating}
-                    bookId={book.id}
-                    updateUserRatings={updateUserRatings}
+                    book={book}
+                    onUpdateReview={onUpdateReview}
+                    onCreateReview={onCreateReview}
                     onClose={() => {
                       setIsEditUserReviewModalOpen(false)
                     }}
