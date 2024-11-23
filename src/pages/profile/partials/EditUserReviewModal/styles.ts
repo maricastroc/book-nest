@@ -12,7 +12,7 @@ export const Content = styled(RadixContent, {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 'clamp(300px, 80vw, 38rem)',
+  width: 'clamp(310px, 90vw, 38rem)',
   borderRadius: '4px',
   height: 'auto',
   zIndex: 9998,

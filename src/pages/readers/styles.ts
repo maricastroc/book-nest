@@ -5,7 +5,7 @@ export const UsersPageWrapper = styled('div', {
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
-  padding: '0 1rem',
+  padding: '0 1rem 2.5rem',
   maxWidth: '100%',
   alignItems: 'center',
   justifyContent: 'flex-start',

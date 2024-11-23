@@ -7,7 +7,7 @@ import {
 } from '@radix-ui/react-dialog'
 
 export const Content = styled(RadixContent, {
-  padding: '1.5rem',
+  padding: '1.5rem 1.5rem 5rem',
   backgroundColor: '$gray700',
   position: 'fixed',
   top: '50%',
@@ -22,6 +22,7 @@ export const Content = styled(RadixContent, {
 
   '@media (min-width: 480px)': {
     width: 'clamp(320px, 85vw, 700px)',
+    padding: '1.5rem',
   },
 
   '@media (min-width: 768px)': {

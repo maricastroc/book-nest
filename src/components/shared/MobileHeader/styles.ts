@@ -4,7 +4,7 @@ export const MobileHeaderBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-  padding: '1.2rem 1.7rem',
+  padding: '0.95rem 1.7rem',
   position: 'fixed',
   backgroundColor: '$gray800',
   borderBottom: '1px solid $gray700',
@@ -28,7 +28,7 @@ export const MobileHeaderContent = styled('header', {
   width: '100%',
 
   img: {
-    width: '8.8rem',
+    width: '8.5rem',
     height: 'auto',
   },
 })
@@ -40,7 +40,7 @@ export const LogoAndIcon = styled('div', {
   width: '100%',
 
   img: {
-    width: '8.8rem',
+    width: '8.5rem',
     height: 'auto',
   },
 })

@@ -49,7 +49,7 @@ export const MenuBody = styled('div', {
   height: '100%',
   overflow: 'scroll',
   width: '100%',
-  padding: '2rem 1.5rem 1.5rem',
+  padding: '2rem 1.5rem 2.5rem',
   borderRadius: 8,
   animation: `${entranceAnimation} 0.4s`,
 

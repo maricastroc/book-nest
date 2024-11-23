@@ -6,10 +6,14 @@ export const RatingCardFormWrapper = styled('form', {
   alignItems: 'flex-start',
   justifyContent: 'center',
   backgroundColor: '$gray700',
-  margin: '0.5rem auto 1rem',
-  padding: '1.5rem',
+  margin: '0.5rem auto',
+  padding: '0.8rem 1rem',
   borderRadius: 8,
   width: '100%',
+
+  '@media (min-width: 480px)': {
+    padding: '1.5rem',
+  },
 })
 
 export const RatingCardFormHeader = styled('div', {
