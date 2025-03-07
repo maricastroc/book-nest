@@ -139,14 +139,14 @@ export function Sidebar() {
                     isLoading={isValidatingLoggedUser}
                     avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
                     onClick={() => {
-                      const currentPath = router.asPath;
-                      
+                      const currentPath = router.asPath
+
                       const targetPath = currentPath.includes('/profile/')
-                          ? `/profile/${loggedUser.id}`
-                          : `/profile/${loggedUser.id}`;
-                  
-                      router.push(targetPath);
-                  }}
+                        ? `/profile/${loggedUser.id}`
+                        : `/profile/${loggedUser.id}`
+
+                      router.push(targetPath)
+                    }}
                   />
                   <SignOutContainer onClick={handleLogout}>
                     <p>{loggedUser.name.split(' ')[0]}</p>
