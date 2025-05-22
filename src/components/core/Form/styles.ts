@@ -6,11 +6,18 @@ export const StyledForm = styled('form', {
   width: '85vw',
   maxWidth: '27rem',
   height: 'auto',
+  gap: '1rem',
 
   variants: {
     isLarger: {
       true: {
         maxWidth: '29rem',
+      },
+    },
+    hasGap: {
+      true: {
+        gap: '1rem',
+        maxWidth: '100%',
       },
     },
   },

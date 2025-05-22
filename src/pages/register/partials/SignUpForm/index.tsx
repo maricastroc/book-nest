@@ -48,6 +48,14 @@ export default function SignUpForm() {
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
 
+  const router = useRouter()
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [showCropper, setShowCropper] = useState(false)
+
+  const [originalImage, setOriginalImage] = useState<string | null>(null)
+
   const {
     handleSubmit,
     control,
@@ -58,14 +66,6 @@ export default function SignUpForm() {
     resolver: zodResolver(signUpFormSchema),
     defaultValues: { email: '', password: '' },
   })
-
-  const router = useRouter()
-
-  const [isLoading, setIsLoading] = useState(false)
-
-  const [showCropper, setShowCropper] = useState(false)
-
-  const [originalImage, setOriginalImage] = useState<string | null>(null)
 
   async function onSubmit(data: SignUpFormData) {
     const formData = new FormData()
