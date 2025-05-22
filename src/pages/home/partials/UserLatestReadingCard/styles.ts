@@ -27,6 +27,7 @@ export const UserCardHeader = styled('div', {
   borderTopRightRadius: 8,
   padding: '1rem 1.5rem',
   backgroundColor: '$gray650',
+  filter: 'brightness(0.9)',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.1)',
 
   time: {

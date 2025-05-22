@@ -19,10 +19,8 @@ import {
 } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
-import * as Dialog from '@radix-ui/react-dialog'
-import { SignInModal } from '../../modals/SignInModal'
 import { toast } from 'react-toastify'
-import { useState, useCallback, ComponentType } from 'react'
+import { useCallback, ComponentType } from 'react'
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { Avatar } from '../Avatar'
 import { useAppContext } from '@/contexts/AppContext'
@@ -32,7 +30,6 @@ import {
   PageBtnWrapper,
   SignInButton,
   SignOutContainer,
-  SignInContainer,
   SidebarProfileContainer,
 } from '@/styles/shared'
 
@@ -63,8 +60,6 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
 
 export function Sidebar() {
   const router = useRouter()
-
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
   const { loggedUser, isValidatingLoggedUser } = useAppContext()
 
@@ -156,19 +151,10 @@ export function Sidebar() {
               )}
             </SidebarProfileContainer>
           ) : (
-            <SignInContainer>
-              <Dialog.Root>
-                <Dialog.Trigger asChild>
-                  <SignInButton onClick={() => setIsSignInModalOpen(true)}>
-                    <p>Login</p>
-                    <SignIn />
-                  </SignInButton>
-                </Dialog.Trigger>
-                {isSignInModalOpen && (
-                  <SignInModal onClose={() => setIsSignInModalOpen(false)} />
-                )}
-              </Dialog.Root>
-            </SignInContainer>
+            <SignInButton onClick={() => router.push('/')}>
+              <p>Login</p>
+              <SignIn />
+            </SignInButton>
           )}
         </SidebarContent>
         <Image

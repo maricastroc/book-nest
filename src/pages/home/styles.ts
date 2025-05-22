@@ -1,5 +1,4 @@
 import { styled } from '@/styles'
-import { ToastContainer } from 'react-toastify'
 
 export const HomePageWrapper = styled('div', {
   display: 'flex',
@@ -255,32 +254,5 @@ export const PopularBooksContent = styled('div', {
     overflowY: 'scroll',
     height: '100%',
     paddingRight: '1rem',
-  },
-})
-
-export const StyledToastContainer = styled(ToastContainer, {
-  '& .Toastify__toast': {
-    backgroundColor: '$gray700',
-    color: '$gray200',
-    borderRadius: 4,
-    fontFamily: 'Nunito sans, sans-serif',
-    fontSize: '0.95rem',
-    zIndex: 9999,
-  },
-
-  '& .Toastify__close-button': {
-    color: '$white',
-    zIndex: 9999,
-  },
-
-  '& .Toastify__toast-body svg': {
-    fill: '$purple100',
-    fontSize: '0.5rem',
-    zIndex: 9999,
-  },
-
-  '& .Toastify__progress-bar': {
-    backgroundColor: '$purple100',
-    zIndex: 9999,
   },
 })

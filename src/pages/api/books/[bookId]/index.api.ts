@@ -24,9 +24,6 @@ export default async function handler(
     },
     include: {
       ratings: {
-        where: {
-          deletedAt: null,
-        },
         include: {
           user: true,
         },

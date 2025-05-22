@@ -1,9 +1,19 @@
 import { styled } from '@/styles'
 
 import {
+  Title as RadixTitle,
+  Close as RadixClose,
+  Content as RadixContent,
   Overlay as RadixOverlay,
   Description as RadixDescription,
 } from '@radix-ui/react-dialog'
+
+import { keyframes } from '@stitches/react'
+
+const overlayShow = keyframes({
+  '0%': { opacity: 0 },
+  '100%': { opacity: 1 },
+})
 
 export const ReadNotice = styled('div', {
   display: 'flex',
@@ -344,4 +354,136 @@ export const SearchBar = styled('div', {
     width: '60%',
     maxWidth: '25rem',
   },
+})
+
+export const ModalOverlay = styled(RadixOverlay, {
+  position: 'fixed',
+  width: '100vw',
+  height: '100vh',
+  inset: 0,
+  zIndex: 9997,
+  backgroundColor: 'rgba(10, 10, 10, 0.2)',
+  backdropFilter: 'blur(4px)',
+  WebkitBackdropFilter: 'blur(4px)',
+
+  variants: {
+    hasOverlay: {
+      false: {
+        backgroundColor: 'transparent',
+      },
+    },
+  },
+
+  '@media (prefers-reduced-motion: no-preference)': {
+    '&[data-state="open"]': {
+      animation: `${overlayShow} 200ms ease-out forwards`,
+    },
+    '&[data-state="closed"]': {
+      animation: `${overlayShow} 200ms ease-in forwards`,
+    },
+  },
+})
+
+export const ModalDescription = styled(RadixDescription, {
+  fontSize: '1rem',
+  width: '100%',
+  textAlign: 'left',
+  color: '$gray300',
+  lineHeight: '1.5rem',
+  marginBottom: '0.5rem',
+})
+
+export const ModalContent = styled(RadixContent, {
+  padding: '1.5rem',
+  backgroundColor: '$gray700',
+  color: '$gray300',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 'clamp(300px, 80vw, 320px)',
+  borderRadius: '8px',
+  zIndex: 9998,
+  overflow: 'scroll',
+  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
+  height: 'auto',
+
+  '&:focus': {
+    border: 'none',
+    outlineColor: 'none',
+  },
+
+  '@media (min-width: 480px)': {
+    width: 'clamp(300px, 85vw, 460px)',
+    height: 'auto',
+  },
+
+  '@media (min-width: 768px)': {
+    padding: '2rem',
+    width: 'clamp(20rem, 80vw, 30rem)',
+  },
+
+  '@media (prefers-reduced-motion: no-preference)': {
+    '&[data-state="open"]': {
+      animation: `${overlayShow} 200ms ease-out forwards`,
+    },
+    '&[data-state="closed"]': {
+      animation: `${overlayShow} 200ms ease-in forwards`,
+    },
+  },
+})
+
+export const ModalHeader = styled('div', {
+  display: 'flex',
+  alignItems: 'start',
+  justifyContent: 'space-between',
+  width: '100%',
+  marginBottom: '1rem',
+
+  '@media (min-width: 480px)': {
+    alignItems: 'center',
+  },
+})
+
+export const ModalCloseButton = styled(RadixClose, {
+  color: '$gray300',
+  fontWeight: '700',
+  display: 'flex',
+  width: '1.5rem',
+  justifyContent: 'flex-end',
+  cursor: 'pointer',
+  backgroundColor: 'transparent',
+  border: '0',
+  marginTop: '0.1rem',
+
+  svg: {
+    color: '$gray300',
+    fontSize: '1.3rem',
+  },
+
+  '&:hover': {
+    transition: '200ms ease',
+
+    svg: {
+      filter: 'brightness(1.2)',
+    },
+  },
+
+  '&:focus': {
+    boxShadow: '0 0 0 2px $blue600',
+  },
+
+  '@media (min-width: 480px)': {
+    marginTop: 0,
+  },
+})
+
+export const ModalTitle = styled(RadixTitle, {
+  alignSelf: 'flex-start',
+  fontSize: '$2xl',
+  fontWeight: 400,
 })

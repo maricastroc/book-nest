@@ -26,15 +26,16 @@ export const {
       purple300: '#2A2879',
       purple400: '#1F1D5C',
 
+      blue600: '#5A698F',
+
       gray100: '#F8F9FC',
       gray200: '#E6E8F2',
       gray300: '#D1D6E4',
       gray400: '#8D95AF',
-      gray450: '#676d81',
       gray500: '#303F73',
       gray600: '#252D4A',
       gray650: '#20263f',
-      gray700: '#181C2A',
+      gray700: '#161D2F',
       gray750: '#121520',
       gray800: '#0E1116',
 
@@ -57,6 +58,7 @@ export const {
       lg: '1.125rem',
       xl: '1.25rem',
       '2xl': '1.5rem',
+      '3xl': '2rem',
     },
   },
 })

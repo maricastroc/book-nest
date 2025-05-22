@@ -1,9 +1,9 @@
 import type { AppProps } from 'next/app'
 import { globalStyles } from '../styles/global'
 import { SessionProvider } from 'next-auth/react'
-import { StyledToastContainer } from './home/styles'
 import 'react-toastify/dist/ReactToastify.css'
 import { AppProvider } from '@/contexts/AppContext'
+import { Toaster } from 'react-hot-toast'
 
 globalStyles()
 
@@ -13,7 +13,26 @@ export default function App({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
-      <StyledToastContainer />
+      <Toaster
+        toastOptions={{
+          style: {
+            backgroundColor: '#161D2F',
+            color: '#fff',
+          },
+          success: {
+            style: {
+              backgroundColor: '#161D2F',
+              color: '#fff',
+            },
+          },
+          error: {
+            style: {
+              backgroundColor: '#161D2F',
+              color: '#fff',
+            },
+          },
+        }}
+      />
       <AppProvider>
         <Component {...pageProps} />
       </AppProvider>

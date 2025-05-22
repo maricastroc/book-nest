@@ -1,15 +1,15 @@
-import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
+import { NextSeo } from 'next-seo'
 import { Container, LogoWrapper } from './styles'
-import SignInForm from '@/pages/login/partials/SignInForm'
+import SignUpForm from '@/pages/register/partials/SignUpForm'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingComponent } from '@/components/core/LoadingComponent'
 import Logo from '../../../public/assets/logo.svg'
 
-export default function Login() {
+export default function Register() {
   const isRouteLoading = useLoadingOnRouteChange()
 
   const [isClient, setIsClient] = useState(false)
@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <>
       <NextSeo
-        title="Login | Book Wise"
+        title="Sign Up | Book Wise"
         additionalMetaTags={[
           {
             name: 'viewport',
@@ -48,7 +48,7 @@ export default function Login() {
             <LogoWrapper>
               <Image alt="" src={Logo} />
             </LogoWrapper>
-            <SignInForm />
+            <SignUpForm />
           </Container>
         ))}
     </>

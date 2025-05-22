@@ -7,6 +7,7 @@ export const Container = styled('div', {
   height: '100vh',
   alignItems: 'center',
   justifyContent: 'center',
+  overflow: 'auto',
 })
 
 export const LogoWrapper = styled('div', {
@@ -14,7 +15,7 @@ export const LogoWrapper = styled('div', {
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
-  marginBottom: '2rem',
+  marginBottom: '1.5rem',
   gap: '0.75rem',
 
   img: {
