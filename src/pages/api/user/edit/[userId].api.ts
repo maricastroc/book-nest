@@ -5,7 +5,6 @@ import { z } from 'zod'
 import bcrypt from 'bcrypt'
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
 import fs from 'fs'
-import path from 'path'
 import { prisma } from '@/lib/prisma'
 
 export const config = {
@@ -88,21 +87,23 @@ export default async function handler(
 
       const validatedFields = await updateUserSchema.parseAsync(updatedFields)
 
-      let avatarUrl
+      const avatarFile = files.avatarUrl?.[0]
+      let avatarUrl: string | null = null
 
-      if (files.avatarUrl) {
-        const avatarFile = Array.isArray(files.avatarUrl)
-          ? files.avatarUrl[0]
-          : files.avatarUrl
-        const avatarPath = path.join(
-          process.cwd(),
-          'public',
-          'users',
-          'images',
-          avatarFile.originalFilename ?? '',
-        )
-        fs.renameSync(avatarFile.filepath, avatarPath)
-        avatarUrl = `/users/images/${avatarFile.originalFilename}`
+      if (avatarFile) {
+        const MAX_SIZE = 2 * 1024 * 1024
+        const fileContent = await fs.promises.readFile(avatarFile.filepath)
+
+        if (fileContent.length > MAX_SIZE) {
+          throw new Error('Image must be a maximum of 2MB!')
+        }
+
+        const base64Image = fileContent.toString('base64')
+        const dataURI = `data:${avatarFile.mimetype};base64,${base64Image}`
+
+        avatarUrl = dataURI
+
+        await fs.promises.unlink(avatarFile.filepath)
       }
 
       const updates: Updates = { ...validatedFields }

@@ -81,7 +81,7 @@ export default function SignUpForm() {
     try {
       setIsLoading(true)
 
-      await api.post(`/user/create`, formData, {
+      await api.post(`/user`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

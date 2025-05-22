@@ -175,7 +175,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
 
   useEffect(() => {
     if (loggedUser) {
-      setAvatarPreview(`../${loggedUser.avatarUrl}`)
+      setAvatarPreview(`${loggedUser.avatarUrl}`)
       setValue('name', loggedUser.name)
       setValue('email', loggedUser.email ?? '')
 

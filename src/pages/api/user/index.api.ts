@@ -6,7 +6,6 @@ import { z } from 'zod'
 import bcrypt from 'bcrypt'
 import { buildNextAuthOptions } from '../auth/[...nextauth].api'
 import fs from 'fs'
-import path from 'path'
 
 export const config = {
   api: {
@@ -55,10 +54,6 @@ export default async function handler(
       const password = getSingleString(fields.password)
       const avatarFile = files.avatarUrl?.[0]
 
-      if (!avatarFile) {
-        return res.status(400).json({ message: 'Avatar file is required.' })
-      }
-
       const createUserSchema = z.object({
         name: z.string().min(1, 'Name is required'),
         email: z
@@ -85,21 +80,30 @@ export default async function handler(
 
       const hashedPassword = await bcrypt.hash(password, 10)
 
-      const avatarPath = path.join(
-        process.cwd(),
-        'public',
-        'users',
-        'images',
-        avatarFile.originalFilename ?? '',
-      )
-      fs.renameSync(avatarFile.filepath, avatarPath)
+      let avatarUrl: string | null = null
+
+      if (avatarFile) {
+        const MAX_SIZE = 2 * 1024 * 1024
+        const fileContent = await fs.promises.readFile(avatarFile.filepath)
+
+        if (fileContent.length > MAX_SIZE) {
+          throw new Error('Image must be a maximum of 2MB!')
+        }
+
+        const base64Image = fileContent.toString('base64')
+        const dataURI = `data:${avatarFile.mimetype};base64,${base64Image}`
+
+        avatarUrl = dataURI
+
+        await fs.promises.unlink(avatarFile.filepath)
+      }
 
       const user = await prisma.user.create({
         data: {
           name,
           email,
           password: hashedPassword,
-          avatarUrl: `/users/images/${avatarFile.originalFilename}`,
+          avatarUrl,
         },
       })
 
