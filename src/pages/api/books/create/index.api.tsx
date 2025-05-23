@@ -7,7 +7,6 @@ import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import fs from 'fs/promises'
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
-import sharp from 'sharp'
 
 export const config = {
   api: {
@@ -96,31 +95,22 @@ export default async function handler(
       if (coverSource === 'openlibrary' && coverUrlFromOpenLibrary) {
         finalCoverUrl = getSingleString(coverUrlFromOpenLibrary)
       } else if (coverFile) {
-        const MAX_SIZE = 2 * 1024 * 1024
-
-        const fileBuffer = await fs.readFile(coverFile.filepath)
-
+        const MAX_SIZE = 2 * 1024 * 1024;
+        const fileBuffer = await fs.readFile(coverFile.filepath);
+        
         if (fileBuffer.length > MAX_SIZE) {
-          await fs.unlink(coverFile.filepath)
-          return res
-            .status(400)
-            .json({ message: 'A imagem deve ter menos de 2MB' })
+            await fs.unlink(coverFile.filepath);
+            return res.status(400).json({ message: 'Image must be less than 2MB' });
         }
 
-        const optimizedImage = await sharp(fileBuffer)
-          .resize(800, 800, { fit: 'inside' })
-          .jpeg({ quality: 80, mozjpeg: true })
-          .toBuffer()
+        const base64Image = fileBuffer.toString('base64');
+        finalCoverUrl = `data:${coverFile.mimetype};base64,${base64Image}`;
 
-        const base64Image = optimizedImage.toString('base64')
-        finalCoverUrl = `data:${coverFile.mimetype};base64,${base64Image}`
-
-        await fs.unlink(coverFile.filepath)
+        await fs.unlink(coverFile.filepath);
       } else {
         return res.status(400).json({ message: 'Cover image is required' })
       }
 
-      // Criação do livro
       const newBook = await prisma.book.create({
         data: {
           name,
