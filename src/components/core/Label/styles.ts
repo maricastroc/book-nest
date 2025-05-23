@@ -6,7 +6,7 @@ export const StyledLabel = styled('label', {
   fontSize: '0.875rem',
   transition: 'color 0.2s',
   fontWeight: 700,
-  marginLeft: '0.5rem',
+  marginLeft: '0.3rem',
 
   variants: {
     focused: {

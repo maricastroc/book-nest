@@ -1,5 +1,16 @@
 import { styled } from '@/styles'
 
+export const WarningContainer = styled('div', {
+  width: '100%',
+  backgroundColor: '$gray600',
+  padding: '1rem',
+  borderRadius: 12,
+  color: '$gray300',
+  fontSize: '0.875rem',
+  lineHeight: 1.7,
+  marginBottom: '1.5rem',
+})
+
 export const FormContainer = styled('form', {
   display: 'flex',
   flexDirection: 'column',
@@ -148,4 +159,11 @@ export const ChangePasswordInputContainer = styled('div', {
   gap: '0.6rem',
   width: '100%',
   alignItems: 'center',
+})
+
+export const DividerLine = styled('span', {
+  width: '100%',
+  background: '$gray600',
+  height: 1,
+  margin: '0.6rem 0',
 })

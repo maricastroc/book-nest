@@ -3,9 +3,9 @@ import { styled } from '@/styles'
 export const StyledInput = styled('input', {
   backgroundColor: 'transparent',
   border: 'solid 1px $blue600',
-  color: '$gray100',
-  padding: '0.75rem 0.6rem',
-  fontSize: '0.9375rem',
+  color: '$gray200',
+  padding: '0.65rem 0.6rem',
+  fontSize: '0.9rem',
   borderRadius: 8,
   width: '100%',
 
@@ -17,6 +17,12 @@ export const StyledInput = styled('input', {
     backgroundColor: 'transparent',
     outline: 'none',
     boxShadow: 'none',
+  },
+
+  '&:disabled': {
+    backgroundColor: '$blue600',
+    borderColor: '$blue600',
+    cursor: 'not-allowed',
   },
 })
 
@@ -46,7 +52,7 @@ export const StyledLabel = styled('label', {
   fontSize: '0.875rem',
   transition: 'color 0.2s',
   fontWeight: 700,
-  marginLeft: '0.5rem',
+  marginLeft: '0.3rem',
 
   variants: {
     focused: {

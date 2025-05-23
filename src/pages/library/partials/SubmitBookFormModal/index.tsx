@@ -13,6 +13,8 @@ import {
   CoverSectionContainer,
   PreviewContainer,
   ImagePreview,
+  DividerLine,
+  WarningContainer,
 } from './styles'
 import { handleApiError } from '@/utils/handleApiError'
 import { api } from '@/lib/axios'
@@ -31,6 +33,7 @@ import { FileInput } from '@/components/core/FileInput'
 import { FormErrors } from '@/components/core/FormErrors'
 import { Textarea } from '@/components/core/Textarea'
 import { Label } from '@/components/core/Label'
+import { checkImageExists } from '@/utils/checkImageExists'
 
 interface SubmitBookFormModalProps {
   isEdit?: boolean
@@ -62,10 +65,12 @@ const submitBookFormSchema = z.object({
   summary: z
     .string()
     .min(20, { message: 'Summary must have at least 20 characters.' }),
-  publishingYear: z.string().min(3, { message: 'Invalid year.' }),
-  publisher: z.string().optional(),
-  language: z.string().optional(),
-  isbn: z.string().optional(),
+  publishingYear: z
+    .string()
+    .min(3, { message: 'Publishing year is required.' }),
+  publisher: z.string().min(3, { message: 'Book publisher is required.' }),
+  language: z.string().min(3, { message: 'Book language is required' }),
+  isbn: z.string().min(3, { message: 'ISBN is required' }),
   totalPages: z.string().min(1, { message: 'Pages number is required.' }),
   coverUrl: z
     .custom<File>((file) => file instanceof File && file.size > 0)
@@ -77,7 +82,7 @@ const submitBookFormSchema = z.object({
         label: z.string(),
       }),
     )
-    .min(1, { message: 'At least one category is required.' }),
+    .min(1, { message: 'You must select at least one category.' }),
 })
 
 type SubmitBookFormData = z.infer<typeof submitBookFormSchema>
@@ -185,8 +190,12 @@ export function SubmitBookFormModal({
 
         const coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
 
-        setCoverPreview(coverUrl)
-        setCoverUrl(coverUrl)
+        const isValidImage = await checkImageExists(coverUrl)
+
+        if (isValidImage) {
+          setCoverPreview(coverUrl)
+          setCoverUrl(coverUrl)
+        }
       } else {
         throw new Error('Book not found')
       }
@@ -328,10 +337,11 @@ export function SubmitBookFormModal({
         }}
         title="Missing a Book?"
       >
-        <p style={{ marginBottom: '1.5rem' }}>
-          Here you can submit a new book to our platform! Just fill the fields
-          above:
-        </p>
+        <WarningContainer>
+          Submit a new book to our platform! Make sure all information is
+          accurate — if in doubt, check bookstore websites or Google. Help us
+          keep the platform high-quality!
+        </WarningContainer>
         <FormContainer onSubmit={handleSubmit(handleSubmitBook, onInvalid)}>
           <InputContainer>
             <Controller
@@ -359,6 +369,7 @@ export function SubmitBookFormModal({
 
           {isValidBook && (
             <>
+              <DividerLine />
               <CoverSectionContainer>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <FileInput
@@ -403,8 +414,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
-                      label="Book name:"
-                      disabled={isValidBook}
+                      label="Book name"
                       placeholder="e.g. Harry Potter and the Philosopher's Stone"
                       {...field}
                     />
@@ -419,8 +429,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
-                      disabled={isValidBook}
-                      label="Book author:"
+                      label="Book author"
                       placeholder="e.g. J. K. Rowling"
                       {...field}
                     />
@@ -435,10 +444,10 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Textarea
-                      label="Book Summary:"
-                      disabled={isValidBook}
+                      label="Book Summary"
                       rows={5}
                       maxLength={500}
+                      placeholder="e.g. Adaptation of the first of J.K. Rowling's popular children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son of two powerful wizards and possesses unique magical powers of his own."
                       {...field}
                     />
                   )}
@@ -453,8 +462,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
-                      disabled={isValidBook}
-                      label="Pages number:"
+                      label="Pages number"
                       placeholder="e.g. 232"
                       {...field}
                     />
@@ -486,15 +494,14 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
-                      disabled={isValidBook}
-                      label="Publisher:"
+                      label="Publisher"
                       placeholder="e.g. Bloomsbury Pub Ltd"
                       {...field}
                     />
                   )}
                 />
-                {errors.publishingYear && (
-                  <FormErrors error={errors.publishingYear.message} />
+                {errors.publisher && (
+                  <FormErrors error={errors.publisher.message} />
                 )}
               </InputContainer>
               <InputContainer>
@@ -503,8 +510,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
-                      disabled={isValidBook}
-                      label="Language:"
+                      label="Language"
                       placeholder="e.g. English"
                       {...field}
                     />
@@ -517,7 +523,7 @@ export function SubmitBookFormModal({
 
               {options && options.length && (
                 <InputContainer>
-                  <Label content="Categories:" />
+                  <Label content="Categories" />
                   <Controller
                     name="categories"
                     control={control}

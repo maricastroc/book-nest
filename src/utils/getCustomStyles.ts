@@ -4,6 +4,7 @@ export const customStyles = {
     ...provided,
     backgroundColor: '#161D2F',
     borderColor: '#5A698F',
+    padding: '0.2rem 0.2rem',
     borderRadius: 6,
     cursor: 'pointer',
     boxShadow: 'none',

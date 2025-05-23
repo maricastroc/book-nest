@@ -6,6 +6,7 @@ export const StyledFormErrors = styled('div', {
   alignItems: 'flex-start',
   gap: '0.4rem',
   marginTop: '0.1rem',
+  marginBottom: '-0.1rem',
 
   svg: {
     color: '$red300',
@@ -14,7 +15,7 @@ export const StyledFormErrors = styled('div', {
 
   p: {
     color: '$gray300',
-    fontSize: '0.8rem',
+    fontSize: '0.8375rem',
   },
 })
 

@@ -23,7 +23,6 @@ export const Input = ({ type, label, ...props }: InputProps) => {
       {label && <StyledLabel>{label}</StyledLabel>}
       <InputContainer>
         <StyledInput
-          hasLabel={!!label && label?.length > 0}
           autoComplete={type === 'password' ? 'new-password' : 'nope'}
           name="field"
           type={type === 'password' && showPassword ? 'text' : type}
