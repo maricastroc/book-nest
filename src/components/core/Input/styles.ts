@@ -9,6 +9,26 @@ export const StyledInput = styled('input', {
   borderRadius: 8,
   width: '100%',
 
+  variants: {
+    variant: {
+      default: {
+        padding: '0.7rem 0.6rem',
+        border: 'none',
+        borderBottom: 'solid 1px $blue600',
+        borderRadius: 0,
+      },
+      secondary: {
+        padding: '0.7rem 0.6rem',
+        border: 'solid 1px $blue600',
+        borderRadius: 8,
+      },
+    },
+  },
+
+  defaultVariants: {
+    variant: 'default',
+  },
+
   '&::placeholder': {
     color: '#8D95AF',
   },

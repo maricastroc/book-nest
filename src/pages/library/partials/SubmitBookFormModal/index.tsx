@@ -6,7 +6,6 @@ import Select from 'react-select'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { useEffect, useRef, useState } from 'react'
 import {
   FormContainer,
@@ -34,6 +33,7 @@ import { FormErrors } from '@/components/core/FormErrors'
 import { Textarea } from '@/components/core/Textarea'
 import { Label } from '@/components/core/Label'
 import { checkImageExists } from '@/utils/checkImageExists'
+import toast from 'react-hot-toast'
 
 interface SubmitBookFormModalProps {
   isEdit?: boolean
@@ -69,7 +69,7 @@ const submitBookFormSchema = z.object({
     .string()
     .min(3, { message: 'Publishing year is required.' }),
   publisher: z.string().min(3, { message: 'Book publisher is required.' }),
-  language: z.string().min(3, { message: 'Book language is required' }),
+  language: z.string().min(2, { message: 'Book language is required' }),
   isbn: z.string().min(3, { message: 'ISBN is required' }),
   totalPages: z.string().min(1, { message: 'Pages number is required.' }),
   coverUrl: z
@@ -134,6 +134,26 @@ export function SubmitBookFormModal({
     },
   })
 
+  async function checkIfBookExists({
+    isbn,
+    title,
+  }: {
+    isbn?: string
+    title?: string
+  }) {
+    try {
+      let url = '/books/check?'
+      if (isbn) url += `isbn=${encodeURIComponent(isbn)}`
+      if (title) url += `${isbn ? '&' : ''}title=${encodeURIComponent(title)}`
+
+      const response = await api.get(url)
+      return response.data
+    } catch (error) {
+      console.error('Error checking book:', error)
+      return { exists: false, book: null }
+    }
+  }
+
   const handleCoverChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
@@ -155,13 +175,10 @@ export function SubmitBookFormModal({
   }
 
   async function getBookInfoWithGoogleBooks(isbn: string | undefined) {
-    if (!isbn) {
-      return
-    }
+    if (!isbn) return
 
     try {
       setIsLoading(true)
-
       const cleanedIsbn = isbn.replace(/[-\s]/g, '')
 
       const response = await api.get(
@@ -170,39 +187,48 @@ export function SubmitBookFormModal({
         )}&langRestrict=en`,
       )
 
-      const books = response.data.items?.filter((book: GoogleBookProps) => {
-        return book.volumeInfo.language === 'en'
+      const books = response.data.items?.filter(
+        (book: GoogleBookProps) => book.volumeInfo.language === 'en',
+      )
+
+      if (!books?.length) {
+        throw new Error('Book not found in Google Books')
+      }
+
+      const googleBook = books[0].volumeInfo
+      const bookTitle = googleBook.title
+
+      const bookCheck = await checkIfBookExists({
+        isbn: cleanedIsbn,
+        title: bookTitle,
       })
 
-      if (books && books.length > 0) {
-        setIsValidBook(true)
+      if (bookCheck.exists) {
+        toast.error(
+          `"${bookCheck.book.name}" by "${bookCheck.book.author}" is already registered in our system!`,
+        )
+        setIsValidBook(false)
+        return
+      }
 
-        const foundBook = books[0].volumeInfo
+      setIsValidBook(true)
+      setValue('name', bookTitle)
+      setValue('author', googleBook.authors?.[0])
+      setValue('summary', googleBook.description)
+      setValue('totalPages', googleBook.pageCount?.toString())
+      setValue('publisher', googleBook.publisher)
+      setValue('publishingYear', formatDate(googleBook.publishedDate))
+      setValue('isbn', cleanedIsbn)
+      setValue('language', googleBook.language)
 
-        setValue('name', foundBook?.title)
-        setValue('author', foundBook?.authors?.[0])
-        setValue('summary', foundBook?.description)
-        setValue('totalPages', foundBook.pageCount?.toString())
-        setValue('publisher', foundBook?.publisher)
-        setValue('publishingYear', formatDate(foundBook?.publishedDate))
-        setValue('isbn', cleanedIsbn)
-        setValue('language', foundBook?.language)
+      const coverUrl = `https://covers.openlibrary.org/b/isbn/${cleanedIsbn}-L.jpg`
 
-        const coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
-
-        const isValidImage = await checkImageExists(coverUrl)
-
-        if (isValidImage) {
-          setCoverPreview(coverUrl)
-          setCoverUrl(coverUrl)
-        }
-      } else {
-        throw new Error('Book not found')
+      if (await checkImageExists(coverUrl)) {
+        setCoverPreview(coverUrl)
+        setCoverUrl(coverUrl)
       }
     } catch (error) {
-      toast.error(
-        'The book information could not be verified. Please check the ISBN.',
-      )
+      toast.error(`Oops, we couldn't find any books. Please check the ISBN.`)
       setIsValidBook(false)
     } finally {
       setIsLoading(false)
@@ -349,6 +375,7 @@ export function SubmitBookFormModal({
               control={control}
               render={({ field }) => (
                 <Input
+                  variant="secondary"
                   label="ISBN:"
                   placeholder="e.g. 978-0-7475-3269-9"
                   {...field}
@@ -414,6 +441,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      variant="secondary"
                       label="Book name"
                       placeholder="e.g. Harry Potter and the Philosopher's Stone"
                       {...field}
@@ -429,6 +457,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      variant="secondary"
                       label="Book author"
                       placeholder="e.g. J. K. Rowling"
                       {...field}
@@ -446,7 +475,7 @@ export function SubmitBookFormModal({
                     <Textarea
                       label="Book Summary"
                       rows={5}
-                      maxLength={500}
+                      maxLength={1000}
                       placeholder="e.g. Adaptation of the first of J.K. Rowling's popular children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son of two powerful wizards and possesses unique magical powers of his own."
                       {...field}
                     />
@@ -462,6 +491,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      variant="secondary"
                       label="Pages number"
                       placeholder="e.g. 232"
                       {...field}
@@ -478,6 +508,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      variant="secondary"
                       label="Publishing Year"
                       placeholder="1994"
                       {...field}
@@ -494,6 +525,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      variant="secondary"
                       label="Publisher"
                       placeholder="e.g. Bloomsbury Pub Ltd"
                       {...field}
@@ -510,6 +542,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      variant="secondary"
                       label="Language"
                       placeholder="e.g. English"
                       {...field}

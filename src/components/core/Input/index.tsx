@@ -9,9 +9,15 @@ import { Eye, EyeSlash } from 'phosphor-react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
+  variant?: 'default' | 'secondary'
 }
 
-export const Input = ({ type, label, ...props }: InputProps) => {
+export const Input = ({
+  type,
+  label,
+  variant = 'default',
+  ...props
+}: InputProps) => {
   const [showPassword, setShowPassword] = useState(false)
 
   const togglePasswordVisibility = () => {
@@ -23,6 +29,7 @@ export const Input = ({ type, label, ...props }: InputProps) => {
       {label && <StyledLabel>{label}</StyledLabel>}
       <InputContainer>
         <StyledInput
+          variant={variant}
           autoComplete={type === 'password' ? 'new-password' : 'nope'}
           name="field"
           type={type === 'password' && showPassword ? 'text' : type}

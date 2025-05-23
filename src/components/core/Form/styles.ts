@@ -5,7 +5,7 @@ export const StyledForm = styled('form', {
   flexDirection: 'column',
   width: '100%',
   height: 'auto',
-  gap: '1.5rem',
+  gap: '1.2rem',
 
   variants: {
     isLarger: {

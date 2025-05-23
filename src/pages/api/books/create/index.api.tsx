@@ -49,6 +49,28 @@ export default async function handler(
     }
 
     try {
+      const existingBook = await prisma.book.findFirst({
+        where: {
+          OR: [
+            { isbn: getSingleString(fields.isbn) },
+            {
+              name: getSingleString(fields.name),
+              author: getSingleString(fields.author),
+            },
+          ],
+        },
+      })
+
+      if (existingBook) {
+        return res.status(400).json({
+          message: 'This book already exists in our platform',
+          existingBook: {
+            id: existingBook.id,
+            name: existingBook.name,
+          },
+        })
+      }
+
       const name = getSingleString(fields.name)
       const author = getSingleString(fields.author)
       const summary = getSingleString(fields.summary)
@@ -65,16 +87,6 @@ export default async function handler(
 
       if (!coverFile) {
         return res.status(400).json({ message: 'Cover file is required.' })
-      }
-
-      const existingBook = await prisma.book.findFirst({
-        where: { name },
-      })
-
-      if (existingBook) {
-        return res
-          .status(400)
-          .json({ message: 'A book with this name already exists.' })
       }
 
       const createBookSchema = z.object({

@@ -208,7 +208,11 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
       ) : (
         <>
           <BaseModal onClose={onClose} title="Edit Profile">
-            <Form isProfileScreen onSubmit={handleSubmit(handleEditProfile)}>
+            <Form
+              isProfileScreen
+              onSubmit={handleSubmit(handleEditProfile)}
+              style={{ gap: '1.5rem' }}
+            >
               <AvatarSection>
                 <InputContainer>
                   <AvatarUploadWrapper>
@@ -252,7 +256,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                   name="name"
                   control={control}
                   render={({ field }) => (
-                    <Input placeholder="Name" {...field} />
+                    <Input variant="secondary" placeholder="Name" {...field} />
                   )}
                 />
                 {errors.name && (
@@ -267,7 +271,11 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                   name="email"
                   control={control}
                   render={({ field }) => (
-                    <Input placeholder="Email Address" {...field} />
+                    <Input
+                      variant="secondary"
+                      placeholder="Email Address"
+                      {...field}
+                    />
                   )}
                 />
                 {errors.email && <FormErrors error={errors.email.message} />}
@@ -281,6 +289,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                       control={control}
                       render={({ field }) => (
                         <Input
+                          variant="secondary"
                           type="password"
                           placeholder="Current Password"
                           {...field}
@@ -303,6 +312,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                       control={control}
                       render={({ field }) => (
                         <Input
+                          variant="secondary"
                           type="password"
                           placeholder="New Password"
                           {...field}
