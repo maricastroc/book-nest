@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import { NextSeo } from 'next-seo'
 import { Sidebar } from '@/components/shared/Sidebar'
 import {
@@ -25,7 +24,6 @@ import { BookProps } from '@/@types/book'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
-import { MobileFooter } from '@/components/shared/MobileFooter'
 import { TabletHeader } from '@/components/shared/TabletHeader'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { api } from '@/lib/axios'
@@ -148,13 +146,7 @@ export default function Profile() {
         <LoadingPage />
       ) : (
         <UserLibraryPageWrapper>
-          {isSmallSize ? (
-            <MobileHeader />
-          ) : isMediumSize ? (
-            <TabletHeader />
-          ) : (
-            <Sidebar />
-          )}
+          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
           {openLateralMenu && selectedBook && (
             <LateralMenu
               bookId={selectedBook.id}
@@ -210,7 +202,6 @@ export default function Profile() {
               </SubmittedBooksContainer>
             </UserLibraryContent>
           </UserLibraryBody>
-          {isSmallSize && <MobileFooter />}
         </UserLibraryPageWrapper>
       )}
     </>

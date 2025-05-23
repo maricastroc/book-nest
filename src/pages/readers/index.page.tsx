@@ -8,7 +8,6 @@ import {
   HeadingTitle,
   TitleAndSearch,
 } from './styles'
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { NextSeo } from 'next-seo'
 import { CategoryProps } from '@/@types/category'
@@ -17,7 +16,6 @@ import { useScreenSize } from '@/utils/useScreenSize'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { TabletHeader } from '@/components/shared/TabletHeader'
-import { MobileFooter } from '@/components/shared/MobileFooter'
 import { UserCard } from './partials/UserCard'
 import { SearchBar } from '@/styles/shared'
 import { SkeletonUserCard } from './partials/SkeletonUserCard'
@@ -55,13 +53,7 @@ export default function Users() {
         <LoadingPage />
       ) : (
         <UsersPageWrapper>
-          {isSmallSize ? (
-            <MobileHeader />
-          ) : isMediumSize ? (
-            <TabletHeader />
-          ) : (
-            <Sidebar />
-          )}
+          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
           <UsersPageContainer>
             <UsersPageHeading>
               <TitleAndSearch>
@@ -97,7 +89,6 @@ export default function Users() {
               </UsersContainer>
             </UsersPageContent>
           </UsersPageContainer>
-          {isSmallSize && <MobileFooter />}
         </UsersPageWrapper>
       )}
     </>

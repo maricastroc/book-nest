@@ -1,4 +1,3 @@
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import {
   HomePageWrapper,
   HomePageHeading,
@@ -32,7 +31,6 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
-import { MobileFooter } from '@/components/shared/MobileFooter'
 import { TabletHeader } from '@/components/shared/TabletHeader'
 import useRequest from '@/utils/useRequest'
 
@@ -121,13 +119,7 @@ export default function Home() {
               onUpdateBook={onUpdateBook}
             />
           )}
-          {isSmallSize ? (
-            <MobileHeader />
-          ) : isMediumSize ? (
-            <TabletHeader />
-          ) : (
-            <Sidebar />
-          )}
+          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
           <HomePageContainer>
             <HomePageHeading>
               <ChartLineUp />
@@ -212,7 +204,6 @@ export default function Home() {
               </PopularBooksWrapper>
             </HomePageContent>
           </HomePageContainer>
-          {isSmallSize && <MobileFooter />}
         </HomePageWrapper>
       )}
     </>

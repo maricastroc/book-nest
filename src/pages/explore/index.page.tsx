@@ -11,7 +11,6 @@ import {
   TitleAndSearch,
 } from './styles'
 import { useEffect, useState } from 'react'
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { NextSeo } from 'next-seo'
@@ -24,7 +23,6 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { BookCard } from '@/components/cards/BookCard'
 import { TabletHeader } from '@/components/shared/TabletHeader'
-import { MobileFooter } from '@/components/shared/MobileFooter'
 import { SearchBar } from '@/styles/shared'
 import useRequest from '@/utils/useRequest'
 
@@ -101,13 +99,7 @@ export default function Explore() {
               }}
             />
           )}
-          {isSmallSize ? (
-            <MobileHeader />
-          ) : isMediumSize ? (
-            <TabletHeader />
-          ) : (
-            <Sidebar />
-          )}
+          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
           <ExplorePageContainer>
             <ExplorePageHeading>
               <TitleAndSearch>
@@ -176,7 +168,6 @@ export default function Explore() {
               </BooksContainer>
             </ExplorePageContent>
           </ExplorePageContainer>
-          {isSmallSize && <MobileFooter />}
         </ExplorePageWrapper>
       )}
     </>

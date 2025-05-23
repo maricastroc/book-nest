@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/shared/Sidebar'
@@ -28,7 +27,6 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import { TabletHeader } from '@/components/shared/TabletHeader'
-import { MobileFooter } from '@/components/shared/MobileFooter'
 import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
 
@@ -130,13 +128,7 @@ export default function Profile() {
         <LoadingPage />
       ) : (
         <ProfilePageWrapper>
-          {isSmallSize ? (
-            <MobileHeader />
-          ) : isMediumSize ? (
-            <TabletHeader />
-          ) : (
-            <Sidebar />
-          )}
+          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
           <ProfilePageContainer>
             <ProfilePageHeading>
               <ProfilePageHeadingTitle>
@@ -205,7 +197,6 @@ export default function Profile() {
               </UserDetailsContainer>
             </ProfilePageContent>
           </ProfilePageContainer>
-          {isSmallSize && <MobileFooter />}
         </ProfilePageWrapper>
       )}
     </>

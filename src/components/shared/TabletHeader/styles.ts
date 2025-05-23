@@ -14,7 +14,7 @@ export const TabletHeaderWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-  padding: '2rem 1rem 1.5rem',
+  padding: '1.2rem 1.5rem',
   position: 'fixed',
   backgroundColor: '$gray800',
   top: 0,
@@ -38,8 +38,15 @@ export const TabletHeaderContent = styled('header', {
   width: '100%',
 
   img: {
-    width: '8.5rem',
+    width: '8rem',
     height: 'auto',
+  },
+
+  '@media (min-width: 480px)': {
+    img: {
+      width: '8.5rem',
+      height: 'auto',
+    },
   },
 })
 
@@ -53,7 +60,13 @@ export const LinksContainer = styled('button', {
 
   svg: {
     color: '$white',
-    fontSize: '1.8rem',
+    fontSize: '1.65rem',
+  },
+
+  '@media (min-width: 480px)': {
+    svg: {
+      fontSize: '1.8rem',
+    },
   },
 })
 
