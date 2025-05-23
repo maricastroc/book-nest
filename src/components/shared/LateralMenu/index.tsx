@@ -65,7 +65,7 @@ export function LateralMenu({
     undefined,
   )
 
-  const { loggedUser } = useAppContext()
+  const { loggedUser, isSubmitting } = useAppContext()
 
   const shouldShowReviewOption = loggedUser && !userRating
 
@@ -239,7 +239,7 @@ export function LateralMenu({
         <X />
       </CloseButton>
       <MenuBody>
-        {isLoading ? (
+        {isLoading || isSubmitting ? (
           <SkeletonLateralMenu />
         ) : (
           <>

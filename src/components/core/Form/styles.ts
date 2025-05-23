@@ -14,10 +14,10 @@ export const StyledForm = styled('form', {
         maxWidth: '29rem',
       },
     },
-    hasGap: {
+    isProfileScreen: {
       true: {
         gap: '1rem',
-        maxWidth: '100%',
+        width: 'auto',
       },
     },
   },

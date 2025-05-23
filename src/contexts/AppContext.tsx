@@ -37,7 +37,9 @@ export interface CreateReviewData {
 }
 
 interface AppContextType {
+  isSubmitting: boolean
   loggedUser: UserProps | null
+  handleSetIsSubmitting: (value: boolean) => void
   handleSetUserId: (value: string) => void
   handleSetLoggedUser: (data: UserProps) => void
   handleEditReview: (data: EditReviewData) => Promise<RatingProps>
@@ -54,12 +56,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [loggedUser, setLoggedUser] = useState<UserProps | null>(null)
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const [userId, setUserId] = useState('')
 
   const [isValidatingLoggedUser, setIsValidatingLoggedUser] = useState(false)
-  useState<boolean>(false)
 
   const session = useSession()
+
+  const handleSetIsSubmitting = (value: boolean) => {
+    setIsSubmitting(value)
+  }
 
   const handleSetLoggedUser = useCallback(
     (value: UserProps) => setLoggedUser(value),
@@ -131,15 +138,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   const contextValue = useMemo(
     () => ({
       loggedUser,
-      handleSetLoggedUser,
       isValidatingLoggedUser,
+      isSubmitting,
+      handleSetIsSubmitting,
+      handleSetLoggedUser,
       handleCreateReview,
       handleEditReview,
       handleDeleteReview,
       handleSetUserId,
       userId,
     }),
-    [loggedUser, userId],
+    [loggedUser, userId, isSubmitting],
   )
 
   return (

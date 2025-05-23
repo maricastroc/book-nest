@@ -47,16 +47,18 @@ export const ProfilePageContainer = styled('div', {
   margin: '0 auto',
   maxHeight: '100%',
   padding: '1rem',
-  paddingTop: '7rem',
+  marginTop: '5rem',
   maxWidth: '42rem',
   paddingBottom: '4rem',
 
   '@media (min-width: 480px)': {
     padding: '1.5rem',
+    marginTop: '5.5rem',
   },
 
   '@media (min-width: 768px)': {
     padding: '1.5rem 0',
+    marginTop: 0,
   },
 
   '@media (min-width: 980px)': {

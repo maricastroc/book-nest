@@ -84,6 +84,7 @@ export function ProfileCard({
                     </ActionButton>
                   </Dialog.Trigger>
                   <DeleteModal
+                    onClose={() => setIsDeleteModalOpen(false)}
                     onConfirm={() => {
                       deleteReview()
                     }}

@@ -37,7 +37,7 @@ export const DropdownMenu = ({
 }: DropdownMenuProps) => {
   const [userRating, setUserRating] = useState<RatingProps | null>(null)
 
-  const { loggedUser } = useAppContext()
+  const { loggedUser, handleSetIsSubmitting } = useAppContext()
 
   const statuses = [
     { label: 'Read', className: 'read' },
@@ -49,6 +49,8 @@ export const DropdownMenu = ({
   const handleSelectReadingStatus = async (book: BookProps, status: string) => {
     if (loggedUser && book) {
       try {
+        handleSetIsSubmitting(true)
+
         await api.post('/reading_status', {
           userId: loggedUser.id,
           bookId: book.id,
@@ -58,6 +60,8 @@ export const DropdownMenu = ({
         toast.success('Status successfully updated!')
       } catch (error) {
         handleApiError(error)
+      } finally {
+        handleSetIsSubmitting(false)
       }
     }
   }

@@ -5,7 +5,7 @@ import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import { Button } from '@/components/core/Button'
 import { ButtonGroup, CropperWrapper } from './styles'
-import { ModalContent, ModalOverlay } from '@/styles/shared'
+import { BaseModal } from '@/components/modals/BaseModal'
 
 interface ImageCropperProps {
   src: string
@@ -43,34 +43,32 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
 
   return (
     <Dialog.Portal>
-      <ModalOverlay hasOverlay={false}>
-        <ModalContent>
-          <CropperWrapper>
-            <Cropper
-              src={src}
-              style={{ height: '100%', width: '100%' }}
-              initialAspectRatio={aspectRatio}
-              aspectRatio={aspectRatio}
-              guides={true}
-              ref={cropperRef}
-            />
-          </CropperWrapper>
-          <ButtonGroup>
-            <Button
-              content="Cancel"
-              variant="outline-white"
-              onClick={() => {
-                onClose()
-              }}
-            />
-            <Button
-              variant="solid-white"
-              content="Crop Image"
-              onClick={handleCrop}
-            />
-          </ButtonGroup>
-        </ModalContent>
-      </ModalOverlay>
+      <BaseModal onClose={onClose}>
+        <CropperWrapper>
+          <Cropper
+            src={src}
+            style={{ height: '100%', width: '100%' }}
+            initialAspectRatio={aspectRatio}
+            aspectRatio={aspectRatio}
+            guides={true}
+            ref={cropperRef}
+          />
+        </CropperWrapper>
+        <ButtonGroup>
+          <Button
+            content="Cancel"
+            variant="outline-white"
+            onClick={() => {
+              onClose()
+            }}
+          />
+          <Button
+            variant="solid-white"
+            content="Crop Image"
+            onClick={handleCrop}
+          />
+        </ButtonGroup>
+      </BaseModal>
     </Dialog.Portal>
   )
 }

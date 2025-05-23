@@ -4,19 +4,19 @@ import { StyledForm } from './styles'
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
   children: ReactNode
   isLarger?: boolean
-  hasGap?: boolean
+  isProfileScreen?: boolean
 }
 
 export const Form = ({
   children,
   isLarger = false,
-  hasGap = false,
+  isProfileScreen = false,
   ...props
 }: Props) => {
   return (
     <StyledForm
       isLarger={isLarger}
-      hasGap={hasGap}
+      isProfileScreen={isProfileScreen}
       {...props}
       autoComplete="off"
     >

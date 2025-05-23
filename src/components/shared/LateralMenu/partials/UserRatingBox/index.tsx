@@ -45,9 +45,13 @@ export function UserRatingBox({
 
   const [openEditReviewBox, setOpenEditReviewBox] = useState(false)
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
   const { handleDeleteReview } = useAppContext()
 
   const session = useSession()
+
+  const isFromLoggedUser = rating.userId === session.data?.user.id
 
   return openEditReviewBox ? (
     <RatingCardForm
@@ -91,14 +95,18 @@ export function UserRatingBox({
           <TextBox description={rating.description ?? ''} />
         )}
       </UserRatingBoxContent>
-      {rating.userId === session.data?.user.id && (
+      {isFromLoggedUser && (
         <>
           <UserActions>
-            <Dialog.Root>
+            <Dialog.Root open={isDeleteModalOpen}>
               <Dialog.Trigger asChild>
-                <Trash className="delete_icon" />
+                <Trash
+                  className="delete_icon"
+                  onClick={() => setIsDeleteModalOpen(true)}
+                />
               </Dialog.Trigger>
               <DeleteModal
+                onClose={() => setIsDeleteModalOpen(false)}
                 onConfirm={() => {
                   handleDeleteReview(rating.id)
                   onDeleteReview(rating.id)

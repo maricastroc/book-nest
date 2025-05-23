@@ -1,19 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import {
-  Content,
-  CloseButton,
-  RatingBookModalHeader,
-  RatingBookModalContent,
-  Title,
-} from './styles'
-import { Star, X } from 'phosphor-react'
+import { Star } from 'phosphor-react'
 import { useState } from 'react'
 import { Rating } from 'react-simple-star-rating'
 import { getRatingMessage } from '@/utils/getRatingMessage'
-import { CustomButton } from '@/components/shared/Button'
-import { Overlay } from '@/styles/shared'
 import { RatingProps } from '@/@types/rating'
 import { useAppContext } from '@/contexts/AppContext'
+import { BaseModal } from '@/components/modals/BaseModal'
+import { Button } from '@/components/core/Button'
 
 interface RatingBookModalProps {
   onClose: () => void
@@ -62,35 +55,36 @@ export function RatingBookModal({
 
   return (
     <Dialog.Portal>
-      <Overlay className="DialogOverlay" />
-      <Content className="DialogContent">
-        <RatingBookModalHeader>
-          <Title className="DialogTitle">Rate your reading!</Title>
-          <p>{rate !== undefined && getRatingMessage(rate)}</p>
-          <CloseButton onClick={() => onClose()}>
-            <X alt="Close" />
-          </CloseButton>
-        </RatingBookModalHeader>
-        <RatingBookModalContent>
-          <Rating
-            allowFraction
-            initialValue={rate}
-            onClick={handleRating}
-            emptyIcon={<Star size={20} />}
-            fillIcon={<Star weight="fill" size={20} />}
-            emptyColor="#8381D9"
-            fillColor="#8381D9"
-          />
-        </RatingBookModalContent>
-        <CustomButton
-          hasRoundedBorder={false}
+      <BaseModal
+        hasAlignMiddleContent
+        showCloseButton={false}
+        title="Rate your reading!"
+        onClose={() => {
+          setRate(undefined)
+          onClose()
+        }}
+      >
+        <p style={{ marginBottom: '0.5rem' }}>
+          {rate !== undefined && getRatingMessage(rate)}
+        </p>
+
+        <Rating
+          allowFraction
+          initialValue={rate}
+          onClick={handleRating}
+          emptyIcon={<Star size={24} />}
+          fillIcon={<Star weight="fill" size={24} />}
+          emptyColor="#8381D9"
+          fillColor="#8381D9"
+        />
+        <Button
           style={{ marginTop: '2rem' }}
           content="Confirm"
           isDisabled={rate === undefined}
           onClick={submitReview}
           disabled={rate === undefined || isLoading}
         />
-      </Content>
+      </BaseModal>
     </Dialog.Portal>
   )
 }

@@ -1,5 +1,4 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'phosphor-react'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,20 +7,15 @@ import { toast } from 'react-toastify'
 import { useEffect, useRef, useState } from 'react'
 import AvatarDefaultImage from '../../../../public/assets/avatar_mockup.png'
 import {
-  Title,
-  Content,
   StyledCheckbox,
   StyledIndicator,
-  Header,
   ChangePasswordInputContainer,
-  CloseButton,
 } from './styles'
 import { handleApiError } from '@/utils/handleApiError'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSession } from 'next-auth/react'
 import { api } from '@/lib/axios'
 import { useAppContext } from '@/contexts/AppContext'
-import { Overlay } from '@/styles/shared'
 import { Input } from '@/components/core/Input'
 import { InputContainer } from '@/components/core/InputContainer'
 import { FormErrors } from '@/components/core/FormErrors'
@@ -35,6 +29,7 @@ import { Form } from '@/components/core/Form'
 import { Button } from '@/components/core/Button'
 import { truncateMiddle } from '@/utils/truncateMiddle'
 import { ImageCropper } from '@/components/shared/ImageCropper'
+import { BaseModal } from '../BaseModal'
 
 interface EditProfileModalProps {
   onClose: () => void
@@ -196,15 +191,8 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
         />
       ) : (
         <>
-          <Overlay className="DialogOverlay" />
-          <Content className="DialogContent">
-            <Header>
-              <Title className="DialogTitle">Edit Profile</Title>
-              <CloseButton onClick={onClose}>
-                <X alt="Close" />
-              </CloseButton>
-            </Header>
-            <Form hasGap onSubmit={handleSubmit(handleEditProfile)}>
+          <BaseModal onClose={onClose} title="Edit Profile">
+            <Form isProfileScreen onSubmit={handleSubmit(handleEditProfile)}>
               <AvatarSection>
                 <InputContainer>
                   <AvatarUploadWrapper>
@@ -337,7 +325,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                 }}
               />
             </Form>
-          </Content>
+          </BaseModal>
         </>
       )}
     </Dialog.Portal>
