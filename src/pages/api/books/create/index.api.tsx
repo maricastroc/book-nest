@@ -95,18 +95,20 @@ export default async function handler(
       if (coverSource === 'openlibrary' && coverUrlFromOpenLibrary) {
         finalCoverUrl = getSingleString(coverUrlFromOpenLibrary)
       } else if (coverFile) {
-        const MAX_SIZE = 2 * 1024 * 1024;
-        const fileBuffer = await fs.readFile(coverFile.filepath);
-        
+        const MAX_SIZE = 2 * 1024 * 1024
+        const fileBuffer = await fs.readFile(coverFile.filepath)
+
         if (fileBuffer.length > MAX_SIZE) {
-            await fs.unlink(coverFile.filepath);
-            return res.status(400).json({ message: 'Image must be less than 2MB' });
+          await fs.unlink(coverFile.filepath)
+          return res
+            .status(400)
+            .json({ message: 'Image must be less than 2MB' })
         }
 
-        const base64Image = fileBuffer.toString('base64');
-        finalCoverUrl = `data:${coverFile.mimetype};base64,${base64Image}`;
+        const base64Image = fileBuffer.toString('base64')
+        finalCoverUrl = `data:${coverFile.mimetype};base64,${base64Image}`
 
-        await fs.unlink(coverFile.filepath);
+        await fs.unlink(coverFile.filepath)
       } else {
         return res.status(400).json({ message: 'Cover image is required' })
       }
