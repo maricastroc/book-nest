@@ -141,7 +141,16 @@ export default function Profile() {
 
   return (
     <>
-      <NextSeo title="Profile | Book Wise" />
+      <NextSeo
+        title="Library | Book Wise"
+        additionalMetaTags={[
+          {
+            name: 'viewport',
+            content:
+              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          },
+        ]}
+      />
       {isRouteLoading ? (
         <LoadingPage />
       ) : (

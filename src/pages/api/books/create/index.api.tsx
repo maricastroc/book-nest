@@ -5,9 +5,9 @@ import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
-import fs from 'fs/promises' // Usando fs/promises para async/await
+import fs from 'fs/promises'
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
-import path from 'path'
+import sharp from 'sharp'
 
 export const config = {
   api: {
@@ -41,7 +41,6 @@ export default async function handler(
     if (err) return res.status(500).json({ message: 'Error processing form' })
 
     try {
-      // Extração dos campos
       const name = getSingleString(fields.name)
       const author = getSingleString(fields.author)
       const summary = getSingleString(fields.summary)
@@ -54,11 +53,10 @@ export default async function handler(
         10,
       )
       const categories = JSON.parse(getSingleString(fields.categories) || '[]')
-      const coverSource = getSingleString(fields.coverSource) // 'openlibrary' ou 'upload'
+      const coverSource = getSingleString(fields.coverSource)
       const coverFile = files.coverUrl?.[0]
       const coverUrlFromOpenLibrary = fields.coverUrl?.[0]
 
-      // Verificação de livro existente
       const existingBook = await prisma.book.findFirst({
         where: {
           OR: [{ isbn }, { name, author }],
@@ -75,7 +73,6 @@ export default async function handler(
         })
       }
 
-      // Validação com Zod
       const createBookSchema = z.object({
         name: z.string().min(1),
         author: z.string().min(1),
@@ -94,60 +91,31 @@ export default async function handler(
         categories,
       })
 
-      // Tratamento da capa
       let finalCoverUrl: string
 
       if (coverSource === 'openlibrary' && coverUrlFromOpenLibrary) {
-        // Caso OpenLibrary (armazena a URL diretamente)
         finalCoverUrl = getSingleString(coverUrlFromOpenLibrary)
       } else if (coverFile) {
-        // Configurações do armazenamento local
-        const UPLOADS_DIR = path.join(
-          process.cwd(),
-          'public',
-          'uploads',
-          'books',
-        )
-        const MAX_SIZE = 2 * 1024 * 1024 // 2MB
+        const MAX_SIZE = 2 * 1024 * 1024
 
-        // 1. Verifica tamanho do arquivo
         const fileBuffer = await fs.readFile(coverFile.filepath)
+
         if (fileBuffer.length > MAX_SIZE) {
           await fs.unlink(coverFile.filepath)
           return res
             .status(400)
-            .json({ message: 'Cover image must be less than 2MB' })
+            .json({ message: 'A imagem deve ter menos de 2MB' })
         }
 
-        // 2. Valida o tipo do arquivo
-        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp']
-        if (!allowedMimeTypes.includes(coverFile.mimetype as string)) {
-          await fs.unlink(coverFile.filepath)
-          return res
-            .status(400)
-            .json({ message: 'Only JPG, PNG or WEBP images are allowed' })
-        }
+        const optimizedImage = await sharp(fileBuffer)
+          .resize(800, 800, { fit: 'inside' })
+          .jpeg({ quality: 80, mozjpeg: true })
+          .toBuffer()
 
-        // 3. Cria diretório se não existir
-        await fs.mkdir(UPLOADS_DIR, { recursive: true })
+        const base64Image = optimizedImage.toString('base64')
+        finalCoverUrl = `data:${coverFile.mimetype};base64,${base64Image}`
 
-        // 4. Gera nome único para o arquivo
-        const fileExt = path.extname(coverFile.originalFilename || 'cover.jpg')
-        const fileName = `${Date.now()}-${Math.random()
-          .toString(36)
-          .substring(2, 9)}${fileExt}`
-        const filePath = path.join(UPLOADS_DIR, fileName)
-
-        // 5. Move o arquivo para o diretório permanente
-        try {
-          await fs.rename(coverFile.filepath, filePath)
-
-          // 6. Retorna o caminho relativo para armazenar no banco
-          finalCoverUrl = `/uploads/books/${fileName}`
-        } catch (error) {
-          await fs.unlink(coverFile.filepath)
-          return res.status(500).json({ message: 'Failed to save cover image' })
-        }
+        await fs.unlink(coverFile.filepath)
       } else {
         return res.status(400).json({ message: 'Cover image is required' })
       }
@@ -181,7 +149,6 @@ export default async function handler(
         message: 'Book successfully created!',
       })
     } catch (error) {
-      // Limpeza de arquivos temporários em caso de erro
       if (files.coverUrl?.[0]) {
         await fs.unlink(files.coverUrl[0].filepath).catch(() => {})
       }
