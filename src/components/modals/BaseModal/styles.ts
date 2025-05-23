@@ -46,7 +46,7 @@ export const Content = styled(RadixContent, {
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'flex-start',
-  maxHeight: '85vh',
+  maxHeight: '80vh',
 
   '@media (min-width: 480px)': {
     width: 'clamp(300px, 85vw, 460px)',
@@ -131,7 +131,6 @@ export const Description = styled(RadixDescription, {
   textAlign: 'left',
   color: '$gray300',
   lineHeight: '160%',
-  overflow: 'scroll',
 
   variants: {
     hasAlignMiddleContent: {
