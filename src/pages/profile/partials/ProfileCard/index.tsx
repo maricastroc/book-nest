@@ -25,7 +25,7 @@ import { StarsRating } from '@/components/shared/StarsRating'
 import { DeleteModal } from '@/components/modals/DeleteModal'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { TextBox } from '@/components/shared/TextBox'
-import { EditUserReviewModal } from '@/pages/profile/partials/EditUserReviewModal'
+import { RatingCardForm } from '@/components/shared/RatingCardForm'
 
 interface ProfileCardProps {
   book: BookProps
@@ -45,7 +45,7 @@ export function ProfileCard({
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
 
-  const [isEditUserReviewModalOpen, setIsEditUserReviewModalOpen] =
+  const [isEditUserReviewCardOpen, setIsEditUserReviewCardOpen] =
     useState(false)
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -62,7 +62,18 @@ export function ProfileCard({
     }
   }
   console.log(rating, book)
-  return (
+  return isEditUserReviewCardOpen ? (
+    <RatingCardForm
+      isEdit
+      rating={rating}
+      book={book}
+      onUpdateReview={onUpdateReview}
+      onCreateReview={onCreateReview}
+      onClose={() => {
+        setIsEditUserReviewCardOpen(false)
+      }}
+    />
+  ) : (
     <ProfileCardWrapper>
       <time title={dateFormatted} dateTime={dateString}>
         {dateRelativeToNow}
@@ -90,26 +101,13 @@ export function ProfileCard({
                     }}
                   />
                 </Dialog.Root>
-                <Dialog.Root open={isEditUserReviewModalOpen}>
-                  <Dialog.Trigger asChild>
-                    <ActionButton
-                      className="edit"
-                      type="button"
-                      onClick={() => setIsEditUserReviewModalOpen(true)}
-                    >
-                      <PencilSimple />
-                    </ActionButton>
-                  </Dialog.Trigger>
-                  <EditUserReviewModal
-                    rating={rating}
-                    book={book}
-                    onUpdateReview={onUpdateReview}
-                    onCreateReview={onCreateReview}
-                    onClose={() => {
-                      setIsEditUserReviewModalOpen(false)
-                    }}
-                  />
-                </Dialog.Root>
+                <ActionButton
+                  className="edit"
+                  type="button"
+                  onClick={() => setIsEditUserReviewCardOpen(true)}
+                >
+                  <PencilSimple />
+                </ActionButton>
               </UserActions>
             </>
           )}
@@ -132,7 +130,7 @@ export function ProfileCard({
                     />
                   ) : (
                     <EmptyCardContent
-                      onClick={() => setIsEditUserReviewModalOpen(true)}
+                      onClick={() => setIsEditUserReviewCardOpen(true)}
                     >
                       Add your Review
                       <Plus />
@@ -154,7 +152,7 @@ export function ProfileCard({
                 <>
                   <DividerLine />
                   <EmptyCardContent
-                    onClick={() => setIsEditUserReviewModalOpen(true)}
+                    onClick={() => setIsEditUserReviewCardOpen(true)}
                   >
                     Add your Review
                     <Plus />
