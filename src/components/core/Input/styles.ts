@@ -11,13 +11,22 @@ export const StyledInput = styled('input', {
   width: '100%',
 
   '&::placeholder': {
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: '#8D95AF',
   },
 
   '&:focus': {
     backgroundColor: 'transparent',
     outline: 'none',
     boxShadow: 'none',
+  },
+
+  variants: {
+    hasLabel: {
+      true: {
+        paddingTop: '0.4rem',
+        paddingBottom: '0.6rem',
+      },
+    },
   },
 })
 
@@ -38,5 +47,22 @@ export const ToggleButton = styled('button', {
 
   '&:focus': {
     outline: 'none',
+  },
+})
+
+export const StyledLabel = styled('label', {
+  display: 'block',
+  color: '$gray300',
+  fontSize: '0.875rem',
+  transition: 'color 0.2s',
+  fontWeight: 700,
+  marginLeft: '0.5rem',
+
+  variants: {
+    focused: {
+      true: {
+        color: '$blue500',
+      },
+    },
   },
 })

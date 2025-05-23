@@ -5,7 +5,7 @@ export const StyledFormErrors = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '0.4rem',
-  marginTop: '0.3rem',
+  marginTop: '0.1rem',
 
   svg: {
     color: '$red300',
@@ -13,8 +13,8 @@ export const StyledFormErrors = styled('div', {
   },
 
   p: {
-    color: '$gray300',
-    fontSize: '$sm',
+    color: '$red300',
+    fontSize: '0.8rem',
   },
 })
 

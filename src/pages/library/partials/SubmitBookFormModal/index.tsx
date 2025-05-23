@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as Dialog from '@radix-ui/react-dialog'
-import { Book, Pencil, X } from 'phosphor-react'
+import { Book } from 'phosphor-react'
 import Select from 'react-select'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,27 +9,14 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useEffect, useRef, useState } from 'react'
 import {
-  Title,
-  Content,
-  CloseButton,
   FormContainer,
-  ImageInput,
-  Input,
-  Header,
-  Textarea,
   CoverSectionContainer,
   PreviewContainer,
   ImagePreview,
-  EditBtn,
   DividerLine,
 } from './styles'
-import { CustomLabel } from '@/components/shared/Label'
-import { FormErrors } from '@/components/shared/FormErrors'
-import { InputContainer } from '@/components/shared/InputContainer'
 import { handleApiError } from '@/utils/handleApiError'
 import { api } from '@/lib/axios'
-import { Description, Overlay } from '@/styles/shared'
-import { CustomButton } from '@/components/shared/Button'
 import { customStyles } from '@/utils/getCustomStyles'
 import { CategoryProps } from '@/@types/category'
 import { useAppContext } from '@/contexts/AppContext'
@@ -37,6 +24,14 @@ import { BookProps } from '@/@types/book'
 import { formatDate } from '@/utils/formatDate'
 import { disabledCustomStyles } from '@/utils/getDisabledCustomStyles'
 import useRequest from '@/utils/useRequest'
+import { InputContainer } from '@/components/core/InputContainer'
+import { Input } from '@/components/core/Input'
+import { Button } from '@/components/core/Button'
+import { BaseModal } from '@/components/modals/BaseModal'
+import { FileInput } from '@/components/core/FileInput'
+import { FormErrors } from '@/components/core/FormErrors'
+import { Textarea } from '@/components/core/Textarea'
+import { Label } from '@/components/core/Label'
 
 interface SubmitBookFormModalProps {
   isEdit?: boolean
@@ -122,6 +117,7 @@ export function SubmitBookFormModal({
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<SubmitBookFormData>({
     resolver: zodResolver(submitBookFormSchema),
@@ -182,6 +178,22 @@ export function SubmitBookFormModal({
         setValue('publishingYear', formatDate(foundBook?.publishedDate))
         setValue('isbn', foundBook?.industryIdentifiers[0]?.identifier)
         setValue('language', foundBook?.language)
+
+        const isbn =
+          foundBook?.industryIdentifiers.find(
+            (id: { type: string }) => id.type === 'ISBN_13',
+          )?.identifier ||
+          foundBook?.industryIdentifiers.find(
+            (id: { type: string }) => id.type === 'ISBN_10',
+          )?.identifier ||
+          ''
+
+        const openLibraryCover = isbn
+          ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
+          : ''
+
+        setCoverPreview(openLibraryCover)
+        setCoverUrl(openLibraryCover)
       }
     } catch (error) {
       if (error) {
@@ -300,185 +312,200 @@ export function SubmitBookFormModal({
 
   return (
     <Dialog.Portal>
-      <Overlay className="DialogOverlay" onClick={onClose} />
-      <Content className="DialogContent">
-        <Header>
-          <Title className="DialogTitle">
-            <h2>Missing a Book?</h2>
-            <p>
-              Here you can submit a new book to our platform! Just fill the
-              fields above:
-            </p>
-          </Title>
-          <CloseButton onClick={onClose}>
-            <X alt="Close" />
-          </CloseButton>
-        </Header>
-        <Description className="DialogDescription">
-          <FormContainer onSubmit={handleSubmit(handleSubmitBook, onInvalid)}>
-            <CoverSectionContainer>
-              <PreviewContainer>
-                <ImagePreview>
-                  {coverPreview ? (
-                    <img src={coverPreview} alt="Cover Preview" />
-                  ) : (
-                    <Book />
-                  )}
-                </ImagePreview>
-                <EditBtn type="button" onClick={handleCoverChangeClick}>
-                  <Pencil />
-                </EditBtn>
-              </PreviewContainer>
-              <InputContainer>
-                <CustomLabel>Book cover here:</CustomLabel>
-                <ImageInput>
-                  <input
-                    type="file"
-                    ref={inputFileRef}
-                    style={{ display: 'none' }}
-                    onChange={handleCoverChange}
-                  />
-                  <button type="button" onClick={handleCoverChangeClick}>
-                    Choose File
-                  </button>
-                  <span>
-                    {watch('coverUrl')?.name
-                      ? watch('coverUrl')?.name
-                      : coverUrl}
-                  </span>
-                </ImageInput>
-                {showErrors && !isEdit && !form.coverUrl && (
-                  <FormErrors error={'Cover Image is required.'} />
+      <BaseModal
+        isLarger
+        onClose={() => {
+          onClose()
+          setShowErrors(false)
+          reset()
+        }}
+        title="Missing a Book?"
+      >
+        <p>
+          Here you can submit a new book to our platform! Just fill the fields
+          above:
+        </p>
+        <FormContainer onSubmit={handleSubmit(handleSubmitBook, onInvalid)}>
+          <CoverSectionContainer>
+            <InputContainer>
+              <FileInput
+                label="Book cover:"
+                buttonText="Choose file"
+                accept=".pdf,.jpg,.png"
+                content={
+                  watch('coverUrl')?.name
+                    ? watch('coverUrl')?.name
+                    : coverUrl || 'No file chosen'
+                }
+                onChange={handleCoverChange}
+              />
+              {showErrors && !isEdit && !form.coverUrl && (
+                <FormErrors error={'Cover Image is required.'} />
+              )}
+            </InputContainer>
+            <PreviewContainer>
+              <ImagePreview onClick={handleCoverChangeClick}>
+                {coverPreview ? (
+                  <img src={coverPreview} alt="Cover Preview" />
+                ) : (
+                  <Book />
                 )}
-              </InputContainer>
-            </CoverSectionContainer>
-            <InputContainer>
-              <CustomLabel>Book Name</CustomLabel>
-              <Input
-                placeholder="e.g. The Lord of the Rings"
-                {...register('name')}
-              />
-              {errors.name && <FormErrors error={errors.name.message} />}
-            </InputContainer>
-            <InputContainer>
-              <CustomLabel>Book Author</CustomLabel>
-              <Input
-                type="text"
-                placeholder="e.g. J.R.R. Tolkien"
-                {...register('author')}
-              />
-              {errors.author && <FormErrors error={errors.author.message} />}
-            </InputContainer>
+              </ImagePreview>
+            </PreviewContainer>
+          </CoverSectionContainer>
 
-            <CustomButton
-              type="button"
-              content={isLoading ? 'Loading...' : 'Get Book Information'}
-              onClick={() => getBookInfoWithGoogleBooks(form.name, form.author)}
-              disabled={isSubmitting || !form.name || !form.author || isLoading}
+          <InputContainer>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  label="Book name:"
+                  placeholder="e.g. The Lord of the Rings"
+                  {...field}
+                />
+              )}
             />
+            {errors.name && <FormErrors error={errors.name.message} />}
+          </InputContainer>
 
-            <DividerLine />
-            <InputContainer>
-              <CustomLabel>Book Summary</CustomLabel>
-              <Textarea
-                disabled={!isValidBook}
-                placeholder="e.g. The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien’s extensive knowledge of philology and folklore."
-                {...register('summary')}
-              />
-              {errors.summary && <FormErrors error={errors.summary.message} />}
-            </InputContainer>
-            <InputContainer>
-              <CustomLabel>Pages Number</CustomLabel>
-              <Input
-                disabled={!isValidBook}
-                type="number"
-                placeholder="e.g. 1137"
-                {...register('totalPages')}
-              />
-              {errors.totalPages && (
-                <FormErrors error={errors.totalPages.message} />
+          <InputContainer>
+            <Controller
+              name="author"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  label="Book author:"
+                  placeholder="e.g. J.R.R. Tolkien"
+                  {...field}
+                />
               )}
-            </InputContainer>
-            <InputContainer>
-              <CustomLabel>Publishing Year</CustomLabel>
-              <Input
-                disabled={!isValidBook}
-                type="text"
-                placeholder="e.g. 1954"
-                {...register('publishingYear')}
-              />
-              {errors.publishingYear && (
-                <FormErrors error={errors.publishingYear.message} />
-              )}
-            </InputContainer>
-            <InputContainer>
-              <CustomLabel>Publisher</CustomLabel>
-              <Input
-                disabled={!isValidBook}
-                type="text"
-                placeholder="e.g. Raincoast Books"
-                {...register('publisher')}
-              />
-              {errors.publisher && (
-                <FormErrors error={errors.publisher.message} />
-              )}
-            </InputContainer>
-            <InputContainer>
-              <CustomLabel>Language</CustomLabel>
-              <Input
-                disabled={!isValidBook}
-                type="text"
-                placeholder="e.g. English"
-                {...register('language')}
-              />
-              {errors.language && (
-                <FormErrors error={errors.language.message} />
-              )}
-            </InputContainer>
-            <InputContainer>
-              <CustomLabel>ISBN</CustomLabel>
-              <Input
-                disabled={!isValidBook}
-                type="text"
-                placeholder="e.g. 978-316148410"
-                {...register('isbn')}
-              />
-              {errors.isbn && <FormErrors error={errors.isbn.message} />}
-            </InputContainer>
+            />
+            {errors.author && <FormErrors error={errors.author.message} />}
+          </InputContainer>
 
-            {options && options.length && (
+          <Button
+            type="button"
+            content={isLoading ? 'Loading...' : 'Get Book Information'}
+            onClick={() => getBookInfoWithGoogleBooks(form.name, form.author)}
+            disabled={isSubmitting || !form.name || !form.author || isLoading}
+            style={{ marginTop: '1rem' }}
+          />
+
+          {isValidBook && (
+            <>
+              <DividerLine />
               <InputContainer>
-                <CustomLabel>Book Categories</CustomLabel>
                 <Controller
-                  name="categories"
+                  name="summary"
                   control={control}
-                  defaultValue={[]}
                   render={({ field }) => (
-                    <Select
+                    <Textarea
+                      label="Book Summary:"
+                      rows={5}
+                      maxLength={500}
                       {...field}
-                      isMulti
-                      options={options as any}
-                      styles={
-                        !isValidBook ? disabledCustomStyles : customStyles
-                      }
-                      onChange={(selected) => field.onChange(selected)}
                     />
                   )}
                 />
-                {errors.categories && (
-                  <FormErrors error={errors.categories.message} />
+                {errors.summary && (
+                  <FormErrors error={errors.summary.message} />
                 )}
               </InputContainer>
-            )}
+              <InputContainer>
+                <Input
+                  label="Pages Number:"
+                  disabled={!isValidBook}
+                  type="number"
+                  placeholder="e.g. 1137"
+                  {...register('totalPages')}
+                />
+                {errors.totalPages && (
+                  <FormErrors error={errors.totalPages.message} />
+                )}
+              </InputContainer>
+              <InputContainer>
+                <Input
+                  label="Publishing Year:"
+                  disabled={!isValidBook}
+                  type="text"
+                  placeholder="e.g. 1954"
+                  {...register('publishingYear')}
+                />
+                {errors.publishingYear && (
+                  <FormErrors error={errors.publishingYear.message} />
+                )}
+              </InputContainer>
+              <InputContainer>
+                <Input
+                  label="Publisher:"
+                  disabled={!isValidBook}
+                  type="text"
+                  placeholder="e.g. Raincoast Books"
+                  {...register('publisher')}
+                />
+                {errors.publisher && (
+                  <FormErrors error={errors.publisher.message} />
+                )}
+              </InputContainer>
+              <InputContainer>
+                <Input
+                  label="Language:"
+                  disabled={!isValidBook}
+                  type="text"
+                  placeholder="e.g. English"
+                  {...register('language')}
+                />
+                {errors.language && (
+                  <FormErrors error={errors.language.message} />
+                )}
+              </InputContainer>
+              <InputContainer>
+                <Input
+                  label="ISBN:"
+                  disabled={!isValidBook}
+                  type="text"
+                  placeholder="e.g. 978-316148410"
+                  {...register('isbn')}
+                />
+                {errors.isbn && <FormErrors error={errors.isbn.message} />}
+              </InputContainer>
 
-            <CustomButton
-              type="submit"
-              content={isEdit ? 'Save Changes' : 'Submit New Book'}
-              disabled={isSubmitting || !isValidBook}
-            />
-          </FormContainer>
-        </Description>
-      </Content>
+              {options && options.length && (
+                <InputContainer>
+                  <Label content="Categories:" />
+                  <Controller
+                    name="categories"
+                    control={control}
+                    defaultValue={[]}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isMulti
+                        options={options as any}
+                        styles={
+                          !isValidBook ? disabledCustomStyles : customStyles
+                        }
+                        onChange={(selected) => field.onChange(selected)}
+                      />
+                    )}
+                  />
+                  {errors.categories && (
+                    <FormErrors error={errors.categories.message} />
+                  )}
+                </InputContainer>
+              )}
+
+              <Button
+                type="submit"
+                content={isEdit ? 'Save Changes' : 'Submit New Book'}
+                disabled={isSubmitting || !isValidBook}
+                style={{ marginTop: '1rem' }}
+              />
+            </>
+          )}
+        </FormContainer>
+      </BaseModal>
     </Dialog.Portal>
   )
 }

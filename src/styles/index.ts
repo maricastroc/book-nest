@@ -39,7 +39,7 @@ export const {
       gray750: '#121520',
       gray800: '#0E1116',
 
-      red300: '#c54646',
+      red300: '#cc4e4e',
       red400: '#843d3d',
 
       reading: '#4F72D5',

@@ -22,7 +22,7 @@ export const Header = styled('div', {
   alignItems: 'start',
   justifyContent: 'space-between',
   width: '100%',
-  marginBottom: '2rem',
+  marginBottom: '1.5rem',
 
   '@media (min-width: 480px)': {
     alignItems: 'center',
@@ -46,6 +46,7 @@ export const Content = styled(RadixContent, {
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'flex-start',
+  maxHeight: '85vh',
 
   '@media (min-width: 480px)': {
     width: 'clamp(300px, 85vw, 460px)',
@@ -54,13 +55,28 @@ export const Content = styled(RadixContent, {
   '@media (min-width: 768px)': {
     padding: '2rem',
     width: 'clamp(20rem, 80vw, 32rem)',
-    maxWidth: '33rem',
   },
 
   '&:focus': {
     outline: 'none',
     boxShadow: 'none',
     border: 'none',
+  },
+
+  variants: {
+    isLarger: {
+      true: {
+        width: 'clamp(320px, 90vw, 480px)',
+
+        '@media (min-width: 480px)': {
+          width: 'clamp(320px, 85vw, 700px)',
+        },
+
+        '@media (min-width: 768px)': {
+          width: 'clamp(20rem, 80vw, 40rem)',
+        },
+      },
+    },
   },
 })
 
@@ -69,7 +85,6 @@ export const Title = styled(RadixTitle, {
   fontSize: '$3xl',
   textAlign: 'start',
   width: '100%',
-  marginBottom: '1rem',
   fontWeight: 300,
 
   variants: {
@@ -78,10 +93,6 @@ export const Title = styled(RadixTitle, {
         textAlign: 'center',
       },
     },
-  },
-
-  '@media (min-width: 480px)': {
-    marginBottom: 0,
   },
 })
 
@@ -105,7 +116,8 @@ export const CloseButton = styled(RadixClose, {
   },
 
   '&:focus': {
-    boxShadow: '0 0 0 2px $purple100',
+    boxShadow: 'none',
+    outline: 'none',
   },
 
   '@media (min-width: 480px)': {
@@ -114,11 +126,12 @@ export const CloseButton = styled(RadixClose, {
 })
 
 export const Description = styled(RadixDescription, {
-  fontSize: '0.95rem',
+  fontSize: '0.9375rem',
   width: '100%',
   textAlign: 'left',
   color: '$gray300',
-  lineHeight: '180%',
+  lineHeight: '160%',
+  overflow: 'scroll',
 
   variants: {
     hasAlignMiddleContent: {
@@ -129,5 +142,9 @@ export const Description = styled(RadixDescription, {
         justifyContent: 'center',
       },
     },
+  },
+
+  '@media (min-width: 480px)': {
+    fontSize: '0.975rem',
   },
 })

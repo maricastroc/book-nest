@@ -13,9 +13,9 @@ import {
 interface BaseModalProps {
   onClose: () => void
   title?: string
-  children: ReactNode
-  maxWidth?: string
+  isLarger?: boolean
   hasAlignMiddleContent?: boolean
+  children: ReactNode
   showCloseButton?: boolean
 }
 
@@ -23,14 +23,14 @@ export function BaseModal({
   onClose,
   title,
   children,
-  maxWidth = '500px',
+  isLarger = false,
   hasAlignMiddleContent = false,
   showCloseButton = true,
 }: BaseModalProps) {
   return (
     <Dialog.Portal>
       <Overlay className="DialogOverlay" onClick={onClose} />
-      <Content className="DialogContent" style={{ maxWidth }}>
+      <Content className="DialogContent" isLarger={isLarger}>
         {title && (
           <Header className="DialogHeader">
             <Title

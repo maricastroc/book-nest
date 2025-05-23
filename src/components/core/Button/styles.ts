@@ -79,7 +79,6 @@ export const StyledButton = styled('button', {
     border: 'solid 1px $blue600',
     color: '$gray100',
     cursor: 'not-allowed !important',
-    pointerEvents: 'none',
 
     svg: {
       color: '$gray100',

@@ -1,8 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { Content, CloseButton, Title } from './styles'
-import { X } from 'phosphor-react'
-import { CustomButton } from '@/components/shared/Button'
-import { Overlay } from '@/styles/shared'
+import { BaseModal } from '@/components/modals/BaseModal'
+import { Button } from '@/components/core/Button'
 
 interface ReviewWarningModalProps {
   onClose: () => void
@@ -11,20 +9,19 @@ interface ReviewWarningModalProps {
 export function ReviewWarningModal({ onClose }: ReviewWarningModalProps) {
   return (
     <Dialog.Portal>
-      <Overlay className="DialogOverlay" onClick={onClose} />
-      <Content className="DialogContent">
-        <Title className="DialogTitle">Ooops!</Title>
-        <p>You need to mark this book as Read in order to write a review.</p>
-        <CloseButton onClick={() => onClose()}>
-          <X alt="Close" />
-        </CloseButton>
-        <CustomButton
-          hasRoundedBorder={false}
+      <BaseModal onClose={onClose} title="Ooops!">
+        <p>
+          You need to mark this book as{' '}
+          <span style={{ fontWeight: 700 }}>Read</span> or as{' '}
+          <span style={{ fontWeight: 700 }}>Did not finish</span> in order to
+          write a review.
+        </p>
+        <Button
           style={{ marginTop: '2rem' }}
           content="Got it!"
           onClick={onClose}
         />
-      </Content>
+      </BaseModal>
     </Dialog.Portal>
   )
 }

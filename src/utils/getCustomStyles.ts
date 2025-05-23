@@ -2,26 +2,26 @@
 export const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: '#181C2A',
-    borderColor: 'rgba(131, 129, 217, 0.5)',
+    backgroundColor: '#161D2F',
+    borderColor: '#5A698F',
     borderRadius: 6,
     cursor: 'pointer',
     boxShadow: 'none',
     '&:hover': {
-      borderColor: '#4F47A3',
+      borderColor: '#5A698F',
     },
   }),
   menu: (provided: any) => ({
     ...provided,
-    backgroundColor: '#121520',
+    backgroundColor: '#20263f',
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    backgroundColor: '#121520',
+    backgroundColor: '#20263f',
     cursor: 'pointer',
     color: state.isSelected ? '#8381D9' : '#D1D6E4',
     '&:hover': {
-      backgroundColor: '#121520',
+      backgroundColor: '#20263f',
       color: '#8381D9',
     },
   }),
