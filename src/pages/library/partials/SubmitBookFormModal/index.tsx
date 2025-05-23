@@ -73,8 +73,17 @@ const submitBookFormSchema = z.object({
   isbn: z.string().min(3, { message: 'ISBN is required' }),
   totalPages: z.string().min(1, { message: 'Pages number is required.' }),
   coverUrl: z
-    .custom<File>((file) => file instanceof File && file.size > 0)
-    .optional(),
+    .union([
+      z.custom<File>((file) => file instanceof File, {
+        message: 'Cover must be a file',
+      }),
+      z.string().url({
+        message: 'Cover must be a valid URL',
+      }),
+    ])
+    .refine((value) => value !== undefined, {
+      message: 'Cover image is required',
+    }),
   categories: z
     .array(
       z.object({
@@ -164,7 +173,7 @@ export function SubmitBookFormModal({
       reader.readAsDataURL(file)
     }
   }
-
+  console.log(errors)
   const handleCoverChangeClick = () => {
     inputFileRef.current?.click()
   }
@@ -226,6 +235,7 @@ export function SubmitBookFormModal({
       if (await checkImageExists(coverUrl)) {
         setCoverPreview(coverUrl)
         setCoverUrl(coverUrl)
+        setValue('coverUrl', coverUrl)
       }
     } catch (error) {
       toast.error(`Oops, we couldn't find any books. Please check the ISBN.`)
@@ -249,7 +259,13 @@ export function SubmitBookFormModal({
     formData.append('isbn', String(data.isbn || ''))
     formData.append('publishingYear', String(data.publishingYear))
 
-    if (data.coverUrl) formData.append('coverUrl', data.coverUrl)
+    if (typeof data.coverUrl === 'string') {
+      formData.append('coverUrl', data.coverUrl)
+      formData.append('coverSource', 'openlibrary')
+    } else if (data.coverUrl instanceof File) {
+      formData.append('coverUrl', data.coverUrl)
+      formData.append('coverSource', 'upload')
+    }
 
     const categoryValues = data?.categories?.map(
       (category: any) => category.value,
@@ -261,9 +277,7 @@ export function SubmitBookFormModal({
       setIsSubmitting(true)
 
       const requestUrl = isEdit ? `/books/edit/${book?.id}` : '/books/create'
-
       const method = isEdit ? 'put' : 'post'
-
       const response = await api[method](requestUrl, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
@@ -272,13 +286,11 @@ export function SubmitBookFormModal({
 
       if (isEdit && onUpdateBook) {
         onUpdateBook(response.data.book)
-
         onClose()
       }
 
       if (!isEdit && onCreateBook) {
         onCreateBook(response.data.book)
-
         onClose()
       }
     } catch (error) {
@@ -405,9 +417,11 @@ export function SubmitBookFormModal({
                     accept="image/*"
                     onChange={handleCoverChange}
                     content={
-                      watch('coverUrl')?.name
-                        ? watch('coverUrl')?.name
-                        : coverUrl || 'No file chosen'
+                      typeof watch('coverUrl') === 'string'
+                        ? 'OpenLibrary Cover'
+                        : (watch('coverUrl') as File)?.name ||
+                          coverUrl ||
+                          'No file chosen'
                     }
                   />
                   {showErrors && !isEdit && !form.coverUrl && (
