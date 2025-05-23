@@ -7,6 +7,7 @@ import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import fs from 'fs/promises' // Usando fs/promises para async/await
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
+import path from 'path'
 
 export const config = {
   api: {
@@ -100,10 +101,17 @@ export default async function handler(
         // Caso OpenLibrary (armazena a URL diretamente)
         finalCoverUrl = getSingleString(coverUrlFromOpenLibrary)
       } else if (coverFile) {
-        // Caso upload (converte para base64)
+        // Configurações do armazenamento local
+        const UPLOADS_DIR = path.join(
+          process.cwd(),
+          'public',
+          'uploads',
+          'books',
+        )
         const MAX_SIZE = 2 * 1024 * 1024 // 2MB
-        const fileBuffer = await fs.readFile(coverFile.filepath)
 
+        // 1. Verifica tamanho do arquivo
+        const fileBuffer = await fs.readFile(coverFile.filepath)
         if (fileBuffer.length > MAX_SIZE) {
           await fs.unlink(coverFile.filepath)
           return res
@@ -111,9 +119,35 @@ export default async function handler(
             .json({ message: 'Cover image must be less than 2MB' })
         }
 
-        const base64Image = fileBuffer.toString('base64')
-        finalCoverUrl = `data:${coverFile.mimetype};base64,${base64Image}`
-        await fs.unlink(coverFile.filepath) // Remove o arquivo temporário
+        // 2. Valida o tipo do arquivo
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp']
+        if (!allowedMimeTypes.includes(coverFile.mimetype as string)) {
+          await fs.unlink(coverFile.filepath)
+          return res
+            .status(400)
+            .json({ message: 'Only JPG, PNG or WEBP images are allowed' })
+        }
+
+        // 3. Cria diretório se não existir
+        await fs.mkdir(UPLOADS_DIR, { recursive: true })
+
+        // 4. Gera nome único para o arquivo
+        const fileExt = path.extname(coverFile.originalFilename || 'cover.jpg')
+        const fileName = `${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2, 9)}${fileExt}`
+        const filePath = path.join(UPLOADS_DIR, fileName)
+
+        // 5. Move o arquivo para o diretório permanente
+        try {
+          await fs.rename(coverFile.filepath, filePath)
+
+          // 6. Retorna o caminho relativo para armazenar no banco
+          finalCoverUrl = `/uploads/books/${fileName}`
+        } catch (error) {
+          await fs.unlink(coverFile.filepath)
+          return res.status(500).json({ message: 'Failed to save cover image' })
+        }
       } else {
         return res.status(400).json({ message: 'Cover image is required' })
       }
