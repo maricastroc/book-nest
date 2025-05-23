@@ -8,7 +8,8 @@ export const Wrapper = styled('div', {
   backgroundColor: '$gray700',
   padding: '2rem',
   borderRadius: 20,
-  width: '100%',
+  width: '85vw',
+  maxWidth: '27rem',
   gap: '1.5rem',
 
   h2: {
@@ -16,14 +17,6 @@ export const Wrapper = styled('div', {
     fontSize: '$3xl',
     fontWeight: 300,
   },
-})
-
-export const Divider = styled('span', {
-  backgroundColor: '$gray600',
-  height: 0.5,
-  color: '$gray600',
-  width: '100%',
-  marginTop: 1,
 })
 
 export const AuthContainer = styled('div', {

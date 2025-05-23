@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import 'react-toastify/dist/ReactToastify.css'
-import { AVATAR_URL_DEFAULT, REVIEW_MAX_LENGTH } from '@/utils/constants'
+import { REVIEW_MAX_LENGTH } from '@/utils/constants'
 import { FormErrors } from '@/components/shared/FormErrors'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
@@ -124,7 +124,7 @@ export function RatingCardForm({
           <UserDetailsWrapper>
             <Avatar
               isClickable={false}
-              avatarUrl={loggedUser.avatarUrl ?? AVATAR_URL_DEFAULT}
+              avatarUrl={loggedUser?.avatarUrl}
               variant="medium"
             />
             <p>{loggedUser.name}</p>

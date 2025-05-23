@@ -7,6 +7,7 @@ export const AvatarContainer = styled('a', {
   width: 42,
   height: 42,
   borderRadius: '50%',
+  backgroundColor: '$gray700',
 
   '&.medium': {
     width: 36,

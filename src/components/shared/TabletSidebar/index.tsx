@@ -26,7 +26,6 @@ import { useRouter } from 'next/router'
 import { useAppContext } from '@/contexts/AppContext'
 import { ComponentType, useCallback, useState } from 'react'
 import { Avatar } from '@/components/shared/Avatar'
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { SkeletonUserSidebar } from '@/components/skeletons/SkeletonUserSidebar'
 import { SignInModal } from '../../modals/SignInModal'
 import { signOut } from 'next-auth/react'
@@ -131,7 +130,7 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
                     isClickable
                     variant="medium"
                     isLoading={isValidatingLoggedUser}
-                    avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
+                    avatarUrl={loggedUser?.avatarUrl}
                     onClick={() => {
                       const currentPath = router.asPath
                       const targetPath = currentPath.includes('/profile/')

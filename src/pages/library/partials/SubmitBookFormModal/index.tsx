@@ -13,7 +13,6 @@ import {
   CoverSectionContainer,
   PreviewContainer,
   ImagePreview,
-  DividerLine,
 } from './styles'
 import { handleApiError } from '@/utils/handleApiError'
 import { api } from '@/lib/axios'
@@ -112,7 +111,6 @@ export function SubmitBookFormModal({
   })
 
   const {
-    register,
     control,
     handleSubmit,
     watch,
@@ -151,17 +149,23 @@ export function SubmitBookFormModal({
     toast.error('Please correct any errors before submitting the form.')
   }
 
-  async function getBookInfoWithGoogleBooks(title: string, author: string) {
+  async function getBookInfoWithGoogleBooks(isbn: string | undefined) {
+    if (!isbn) {
+      return
+    }
+
     try {
       setIsLoading(true)
 
+      const cleanedIsbn = isbn.replace(/[-\s]/g, '')
+
       const response = await api.get(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
-          title,
-        )}+inauthor:${encodeURIComponent(author)}&langRestrict=en`,
+        `https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(
+          cleanedIsbn,
+        )}&langRestrict=en`,
       )
 
-      const books = response.data.items.filter((book: GoogleBookProps) => {
+      const books = response.data.items?.filter((book: GoogleBookProps) => {
         return book.volumeInfo.language === 'en'
       })
 
@@ -176,33 +180,21 @@ export function SubmitBookFormModal({
         setValue('totalPages', foundBook.pageCount?.toString())
         setValue('publisher', foundBook?.publisher)
         setValue('publishingYear', formatDate(foundBook?.publishedDate))
-        setValue('isbn', foundBook?.industryIdentifiers[0]?.identifier)
+        setValue('isbn', cleanedIsbn)
         setValue('language', foundBook?.language)
 
-        const isbn =
-          foundBook?.industryIdentifiers.find(
-            (id: { type: string }) => id.type === 'ISBN_13',
-          )?.identifier ||
-          foundBook?.industryIdentifiers.find(
-            (id: { type: string }) => id.type === 'ISBN_10',
-          )?.identifier ||
-          ''
+        const coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
 
-        const openLibraryCover = isbn
-          ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
-          : ''
-
-        setCoverPreview(openLibraryCover)
-        setCoverUrl(openLibraryCover)
+        setCoverPreview(coverUrl)
+        setCoverUrl(coverUrl)
+      } else {
+        throw new Error('Book not found')
       }
     } catch (error) {
-      if (error) {
-        toast.error(
-          'The book information could not be verified. Please check the title and author.',
-        )
-
-        setIsValidBook(false)
-      }
+      toast.error(
+        'The book information could not be verified. Please check the ISBN.',
+      )
+      setIsValidBook(false)
     } finally {
       setIsLoading(false)
     }
@@ -310,6 +302,18 @@ export function SubmitBookFormModal({
 
   const form = watch()
 
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'isbn' && isValidBook) {
+        setIsValidBook(false)
+        setCoverPreview(null)
+        setCoverUrl(null)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [watch, isValidBook])
+
   return (
     <Dialog.Portal>
       <BaseModal
@@ -317,94 +321,114 @@ export function SubmitBookFormModal({
         onClose={() => {
           onClose()
           setShowErrors(false)
+          setCoverPreview('')
+          setCoverUrl('')
+          setIsValidBook(false)
           reset()
         }}
         title="Missing a Book?"
       >
-        <p>
+        <p style={{ marginBottom: '1.5rem' }}>
           Here you can submit a new book to our platform! Just fill the fields
           above:
         </p>
         <FormContainer onSubmit={handleSubmit(handleSubmitBook, onInvalid)}>
-          <CoverSectionContainer>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <FileInput
-                label="Book cover:"
-                buttonText="Choose file"
-                accept="image/*"
-                onChange={handleCoverChange}
-                content={
-                  watch('coverUrl')?.name
-                    ? watch('coverUrl')?.name
-                    : coverUrl || 'No file chosen'
-                }
-              />
-              {showErrors && !isEdit && !form.coverUrl && (
-                <FormErrors error="Cover image is required" />
-              )}
-            </div>
-            <PreviewContainer>
-              <ImagePreview
-                type="button"
-                onClick={handleCoverChangeClick}
-                aria-label="Book cover preview"
-              >
-                {coverPreview ? (
-                  <img
-                    src={coverPreview}
-                    alt="Book cover preview"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                    }}
-                  />
-                ) : (
-                  <Book size={32} />
-                )}
-              </ImagePreview>
-            </PreviewContainer>
-          </CoverSectionContainer>
-
           <InputContainer>
             <Controller
-              name="name"
+              name="isbn"
               control={control}
               render={({ field }) => (
                 <Input
-                  label="Book name:"
-                  placeholder="e.g. The Lord of the Rings"
+                  label="ISBN:"
+                  placeholder="e.g. 978-0-7475-3269-9"
                   {...field}
                 />
               )}
             />
-            {errors.name && <FormErrors error={errors.name.message} />}
+            {errors.isbn && <FormErrors error={errors.isbn.message} />}
           </InputContainer>
-
-          <InputContainer>
-            <Controller
-              name="author"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  label="Book author:"
-                  placeholder="e.g. J.R.R. Tolkien"
-                  {...field}
-                />
-              )}
+          {!isValidBook && (
+            <Button
+              type="button"
+              content={isLoading ? 'Loading...' : 'Get Book Information'}
+              onClick={() => getBookInfoWithGoogleBooks(form?.isbn)}
+              disabled={isSubmitting || !form.isbn || isLoading}
+              style={{ marginTop: '1rem' }}
             />
-            {errors.author && <FormErrors error={errors.author.message} />}
-          </InputContainer>
-
-          <Button
-            type="button"
-            content={isLoading ? 'Loading...' : 'Get Book Information'}
-            onClick={() => getBookInfoWithGoogleBooks(form.name, form.author)}
-            disabled={isSubmitting || !form.name || !form.author || isLoading}
-            style={{ marginTop: '1rem' }}
-          />
+          )}
 
           {isValidBook && (
             <>
-              <DividerLine />
+              <CoverSectionContainer>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <FileInput
+                    label="Book cover:"
+                    buttonText="Choose file"
+                    accept="image/*"
+                    onChange={handleCoverChange}
+                    content={
+                      watch('coverUrl')?.name
+                        ? watch('coverUrl')?.name
+                        : coverUrl || 'No file chosen'
+                    }
+                  />
+                  {showErrors && !isEdit && !form.coverUrl && (
+                    <FormErrors error="Cover image is required" />
+                  )}
+                </div>
+                <PreviewContainer>
+                  <ImagePreview
+                    type="button"
+                    onClick={handleCoverChangeClick}
+                    aria-label="Book cover preview"
+                  >
+                    {coverPreview ? (
+                      <img
+                        src={coverPreview}
+                        alt="Book cover preview"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
+                    ) : (
+                      <Book size={32} />
+                    )}
+                  </ImagePreview>
+                </PreviewContainer>
+              </CoverSectionContainer>
+
+              <InputContainer>
+                <Controller
+                  name="name"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      label="Book name:"
+                      disabled={isValidBook}
+                      placeholder="e.g. Harry Potter and the Philosopher's Stone"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.name && <FormErrors error={errors.name.message} />}
+              </InputContainer>
+
+              <InputContainer>
+                <Controller
+                  name="author"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      disabled={isValidBook}
+                      label="Book author:"
+                      placeholder="e.g. J. K. Rowling"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.author && <FormErrors error={errors.author.message} />}
+              </InputContainer>
+
               <InputContainer>
                 <Controller
                   name="summary"
@@ -412,6 +436,7 @@ export function SubmitBookFormModal({
                   render={({ field }) => (
                     <Textarea
                       label="Book Summary:"
+                      disabled={isValidBook}
                       rows={5}
                       maxLength={500}
                       {...field}
@@ -423,62 +448,71 @@ export function SubmitBookFormModal({
                 )}
               </InputContainer>
               <InputContainer>
-                <Input
-                  label="Pages Number:"
-                  disabled={!isValidBook}
-                  type="number"
-                  placeholder="e.g. 1137"
-                  {...register('totalPages')}
+                <Controller
+                  name="totalPages"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      disabled={isValidBook}
+                      label="Pages number:"
+                      placeholder="e.g. 232"
+                      {...field}
+                    />
+                  )}
                 />
                 {errors.totalPages && (
                   <FormErrors error={errors.totalPages.message} />
                 )}
               </InputContainer>
               <InputContainer>
-                <Input
-                  label="Publishing Year:"
-                  disabled={!isValidBook}
-                  type="text"
-                  placeholder="e.g. 1954"
-                  {...register('publishingYear')}
+                <Controller
+                  name="publishingYear"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      label="Publishing Year"
+                      placeholder="1994"
+                      {...field}
+                    />
+                  )}
                 />
                 {errors.publishingYear && (
                   <FormErrors error={errors.publishingYear.message} />
                 )}
               </InputContainer>
               <InputContainer>
-                <Input
-                  label="Publisher:"
-                  disabled={!isValidBook}
-                  type="text"
-                  placeholder="e.g. Raincoast Books"
-                  {...register('publisher')}
+                <Controller
+                  name="publisher"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      disabled={isValidBook}
+                      label="Publisher:"
+                      placeholder="e.g. Bloomsbury Pub Ltd"
+                      {...field}
+                    />
+                  )}
                 />
-                {errors.publisher && (
-                  <FormErrors error={errors.publisher.message} />
+                {errors.publishingYear && (
+                  <FormErrors error={errors.publishingYear.message} />
                 )}
               </InputContainer>
               <InputContainer>
-                <Input
-                  label="Language:"
-                  disabled={!isValidBook}
-                  type="text"
-                  placeholder="e.g. English"
-                  {...register('language')}
+                <Controller
+                  name="language"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      disabled={isValidBook}
+                      label="Language:"
+                      placeholder="e.g. English"
+                      {...field}
+                    />
+                  )}
                 />
                 {errors.language && (
                   <FormErrors error={errors.language.message} />
                 )}
-              </InputContainer>
-              <InputContainer>
-                <Input
-                  label="ISBN:"
-                  disabled={!isValidBook}
-                  type="text"
-                  placeholder="e.g. 978-316148410"
-                  {...register('isbn')}
-                />
-                {errors.isbn && <FormErrors error={errors.isbn.message} />}
               </InputContainer>
 
               {options && options.length && (

@@ -61,7 +61,7 @@ export function ProfileCard({
       setIsDeleteModalOpen(false)
     }
   }
-  console.log(rating, book)
+
   return isEditUserReviewCardOpen ? (
     <RatingCardForm
       isEdit

@@ -21,8 +21,8 @@ import { InputContainer } from '@/components/core/InputContainer'
 import { FormErrors } from '@/components/core/FormErrors'
 import {
   AvatarSection,
-  AvatarUploadButton,
   AvatarUploadWrapper,
+  DeleteAvatarButton,
 } from '@/pages/register/partials/SignUpForm/styles'
 import { AvatarUploadPreview } from '@/components/core/AvatarUploadPreview'
 import { Form } from '@/components/core/Form'
@@ -30,6 +30,8 @@ import { Button } from '@/components/core/Button'
 import { truncateMiddle } from '@/utils/truncateMiddle'
 import { ImageCropper } from '@/components/shared/ImageCropper'
 import { BaseModal } from '../BaseModal'
+import { FileInput } from '@/components/core/FileInput'
+import { TrashSimple } from 'phosphor-react'
 
 interface EditProfileModalProps {
   onClose: () => void
@@ -55,7 +57,8 @@ const editProfileFormSchema = (changePassword: boolean) =>
       name: z.string().min(3, { message: 'Name is required.' }),
       avatarUrl: z
         .custom<File>((file) => file instanceof File && file.size > 0)
-        .optional(),
+        .optional()
+        .nullable(),
     })
     .refine(
       (data) =>
@@ -120,10 +123,6 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
     }
   }
 
-  const handleAvatarChangeClick = () => {
-    inputFileRef.current?.click()
-  }
-
   const handleCroppedImage = (croppedImage: string) => {
     fetch(croppedImage)
       .then((res) => res.blob())
@@ -144,7 +143,12 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
       formData.append('name', data.name)
       formData.append('user_id', session.user.id.toString())
 
-      if (data.avatarUrl) formData.append('avatarUrl', data.avatarUrl)
+      if (avatarPreview === null && !!loggedUser?.avatarUrl) {
+        formData.append('removeAvatar', 'true')
+      } else if (data.avatarUrl) {
+        formData.append('avatarUrl', data.avatarUrl)
+      }
+
       if (data.oldPassword) formData.append('oldPassword', data.oldPassword)
       if (data.password) formData.append('password', data.password)
 
@@ -168,14 +172,26 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
     }
   }
 
+  const handleDeleteAvatar = () => {
+    setAvatarPreview(null)
+    setValue('avatarUrl', null)
+    setAvatarPath('')
+
+    if (inputFileRef.current) {
+      inputFileRef.current.value = ''
+    }
+  }
+
   useEffect(() => {
     if (loggedUser) {
-      setAvatarPreview(`${loggedUser.avatarUrl}`)
       setValue('name', loggedUser.name)
       setValue('email', loggedUser.email ?? '')
 
       if (loggedUser?.avatarUrl) {
         setAvatarPath(truncateMiddle(loggedUser?.avatarUrl))
+        setAvatarPreview(`${loggedUser.avatarUrl}`)
+      } else {
+        setAvatarPreview(null)
       }
     }
   }, [loggedUser, setValue])
@@ -196,25 +212,29 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
               <AvatarSection>
                 <InputContainer>
                   <AvatarUploadWrapper>
-                    <AvatarUploadButton>
-                      <input
-                        type="file"
-                        ref={inputFileRef}
-                        style={{ display: 'none' }}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <FileInput
+                        hasBorder={false}
+                        buttonText="Choose file"
+                        accept="image/*"
                         onChange={handleAvatarChange}
-                      />
-                      <button
-                        type="button"
-                        onClick={handleAvatarChangeClick}
-                        style={{
-                          color: `${watch('avatarUrl')?.name ? 'white' : ''}`,
-                        }}
-                      >
-                        {avatarPath ||
+                        content={
+                          avatarPath ||
                           watch('avatarUrl')?.name ||
-                          'Add your avatar'}
-                      </button>
-                    </AvatarUploadButton>
+                          'Add your avatar'
+                        }
+                      />
+                    </div>
+
+                    {avatarPreview && (
+                      <DeleteAvatarButton
+                        type="button"
+                        onClick={handleDeleteAvatar}
+                        aria-label="Remove avatar"
+                      >
+                        <TrashSimple size={18} />
+                      </DeleteAvatarButton>
+                    )}
                   </AvatarUploadWrapper>
 
                   {errors.avatarUrl && (
@@ -224,7 +244,6 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                 <AvatarUploadPreview
                   avatarPreview={avatarPreview}
                   defaultImage={AvatarDefaultImage.src}
-                  onClick={handleAvatarChangeClick}
                 />
               </AvatarSection>
 
@@ -320,9 +339,6 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
                 type="submit"
                 content="Update profile"
                 isSubmitting={isSubmitting}
-                style={{
-                  marginTop: '1rem',
-                }}
               />
             </Form>
           </BaseModal>

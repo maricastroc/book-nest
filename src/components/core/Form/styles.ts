@@ -3,10 +3,9 @@ import { styled } from '@/styles'
 export const StyledForm = styled('form', {
   display: 'flex',
   flexDirection: 'column',
-  width: '85vw',
-  maxWidth: '27rem',
+  width: '100%',
   height: 'auto',
-  gap: '1rem',
+  gap: '1.5rem',
 
   variants: {
     isLarger: {
@@ -16,7 +15,6 @@ export const StyledForm = styled('form', {
     },
     isProfileScreen: {
       true: {
-        gap: '1rem',
         width: 'auto',
       },
     },

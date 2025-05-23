@@ -2,12 +2,11 @@ import { styled } from '@/styles'
 
 export const StyledInput = styled('input', {
   backgroundColor: 'transparent',
-  border: 'none',
-  borderBottom: 'solid 1px $blue600',
+  border: 'solid 1px $blue600',
   color: '$gray100',
   padding: '0.75rem 0.6rem',
   fontSize: '0.9375rem',
-  borderRadius: 0,
+  borderRadius: 8,
   width: '100%',
 
   '&::placeholder': {
@@ -18,15 +17,6 @@ export const StyledInput = styled('input', {
     backgroundColor: 'transparent',
     outline: 'none',
     boxShadow: 'none',
-  },
-
-  variants: {
-    hasLabel: {
-      true: {
-        paddingTop: '0.4rem',
-        paddingBottom: '0.6rem',
-      },
-    },
   },
 })
 

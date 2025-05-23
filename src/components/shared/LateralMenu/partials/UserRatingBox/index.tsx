@@ -15,7 +15,6 @@ import { useState } from 'react'
 
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { RatingCardForm } from '../../../RatingCardForm'
 import { Avatar } from '@/components/shared/Avatar'
 import { UserActions } from '@/styles/shared'
@@ -70,7 +69,7 @@ export function UserRatingBox({
             <Avatar
               isClickable
               variant="regular"
-              avatarUrl={rating.user?.avatarUrl ?? AVATAR_URL_DEFAULT}
+              avatarUrl={rating.user?.avatarUrl}
               onClick={() => {
                 router.push(`/profile/${rating.userId}`)
               }}

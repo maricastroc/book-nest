@@ -12,12 +12,14 @@ interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   buttonText?: string
   content?: string
+  hasBorder?: boolean
 }
 
 export const FileInput = ({
   label,
   content,
   buttonText = 'Choose File',
+  hasBorder = true,
   onChange,
   ...props
 }: FileInputProps) => {
@@ -36,7 +38,7 @@ export const FileInput = ({
   return (
     <div>
       {label && <StyledLabel style={{ marginLeft: 0 }}>{label}</StyledLabel>}
-      <InputContainer>
+      <InputContainer hasBorder={hasBorder}>
         <HiddenFileInput
           type="file"
           ref={fileInputRef}

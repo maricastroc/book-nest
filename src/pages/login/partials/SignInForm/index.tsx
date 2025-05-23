@@ -15,7 +15,6 @@ import { Form } from '@/components/core/Form'
 import { LinkButton } from '@/components/core/LinkButton'
 
 import {
-  Divider,
   AuthContainer,
   AuthOptions,
   AuthItem,
@@ -86,9 +85,9 @@ export default function SignInForm({ onClose }: SignInFormProps) {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Wrapper>
-          <h2>Login</h2>
+      <Wrapper>
+        <h2>Login</h2>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <InputContainer>
             <Controller
               name="email"
@@ -119,44 +118,43 @@ export default function SignInForm({ onClose }: SignInFormProps) {
               marginTop: '1rem',
             }}
           />
+        </Form>
 
-          <LinkButton
-            type="button"
-            onClick={() => {
-              router.push('/register')
-            }}
-          >
-            Don&apos;t have an account? <span>Sign up</span>
-          </LinkButton>
-        </Wrapper>
-        <Divider />
+        <LinkButton
+          type="button"
+          onClick={() => {
+            router.push('/register')
+          }}
+        >
+          Don&apos;t have an account? <span>Sign up</span>
+        </LinkButton>
+      </Wrapper>
 
-        <AuthContainer>
-          <p>Or login with:</p>
-          <AuthOptions>
-            <AuthItem type="button" onClick={() => handleSignIn('google')}>
-              <Icon icon="flat-color-icons:google" fontSize={24} />
-              <p>Google</p>
-            </AuthItem>
+      <AuthContainer>
+        <p>Or login with:</p>
+        <AuthOptions>
+          <AuthItem type="button" onClick={() => handleSignIn('google')}>
+            <Icon icon="flat-color-icons:google" fontSize={24} />
+            <p>Google</p>
+          </AuthItem>
 
-            <VerticalDivider />
-            <AuthItem type="button" onClick={() => handleSignIn('github')}>
-              <Icon
-                icon="ant-design:github-outlined"
-                color="white"
-                fontSize={24}
-              />
-              <p>Github</p>
-            </AuthItem>
+          <VerticalDivider />
+          <AuthItem type="button" onClick={() => handleSignIn('github')}>
+            <Icon
+              icon="ant-design:github-outlined"
+              color="white"
+              fontSize={24}
+            />
+            <p>Github</p>
+          </AuthItem>
 
-            <VerticalDivider />
-            <AuthItem type="button" onClick={() => router.push('/home')}>
-              {<RocketLaunch size={24} />}
-              <p>Guest</p>
-            </AuthItem>
-          </AuthOptions>
-        </AuthContainer>
-      </Form>
+          <VerticalDivider />
+          <AuthItem type="button" onClick={() => router.push('/home')}>
+            {<RocketLaunch size={24} />}
+            <p>Guest</p>
+          </AuthItem>
+        </AuthOptions>
+      </AuthContainer>
     </>
   )
 }

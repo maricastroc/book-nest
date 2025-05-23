@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
 import {
@@ -68,8 +67,8 @@ export function UserDetails({
   )
 
   const userAvatarUrl = isCurrentUser
-    ? loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT
-    : userStatistics?.user.avatarUrl ?? AVATAR_URL_DEFAULT
+    ? loggedUser?.avatarUrl
+    : userStatistics?.user.avatarUrl
 
   const userName = isCurrentUser ? loggedUser?.name : userStatistics?.user.name
 

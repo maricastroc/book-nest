@@ -8,13 +8,14 @@ export const Wrapper = styled('div', {
   backgroundColor: '$gray700',
   padding: '1.5rem',
   borderRadius: 20,
-  width: '100%',
-  gap: '1rem',
+  width: '85vw',
+  maxWidth: '27rem',
 
   h2: {
     alignSelf: 'flex-start',
     fontSize: '$3xl',
     fontWeight: 300,
+    marginBottom: '1rem',
   },
 
   '@media (min-width: 480px)': {
@@ -99,43 +100,6 @@ export const AvatarUploadWrapper = styled('div', {
   borderBottom: 'solid 1px $blue600',
   alignItems: 'center',
   textAlign: 'left',
-})
-
-export const AvatarUploadButton = styled('div', {
-  display: 'flex',
-  alignItems: 'flex-start',
-  textAlign: 'left',
-  backgroundColor: 'transparent',
-  width: '90%',
-  color: '$gray100',
-  padding: '0.75rem 0.6rem',
-  fontSize: '$bodyMd',
-  overflow: 'hidden', // Adiciona overflow hidden
-  textOverflow: 'ellipsis', // Adiciona reticências
-  whiteSpace: 'nowrap', // Impede que o texto quebre em várias linhas
-
-  input: {
-    display: 'none',
-  },
-
-  button: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    color: 'rgba(255, 255, 255, 0.5)',
-    fontSize: '$bodyMd',
-    cursor: 'pointer',
-    border: 'none',
-    overflow: 'hidden', // Adiciona overflow hidden
-    textOverflow: 'ellipsis', // Adiciona reticências
-    whiteSpace: 'nowrap', // Impede que o texto quebre em várias linhas
-    maxWidth: '100%', // Garante que não ultrapasse o container
-  },
-
-  span: {
-    marginLeft: '0.7rem',
-  },
 })
 
 export const DeleteAvatarButton = styled('button', {

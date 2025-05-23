@@ -13,7 +13,7 @@ export const StyledFormErrors = styled('div', {
   },
 
   p: {
-    color: '$red300',
+    color: '$gray300',
     fontSize: '0.8rem',
   },
 })

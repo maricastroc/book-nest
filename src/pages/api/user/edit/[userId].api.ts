@@ -17,7 +17,7 @@ interface Updates {
   name?: string | undefined
   email?: string | undefined
   password?: string | undefined
-  avatarUrl?: string | undefined
+  avatarUrl?: string | null | undefined
 }
 
 const getSingleString = (
@@ -61,6 +61,7 @@ export default async function handler(
 
     try {
       const userId = String(req.query.userId)
+      const removeAvatar = getSingleString(fields.removeAvatar) === 'true'
 
       const updatedFields: {
         name?: string
@@ -88,9 +89,12 @@ export default async function handler(
       const validatedFields = await updateUserSchema.parseAsync(updatedFields)
 
       const avatarFile = files.avatarUrl?.[0]
-      let avatarUrl: string | null = null
 
-      if (avatarFile) {
+      let avatarUrl: string | null | undefined
+
+      if (removeAvatar) {
+        avatarUrl = null
+      } else if (avatarFile) {
         const MAX_SIZE = 2 * 1024 * 1024
         const fileContent = await fs.promises.readFile(avatarFile.filepath)
 
@@ -100,20 +104,20 @@ export default async function handler(
 
         const base64Image = fileContent.toString('base64')
         const dataURI = `data:${avatarFile.mimetype};base64,${base64Image}`
-
         avatarUrl = dataURI
 
         await fs.promises.unlink(avatarFile.filepath)
+      } else {
+        avatarUrl = undefined
       }
 
-      const updates: Updates = { ...validatedFields }
+      const updates: Updates = {
+        ...validatedFields,
+        avatarUrl,
+      }
 
       if (validatedFields.password) {
         updates.password = await bcrypt.hash(validatedFields.password, 10)
-      }
-
-      if (avatarUrl) {
-        updates.avatarUrl = avatarUrl
       }
 
       const updatedUser = await prisma.user.update({

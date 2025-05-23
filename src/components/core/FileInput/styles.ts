@@ -4,9 +4,16 @@ export const InputContainer = styled('div', {
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
-  borderBottom: 'solid 1px $blue600',
   paddingBottom: '0.5rem',
   width: 'auto',
+
+  variants: {
+    hasBorder: {
+      true: {
+        borderBottom: 'solid 1px $blue600',
+      },
+    },
+  },
 })
 
 export const HiddenFileInput = styled('input', {
@@ -22,7 +29,7 @@ export const CustomFileButton = styled('button', {
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  padding: '0.5rem 0.75rem',
+  padding: '0.45rem 0.6rem',
   fontSize: '0.8rem',
   fontWeight: 500,
   transition: 'background-color 0.2s',
@@ -44,7 +51,7 @@ export const CustomFileButton = styled('button', {
 })
 
 export const FileNameDisplay = styled('span', {
-  color: '$gray300',
+  color: '#8D95AF',
   fontSize: '0.875rem',
   fontStyle: 'italic',
   flex: 1,

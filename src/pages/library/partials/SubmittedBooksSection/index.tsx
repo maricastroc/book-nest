@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import * as Dialog from '@radix-ui/react-dialog'
 import {
   EmptyBooksContainer,
@@ -94,10 +93,7 @@ export function SubmittedBooksSection({
         <>
           <UserProfileInfo>
             <>
-              <Avatar
-                avatarUrl={userInfo?.avatarUrl ?? AVATAR_URL_DEFAULT}
-                variant="large"
-              />
+              <Avatar avatarUrl={userInfo?.avatarUrl} variant="large" />
               <h2>{userInfo?.name}</h2>
             </>
             <ActionButton onClick={() => router.push(`/profile/${userId}`)}>

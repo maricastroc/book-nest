@@ -18,7 +18,6 @@ import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { ReadNotice } from '@/styles/shared'
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { TextBox } from '@/components/shared/TextBox'
 
 interface RatingCardProps {
@@ -33,8 +32,6 @@ export function RatingCard({
 }: RatingCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
-
-  const avatarUrl = rating.user.avatarUrl || AVATAR_URL_DEFAULT
 
   const router = useRouter()
 
@@ -53,7 +50,7 @@ export function RatingCard({
           <Avatar
             variant="bigger"
             isClickable
-            avatarUrl={avatarUrl}
+            avatarUrl={rating.user?.avatarUrl}
             onClick={() => {
               router.push(`/profile/${rating.user.id}`)
             }}

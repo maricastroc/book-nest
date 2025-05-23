@@ -27,9 +27,8 @@ export const CoverSectionContainer = styled('div', {
   display: 'flex',
   alignItems: 'center',
   gap: '1rem',
-  marginTop: '1.5rem',
   flexWrap: 'nowrap',
-  overflow: 'visible', // Alterado para visible
+  overflow: 'visible',
 })
 
 export const PreviewContainer = styled('div', {
@@ -39,9 +38,9 @@ export const PreviewContainer = styled('div', {
   minWidth: '4.5rem',
   height: '6.5rem',
   flexShrink: 0,
-  display: 'flex', // Adicionado
-  justifyContent: 'center', // Adicionado
-  alignItems: 'center', // Adicionado
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 })
 
 export const ImagePreview = styled('button', {
@@ -149,11 +148,4 @@ export const ChangePasswordInputContainer = styled('div', {
   gap: '0.6rem',
   width: '100%',
   alignItems: 'center',
-})
-
-export const DividerLine = styled('span', {
-  width: '100%',
-  background: '$gray600',
-  height: 1,
-  margin: '0.6rem 0',
 })

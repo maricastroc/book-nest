@@ -1,5 +1,4 @@
 import { UserProps } from '@/@types/user'
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import {
   AvatarContainer,
   AvatarDefault,
@@ -9,6 +8,7 @@ import {
   UserContentWrapper,
 } from './styles'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
+import AvatarDefaultImage from '../../../../../public/assets/avatar_mockup.png'
 
 interface UserCardProps {
   user: UserProps
@@ -21,7 +21,7 @@ export function UserCard({ user }: UserCardProps) {
   return (
     <UserCardBox>
       <AvatarContainer>
-        <AvatarDefault src={user.avatarUrl ?? AVATAR_URL_DEFAULT} />
+        <AvatarDefault src={user.avatarUrl || AvatarDefaultImage.src} />
       </AvatarContainer>
       <UserContentWrapper>
         <NameAndTime>

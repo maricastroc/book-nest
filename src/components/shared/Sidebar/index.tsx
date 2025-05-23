@@ -21,7 +21,6 @@ import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { useCallback, ComponentType } from 'react'
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { Avatar } from '../Avatar'
 import { useAppContext } from '@/contexts/AppContext'
 import { SkeletonUserSidebar } from '@/components/skeletons/SkeletonUserSidebar'
@@ -132,7 +131,7 @@ export function Sidebar() {
                   <Avatar
                     isClickable
                     isLoading={isValidatingLoggedUser}
-                    avatarUrl={loggedUser?.avatarUrl ?? AVATAR_URL_DEFAULT}
+                    avatarUrl={loggedUser?.avatarUrl}
                     onClick={() => {
                       const currentPath = router.asPath
 

@@ -55,26 +55,3 @@ export const AvatarImage = styled('img', {
     },
   },
 })
-
-export const AddButton = styled('button', {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  background: 'transparent',
-  border: 'none',
-  color: '$gray200',
-  fontSize: '1.5rem',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '32px',
-  height: '32px',
-  borderRadius: '50%',
-  backgroundColor: '$primary500',
-
-  '&:hover': {
-    backgroundColor: '$primary600',
-  },
-})

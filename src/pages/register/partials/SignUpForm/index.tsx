@@ -16,7 +16,6 @@ import { LinkButton } from '@/components/core/LinkButton'
 import AvatarDefaultImage from '../../../../../public/assets/avatar_mockup.png'
 
 import {
-  AvatarUploadButton,
   AvatarSection,
   DeleteAvatarButton,
   Wrapper,
@@ -26,6 +25,7 @@ import { Form } from '@/components/core/Form'
 import { AvatarUploadPreview } from '@/components/core/AvatarUploadPreview'
 import { TrashSimple } from 'phosphor-react'
 import { ImageCropper } from '@/components/shared/ImageCropper'
+import { FileInput } from '@/components/core/FileInput'
 
 const signUpFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -119,14 +119,11 @@ export default function SignUpForm() {
         const file = new File([blob], 'avatar.jpg', {
           type: 'image/jpeg',
         })
+
         setValue('avatarUrl', file)
         setAvatarPreview(croppedImage)
         setShowCropper(false)
       })
-  }
-
-  const handleAvatarChangeClick = () => {
-    inputFileRef.current?.click()
   }
 
   const handleDeleteAvatar = () => {
@@ -140,39 +137,31 @@ export default function SignUpForm() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Wrapper>
-          <h2>Sign Up</h2>
+      <Wrapper>
+        <h2>Sign Up</h2>
 
-          <Dialog.Root open={!!originalImage && showCropper}>
-            <ImageCropper
-              src={originalImage as string}
-              onCrop={handleCroppedImage}
-              aspectRatio={1}
-              onClose={() => setShowCropper(false)}
-            />
-          </Dialog.Root>
+        <Dialog.Root open={!!originalImage && showCropper}>
+          <ImageCropper
+            src={originalImage as string}
+            onCrop={handleCroppedImage}
+            aspectRatio={1}
+            onClose={() => setShowCropper(false)}
+          />
+        </Dialog.Root>
 
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <AvatarSection>
             <InputContainer>
               <AvatarUploadWrapper>
-                <AvatarUploadButton>
-                  <input
-                    type="file"
-                    ref={inputFileRef}
-                    style={{ display: 'none' }}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <FileInput
+                    hasBorder={false}
+                    buttonText="Choose file"
+                    accept="image/*"
                     onChange={handleAvatarChange}
+                    content={watch('avatarUrl')?.name || 'Add your avatar'}
                   />
-                  <button
-                    type="button"
-                    onClick={handleAvatarChangeClick}
-                    style={{
-                      color: `${watch('avatarUrl')?.name ? 'white' : ''}`,
-                    }}
-                  >
-                    {watch('avatarUrl')?.name || 'Add your avatar'}
-                  </button>
-                </AvatarUploadButton>
+                </div>
 
                 {avatarPreview && (
                   <DeleteAvatarButton
@@ -192,7 +181,6 @@ export default function SignUpForm() {
             <AvatarUploadPreview
               avatarPreview={avatarPreview}
               defaultImage={AvatarDefaultImage.src}
-              onClick={handleAvatarChangeClick}
             />
           </AvatarSection>
 
@@ -237,17 +225,18 @@ export default function SignUpForm() {
               marginTop: '1rem',
             }}
           />
+        </Form>
 
-          <LinkButton
-            type="button"
-            onClick={() => {
-              router.push('/')
-            }}
-          >
-            Already have an account? <span>Login</span>
-          </LinkButton>
-        </Wrapper>
-      </Form>
+        <LinkButton
+          type="button"
+          onClick={() => {
+            router.push('/')
+          }}
+          style={{ marginTop: '1rem' }}
+        >
+          Already have an account? <span>Login</span>
+        </LinkButton>
+      </Wrapper>
     </>
   )
 }
