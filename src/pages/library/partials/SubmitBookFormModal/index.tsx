@@ -327,28 +327,38 @@ export function SubmitBookFormModal({
         </p>
         <FormContainer onSubmit={handleSubmit(handleSubmitBook, onInvalid)}>
           <CoverSectionContainer>
-            <InputContainer>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <FileInput
                 label="Book cover:"
                 buttonText="Choose file"
-                accept=".pdf,.jpg,.png"
+                accept="image/*"
+                onChange={handleCoverChange}
                 content={
                   watch('coverUrl')?.name
                     ? watch('coverUrl')?.name
                     : coverUrl || 'No file chosen'
                 }
-                onChange={handleCoverChange}
               />
               {showErrors && !isEdit && !form.coverUrl && (
-                <FormErrors error={'Cover Image is required.'} />
+                <FormErrors error="Cover image is required" />
               )}
-            </InputContainer>
+            </div>
             <PreviewContainer>
-              <ImagePreview onClick={handleCoverChangeClick}>
+              <ImagePreview
+                type="button"
+                onClick={handleCoverChangeClick}
+                aria-label="Book cover preview"
+              >
                 {coverPreview ? (
-                  <img src={coverPreview} alt="Cover Preview" />
+                  <img
+                    src={coverPreview}
+                    alt="Book cover preview"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
                 ) : (
-                  <Book />
+                  <Book size={32} />
                 )}
               </ImagePreview>
             </PreviewContainer>

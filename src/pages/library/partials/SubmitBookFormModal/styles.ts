@@ -7,6 +7,7 @@ export const FormContainer = styled('form', {
   width: '100%',
   alignItems: 'center',
   paddingRight: '0.65rem',
+  overflowX: 'hidden',
 })
 
 export const FormContent = styled('div', {
@@ -24,16 +25,11 @@ export const FormContent = styled('div', {
 export const CoverSectionContainer = styled('div', {
   width: '100%',
   display: 'flex',
-  alignItems: 'flex-start',
-  flexDirection: 'column',
+  alignItems: 'center',
   gap: '1rem',
   marginTop: '1.5rem',
-
-  '@media (min-width: 480px)': {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+  flexWrap: 'nowrap',
+  overflow: 'visible', // Alterado para visible
 })
 
 export const PreviewContainer = styled('div', {
@@ -43,7 +39,9 @@ export const PreviewContainer = styled('div', {
   minWidth: '4.5rem',
   height: '6.5rem',
   flexShrink: 0,
-  marginRight: '1rem',
+  display: 'flex', // Adicionado
+  justifyContent: 'center', // Adicionado
+  alignItems: 'center', // Adicionado
 })
 
 export const ImagePreview = styled('button', {

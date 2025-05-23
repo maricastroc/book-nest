@@ -11,6 +11,7 @@ export const InputContainer = styled('div', {
 
 export const HiddenFileInput = styled('input', {
   display: 'none',
+  width: 'auto',
 })
 
 export const CustomFileButton = styled('button', {
@@ -47,7 +48,7 @@ export const FileNameDisplay = styled('span', {
   fontSize: '0.875rem',
   fontStyle: 'italic',
   flex: 1,
-  width: '100%',
+  width: 'auto',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
