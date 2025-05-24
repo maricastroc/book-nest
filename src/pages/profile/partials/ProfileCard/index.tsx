@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Plus } from 'phosphor-react'
 
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
@@ -23,6 +23,7 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { TextBox } from '@/components/shared/TextBox'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
+import { useClickOutside } from '@/hooks/useClickOutside'
 
 interface ProfileCardProps {
   book: BookProps
@@ -67,24 +68,11 @@ export function ProfileCard({
     }
   }
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node) &&
-        !isDeleteModalOpen
-      ) {
-        setIsDropdownOpen(false)
-      }
+  useClickOutside([dropdownRef, buttonRef], () => {
+    if (!isDeleteModalOpen) {
+      setIsDropdownOpen(false)
     }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isDeleteModalOpen])
+  })
 
   return isEditUserReviewCardOpen ? (
     <RatingCardForm
@@ -109,18 +97,16 @@ export function ProfileCard({
             <DropdownActions
               dropdownRef={dropdownRef}
               buttonRef={buttonRef}
-              handleIsEditUserReviewCardOpen={(value) =>
+              onToggleEditSection={(value) =>
                 setIsEditUserReviewCardOpen(value)
               }
               isDropdownOpen={isDropdownOpen}
-              handleSetIsDropdownOpen={(value: boolean) =>
-                setIsDropdownOpen(value)
-              }
-              isDeleteModalOpen={isDeleteModalOpen}
-              handleSetIsDeleteModalOpen={(value: boolean) =>
+              onToggleDropdown={(value: boolean) => setIsDropdownOpen(value)}
+              isDeleteSectionOpen={isDeleteModalOpen}
+              onToggleDeleteSection={(value: boolean) =>
                 setIsDeleteModalOpen(value)
               }
-              handleDeleteReview={deleteReview}
+              onDelete={deleteReview}
             />
           )}
         </ProfileCardHeader>

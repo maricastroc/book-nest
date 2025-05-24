@@ -10,7 +10,7 @@ import {
 } from './styles'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useSession } from 'next-auth/react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
@@ -21,6 +21,7 @@ import { useAppContext } from '@/contexts/AppContext'
 import { BookProps } from '@/@types/book'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
 import { useScreenSize } from '@/hooks/useScreenSize'
+import { useClickOutside } from '@/hooks/useClickOutside'
 
 interface UserRatingBoxProps {
   rating: RatingProps
@@ -60,24 +61,11 @@ export function UserRatingBox({
 
   const isMobile = useScreenSize(420)
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node) &&
-        !isDeleteModalOpen
-      ) {
-        setIsDropdownOpen(false)
-      }
+  useClickOutside([dropdownRef, buttonRef], () => {
+    if (!isDeleteModalOpen) {
+      setIsDropdownOpen(false)
     }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isDeleteModalOpen])
+  })
 
   return openEditReviewBox ? (
     <RatingCardForm
@@ -115,18 +103,14 @@ export function UserRatingBox({
                 variant="secondary"
                 dropdownRef={dropdownRef}
                 buttonRef={buttonRef}
-                handleIsEditUserReviewCardOpen={(value) =>
-                  setOpenEditReviewBox(value)
-                }
+                onToggleEditSection={(value) => setOpenEditReviewBox(value)}
                 isDropdownOpen={isDropdownOpen}
-                handleSetIsDropdownOpen={(value: boolean) =>
-                  setIsDropdownOpen(value)
-                }
-                isDeleteModalOpen={isDeleteModalOpen}
-                handleSetIsDeleteModalOpen={(value: boolean) =>
+                onToggleDropdown={(value: boolean) => setIsDropdownOpen(value)}
+                isDeleteSectionOpen={isDeleteModalOpen}
+                onToggleDeleteSection={(value: boolean) =>
                   setIsDeleteModalOpen(value)
                 }
-                handleDeleteReview={() => {
+                onDelete={() => {
                   onDeleteReview(rating.id)
                   handleDeleteReview(rating.id)
                 }}

@@ -11,12 +11,12 @@ import {
 import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useAppContext } from '@/contexts/AppContext'
-import { PencilSimple } from 'phosphor-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { SubmitBookFormModal } from '@/pages/library/partials/SubmitBookFormModal'
 import { ReadNotice } from '@/components/shared/ReadNotice'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
-import { ActionButton } from '@/components/core/ActionButton'
+import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
+import { useClickOutside } from '@/hooks/useClickOutside'
 
 interface BookCardProps {
   isLibraryPage?: boolean
@@ -40,7 +40,17 @@ export function BookCard({
 
   const [isEditBookFormOpen, setIsEditBookFormOpen] = useState(false)
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
   const isLoggedUser = loggedUser?.id === libraryPageUserId
+
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useClickOutside([dropdownRef, buttonRef], () => {
+    setIsDropdownOpen(false)
+  })
 
   return (
     <BookCardBox
@@ -78,23 +88,29 @@ export function BookCard({
             <p>{getBookRatingsNumber(book)}</p>
             <StarsRating size={size} rating={book?.rate ?? 0} />
           </RatingWrapper>
-          <Dialog.Root open={isEditBookFormOpen}>
-            <Dialog.Trigger asChild>
-              {isLoggedUser && isLibraryPage && (
-                <ActionButton onClick={() => setIsEditBookFormOpen(true)}>
-                  <PencilSimple className="edit_icon" />
-                </ActionButton>
-              )}
-            </Dialog.Trigger>
-            {isEditBookFormOpen && (
-              <SubmitBookFormModal
-                isEdit
-                book={book}
-                onUpdateBook={onUpdateBook}
-                onClose={() => setIsEditBookFormOpen(false)}
+          {isLoggedUser && isLibraryPage && (
+            <>
+              <Dialog.Root open={isEditBookFormOpen}>
+                {isEditBookFormOpen && (
+                  <SubmitBookFormModal
+                    isEdit
+                    book={book}
+                    onUpdateBook={onUpdateBook}
+                    onClose={() => setIsEditBookFormOpen(false)}
+                  />
+                )}
+              </Dialog.Root>
+              <DropdownActions
+                isSubmission
+                hasDeleteSection={false}
+                isDropdownOpen={isDropdownOpen}
+                onToggleDropdown={(value) => setIsDropdownOpen(value)}
+                dropdownRef={dropdownRef}
+                buttonRef={buttonRef}
+                onToggleEditSection={() => setIsEditBookFormOpen(true)}
               />
-            )}
-          </Dialog.Root>
+            </>
+          )}
         </FooterWrapper>
       </BookContentWrapper>
     </BookCardBox>

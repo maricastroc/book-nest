@@ -60,7 +60,7 @@ export function MenuBookCard({
 
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
-  useClickOutside(dropdownRef, () => setIsAddToLibraryDropdownOpen(false))
+  useClickOutside([dropdownRef], () => setIsAddToLibraryDropdownOpen(false))
 
   useEffect(() => {
     if (book) {
