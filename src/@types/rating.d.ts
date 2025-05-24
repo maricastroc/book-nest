@@ -12,4 +12,6 @@ export interface RatingProps {
 
   user: UserProps
   userId: string
+
+  deletedAt: Date | null
 }

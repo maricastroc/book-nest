@@ -61,6 +61,10 @@ export function LateralMenu({
     onUpdateStatus,
   } = useBookDetails(bookId, onUpdateBook)
 
+  const filteredRatings = bookRatings?.filter((rating) => {
+    return rating.deletedAt === null
+  })
+
   return (
     <LateralMenuWrapper>
       <OverlayBackground onClick={onClose} />
@@ -137,7 +141,7 @@ export function LateralMenu({
                   ))
                 ) : (
                   updatedBook &&
-                  bookRatings?.map((rating) => (
+                  filteredRatings?.map((rating) => (
                     <UserRatingBox
                       key={rating.id}
                       book={updatedBook}

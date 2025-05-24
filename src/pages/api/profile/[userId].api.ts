@@ -22,28 +22,29 @@ export default async function handler(
     },
     include: {
       ratings: {
-        where: searchQuery
-          ? {
-              OR: [
-                {
-                  book: {
-                    name: {
-                      contains: searchQuery,
-                      mode: 'insensitive',
-                    },
+        where: {
+          deletedAt: null,
+          ...(searchQuery && {
+            OR: [
+              {
+                book: {
+                  name: {
+                    contains: searchQuery,
+                    mode: 'insensitive',
                   },
                 },
-                {
-                  book: {
-                    author: {
-                      contains: searchQuery,
-                      mode: 'insensitive',
-                    },
+              },
+              {
+                book: {
+                  author: {
+                    contains: searchQuery,
+                    mode: 'insensitive',
                   },
                 },
-              ],
-            }
-          : {},
+              },
+            ],
+          }),
+        },
         include: {
           book: {
             include: {
