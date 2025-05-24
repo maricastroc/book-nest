@@ -71,11 +71,7 @@ export default async function handler(
         .json({ message: 'UserId, BookId, and Status are required.' })
     }
 
-    if (
-      status === 'Read' ||
-      status === 'Did not Finish' ||
-      status === 'Reading'
-    ) {
+    if (status === 'Read' || status === 'Did not Finish') {
       await prisma.rating.updateMany({
         where: {
           userId,

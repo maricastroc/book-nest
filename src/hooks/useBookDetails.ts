@@ -2,44 +2,31 @@
 import { useEffect, useState } from 'react'
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
-import { api } from '@/lib/axios'
-import { handleApiError } from '@/utils/handleApiError'
 import { useAppContext } from '@/contexts/AppContext'
+import useRequest from './useRequest'
 
 export function useBookDetails(
   bookId: string,
   onUpdateBook: (book: BookProps) => void,
 ) {
-  const [book, setBook] = useState<BookProps | null>(null)
+  const [updatedBook, setUpdatedBook] = useState<BookProps | null>(null)
+
   const [userRating, setUserRating] = useState<RatingProps | undefined>(
     undefined,
   )
+
   const [bookRatings, setBookRatings] = useState<RatingProps[]>([])
-  const [isLoading, setIsLoading] = useState(false)
 
   const { loggedUser } = useAppContext()
 
-  const fetchBookInfo = async () => {
-    try {
-      setIsLoading(true)
-      const response = await api.get(`/books/${bookId}`)
-      const bookData: BookProps = response.data.book
-
-      if (bookData?.ratings) {
-        setBook(bookData)
-        setBookRatings(bookData.ratings)
-
-        const foundUserRating = bookData.ratings.find(
-          (rating) => rating.user.id === loggedUser?.id,
-        )
-        setUserRating(foundUserRating)
-      }
-    } catch (error) {
-      handleApiError(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const {
+    data: book,
+    mutate,
+    isValidating,
+  } = useRequest<BookProps | null>({
+    url: `/books/${bookId}`,
+    method: 'GET',
+  })
 
   const calculateAverageRating = (ratings: RatingProps[]) => {
     const ratingCount = ratings.length
@@ -56,7 +43,7 @@ export function useBookDetails(
   ) => {
     const { average, ratingCount } = calculateAverageRating(updatedRatings)
 
-    setBook((prev) => {
+    setUpdatedBook((prev) => {
       if (!prev) return prev
 
       const updatedBook = {
@@ -83,6 +70,7 @@ export function useBookDetails(
     const updatedRatings = bookRatings.map((rating) =>
       rating.id === updatedReview.id ? updatedReview : rating,
     )
+
     setBookRatings(updatedRatings)
     setUserRating(updatedReview)
     updateBookWithRatings(updatedRatings, updatedReview.rate)
@@ -92,6 +80,7 @@ export function useBookDetails(
     const updatedRatings = bookRatings.filter(
       (rating) => rating.id !== ratingId,
     )
+
     setBookRatings(updatedRatings)
     setUserRating(undefined)
     updateBookWithRatings(updatedRatings)
@@ -102,7 +91,7 @@ export function useBookDetails(
     newStatus: string,
     userRating: number,
   ) => {
-    setBook((prevBook) => {
+    setUpdatedBook((prevBook) => {
       if (!prevBook) return prevBook
 
       const updatedBook = {
@@ -111,28 +100,38 @@ export function useBookDetails(
         ratingCount: book?.ratings?.length,
         readingStatus: newStatus,
       }
-
+      mutate()
       onUpdateBook(updatedBook)
+
       return updatedBook
     })
   }
 
   useEffect(() => {
-    if (bookId) {
-      fetchBookInfo()
+    if (book) {
+      setUpdatedBook(book)
+
+      if (book?.ratings) {
+        setBookRatings(book?.ratings)
+
+        const foundUserRating = book?.ratings.find(
+          (rating) => rating.user.id === loggedUser?.id,
+        )
+
+        setUserRating(foundUserRating)
+      }
     }
-  }, [bookId])
+  }, [book, bookId])
 
   return {
-    book,
+    updatedBook,
     userRating,
     bookRatings,
-    isLoading,
+    isValidating,
     onUpdateBook,
     onUpdateStatus,
     onUpdateReview,
     onCreateReview,
     onDeleteReview,
-    refetch: fetchBookInfo,
   }
 }

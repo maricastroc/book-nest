@@ -51,10 +51,10 @@ export function LateralMenu({
   const { loggedUser, isSubmitting } = useAppContext()
 
   const {
-    book,
+    updatedBook,
     bookRatings,
     userRating,
-    isLoading,
+    isValidating,
     onUpdateReview,
     onCreateReview,
     onDeleteReview,
@@ -68,7 +68,7 @@ export function LateralMenu({
         <X />
       </CloseButton>
       <MenuBody>
-        {isLoading || isSubmitting ? (
+        {isValidating || isSubmitting ? (
           <SkeletonLateralMenu />
         ) : (
           <>
@@ -86,11 +86,11 @@ export function LateralMenu({
               </Dialog.Root>
             )}
 
-            {book && (
+            {updatedBook && (
               <MenuBookCard
-                key={book.id}
-                book={book}
-                categories={book.categories as CategoryProps[]}
+                key={updatedBook.id}
+                book={updatedBook}
+                categories={updatedBook.categories as CategoryProps[]}
                 onUpdateStatus={onUpdateStatus}
                 onCreateReview={onCreateReview}
               />
@@ -99,8 +99,8 @@ export function LateralMenu({
               <RatingsListHeader>
                 <p>Ratings</p>
                 {!userRating &&
-                  (book?.readingStatus === READ_STATUS ||
-                  book?.readingStatus === DID_NOT_FINISH_STATUS ? (
+                  (updatedBook?.readingStatus === READ_STATUS ||
+                  updatedBook?.readingStatus === DID_NOT_FINISH_STATUS ? (
                     <span onClick={() => setIsReviewFormOpen(true)}>
                       Review
                     </span>
@@ -119,28 +119,28 @@ export function LateralMenu({
                   ))}
               </RatingsListHeader>
               <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
-                {book && isReviewFormOpen && (
+                {updatedBook && isReviewFormOpen && (
                   <RatingCardForm
                     isEdit={!!userRating}
                     rating={userRating}
                     onClose={() => setIsReviewFormOpen(false)}
                     onUpdateReview={onUpdateReview}
                     onCreateReview={onCreateReview}
-                    book={book}
+                    book={updatedBook}
                   />
                 )}
-                {!isLoading && !bookRatings?.length ? (
+                {!isValidating && !bookRatings?.length ? (
                   <EmptyContainer content="reviews" />
-                ) : isLoading ? (
+                ) : isValidating ? (
                   Array.from({ length: 3 }).map((_, index) => (
                     <SkeletonRatingCard key={index} />
                   ))
                 ) : (
-                  book &&
+                  updatedBook &&
                   bookRatings?.map((rating) => (
                     <UserRatingBox
                       key={rating.id}
-                      book={book}
+                      book={updatedBook}
                       rating={rating}
                       onUpdateReview={onUpdateReview}
                       onCreateReview={onCreateReview}

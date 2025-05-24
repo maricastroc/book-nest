@@ -3,6 +3,7 @@ import {
   AddToLibraryDropdown,
   ReadingStatusItem,
   DividerDropdown,
+  WarningMessage,
 } from './styles'
 import { BookProps } from '@/@types/book'
 import { useAppContext } from '@/contexts/AppContext'
@@ -11,6 +12,8 @@ import { useEffect, useState } from 'react'
 import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
 import { handleApiError } from '@/utils/handleApiError'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 interface DropdownMenuProps {
   isOpen: boolean
@@ -125,9 +128,17 @@ export const DropdownMenu = ({
           >
             {status.label}
           </ReadingStatusItem>
+
           <DividerDropdown />
         </>
       ))}
+      <WarningMessage>
+        <FontAwesomeIcon icon={faCircleInfo} />
+        <p>
+          Reviews are only visible when status is set to
+          <strong> Read</strong> or <strong>Did not finish</strong>
+        </p>
+      </WarningMessage>
     </AddToLibraryDropdown>
   ) : null
 }
