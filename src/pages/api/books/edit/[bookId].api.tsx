@@ -3,8 +3,6 @@ import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
-import fs from 'fs'
-import path from 'path'
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
 
 export const config = {
@@ -53,18 +51,15 @@ export default async function handler(
 
   const form = new IncomingForm()
 
-  form.parse(req, async (err, fields, files) => {
+  form.parse(req, async (err, fields) => {
     if (err) {
       return res.status(500).json({ message: 'Error processing form' })
     }
 
     try {
-      const name = getSingleString(fields.name)
-      const author = getSingleString(fields.author)
       const publisher = getSingleString(fields.publisher)
       const summary = getSingleString(fields.summary)
       const language = getSingleString(fields.language)
-      const isbn = getSingleString(fields.isbn)
       const totalPages = parseInt(getSingleString(fields.totalPages), 10)
       const publishingYear = parseInt(
         getSingleString(fields.publishingYear),
@@ -89,14 +84,17 @@ export default async function handler(
         return res.status(404).json({ message: 'Book not found.' })
       }
 
+      if (existingBook.userId !== session.user.id) {
+        return res
+          .status(403)
+          .json({ message: 'You can only edit your own books.' })
+      }
+
       const updateData: UpdateBookData = {}
 
-      if (name) updateData.name = name
-      if (author) updateData.author = author
       if (summary) updateData.summary = summary
       if (publisher) updateData.publisher = publisher
       if (language) updateData.publisher = language
-      if (isbn) updateData.publisher = isbn
       if (totalPages) updateData.totalPages = totalPages
       if (publishingYear) updateData.publishingYear = publishingYear.toString()
 
@@ -166,24 +164,6 @@ export default async function handler(
             .status(400)
             .json({ message: 'A book must have at least one category' })
         }
-      }
-
-      let coverUrl
-
-      if (files.coverUrl) {
-        const coverFile = Array.isArray(files.coverUrl)
-          ? files.coverUrl[0]
-          : files.coverUrl
-        const coverPath = path.join(
-          process.cwd(),
-          'public',
-          'images',
-          'books',
-          coverFile.originalFilename ?? '',
-        )
-        fs.renameSync(coverFile.filepath, coverPath)
-        coverUrl = `/images/books/${coverFile.originalFilename}`
-        updateData.coverUrl = coverUrl
       }
 
       const updatedBook = await prisma.book.update({

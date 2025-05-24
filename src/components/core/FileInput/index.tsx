@@ -9,6 +9,7 @@ import {
 } from './styles'
 
 interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  isDisabled?: boolean
   label?: string
   buttonText?: string
   content?: string
@@ -20,6 +21,7 @@ export const FileInput = ({
   content,
   buttonText = 'Choose File',
   hasBorder = true,
+  isDisabled = false,
   onChange,
   ...props
 }: FileInputProps) => {
@@ -45,7 +47,11 @@ export const FileInput = ({
           onChange={handleFileChange}
           {...props}
         />
-        <CustomFileButton type="button" onClick={handleButtonClick}>
+        <CustomFileButton
+          disabled={isDisabled}
+          type="button"
+          onClick={handleButtonClick}
+        >
           <Upload size={14} style={{ marginRight: '0.5rem' }} />
           {buttonText}
         </CustomFileButton>

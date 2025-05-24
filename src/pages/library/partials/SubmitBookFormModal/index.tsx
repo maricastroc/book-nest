@@ -173,7 +173,7 @@ export function SubmitBookFormModal({
       reader.readAsDataURL(file)
     }
   }
-  console.log(errors)
+
   const handleCoverChangeClick = () => {
     inputFileRef.current?.click()
   }
@@ -244,7 +244,7 @@ export function SubmitBookFormModal({
       setIsLoading(false)
     }
   }
-
+  console.log(watch()?.coverUrl)
   async function handleSubmitBook(data: SubmitBookFormData) {
     setShowErrors(true)
 
@@ -320,7 +320,7 @@ export function SubmitBookFormModal({
       setValue('publisher', book.publisher || '')
       setValue('language', book.language || '')
       setValue('isbn', book.isbn || '')
-
+      setValue('coverUrl', book.coverUrl || '')
       setIsValidBook(true)
 
       if (book?.publishingYear) {
@@ -360,7 +360,7 @@ export function SubmitBookFormModal({
 
     return () => subscription.unsubscribe()
   }, [watch, isValidBook])
-
+  console.log(errors)
   return (
     <Dialog.Portal>
       <BaseModal
@@ -373,12 +373,23 @@ export function SubmitBookFormModal({
           setIsValidBook(false)
           reset()
         }}
-        title="Missing a Book?"
+        title={isEdit ? 'Edit your book' : 'Missing a Book?'}
       >
         <WarningContainer>
-          Submit a new book to our platform! Make sure all information is
-          accurate — if in doubt, check bookstore websites or Google. Help us
-          keep the platform high-quality!
+          {isEdit ? (
+            <>
+              You’re editing a book entry. Please review and update the
+              information carefully. Ensure all details remain accurate — if
+              needed, verify using trusted sources like publisher websites or
+              Google Books.
+            </>
+          ) : (
+            <>
+              Submit a new book to our platform! Make sure all information is
+              accurate — if in doubt, check bookstore websites or Google. Help
+              us keep the platform high-quality!
+            </>
+          )}
         </WarningContainer>
         <FormContainer onSubmit={handleSubmit(handleSubmitBook, onInvalid)}>
           <InputContainer>
@@ -388,6 +399,7 @@ export function SubmitBookFormModal({
               render={({ field }) => (
                 <Input
                   variant="secondary"
+                  disabled={isEdit}
                   label="ISBN:"
                   placeholder="e.g. 978-0-7475-3269-9"
                   {...field}
@@ -415,6 +427,8 @@ export function SubmitBookFormModal({
                     label="Book cover:"
                     buttonText="Choose file"
                     accept="image/*"
+                    isDisabled={isEdit}
+                    disabled={isEdit}
                     onChange={handleCoverChange}
                     content={
                       typeof watch('coverUrl') === 'string'
@@ -455,6 +469,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      disabled={isEdit}
                       variant="secondary"
                       label="Book name"
                       placeholder="e.g. Harry Potter and the Philosopher's Stone"
@@ -471,6 +486,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
+                      disabled={isEdit}
                       variant="secondary"
                       label="Book author"
                       placeholder="e.g. J. K. Rowling"

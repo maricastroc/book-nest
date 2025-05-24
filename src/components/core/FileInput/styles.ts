@@ -48,6 +48,17 @@ export const CustomFileButton = styled('button', {
     outline: 'none',
     boxShadow: 'none',
   },
+
+  '&:disabled': {
+    backgroundColor: '$blue600',
+    border: 'solid 1px $blue600',
+    color: '$gray100',
+    cursor: 'not-allowed !important',
+
+    svg: {
+      color: '$gray100',
+    },
+  },
 })
 
 export const FileNameDisplay = styled('span', {
