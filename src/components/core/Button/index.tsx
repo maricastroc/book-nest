@@ -3,24 +3,22 @@ import { ButtonHTMLAttributes } from 'react'
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string | undefined
+  isSmaller?: boolean
   isSubmitting?: boolean
-  hasRoundedBorder?: boolean
-  isDisabled?: boolean
   variant?: 'default' | 'outline-white' | 'solid-white'
 }
 
 export const Button = ({
   content,
   isSubmitting = false,
-  hasRoundedBorder = true,
-  isDisabled = false,
+  isSmaller = false,
   variant = 'default',
   ...props
 }: Props) => {
   return (
     <StyledButton
-      disabled={isSubmitting || isDisabled}
-      className={hasRoundedBorder ? 'rounded' : ''}
+      disabled={isSubmitting}
+      className={isSmaller ? 'smaller' : ''}
       variant={variant}
       {...props}
     >

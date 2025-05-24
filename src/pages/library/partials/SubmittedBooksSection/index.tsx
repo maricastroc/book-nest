@@ -18,9 +18,10 @@ import { BookCard } from '@/components/cards/BookCard'
 import { BookProps } from '@/@types/book'
 import { UserInfo } from '../../[userId]/index.page'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
-import { ActionButton, DividerLine } from '@/styles/shared'
+import { DividerLine } from '@/styles/shared'
 import { useRouter } from 'next/router'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { Button } from '@/components/core/Button'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
@@ -96,9 +97,12 @@ export function SubmittedBooksSection({
               <Avatar avatarUrl={userInfo?.avatarUrl} variant="large" />
               <h2>{userInfo?.name}</h2>
             </>
-            <ActionButton onClick={() => router.push(`/profile/${userId}`)}>
-              View Profile
-            </ActionButton>
+            <Button
+              isSmaller
+              content="View Profile"
+              onClick={() => router.push(`/profile/${userId}`)}
+              style={{ marginTop: '0.7rem' }}
+            />
             <DividerLine />
           </UserProfileInfo>
           <SubmittedBooksWrapper>

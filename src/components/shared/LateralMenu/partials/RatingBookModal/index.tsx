@@ -80,9 +80,8 @@ export function RatingBookModal({
         <Button
           style={{ marginTop: '2rem' }}
           content="Confirm"
-          isDisabled={rate === undefined}
-          onClick={submitReview}
           disabled={rate === undefined || isLoading}
+          onClick={submitReview}
         />
       </BaseModal>
     </Dialog.Portal>

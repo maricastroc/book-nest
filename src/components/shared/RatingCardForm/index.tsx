@@ -1,6 +1,5 @@
 import { Check, Star, X } from 'phosphor-react'
 import {
-  ActionButton,
   CharacterCounter,
   CharacterCounterWrapper,
   RatingCardFormWrapper,
@@ -25,6 +24,7 @@ import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
 import { BookProps } from '@/@types/book'
 import { FormErrors } from '@/components/core/FormErrors'
+import { ActionButton } from '@/components/core/ActionButton'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean

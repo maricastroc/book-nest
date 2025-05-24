@@ -7,7 +7,6 @@ import {
   BookCardBox,
   RatingWrapper,
   FooterWrapper,
-  ActionButton,
 } from './styles'
 import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -17,6 +16,7 @@ import { useState } from 'react'
 import { SubmitBookFormModal } from '@/pages/library/partials/SubmitBookFormModal'
 import { ReadNotice } from '@/components/shared/ReadNotice'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
+import { ActionButton } from '@/components/core/ActionButton'
 
 interface BookCardProps {
   isLibraryPage?: boolean
@@ -44,7 +44,7 @@ export function BookCard({
 
   return (
     <BookCardBox
-      className={size}
+      className={`${size} ${isLibraryPage ? 'library_style' : ''}`}
       onClick={() => {
         if (!isLibraryPage) {
           onOpenDetails()
@@ -52,7 +52,7 @@ export function BookCard({
       }}
     >
       <BookCover
-        className={size}
+        className={`${size} ${isLibraryPage ? 'library_style' : ''}`}
         src={book.coverUrl}
         onClick={() => onOpenDetails()}
       />
@@ -81,11 +81,8 @@ export function BookCard({
           <Dialog.Root open={isEditBookFormOpen}>
             <Dialog.Trigger asChild>
               {isLoggedUser && isLibraryPage && (
-                <ActionButton
-                  className="edit"
-                  onClick={() => setIsEditBookFormOpen(true)}
-                >
-                  <PencilSimple />
+                <ActionButton onClick={() => setIsEditBookFormOpen(true)}>
+                  <PencilSimple className="edit_icon" />
                 </ActionButton>
               )}
             </Dialog.Trigger>

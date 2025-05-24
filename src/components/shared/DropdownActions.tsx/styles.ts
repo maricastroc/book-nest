@@ -5,8 +5,8 @@ export const DropdownButton = styled('button', {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '0.6rem',
-  width: '2rem',
-  height: '2rem',
+  width: '1.75rem',
+  height: '1.75rem',
   backgroundColor: 'rgba(131, 129, 217, 0.3)',
   borderRadius: '100%',
   borderColor: 'transparent',
@@ -43,6 +43,24 @@ export const Dropdown = styled('div', {
   right: '4%',
   top: '92%',
   zIndex: 9997,
+
+  variants: {
+    variant: {
+      default: {
+        right: '4%',
+        top: '92%',
+      },
+
+      secondary: {
+        right: '0%',
+        top: '58%',
+      },
+    },
+  },
+
+  defaultVariants: {
+    variant: 'default',
+  },
 })
 
 export const DropdownItem = styled('button', {

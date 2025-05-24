@@ -5,22 +5,22 @@ import {
   UserRatingBoxWrapper,
   UserRatingBoxContent,
   UserDetailsWrapper,
+  UserRatingAndActionsWrapper,
+  StarsRatingWrapper,
 } from './styles'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useSession } from 'next-auth/react'
-import { Trash, Pencil } from 'phosphor-react'
-import { DeleteModal } from '../../../../modals/DeleteModal'
-import * as Dialog from '@radix-ui/react-dialog'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
 import { RatingCardForm } from '../../../RatingCardForm'
 import { Avatar } from '@/components/shared/Avatar'
-import { UserActions } from '@/styles/shared'
 import { TextBox } from '@/components/shared/TextBox'
 import { useAppContext } from '@/contexts/AppContext'
 import { BookProps } from '@/@types/book'
+import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
+import { useScreenSize } from '@/hooks/useScreenSize'
 
 interface UserRatingBoxProps {
   rating: RatingProps
@@ -46,11 +46,38 @@ export function UserRatingBox({
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
   const { handleDeleteReview } = useAppContext()
 
   const session = useSession()
 
   const isFromLoggedUser = rating.userId === session.data?.user.id
+
+  const isMobile = useScreenSize(420)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node) &&
+        !isDeleteModalOpen
+      ) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isDeleteModalOpen])
 
   return openEditReviewBox ? (
     <RatingCardForm
@@ -81,8 +108,37 @@ export function UserRatingBox({
               </time>
             </UserNameDateWrapper>
           </UserDetailsWrapper>
-          <StarsRating rating={rating.rate} />
+          <UserRatingAndActionsWrapper>
+            {!isMobile && <StarsRating rating={rating.rate} />}
+            {isFromLoggedUser && (
+              <DropdownActions
+                variant="secondary"
+                dropdownRef={dropdownRef}
+                buttonRef={buttonRef}
+                handleIsEditUserReviewCardOpen={(value) =>
+                  setOpenEditReviewBox(value)
+                }
+                isDropdownOpen={isDropdownOpen}
+                handleSetIsDropdownOpen={(value: boolean) =>
+                  setIsDropdownOpen(value)
+                }
+                isDeleteModalOpen={isDeleteModalOpen}
+                handleSetIsDeleteModalOpen={(value: boolean) =>
+                  setIsDeleteModalOpen(value)
+                }
+                handleDeleteReview={() => {
+                  onDeleteReview(rating.id)
+                  handleDeleteReview(rating.id)
+                }}
+              />
+            )}
+          </UserRatingAndActionsWrapper>
         </UserRatingBoxHeader>
+        {isMobile && (
+          <StarsRatingWrapper>
+            <StarsRating rating={rating.rate} />
+          </StarsRatingWrapper>
+        )}
         {openEditReviewBox ? (
           <RatingCardForm
             book={book}
@@ -94,31 +150,6 @@ export function UserRatingBox({
           <TextBox description={rating.description ?? ''} />
         )}
       </UserRatingBoxContent>
-      {isFromLoggedUser && (
-        <>
-          <UserActions>
-            <Dialog.Root open={isDeleteModalOpen}>
-              <Dialog.Trigger asChild>
-                <Trash
-                  className="delete_icon"
-                  onClick={() => setIsDeleteModalOpen(true)}
-                />
-              </Dialog.Trigger>
-              <DeleteModal
-                onClose={() => setIsDeleteModalOpen(false)}
-                onConfirm={() => {
-                  handleDeleteReview(rating.id)
-                  onDeleteReview(rating.id)
-                }}
-              />
-            </Dialog.Root>
-            <Pencil
-              className="edit_icon"
-              onClick={() => setOpenEditReviewBox(!openEditReviewBox)}
-            />
-          </UserActions>
-        </>
-      )}
     </UserRatingBoxWrapper>
   )
 }

@@ -14,6 +14,12 @@ export const StyledButton = styled('button', {
   transition: 'all 200ms ease',
   borderRadius: 8,
 
+  '&.smaller': {
+    padding: '0.4rem',
+    fontSize: '0.85rem',
+    width: '6rem',
+  },
+
   svg: {
     transition: '200ms ease',
   },

@@ -12,15 +12,10 @@ import {
 import { Avatar } from '../../../../components/shared/Avatar'
 import { EditProfileModal } from '../../../../components/modals/EditProfileModal'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
-import {
-  BookOpen,
-  BookmarkSimple,
-  Books,
-  PencilSimple,
-  UserList,
-} from 'phosphor-react'
+import { BookOpen, BookmarkSimple, Books, UserList } from 'phosphor-react'
 import { useRouter } from 'next/router'
-import { ActionButton, DividerLine } from '@/styles/shared'
+import { DividerLine } from '@/styles/shared'
+import { Button } from '@/components/core/Button'
 
 interface UserDetailsProps {
   userId: string
@@ -121,13 +116,13 @@ export function UserDetails({
           {isCurrentUser ? (
             <Dialog.Root>
               <Dialog.Trigger asChild>
-                <ActionButton
+                <Button
+                  isSmaller
                   type="button"
+                  content="Edit Info"
                   onClick={() => setIsEditProfileModalOpen(true)}
-                >
-                  <PencilSimple />
-                  Edit Info
-                </ActionButton>
+                  style={{ marginTop: '1rem' }}
+                />
               </Dialog.Trigger>
               {isEditProfileModalOpen && (
                 <EditProfileModal
@@ -136,9 +131,12 @@ export function UserDetails({
               )}
             </Dialog.Root>
           ) : (
-            <ActionButton onClick={() => router.push(`/library/${userId}`)}>
-              View Library
-            </ActionButton>
+            <Button
+              isSmaller
+              style={{ marginTop: '1rem' }}
+              content="View Library"
+              onClick={() => router.push(`/library/${userId}`)}
+            />
           )}
 
           <DividerLine />

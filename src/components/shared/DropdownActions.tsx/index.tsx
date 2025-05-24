@@ -7,6 +7,7 @@ import { RefObject } from 'react'
 import { DeleteModal } from '@/components/modals/DeleteModal'
 
 interface Props {
+  variant?: 'default' | 'secondary'
   buttonRef: RefObject<HTMLButtonElement>
   dropdownRef: RefObject<HTMLDivElement>
   isDropdownOpen: boolean
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export const DropdownActions = ({
+  variant = 'default',
   buttonRef,
   isDropdownOpen,
   dropdownRef,
@@ -31,12 +33,12 @@ export const DropdownActions = ({
     <>
       <DropdownButton
         ref={buttonRef}
-        onClick={() => handleSetIsDropdownOpen(true)}
+        onClick={() => handleSetIsDropdownOpen(!isDropdownOpen)}
       >
         <FontAwesomeIcon icon={faEllipsisVertical} />
       </DropdownButton>
       {isDropdownOpen && (
-        <Dropdown ref={dropdownRef}>
+        <Dropdown ref={dropdownRef} variant={variant}>
           <Dialog.Root
             open={isDeleteModalOpen}
             onOpenChange={() => handleSetIsDeleteModalOpen(true)}

@@ -20,17 +20,15 @@ export const UserRatingBoxContent = styled('div', {
 })
 
 export const UserRatingBoxHeader = styled('div', {
+  position: 'relative',
   display: 'flex',
-  flexDirection: 'column',
   width: '100%',
   alignItems: 'flex-start',
   marginBottom: '1rem',
+  justifyContent: 'space-between',
 
-  '@media (min-width: 380px)': {
+  '@media (min-width: 420px)': {
     marginBottom: 0,
-    gap: '1rem',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 })
 
@@ -62,5 +60,20 @@ export const UserNameDateWrapper = styled('div', {
     WebkitLineClamp: 1,
     WebkitBoxOrient: 'vertical',
     whiteSpace: 'normal',
+  },
+})
+
+export const UserRatingAndActionsWrapper = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '1rem',
+})
+
+export const StarsRatingWrapper = styled('div', {
+  marginTop: '-1rem',
+  marginBottom: '1rem',
+
+  '@media (min-width: 420px)': {
+    display: 'none',
   },
 })

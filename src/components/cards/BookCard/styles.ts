@@ -34,6 +34,13 @@ export const BookCardBox = styled('div', {
       height: '9.2rem',
     },
   },
+
+  '&.library_style': {
+    '&:hover': {
+      backgroundColor: '$gray700',
+      transition: '200ms ease-in-out',
+    },
+  },
 })
 
 export const BookContentWrapper = styled('div', {
@@ -111,6 +118,13 @@ export const BookCover = styled('img', {
   '@media (min-width: 480px)': {
     width: '6.5rem',
   },
+
+  '&.library_style': {
+    '&:hover': {
+      transition: '200ms all',
+      filter: 'brightness(1.15)',
+    },
+  },
 })
 
 export const FooterWrapper = styled('div', {
@@ -134,49 +148,5 @@ export const RatingWrapper = styled('div', {
 
   '&.smaller': {
     gap: '0.05rem',
-  },
-})
-
-export const ActionButton = styled('button', {
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  border: 'none',
-  borderRadius: 8,
-  padding: '0.3rem',
-  backgroundColor: 'transparent',
-
-  svg: {
-    fontSize: '1.2rem',
-  },
-
-  '&.edit': {
-    border: '1px solid $green200',
-
-    svg: {
-      color: '$green100',
-    },
-  },
-
-  '&.delete': {
-    border: '1px solid $red400',
-
-    svg: {
-      color: '$red300',
-    },
-  },
-
-  '&:hover': {
-    filter: 'brightness(1.3)',
-    transition: '200ms',
-  },
-
-  variants: {
-    disabled: {
-      true: {
-        cursor: 'not-allowed',
-      },
-    },
   },
 })
