@@ -9,7 +9,7 @@ export const LibraryContainerBox = styled('div', {
   width: '100%',
   marginBottom: '0.5rem',
   gap: '0.7rem',
-
+  overflowX: 'scroll',
   '&.smaller': {
     paddingRight: '1.5rem',
   },
@@ -94,32 +94,22 @@ export const TagStatus = styled('div', {
   },
 })
 
+export const ScrollContainer = styled('div', {
+  position: 'relative',
+  width: '100%',
+})
+
 export const ContainerWrapper = styled('div', {
   display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'flex-start',
-  padding: '1.2rem 0 1.2rem 1.2rem',
-  width: '100%',
   gap: '1.2rem',
-  overflowX: 'scroll',
+  overflowX: 'auto',
+  padding: '1.5rem 1.5rem 1.2rem 1.5rem',
   background: '$gray700',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
   '&.smaller': {
     padding: '1.2rem',
-  },
-
-  '@media (min-width: 680px)': {
-    gap: '1.5rem',
-  },
-
-  '@media (min-width: 1024px)': {
-    gap: '1.8rem',
-  },
-
-  '@media (min-width: 1200px)': {
-    padding: '1.8rem',
   },
 })
 
@@ -252,5 +242,57 @@ export const EmptyBooksContainer = styled('div', {
 
   '@media (min-width: 1200px)': {
     height: '7.8rem',
+  },
+})
+
+export const CaretRightIcon = styled('div', {
+  position: 'absolute',
+  cursor: 'pointer',
+  right: '0.5rem',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 997,
+  color: '$gray100',
+  backgroundColor: '$blue600',
+  borderRadius: '50%',
+  width: '2rem',
+  height: '2rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: 0.9,
+  transition: 'all 0.2s',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+
+  '&:hover': {
+    opacity: 1,
+    backgroundColor: '$gray500',
+    transform: 'translateY(-50%) scale(1.1)',
+  },
+})
+
+export const CaretLeftIcon = styled('div', {
+  position: 'absolute',
+  cursor: 'pointer',
+  left: '0.5rem',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 997,
+  color: '$gray100',
+  backgroundColor: '$blue600',
+  borderRadius: '50%',
+  width: '2rem',
+  height: '2rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: 0.7,
+  transition: 'all 0.2s',
+  boxShadow: '0 2px 4px rgba(73, 73, 73, 0.1)',
+
+  '&:hover': {
+    opacity: 1,
+    backgroundColor: '$gray500',
+    transform: 'translateY(-50%) scale(1.1)',
   },
 })

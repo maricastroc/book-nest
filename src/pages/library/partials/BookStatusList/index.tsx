@@ -9,10 +9,13 @@ import {
   BookDetailsWrapper,
   EmptyBookCover,
   EmptyBooksContainer,
+  CaretLeftIcon,
+  CaretRightIcon,
+  ScrollContainer,
 } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
-import { Plus } from 'phosphor-react'
+import { CaretLeft, CaretRight, Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useRouter } from 'next/router'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
@@ -50,57 +53,83 @@ export function BookStatusList({
     }
 
     checkOverflow()
-
     window.addEventListener('resize', checkOverflow)
+
     return () => {
       window.removeEventListener('resize', checkOverflow)
     }
   }, [books])
 
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (containerRef.current) {
+      const scrollAmount = direction === 'right' ? 300 : -300
+      containerRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth',
+      })
+    }
+  }
+
   return (
-    <LibraryContainerBox className={isOverflowing ? '' : 'smaller'}>
+    <LibraryContainerBox>
       <TagStatus className={className}>
         <FontAwesomeIcon icon={faBookmark} />
         {statusLabel}
       </TagStatus>
-      <ContainerWrapper
-        ref={containerRef}
-        className={books?.length ? '' : 'smaller'}
-        style={{ paddingRight: isOverflowing ? '0' : '1.2rem' }}
-      >
-        {books && books.length > 0 ? (
-          <>
-            {books.map((book) => (
-              <BookContainer key={book.id}>
-                <BookCover src={book.coverUrl} onClick={() => onSelect(book)} />
-                <BookDetailsWrapper>
-                  <p>{book.name}</p>
-                  <h2>{book.author}</h2>
-                  {(status === READ_STATUS ||
-                    status === DID_NOT_FINISH_STATUS) && (
-                    <StarsRating
-                      size={'smaller'}
-                      rating={book?.userRating ?? 0}
-                    />
-                  )}
-                </BookDetailsWrapper>
+
+      <ScrollContainer>
+        <ContainerWrapper
+          ref={containerRef}
+          className={books?.length ? '' : 'smaller'}
+        >
+          {books && books.length > 0 ? (
+            <>
+              {books.map((book) => (
+                <BookContainer key={book.id}>
+                  <BookCover
+                    src={book.coverUrl}
+                    onClick={() => onSelect(book)}
+                  />
+                  <BookDetailsWrapper>
+                    <p>{book.name}</p>
+                    <h2>{book.author}</h2>
+                    {(status === READ_STATUS ||
+                      status === DID_NOT_FINISH_STATUS) && (
+                      <StarsRating
+                        size={'smaller'}
+                        rating={book?.userRating ?? 0}
+                      />
+                    )}
+                  </BookDetailsWrapper>
+                </BookContainer>
+              ))}
+              <BookContainer>
+                <EmptyBookCover onClick={() => router.push('/explore')}>
+                  <Plus />
+                </EmptyBookCover>
               </BookContainer>
-            ))}
-            <BookContainer>
+            </>
+          ) : (
+            <EmptyBooksContainer>
               <EmptyBookCover onClick={() => router.push('/explore')}>
                 <Plus />
               </EmptyBookCover>
-            </BookContainer>
+              <p>{emptyBoxMessage ?? ''}</p>
+            </EmptyBooksContainer>
+          )}
+        </ContainerWrapper>
+
+        {isOverflowing && books && books.length > 0 && (
+          <>
+            <CaretLeftIcon onClick={() => handleScroll('left')}>
+              <CaretLeft size={24} weight="bold" />
+            </CaretLeftIcon>
+            <CaretRightIcon onClick={() => handleScroll('right')}>
+              <CaretRight size={24} weight="bold" />
+            </CaretRightIcon>
           </>
-        ) : (
-          <EmptyBooksContainer>
-            <EmptyBookCover onClick={() => router.push('/explore')}>
-              <Plus />
-            </EmptyBookCover>
-            <p>{emptyBoxMessage ?? ''}</p>
-          </EmptyBooksContainer>
         )}
-      </ContainerWrapper>
+      </ScrollContainer>
     </LibraryContainerBox>
   )
 }
