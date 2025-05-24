@@ -1,11 +1,12 @@
-import { RefObject } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { RefObject, useEffect } from 'react'
 import { Pencil, Trash } from 'phosphor-react'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { DeleteModal } from '@/components/modals/DeleteModal'
-import { Dropdown, DropdownButton, DropdownItem } from './styles'
+import { DividerLine, Dropdown, DropdownButton, DropdownItem } from './styles'
 
 interface Props {
   variant?: 'default' | 'secondary'
@@ -46,8 +47,13 @@ export const DropdownActions = ({
   const handleDeleteConfirm = () => {
     onDelete?.()
     onToggleDropdown(false)
-    onToggleDeleteSection?.(false)
   }
+
+  useEffect(() => {
+    if (!isDropdownOpen) {
+      onToggleDeleteSection?.(false)
+    }
+  }, [isDropdownOpen])
 
   return (
     <>
@@ -64,19 +70,23 @@ export const DropdownActions = ({
           variant={variant}
           className={`${isSubmission ? 'larger' : ''}`}
         >
-          <DropdownItem onClick={handleEditClick}>
-            <Pencil className="edit_icon" />
+          <DropdownItem className="edit_icon" onClick={handleEditClick}>
+            <Pencil />
             <p>{isSubmission ? 'Edit Submission' : 'Edit Review'}</p>
           </DropdownItem>
 
+          <DividerLine />
           {hasDeleteSection && (
             <Dialog.Root
               open={isDeleteSectionOpen}
               onOpenChange={handleDeleteClick}
             >
               <Dialog.Trigger asChild>
-                <DropdownItem onClick={handleDeleteClick}>
-                  <Trash className="delete_icon" />
+                <DropdownItem
+                  className="delete_icon"
+                  onClick={handleDeleteClick}
+                >
+                  <Trash />
                   <p>{isSubmission ? 'Delete Submission' : 'Delete Review'}</p>
                 </DropdownItem>
               </Dialog.Trigger>
@@ -85,7 +95,6 @@ export const DropdownActions = ({
                 onConfirm={handleDeleteConfirm}
                 onClose={() => {
                   onToggleDropdown(false)
-                  onToggleDeleteSection?.(false)
                 }}
               />
             </Dialog.Root>

@@ -35,12 +35,12 @@ export const Dropdown = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'center',
   position: 'absolute',
-  width: '8.6rem',
   backgroundColor: '$gray600',
   borderRadius: 8,
-  padding: '0.9rem 0',
+  padding: '1rem 1rem',
   gap: '0.6rem',
   right: '4%',
+  width: 'auto',
   top: '92%',
   zIndex: 9997,
 
@@ -71,45 +71,53 @@ export const Dropdown = styled('div', {
 export const DropdownItem = styled('button', {
   display: 'flex',
   alignItems: 'center',
-  gap: '0.3rem',
-  fontSize: '0.9rem',
+  gap: '0.5rem',
+  fontSize: '0.95rem',
   fontWeight: 600,
   color: '$gray200',
-  marginLeft: '0.6rem',
   backgroundColor: 'transparent',
   borderColor: 'transparent',
   cursor: 'pointer',
   transition: 'all 200ms',
 
-  p: {
-    color: '$gray200',
+  svg: {
+    fontSize: '1.1rem',
+    transition: 'all 200ms',
   },
 
-  svg: {
-    cursor: 'pointer',
-    fontSize: '0.9rem',
-    color: '$gray400',
+  p: {
+    color: '$gray200',
+    transition: 'all 200ms',
+  },
 
-    '&.edit_icon': {
-      color: '$green100',
-      filter: 'brightness(1.5)',
-    },
+  '&.edit_icon': {
+    color: '$green100',
+    filter: 'brightness(1.5)',
+  },
 
-    '&.delete_icon': {
-      color: '$red300',
-      filter: 'brightness(1.5)',
-    },
+  '&.delete_icon': {
+    color: '$red300',
+    filter: 'brightness(1.5)',
   },
 
   '&:hover': {
-    p: {
-      '&.edit_icon': {
-        filter: 'brightness(1.8)',
+    '&.edit_icon': {
+      p: {
+        color: '$green100',
       },
+    },
 
-      '&.delete_icon': {
-        filter: 'brightness(1.8)',
+    '&.delete_icon': {
+      p: {
+        color: '$red300',
       },
     },
   },
+})
+
+export const DividerLine = styled('span', {
+  width: '100%',
+  height: 0.5,
+  backgroundColor: '$gray400',
+  opacity: 0.7,
 })
