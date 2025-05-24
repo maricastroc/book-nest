@@ -99,6 +99,14 @@ export function RatingCardForm({
   }
 
   async function editReview() {
+    if (
+      rating?.description === watch()?.description &&
+      rating?.rate === watch()?.rate
+    ) {
+      onClose()
+      return
+    }
+
     if (rating && handleEditReview) {
       const data = watch()
 
@@ -109,7 +117,7 @@ export function RatingCardForm({
       }
 
       const updatedRating = await handleEditReview(payload)
-      await onUpdateReview(updatedRating)
+      onUpdateReview(updatedRating)
       onClose()
     }
   }
