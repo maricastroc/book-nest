@@ -19,12 +19,12 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import 'react-toastify/dist/ReactToastify.css'
 import { REVIEW_MAX_LENGTH } from '@/utils/constants'
-import { FormErrors } from '@/components/shared/FormErrors'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
 import { BookProps } from '@/@types/book'
+import { FormErrors } from '@/components/core/FormErrors'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean

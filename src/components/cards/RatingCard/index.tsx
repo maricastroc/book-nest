@@ -48,7 +48,6 @@ export function RatingCard({
       <RatingCardHeader>
         <UserDetailsWrapper>
           <Avatar
-            variant="bigger"
             isClickable
             avatarUrl={rating.user?.avatarUrl}
             onClick={() => {

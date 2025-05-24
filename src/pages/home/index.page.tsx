@@ -23,7 +23,6 @@ import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
-import { UserLatestReadingCard } from '@/pages/home/partials/UserLatestReadingCard'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { RatingProps } from '@/@types/rating'
@@ -136,10 +135,9 @@ export default function Home() {
                       {isValidatingUserLatestReading ? (
                         <SkeletonRatingCard withMarginBottom />
                       ) : userLatestRatingData && userLatestRatingData?.book ? (
-                        <UserLatestReadingCard
+                        <RatingCard
                           key={userLatestRatingData.id}
                           rating={userLatestRatingData}
-                          book={userLatestRatingData.book}
                           onOpenDetails={() => {
                             setSelectedBook(
                               userLatestRatingData.book as BookProps,

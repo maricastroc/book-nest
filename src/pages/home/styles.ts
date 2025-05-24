@@ -157,6 +157,7 @@ export const UserLatestReadingContainer = styled('div', {
   flexDirection: 'column',
   width: '100%',
   gap: '1rem',
+  marginBottom: '2rem',
 })
 
 export const UserLatestReadingTitle = styled('p', {

@@ -19,7 +19,7 @@ export const RatingCardBox = styled('div', {
 export const RatingCardHeader = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '1.5rem 1.5rem 1.2rem',
+  padding: '0.85rem 1.5rem',
   borderTopLeftRadius: 8,
   borderTopRightRadius: 8,
   gap: '1.2rem',
@@ -32,6 +32,7 @@ export const RatingCardHeader = styled('div', {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    padding: '0.85rem 1.5rem',
   },
 })
 
@@ -43,7 +44,7 @@ export const UserDetailsWrapper = styled('div', {
   width: '100%',
 
   '@media (min-width: 480px)': {
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
 })
 
@@ -56,6 +57,7 @@ export const UserDetailsHeader = styled('div', {
   '@media (min-width: 480px)': {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
   },
 })

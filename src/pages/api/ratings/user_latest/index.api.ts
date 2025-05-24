@@ -38,6 +38,12 @@ export default async function handler(
             },
           },
         },
+        user: {
+          select: {
+            name: true,
+            avatarUrl: true,
+          },
+        },
       },
     })
 
@@ -47,7 +53,7 @@ export default async function handler(
         .json({ message: 'No ratings found for this user.' })
     }
 
-    const { book } = userLastRating
+    const { book, user } = userLastRating
     const readingStatus = book.readingStatus?.[0]?.status ?? null
 
     return res.json({
@@ -57,6 +63,10 @@ export default async function handler(
           name: book.name,
           author: book.author,
           coverUrl: book.coverUrl,
+        },
+        user: {
+          name: user.name,
+          avatarUrl: user.avatarUrl,
         },
         description: userLastRating.description,
         rate: userLastRating.rate,
