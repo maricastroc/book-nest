@@ -25,7 +25,7 @@ import { BookProps } from '@/@types/book'
 interface UserRatingBoxProps {
   rating: RatingProps
   book: BookProps
-  onUpdateReview: (updatedReview: RatingProps) => Promise<void>
+  onUpdateReview: (updatedReview: RatingProps) => void
   onCreateReview: (newRating: RatingProps) => void
   onDeleteReview: (ratingId: string) => void
 }

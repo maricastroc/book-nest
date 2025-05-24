@@ -165,10 +165,10 @@ export function RatingCardForm({
               disabled={isSubmitting}
               onClick={() => onClose()}
             >
-              <X color="#8381D9" />
+              <X className="delete_icon" />
             </ActionButton>
             <ActionButton type="submit" disabled={isSubmitting}>
-              <Check color="#50B2C0" />
+              <Check className="edit_icon" />
             </ActionButton>
           </UserActionsWrapper>
         </FooterWrapper>

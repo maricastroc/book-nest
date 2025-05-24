@@ -30,6 +30,7 @@ export const ProfileCardBox = styled('div', {
 })
 
 export const ProfileCardHeader = styled('div', {
+  position: 'relative',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -37,7 +38,7 @@ export const ProfileCardHeader = styled('div', {
   borderTopLeftRadius: 8,
   borderTopRightRadius: 8,
   marginBottom: '1rem',
-  padding: '1rem 1.5rem 1rem',
+  padding: '0.8rem 1.5rem 0.8rem',
   backgroundColor: '$gray650',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.1)',
 
@@ -200,7 +201,7 @@ export const EmptyCardContent = styled('div', {
   justifyContent: 'center',
   alignItems: 'center',
   minWidth: '100%',
-  minHeight: '7rem',
+  minHeight: '4.5rem',
   height: '100%',
   borderRadius: 8,
   border: '1px dashed $gray400',

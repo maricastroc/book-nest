@@ -1,6 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { BaseModal } from '../BaseModal'
 import { Button } from '@/components/core/Button'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface DeleteModalProps {
   onConfirm: () => void
@@ -8,6 +9,8 @@ interface DeleteModalProps {
 }
 
 export function DeleteModal({ onConfirm, onClose }: DeleteModalProps) {
+  const { isSubmitting } = useAppContext()
+
   return (
     <Dialog.Portal>
       <BaseModal title="Delete Review?" onClose={onClose}>
@@ -17,7 +20,8 @@ export function DeleteModal({ onConfirm, onClose }: DeleteModalProps) {
         </p>
         <Button
           style={{ marginTop: '2rem' }}
-          content="Confirm & Delete"
+          content={isSubmitting ? 'Loading...' : 'Confirm & Delete'}
+          disabled={isSubmitting}
           onClick={() => onConfirm()}
         />
       </BaseModal>

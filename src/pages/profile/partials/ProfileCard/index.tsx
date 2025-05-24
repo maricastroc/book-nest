@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import * as Dialog from '@radix-ui/react-dialog'
-import { PencilSimple, Plus, TrashSimple } from 'phosphor-react'
+import { useEffect, useRef, useState } from 'react'
+import { Plus } from 'phosphor-react'
 
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
@@ -18,14 +17,12 @@ import {
   BookTitleAndAuthor,
   ProfileCardWrapper,
   EmptyCardContent,
-  ActionButton,
 } from './styles'
-import { UserActions } from '@/styles/shared'
 import { StarsRating } from '@/components/shared/StarsRating'
-import { DeleteModal } from '@/components/modals/DeleteModal'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { TextBox } from '@/components/shared/TextBox'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
+import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
 
 interface ProfileCardProps {
   book: BookProps
@@ -50,17 +47,44 @@ export function ProfileCard({
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
   const { loggedUser, handleDeleteReview } = useAppContext()
+
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const isMobile = useScreenSize(480)
 
   const deleteReview = async () => {
     if (loggedUser) {
       await handleDeleteReview(rating.id)
+
       onDeleteReview(rating.id)
+
       setIsDeleteModalOpen(false)
     }
   }
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node) &&
+        !isDeleteModalOpen
+      ) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isDeleteModalOpen])
 
   return isEditUserReviewCardOpen ? (
     <RatingCardForm
@@ -80,36 +104,24 @@ export function ProfileCard({
       </time>
       <ProfileCardBox>
         <ProfileCardHeader>
-          <StarsRating variant={'secondary'} rating={rating.rate} />
+          <StarsRating rating={rating.rate} />
           {rating.userId === loggedUser?.id && (
-            <>
-              <UserActions style={{ paddingRight: 0, marginTop: 0 }}>
-                <Dialog.Root open={isDeleteModalOpen}>
-                  <Dialog.Trigger asChild>
-                    <ActionButton
-                      className="delete"
-                      type="button"
-                      onClick={() => setIsDeleteModalOpen(true)}
-                    >
-                      <TrashSimple />
-                    </ActionButton>
-                  </Dialog.Trigger>
-                  <DeleteModal
-                    onClose={() => setIsDeleteModalOpen(false)}
-                    onConfirm={() => {
-                      deleteReview()
-                    }}
-                  />
-                </Dialog.Root>
-                <ActionButton
-                  className="edit"
-                  type="button"
-                  onClick={() => setIsEditUserReviewCardOpen(true)}
-                >
-                  <PencilSimple />
-                </ActionButton>
-              </UserActions>
-            </>
+            <DropdownActions
+              dropdownRef={dropdownRef}
+              buttonRef={buttonRef}
+              handleIsEditUserReviewCardOpen={(value) =>
+                setIsEditUserReviewCardOpen(value)
+              }
+              isDropdownOpen={isDropdownOpen}
+              handleSetIsDropdownOpen={(value: boolean) =>
+                setIsDropdownOpen(value)
+              }
+              isDeleteModalOpen={isDeleteModalOpen}
+              handleSetIsDeleteModalOpen={(value: boolean) =>
+                setIsDeleteModalOpen(value)
+              }
+              handleDeleteReview={deleteReview}
+            />
           )}
         </ProfileCardHeader>
 

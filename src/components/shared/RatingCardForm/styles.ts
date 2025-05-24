@@ -12,7 +12,7 @@ export const RatingCardFormWrapper = styled('form', {
   width: '100%',
 
   '@media (min-width: 480px)': {
-    padding: '1.5rem',
+    padding: '1.3rem',
   },
 })
 
@@ -56,9 +56,9 @@ export const ReviewFormWrapper = styled('div', {
 export const ReviewForm = styled('textarea', {
   width: '100%',
   marginTop: '1rem',
-  backgroundColor: '$gray800',
+  backgroundColor: 'transparent',
   padding: '0.875rem 0.875rem 1.25rem',
-  border: 'solid 1px $gray500',
+  border: 'solid 1px $blue600',
   borderRadius: 8,
   height: 188,
   minHeight: 80,
@@ -98,7 +98,7 @@ export const UserActionsWrapper = styled('div', {
   marginTop: '0.5rem',
   display: 'flex',
   alignItems: 'center',
-  gap: '0.5rem',
+  gap: '0.7rem',
   justifyContent: 'flex-end',
   width: '100%',
 })
@@ -108,26 +108,29 @@ export const ActionButton = styled('button', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: 'none',
+  border: 'solid 1px $blue600',
+  backgroundColor: 'transparent',
   borderRadius: 8,
-  backgroundColor: '$gray600',
-  padding: '0.5rem',
+  padding: '0.3rem',
 
   svg: {
-    fontSize: '1.5rem',
-  },
+    fontSize: '1.3rem',
+    transition: '200ms all',
 
-  '&:hover': {
-    backgroundColor: '$gray500',
-    transition: '200ms',
-  },
+    '&.edit_icon': {
+      color: '$green100',
 
-  '&.lighter': {
-    backgroundColor: '$gray700',
+      '&:hover': {
+        filter: 'brightness(1.3)',
+      },
+    },
 
-    '&:hover': {
-      filter: 'brightness(1.2)',
-      transition: '200ms',
+    '&.delete_icon': {
+      color: '$red300',
+
+      '&:hover': {
+        filter: 'brightness(1.3)',
+      },
     },
   },
 

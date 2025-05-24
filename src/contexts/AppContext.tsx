@@ -12,7 +12,7 @@ import { UserProps } from '@/@types/user'
 import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
 import { useSession } from 'next-auth/react'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 
 export interface UserStatistics {
   ratings: RatingProps[] | undefined
@@ -93,16 +93,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleDeleteReview = async (id: string) => {
     try {
+      setIsSubmitting(true)
+
       const response = await api.delete('/ratings', { data: { id } })
 
       toast.success(response?.data?.message)
     } catch (error) {
       handleApiError(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleEditReview = async (data: EditReviewData) => {
     try {
+      setIsSubmitting(true)
+
       const response = await api.put('/ratings', {
         id: data.ratingId,
         description: data.description,
@@ -114,11 +120,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       return response.data.rating
     } catch (error) {
       handleApiError(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleCreateReview = async (data: CreateReviewData) => {
     try {
+      setIsSubmitting(true)
+
       const response = await api.post(`/ratings`, { data: { ...data } })
 
       toast.success(response?.data?.message)
@@ -126,6 +136,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       return response.data.rating
     } catch (error) {
       handleApiError(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 

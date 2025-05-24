@@ -64,6 +64,7 @@ export default function Profile() {
       const response = await api.get(`/profile/${userId}`, {
         params: { search },
       })
+
       return response.data.profile
     } catch (error) {
       handleApiError(error)

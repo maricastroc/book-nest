@@ -1,12 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
-import { useAppContext } from '@/contexts/AppContext'
+import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 
+import { useAppContext } from '@/contexts/AppContext'
+
 import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
-import { RatingProps } from '@/@types/rating'
+
+import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 
 import {
   CloseButton,
@@ -17,23 +18,17 @@ import {
   RatingsList,
   RatingsListHeader,
 } from './styles'
+
 import { MenuBookCard } from './partials/MenuBookCard'
 import { UserRatingBox } from './partials/UserRatingBox'
+import { ReviewWarningModal } from './partials/ReviewWarningModal'
+import { SkeletonLateralMenu } from './partials/SkeletonLateralMenu'
+
 import { RatingCardForm } from '../RatingCardForm'
 import { SignInModal } from '@/components/modals/SignInModal'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { ReviewWarningModal } from '@/components/shared/LateralMenu/partials/ReviewWarningModal'
 import { EmptyContainer } from '../EmptyContainer'
-import { READ_STATUS } from '@/utils/constants'
-import { api } from '@/lib/axios'
-import { handleApiError } from '@/utils/handleApiError'
-import { SkeletonLateralMenu } from './partials/SkeletonLateralMenu'
-
-export interface ReadingStatusProps {
-  bookId: string
-  userId: string
-  status: string
-}
+import { useBookDetails } from '@/hooks/useBookDetails'
 
 interface LateralMenuProps {
   bookId: string
@@ -48,189 +43,23 @@ export function LateralMenu({
 }: LateralMenuProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
-  const [book, setBook] = useState<BookProps | null>(null)
-
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
   const [isReviewWarningModalOpen, setIsReviewWarningModalOpen] =
     useState(false)
 
-  const [userRating, setUserRating] = useState<RatingProps | undefined>(
-    undefined,
-  )
-
-  const [isLoading, setIsLoading] = useState(false)
-
-  const [bookRatings, setBookRatings] = useState<RatingProps[] | undefined>(
-    undefined,
-  )
-
   const { loggedUser, isSubmitting } = useAppContext()
 
-  const shouldShowReviewOption = loggedUser && !userRating
-
-  const shouldShowSignInOption = !loggedUser && !userRating
-
-  const handleGetBookInfo = async (bookId: string) => {
-    try {
-      setIsLoading(true)
-
-      const response = await api.get(`/books/${bookId}`)
-
-      setBook(response.data.book)
-
-      if (response.data.book) {
-        const foundUserRating = response.data.book.ratings.find(
-          (rating: RatingProps) => rating.user.id === loggedUser?.id,
-        )
-
-        setBookRatings(response.data.book.ratings)
-
-        setUserRating(foundUserRating)
-      }
-    } catch (error) {
-      handleApiError(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const onUpdateReview = async (updatedReview: RatingProps) => {
-    setBookRatings((prevRatings) => {
-      const updatedRatings = prevRatings?.map((rating) =>
-        rating.id === updatedReview.id ? updatedReview : rating,
-      )
-      return updatedRatings
-    })
-
-    setBook((prevBook) => {
-      if (!prevBook) return prevBook
-
-      const updatedRatings = bookRatings?.map((rating) =>
-        rating.id === updatedReview.id ? updatedReview : rating,
-      )
-
-      const ratingCount = updatedRatings?.length ?? 0
-
-      let averageRating
-
-      if (updatedRatings) {
-        averageRating =
-          updatedRatings?.reduce((acc, rating) => acc + rating.rate, 0) /
-          ratingCount
-      }
-
-      const updatedBook = {
-        ...prevBook,
-        rate: averageRating,
-        userRating: updatedReview.rate,
-        ratingCount: updatedRatings?.length,
-        ratings: updatedRatings,
-      }
-
-      onUpdateBook(updatedBook)
-
-      return updatedBook
-    })
-  }
-
-  const onCreateReview = (newRating: RatingProps) => {
-    const updatedRatings = setBookRatings((prevRatings) => [
-      ...(prevRatings || []),
-      newRating,
-    ])
-
-    setBook((prevBook) => {
-      if (!prevBook) return prevBook
-
-      const updatedRatings = [...(bookRatings || []), newRating]
-
-      const ratingCount = updatedRatings.length
-
-      const averageRating =
-        updatedRatings.reduce((acc, rating) => acc + rating.rate, 0) /
-        ratingCount
-
-      const updatedBook = {
-        ...prevBook,
-        userRating: newRating.rate,
-        ratings: updatedRatings,
-        ratingCount,
-        rate: averageRating,
-      }
-
-      onUpdateBook(updatedBook)
-
-      return updatedBook
-    })
-
-    return updatedRatings
-  }
-
-  const onDeleteReview = (ratingId: string) => {
-    const updatedRatings = setBookRatings((prevRatings) =>
-      prevRatings?.filter((rating) => rating.id !== ratingId),
-    )
-
-    setBook((prevBook) => {
-      if (!prevBook) return prevBook
-
-      const updatedRatings = bookRatings?.filter(
-        (rating) => rating.id !== ratingId,
-      )
-
-      const ratingCount = updatedRatings?.length ?? 0
-
-      let averageRating
-
-      if (updatedRatings) {
-        averageRating =
-          updatedRatings?.reduce((acc, rating) => acc + rating.rate, 0) /
-          ratingCount
-      }
-
-      const updatedBook = {
-        ...prevBook,
-        userRating: undefined,
-        ratings: updatedRatings,
-        ratingCount,
-        averageRating,
-      }
-
-      onUpdateBook(updatedBook)
-
-      return updatedBook
-    })
-
-    return updatedRatings
-  }
-
-  const onUpdateStatus = (
-    book: BookProps,
-    newStatus: string,
-    userRating: number,
-  ) => {
-    setBook((prevBook) => {
-      if (!prevBook) return prevBook
-
-      const updatedBook = {
-        ...prevBook,
-        userRating,
-        ratingCount: book?.ratings?.length,
-        readingStatus: newStatus,
-      }
-
-      onUpdateBook(updatedBook)
-
-      return updatedBook
-    })
-  }
-
-  useEffect(() => {
-    if (bookId) {
-      handleGetBookInfo(bookId)
-    }
-  }, [bookId])
+  const {
+    book,
+    bookRatings,
+    userRating,
+    isLoading,
+    onUpdateReview,
+    onCreateReview,
+    onDeleteReview,
+    onUpdateStatus,
+  } = useBookDetails(bookId, onUpdateBook)
 
   return (
     <LateralMenuWrapper>
@@ -243,6 +72,20 @@ export function LateralMenu({
           <SkeletonLateralMenu />
         ) : (
           <>
+            {isSignInModalOpen && (
+              <Dialog.Root open={isSignInModalOpen}>
+                <SignInModal onClose={() => setIsSignInModalOpen(false)} />
+              </Dialog.Root>
+            )}
+
+            {isReviewWarningModalOpen && (
+              <Dialog.Root open={isReviewWarningModalOpen}>
+                <ReviewWarningModal
+                  onClose={() => setIsReviewWarningModalOpen(false)}
+                />
+              </Dialog.Root>
+            )}
+
             {book && (
               <MenuBookCard
                 key={book.id}
@@ -255,37 +98,25 @@ export function LateralMenu({
             <RatingsWrapper>
               <RatingsListHeader>
                 <p>Ratings</p>
-                {shouldShowReviewOption &&
-                  (book?.readingStatus === READ_STATUS ? (
-                    <Dialog.Root open={isReviewFormOpen}>
-                      <Dialog.Trigger asChild>
-                        <span onClick={() => setIsReviewFormOpen(true)}>
-                          Review
-                        </span>
-                      </Dialog.Trigger>
-                    </Dialog.Root>
+                {!userRating &&
+                  (book?.readingStatus === READ_STATUS ||
+                  book?.readingStatus === DID_NOT_FINISH_STATUS ? (
+                    <span onClick={() => setIsReviewFormOpen(true)}>
+                      Review
+                    </span>
                   ) : (
-                    <Dialog.Root open={isReviewWarningModalOpen}>
-                      <Dialog.Trigger asChild>
-                        <span onClick={() => setIsReviewWarningModalOpen(true)}>
-                          Review
-                        </span>
-                      </Dialog.Trigger>
-                      <ReviewWarningModal
-                        onClose={() => setIsReviewWarningModalOpen(false)}
-                      />
-                    </Dialog.Root>
+                    <span
+                      onClick={() => {
+                        if (loggedUser) {
+                          setIsReviewWarningModalOpen(true)
+                        } else {
+                          setIsSignInModalOpen(true)
+                        }
+                      }}
+                    >
+                      Review
+                    </span>
                   ))}
-                {shouldShowSignInOption && (
-                  <Dialog.Root open={isSignInModalOpen}>
-                    <Dialog.Trigger asChild>
-                      <span onClick={() => setIsSignInModalOpen(true)}>
-                        Review
-                      </span>
-                    </Dialog.Trigger>
-                    <SignInModal onClose={() => setIsSignInModalOpen(false)} />
-                  </Dialog.Root>
-                )}
               </RatingsListHeader>
               <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
                 {book && isReviewFormOpen && (
