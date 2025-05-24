@@ -11,9 +11,9 @@ import {
   ListByBookStatusContainer,
 } from './styles'
 import { Books } from 'phosphor-react'
-import { useScreenSize } from '@/utils/useScreenSize'
+import { useScreenSize } from '@/hooks/useScreenSize'
 import { useRouter } from 'next/router'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext } from '@/contexts/AppContext'
 import { BooksByStatusProps } from '@/@types/books-status'

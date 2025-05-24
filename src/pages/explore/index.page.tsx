@@ -16,15 +16,15 @@ import { LateralMenu } from '@/components/shared/LateralMenu'
 import { NextSeo } from 'next-seo'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
-import { useScreenSize } from '@/utils/useScreenSize'
+import { useScreenSize } from '@/hooks/useScreenSize'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { SkeletonCategories } from '@/pages/explore/partials/SkeletonCategories'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { BookCard } from '@/components/cards/BookCard'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { SearchBar } from '@/styles/shared'
-import useRequest from '@/utils/useRequest'
+import useRequest from '@/hooks/useRequest'
 
 export interface ExploreProps {
   categories: CategoryProps[]

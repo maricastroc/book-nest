@@ -16,7 +16,7 @@ import { StarsRating } from '@/components/shared/StarsRating'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
-import { useScreenSize } from '@/utils/useScreenSize'
+import { useScreenSize } from '@/hooks/useScreenSize'
 import { ReadNotice } from '@/styles/shared'
 import { TextBox } from '@/components/shared/TextBox'
 

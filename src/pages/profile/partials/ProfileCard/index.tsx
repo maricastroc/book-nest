@@ -19,7 +19,7 @@ import {
   EmptyCardContent,
 } from './styles'
 import { StarsRating } from '@/components/shared/StarsRating'
-import { useScreenSize } from '@/utils/useScreenSize'
+import { useScreenSize } from '@/hooks/useScreenSize'
 import { TextBox } from '@/components/shared/TextBox'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
