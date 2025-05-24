@@ -31,7 +31,7 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
-import { TabletHeader } from '@/components/shared/TabletHeader'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import useRequest from '@/utils/useRequest'
 
 export interface EditReviewData {
@@ -119,7 +119,7 @@ export default function Home() {
               onUpdateBook={onUpdateBook}
             />
           )}
-          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
+          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <HomePageContainer>
             <HomePageHeading>
               <ChartLineUp />

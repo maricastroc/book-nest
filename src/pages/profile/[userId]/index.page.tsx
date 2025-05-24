@@ -26,7 +26,7 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useAppContext, UserStatistics } from '@/contexts/AppContext'
-import { TabletHeader } from '@/components/shared/TabletHeader'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
 
@@ -128,7 +128,7 @@ export default function Profile() {
         <LoadingPage />
       ) : (
         <ProfilePageWrapper>
-          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
+          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <ProfilePageContainer>
             <ProfilePageHeading>
               <ProfilePageHeadingTitle>

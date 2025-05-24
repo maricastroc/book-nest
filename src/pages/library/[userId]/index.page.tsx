@@ -24,7 +24,7 @@ import { BookProps } from '@/@types/book'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
-import { TabletHeader } from '@/components/shared/TabletHeader'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
@@ -155,7 +155,7 @@ export default function Profile() {
         <LoadingPage />
       ) : (
         <UserLibraryPageWrapper>
-          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
+          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           {openLateralMenu && selectedBook && (
             <LateralMenu
               bookId={selectedBook.id}

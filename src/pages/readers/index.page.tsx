@@ -15,7 +15,7 @@ import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/utils/useScreenSize'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { TabletHeader } from '@/components/shared/TabletHeader'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import { UserCard } from './partials/UserCard'
 import { SearchBar } from '@/styles/shared'
 import { SkeletonUserCard } from './partials/SkeletonUserCard'
@@ -53,7 +53,7 @@ export default function Users() {
         <LoadingPage />
       ) : (
         <UsersPageWrapper>
-          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
+          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <UsersPageContainer>
             <UsersPageHeading>
               <TitleAndSearch>

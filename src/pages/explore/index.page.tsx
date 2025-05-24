@@ -22,7 +22,7 @@ import { SkeletonCategories } from '@/pages/explore/partials/SkeletonCategories'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { BookCard } from '@/components/cards/BookCard'
-import { TabletHeader } from '@/components/shared/TabletHeader'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import { SearchBar } from '@/styles/shared'
 import useRequest from '@/utils/useRequest'
 
@@ -99,7 +99,7 @@ export default function Explore() {
               }}
             />
           )}
-          {isSmallSize || isMediumSize ? <TabletHeader /> : <Sidebar />}
+          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <ExplorePageContainer>
             <ExplorePageHeading>
               <TitleAndSearch>

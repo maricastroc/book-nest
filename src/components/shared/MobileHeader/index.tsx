@@ -1,50 +1,39 @@
 import Image from 'next/image'
 import {
-  LogoAndIcon,
-  MobileHeaderBox,
+  LinksContainer,
+  MobileHeaderWrapper,
   MobileHeaderContent,
-  SignOutButton,
 } from './styles'
 import Logo from '../../../../public/assets/logo.svg'
-import { useAppContext } from '@/contexts/AppContext'
-import { SignOut } from 'phosphor-react'
-import { signOut } from 'next-auth/react'
-import { toast } from 'react-toastify'
+import { List } from 'phosphor-react'
+import { useState } from 'react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { MobileSidebar } from '@/components/shared/MobileSidebar'
 
 export function MobileHeader({ ...rest }) {
-  const { loggedUser } = useAppContext()
-
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: '/' })
-    toast.success('See you soon!')
-  }
+  const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
   return (
-    <MobileHeaderBox {...rest}>
+    <MobileHeaderWrapper {...rest}>
       <MobileHeaderContent>
-        {loggedUser ? (
-          <LogoAndIcon>
-            <Image
-              src={Logo}
-              width={200}
-              alt="Logo Application."
-              fetchPriority="high"
-              quality={100}
-            />
-            <SignOutButton onClick={handleLogout}>
-              <SignOut />
-            </SignOutButton>
-          </LogoAndIcon>
-        ) : (
-          <Image
-            src={Logo}
-            width={200}
-            alt="Logo Application."
-            fetchPriority="high"
-            quality={100}
-          />
-        )}
+        <Image
+          src={Logo}
+          width={200}
+          alt="Logo Application."
+          fetchPriority="high"
+          quality={100}
+        />
+        <Dialog.Root open={isLateralMenuOpen}>
+          <Dialog.Trigger asChild>
+            <LinksContainer
+              onClick={() => setIsLateralMenuOpen(!isLateralMenuOpen)}
+            >
+              <List />
+            </LinksContainer>
+          </Dialog.Trigger>
+          <MobileSidebar onClose={() => setIsLateralMenuOpen(false)} />
+        </Dialog.Root>
       </MobileHeaderContent>
-    </MobileHeaderBox>
+    </MobileHeaderWrapper>
   )
 }

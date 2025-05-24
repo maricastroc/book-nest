@@ -4,6 +4,7 @@ import {
   LateralMenuWrapper,
   ItemsContainer,
   LogoAndLinksWrapper,
+  Overlay,
 } from './styles'
 import {
   Binoculars,
@@ -14,7 +15,6 @@ import {
   User,
 } from 'phosphor-react'
 import {
-  Overlay,
   PageBtnWrapper,
   SidebarProfileContainer,
   PageBtn,
@@ -33,7 +33,7 @@ import { toast } from 'react-toastify'
 import Image from 'next/image'
 import Logo from '../../../../public/assets/logo.svg'
 
-interface LateralMenuProps {
+interface Props {
   onClose: () => void
 }
 
@@ -58,7 +58,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
   </PageBtnWrapper>
 )
 
-export function LateralMenu({ onClose }: LateralMenuProps) {
+export function MobileSidebar({ onClose }: Props) {
   const router = useRouter()
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)

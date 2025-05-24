@@ -1,6 +1,9 @@
 import { keyframes } from '@stitches/react'
 import { styled } from '@/styles'
-import { Content as RadixContent } from '@radix-ui/react-dialog'
+import {
+  Overlay as RadixOverlay,
+  Content as RadixContent,
+} from '@radix-ui/react-dialog'
 
 const entranceAnimation = keyframes({
   from: {
@@ -11,8 +14,17 @@ const entranceAnimation = keyframes({
   },
 })
 
+export const Overlay = styled(RadixOverlay, {
+  position: 'fixed',
+  width: '100vw',
+  height: '100vh',
+  inset: 0,
+  zIndex: 9997,
+  backgroundColor: 'rgba(10, 10, 10, 0.7)',
+})
+
 export const Content = styled(RadixContent, {
-  padding: '2rem',
+  padding: '2.5rem 2.5rem 2rem',
   backgroundColor: '$gray800',
   position: 'fixed',
   top: '50%',
@@ -21,19 +33,14 @@ export const Content = styled(RadixContent, {
   flexDirection: 'column',
   alignItems: 'flex-start',
   transform: 'translate(-50%, -50%)',
-  width: '35rem',
+  width: '30rem',
   zIndex: 9998,
   borderColor: 'transparent',
   overflowY: 'scroll',
   height: '100%',
 
   '@media (min-width: 480px)': {
-    padding: '2.5rem 2.5rem 2rem',
     width: 'clamp(300px, 100vw, 460px)',
-  },
-
-  '@media (min-width: 768px)': {
-    width: 'clamp(320px, 80vw, 480px)',
   },
 })
 
