@@ -20,6 +20,7 @@ import { useClickOutside } from '@/hooks/useClickOutside'
 
 interface BookCardProps {
   isLibraryPage?: boolean
+  isExplorePage?: boolean
   libraryPageUserId?: string | undefined
   book: BookProps
   onOpenDetails: () => void
@@ -84,7 +85,7 @@ export function BookCard({
           <p>{book.author}</p>
         </BookTitleAndAuthor>
         <FooterWrapper>
-          <RatingWrapper className={isLibraryPage ? 'smaller' : ''}>
+          <RatingWrapper className={isLibraryPage ? 'library_style' : ''}>
             <p>{getBookRatingsNumber(book)}</p>
             <StarsRating size={size} rating={book?.rate ?? 0} />
           </RatingWrapper>

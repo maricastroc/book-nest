@@ -7,7 +7,7 @@ export interface UserProps {
   id: string | number
   name: string
   avatarUrl?: string | null | undefined
-  createdAt: string
+  createdAt?: string
   password?: string | null
   email?: string
 

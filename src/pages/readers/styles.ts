@@ -26,6 +26,10 @@ export const UsersPageWrapper = styled('div', {
     padding: '0 2rem 0 1rem',
     gap: '2.5rem',
     paddingRight: '2rem',
+    paddingLeft: '15.2rem',
+  },
+
+  '@media (min-width: 980px)': {
     paddingLeft: '18rem',
   },
 

@@ -51,6 +51,10 @@ export const HomePageContainer = styled('div', {
     alignItems: 'flex-start',
     padding: '0 0 0 2rem',
     maxWidth: '100%',
+    paddingLeft: '15.2rem',
+  },
+
+  '@media (min-width: 980px)': {
     paddingLeft: '18rem',
   },
 

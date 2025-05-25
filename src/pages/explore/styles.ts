@@ -12,7 +12,7 @@ export const ExplorePageWrapper = styled('div', {
   height: '100vh',
   overflowX: 'hidden',
   minWidth: '100vw',
-  paddingBottom: '5rem',
+  paddingBottom: '3rem',
 
   '@media (min-width: 480px)': {
     marginTop: '5rem',
@@ -26,10 +26,11 @@ export const ExplorePageWrapper = styled('div', {
     padding: '0 2rem 0 1rem',
     gap: '2.5rem',
     paddingRight: '2rem',
-    paddingLeft: '18rem',
+    paddingLeft: '15.2rem',
   },
 
-  '@media (min-width: 1024px)': {
+  '@media (min-width: 980px)': {
+    paddingLeft: '18rem',
     gap: '5rem',
   },
 })
@@ -137,6 +138,7 @@ export const ExplorePageContent = styled('div', {
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
+  paddingBottom: '3rem',
 
   '@media (min-width: 768px)': {
     paddingRight: '1rem',
@@ -154,20 +156,12 @@ export const Categories = styled('div', {
   width: '100%',
   padding: '0 1.8rem 0.8rem',
 
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+
   '@media (min-width: 1024px)': {
     paddingBottom: '1.2rem',
-
-    '&::-webkit-scrollbar': {
-      width: 2,
-      height: 8,
-      opacity: 0.6,
-    },
-
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '$gray700',
-      boxShadow: 'inset 0 0 0px 6px $gray700',
-      opacity: 0.6,
-    },
   },
 })
 
@@ -213,30 +207,29 @@ export const SelectCategoryButton = styled('button', {
 
 export const BooksContainer = styled('div', {
   display: 'grid',
-  gridTemplateColumns: '1fr',
-  gap: '2rem',
-  marginTop: '1rem',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1rem',
   width: '100%',
   marginBottom: '2rem',
 
-  '@media (min-width: 480px)': {
+  '@media (min-width: 420px)': {
     gap: '1.5rem',
   },
 
-  '@media (min-width: 580px)': {
-    gridTemplateColumns: '1fr 1fr',
-  },
-
-  '@media (min-width: 768px)': {
-    gridTemplateColumns: '1fr',
+  '@media (min-width: 480px)': {
+    gridTemplateColumns: '1fr 1fr 1fr',
   },
 
   '@media (min-width: 910px)': {
-    gridTemplateColumns: '1fr 1fr',
+    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+  },
+
+  '@media (min-width: 1200px)': {
+    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
   },
 
   '@media (min-width: 1400px)': {
-    gridTemplateColumns: '1fr 1fr 1fr',
+    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
   },
 })
 
@@ -269,7 +262,7 @@ export const CaretRightIcon = styled('div', {
 
   '@media (min-width: 1024px)': {
     right: 0,
-    top: '43%',
+    top: '48%',
   },
 })
 
@@ -297,6 +290,6 @@ export const CaretLeftIcon = styled('div', {
 
   '@media (min-width: 1024px)': {
     right: 0,
-    top: '43%',
+    top: '48%',
   },
 })

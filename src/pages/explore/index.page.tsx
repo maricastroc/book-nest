@@ -26,14 +26,16 @@ import { NextSeo } from 'next-seo'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 import { useScreenSize } from '@/hooks/useScreenSize'
-import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
+import { SkeletonExploreCard } from '@/components/skeletons/SkeletonExploreCard'
 import { SkeletonCategories } from '@/pages/explore/partials/SkeletonCategories'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { BookCard } from '@/components/cards/BookCard'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { SearchBar } from '@/styles/shared'
 import useRequest from '@/hooks/useRequest'
+import { Pagination } from '@/components/shared/Pagination'
+import { ExploreCard } from './partials/ExploreCard'
+import { usePerPage } from '@/hooks/usePerPage'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -47,6 +49,12 @@ export default function Explore() {
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
+  const perPage = usePerPage()
+
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const [totalPages, setTotalPages] = useState(1)
+
   const [search, setSearch] = useState('')
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>('')
@@ -55,12 +63,22 @@ export default function Explore() {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const { data: books, isValidating } = useRequest<BookProps[] | null>({
+  const { data: booksData, isValidating } = useRequest<{
+    books: BookProps[]
+    pagination: {
+      page: number
+      perPage: number
+      total: number
+      totalPages: number
+    }
+  } | null>({
     url: '/books',
     method: 'GET',
     params: {
       category: selectedCategory,
       ...(search?.length ? { search } : {}),
+      page: currentPage,
+      perPage,
     },
   })
 
@@ -98,11 +116,23 @@ export default function Explore() {
     }
   }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+  console.log(booksData)
   useEffect(() => {
-    if (books) {
-      setUpdatedBooks(books)
+    if (booksData?.pagination) {
+      setTotalPages(booksData.pagination.totalPages)
     }
-  }, [books])
+  }, [booksData])
+
+  // Atualizar livros quando os dados mudarem
+  useEffect(() => {
+    if (booksData?.books) {
+      setUpdatedBooks(booksData.books)
+    }
+  }, [booksData])
 
   return (
     <>
@@ -182,11 +212,12 @@ export default function Explore() {
             <ExplorePageContent>
               <BooksContainer>
                 {isValidating || !updatedBooks?.length
-                  ? Array.from({ length: 9 }).map((_, index) => (
-                      <SkeletonBookCard key={index} />
+                  ? Array.from({ length: perPage }).map((_, index) => (
+                      <SkeletonExploreCard key={index} />
                     ))
                   : updatedBooks?.map((book) => (
-                      <BookCard
+                      <ExploreCard
+                        isExplorePage
                         key={book.id}
                         book={book}
                         onOpenDetails={() => {
@@ -196,6 +227,13 @@ export default function Explore() {
                       />
                     ))}
               </BooksContainer>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              )}
             </ExplorePageContent>
           </ExplorePageContainer>
         </ExplorePageWrapper>

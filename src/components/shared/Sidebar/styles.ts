@@ -19,8 +19,14 @@ export const BackgroundContainer = styled('div', {
     objectFit: 'cover',
     overflow: 'hidden',
     borderRadius: 12,
-    width: '14.5rem',
+    width: '12rem',
     height: '95vh',
+  },
+
+  '@media(min-width: 980px)': {
+    img: {
+      width: '14.5rem',
+    },
   },
 })
 

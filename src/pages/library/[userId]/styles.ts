@@ -14,7 +14,11 @@ export const UserLibraryPageWrapper = styled('div', {
     height: '100%',
     alignItems: 'flex-start',
     padding: '0 0 0 1rem',
-    paddingLeft: '18rem',
+    paddingLeft: '15.2rem',
+  },
+
+  '@media (min-width: 980px)': {
+    paddingLeft: '19rem',
   },
 
   '@media (min-width: 1024px)': {
@@ -23,10 +27,6 @@ export const UserLibraryPageWrapper = styled('div', {
     justifyContent: 'flex-start',
     overflow: 'hidden',
     height: '100vh',
-  },
-
-  '@media (min-width: 1200px)': {
-    paddingLeft: '19rem',
   },
 
   '@media (min-width: 1800px)': {
