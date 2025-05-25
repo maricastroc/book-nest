@@ -128,13 +128,15 @@ export default async function handler(
   })
 
   return res.json({
-    user: {
-      avatarUrl: user.avatarUrl,
-      name: user.name,
-      id: user.id,
-      createdAt: user.createdAt,
+    data: {
+      user: {
+        avatarUrl: user.avatarUrl,
+        name: user.name,
+        id: user.id,
+        createdAt: user.createdAt,
+      },
+      booksByStatus,
+      submittedBooks: submittedBooksWithDetails,
     },
-    booksByStatus,
-    submittedBooks: submittedBooksWithDetails,
   })
 }

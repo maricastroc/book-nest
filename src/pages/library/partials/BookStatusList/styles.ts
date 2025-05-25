@@ -162,16 +162,12 @@ export const BookContainer = styled('div', {
 
 export const BookCover = styled('img', {
   cursor: 'pointer',
-  width: '5.45rem',
-  height: 'auto',
+  width: '5.6rem',
+  height: '8.5rem',
   borderRadius: 8,
   opacity: 0.9,
   filter: 'brightness(0.95)',
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
-
-  '@media (min-width: 680px)': {
-    width: '6rem',
-  },
 
   '&:hover': {
     filter: 'brightness(1.15)',
@@ -185,20 +181,12 @@ export const EmptyBookCover = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   border: '1px dashed $gray400',
-  minWidth: '4.8rem',
+  width: '5.45rem',
+  height: '8.5rem',
   marginRight: '1.5rem',
-  height: '7rem',
   borderRadius: 8,
   opacity: 0.9,
   filter: 'brightness(0.95)',
-
-  '@media (min-width: 480px)': {
-    minWidth: '5.2rem',
-  },
-
-  '@media (min-width: 1200px)': {
-    height: '7.8rem',
-  },
 
   svg: {
     color: '$gray400',

@@ -205,7 +205,7 @@ export function SubmitBookFormModal({
                     <Textarea
                       label="Book Summary"
                       rows={5}
-                      maxLength={1000}
+                      maxLength={2000}
                       placeholder="e.g. Adaptation of the first of J.K. Rowling's popular children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son of two powerful wizards and possesses unique magical powers of his own."
                       {...field}
                     />

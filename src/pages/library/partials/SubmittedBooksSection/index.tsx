@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -30,10 +31,12 @@ interface SubmittedBooksSectionProps {
   userInfo: UserProps | undefined
   submittedBooks: BookProps[] | undefined
   isValidating: boolean
+  mutate: any
 }
 
 export function SubmittedBooksSection({
   onOpenDetails,
+  mutate,
   isValidating,
   userId,
   userInfo,
@@ -72,6 +75,8 @@ export function SubmittedBooksSection({
           : book,
       )
     })
+
+    mutate?.()
   }
 
   const onCreateBook = (createdBook: BookProps) => {
@@ -80,6 +85,8 @@ export function SubmittedBooksSection({
 
       return [...prevBooks, createdBook]
     })
+
+    mutate?.()
   }
 
   useEffect(() => {

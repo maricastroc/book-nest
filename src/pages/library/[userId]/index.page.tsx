@@ -26,8 +26,8 @@ import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
-import { api } from '@/lib/axios'
-import { handleApiError } from '@/utils/handleApiError'
+import useRequest from '@/hooks/useRequest'
+import { UserProps } from '@/@types/user'
 
 export interface UserInfo {
   avatarUrl: string
@@ -48,17 +48,13 @@ export default function Library() {
 
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>()
 
-  const [isValidating, setIsValidating] = useState(false)
-
   const { loggedUser } = useAppContext()
 
   const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
 
   const userName = userInfo?.name?.split(' ')[0] || ''
 
-  const [submittedBooks, setSubmittedBooks] = useState<
-    BookProps[] | undefined
-  >()
+  const [submittedBooks, setSubmittedBooks] = useState<BookProps[]>()
 
   const router = useRouter()
 
@@ -69,23 +65,15 @@ export default function Library() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const handleFetchBooksByStatus = async (userId: string | undefined) => {
-    try {
-      setIsValidating(true)
-
-      const response = await api.get('/library', { params: { userId } })
-
-      if (response?.data) {
-        setBooksByStatus(response.data.booksByStatus)
-        setSubmittedBooks(response.data.submittedBooks)
-        setUserInfo(response.data.user)
-      }
-    } catch (error) {
-      handleApiError(error)
-    } finally {
-      setIsValidating(false)
-    }
-  }
+  const { data, mutate, isValidating } = useRequest<{
+    submittedBooks: BookProps[]
+    booksByStatus: BooksByStatusProps
+    user: UserProps
+  }>({
+    url: '/library',
+    method: 'GET',
+    params: { userId },
+  })
 
   const onUpdateSubmittedBook = (updatedBook: BookProps) => {
     setSubmittedBooks((prevBooks) => {
@@ -131,13 +119,17 @@ export default function Library() {
         [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
       }
     })
+
+    mutate?.()
   }
 
   useEffect(() => {
-    if (userId) {
-      handleFetchBooksByStatus(userId)
+    if (data) {
+      setBooksByStatus(data.booksByStatus)
+      setSubmittedBooks(data.submittedBooks)
+      setUserInfo(data.user as UserInfo)
     }
-  }, [userId])
+  }, [data])
 
   return (
     <>
@@ -202,6 +194,7 @@ export default function Library() {
                   submittedBooks={submittedBooks}
                   userId={userId}
                   userInfo={userInfo}
+                  mutate={mutate}
                   isValidating={isValidating}
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)

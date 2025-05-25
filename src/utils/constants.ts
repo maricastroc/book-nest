@@ -1,4 +1,4 @@
-export const REVIEW_MAX_LENGTH = 1000
+export const REVIEW_MAX_LENGTH = 2000
 
 export const READ_STATUS = 'read'
 export const READING_STATUS = 'reading'
