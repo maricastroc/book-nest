@@ -65,6 +65,7 @@ export function SubmitBookFormModal({
     onUpdateBook,
     onCreateBook,
   })
+
   return (
     <Dialog.Portal>
       <BaseModal
@@ -130,7 +131,7 @@ export function SubmitBookFormModal({
                     disabled={isEdit}
                     onChange={handleCoverChange}
                     content={
-                      typeof form.coverUrl === 'string'
+                      typeof form.coverUrl === 'string' && !!form.coverUrl
                         ? 'OpenLibrary Cover'
                         : (form.coverUrl as File)?.name ||
                           coverUrl ||

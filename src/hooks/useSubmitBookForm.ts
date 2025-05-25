@@ -13,6 +13,7 @@ import { formatDate } from '@/utils/formatDate'
 import toast from 'react-hot-toast'
 import useRequest from '@/hooks/useRequest'
 import { z } from 'zod'
+import { formatCategoryArray } from '@/utils/formatCategoryArray'
 
 export const submitBookFormSchema = z.object({
   userId: z.string(),
@@ -212,6 +213,34 @@ export function useBookForm({
   }
 
   async function handleSubmitBook(data: SubmitBookFormData) {
+    const hasPublisherChange = data?.publisher !== book?.publisher
+
+    const hasLanguageChange = data?.language !== book?.language
+
+    const hasPublishingYearChange =
+      data?.publishingYear !== book?.publishingYear
+
+    const hasSummaryChange = data?.summary !== book?.summary
+
+    const hasPagesNumberChange =
+      String(data.totalPages) !== String(book?.totalPages)
+
+    const hasCategoriesChange = !formatCategoryArray(
+      data?.categories?.map((c) => c.value).sort(),
+      book?.categories?.map((c: any) => c.id || (c as CategoryProps).id).sort(),
+    )
+    if (
+      isEdit &&
+      !hasPublisherChange &&
+      !hasPublishingYearChange &&
+      !hasSummaryChange &&
+      !hasPagesNumberChange &&
+      !hasLanguageChange &&
+      !hasCategoriesChange
+    ) {
+      onClose()
+      return
+    }
     setShowErrors(true)
 
     const formData = new FormData()
