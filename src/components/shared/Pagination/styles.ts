@@ -7,6 +7,10 @@ export const PaginationContainer = styled('div', {
   gap: '0.5rem',
   marginTop: '1.2rem',
   width: '100%',
+
+  '@media (min-width: 768px)': {
+    marginTop: '1.5rem',
+  },
 })
 
 export const PaginationButton = styled('button', {

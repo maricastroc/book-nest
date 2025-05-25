@@ -36,6 +36,7 @@ import useRequest from '@/hooks/useRequest'
 import { Pagination } from '@/components/shared/Pagination'
 import { ExploreCard } from './partials/ExploreCard'
 import { usePerPage } from '@/hooks/usePerPage'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -57,6 +58,8 @@ export default function Explore() {
 
   const [search, setSearch] = useState('')
 
+  const [searchTerm, setSearchTerm] = useState('')
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>('')
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
@@ -71,16 +74,23 @@ export default function Explore() {
       total: number
       totalPages: number
     }
-  } | null>({
-    url: '/books',
-    method: 'GET',
-    params: {
-      category: selectedCategory,
-      ...(search?.length ? { search } : {}),
-      page: currentPage,
-      perPage,
+  } | null>(
+    {
+      url: '/books',
+      method: 'GET',
+      params: {
+        category: selectedCategory,
+        ...(searchTerm?.length ? { search: searchTerm } : {}),
+        page: currentPage,
+        perPage,
+      },
     },
-  })
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      keepPreviousData: true,
+    },
+  )
 
   const { data: categories } = useRequest<CategoryProps[] | null>({
     url: '/categories',
@@ -120,20 +130,28 @@ export default function Explore() {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  console.log(booksData)
+
   useEffect(() => {
     if (booksData?.pagination) {
       setTotalPages(booksData.pagination.totalPages)
     }
   }, [booksData])
 
-  // Atualizar livros quando os dados mudarem
   useEffect(() => {
     if (booksData?.books) {
       setUpdatedBooks(booksData.books)
     }
   }, [booksData])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(search)
+      setCurrentPage(1)
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [search])
+  console.log(!updatedBooks?.length && !isValidating)
   return (
     <>
       <NextSeo title="Explore | Book Wise" />
@@ -198,9 +216,7 @@ export default function Explore() {
                       </SelectCategoryButton>
                       {categories?.map((category) => (
                         <SelectCategoryButton
-                          selected={
-                            !isValidating && selectedCategory === category.id
-                          }
+                          selected={selectedCategory === category.id}
                           key={category.id}
                           onClick={() => {
                             setCurrentPage(1)
@@ -224,22 +240,30 @@ export default function Explore() {
               </ScrollContainer>
             </ExplorePageHeading>
             <ExplorePageContent>
-              <BooksContainer>
-                {isValidating || !updatedBooks?.length
-                  ? Array.from({ length: perPage }).map((_, index) => (
-                      <SkeletonExploreCard key={index} />
-                    ))
-                  : updatedBooks?.map((book) => (
-                      <ExploreCard
-                        isExplorePage
-                        key={book.id}
-                        book={book}
-                        onOpenDetails={() => {
-                          setSelectedBook(book)
-                          setOpenLateralMenu(true)
-                        }}
-                      />
-                    ))}
+              <BooksContainer
+                className={`${
+                  !updatedBooks?.length && !isValidating ? 'empty' : ''
+                }`}
+              >
+                {isValidating ? (
+                  Array.from({ length: perPage }).map((_, index) => (
+                    <SkeletonExploreCard key={index} />
+                  ))
+                ) : updatedBooks?.length ? (
+                  updatedBooks?.map((book) => (
+                    <ExploreCard
+                      isExplorePage
+                      key={book.id}
+                      book={book}
+                      onOpenDetails={() => {
+                        setSelectedBook(book)
+                        setOpenLateralMenu(true)
+                      }}
+                    />
+                  ))
+                ) : (
+                  <EmptyContainer content="books" />
+                )}
               </BooksContainer>
               {totalPages > 1 && (
                 <Pagination

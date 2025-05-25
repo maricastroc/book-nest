@@ -210,6 +210,10 @@ export const BooksContainer = styled('div', {
   width: '100%',
   marginBottom: '2rem',
 
+  '&.empty': {
+    gridTemplateColumns: '1fr',
+  },
+
   '@media (min-width: 420px)': {
     gap: '1.5rem',
   },

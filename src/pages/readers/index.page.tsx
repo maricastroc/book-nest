@@ -21,7 +21,9 @@ import { SearchBar } from '@/styles/shared'
 import { SkeletonUserCard } from './partials/SkeletonUserCard'
 import useRequest from '@/hooks/useRequest'
 import { UserProps } from 'next-auth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Pagination } from '@/components/shared/Pagination'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
 
 export interface UsersProps {
   categories: CategoryProps[]
@@ -33,18 +35,53 @@ export default function Users() {
 
   const [search, setSearch] = useState('')
 
+  const perPage = 18
+
+  const [currentPage, setCurrentPage] = useState(1)
+
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const { data: users, isValidating: isValidatingUsers } = useRequest<
-    UserProps[]
-  >({
-    url: '/user/search',
-    method: 'GET',
-    params: {
-      search,
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const { data, isValidating } = useRequest<{
+    users: UserProps[]
+    pagination: {
+      page: number
+      perPage: number
+      total: number
+      totalPages: number
+    }
+  }>(
+    {
+      url: '/user/search',
+      method: 'GET',
+      params: {
+        search: searchTerm,
+        page: currentPage,
+        perPage,
+      },
     },
-  })
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      revalidateOnReconnect: false,
+      keepPreviousData: true,
+    },
+  )
+
+  const users = data?.users || []
+
+  const totalPages = data?.pagination?.totalPages || 1
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(search)
+      setCurrentPage(1)
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [search])
 
   return (
     <>
@@ -72,21 +109,43 @@ export default function Users() {
                   {search === '' ? (
                     <MagnifyingGlass />
                   ) : (
-                    <X onClick={() => setSearch('')} />
+                    <X
+                      onClick={() => {
+                        setSearch('')
+                        setCurrentPage(1)
+                      }}
+                    />
                   )}
                 </SearchBar>
               </TitleAndSearch>
             </UsersPageHeading>
             <UsersPageContent>
-              <UsersContainer>
-                {isValidatingUsers || !users?.length
-                  ? Array.from({ length: 12 }).map((_, index) => (
-                      <SkeletonUserCard key={index} />
-                    ))
-                  : users?.map((user) => (
-                      <UserCard key={user.id} user={user} />
-                    ))}
+              <UsersContainer
+                className={`${
+                  !data?.users?.length && !isValidating ? 'empty' : ''
+                }`}
+              >
+                {isValidating ? (
+                  Array.from({ length: 12 }).map((_, index) => (
+                    <SkeletonUserCard key={index} />
+                  ))
+                ) : data?.users && data?.users?.length > 0 ? (
+                  users.map((user) => <UserCard key={user.id} user={user} />)
+                ) : (
+                  <EmptyContainer content="users" />
+                )}
               </UsersContainer>
+
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={(page) => {
+                    setCurrentPage(page)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                />
+              )}
             </UsersPageContent>
           </UsersPageContainer>
         </UsersPageWrapper>

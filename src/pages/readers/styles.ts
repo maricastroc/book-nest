@@ -61,6 +61,22 @@ export const UsersPageContainer = styled('div', {
   },
 })
 
+export const UsersPageContent = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingBottom: '5rem',
+
+  '@media (min-width: 768px)': {
+    paddingRight: '1rem',
+    justifyContent: 'flex-start',
+    overflowY: 'scroll',
+    paddingBottom: '3rem',
+  },
+})
+
 export const UsersPageHeading = styled('div', {
   display: 'flex',
   flexDirection: 'column',
@@ -135,20 +151,6 @@ export const HeadingTitle = styled('div', {
   },
 })
 
-export const UsersPageContent = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  alignItems: 'center',
-  justifyContent: 'center',
-
-  '@media (min-width: 768px)': {
-    paddingRight: '1rem',
-    justifyContent: 'flex-start',
-    overflowY: 'scroll',
-  },
-})
-
 export const UsersContainer = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr',
@@ -156,6 +158,10 @@ export const UsersContainer = styled('div', {
   marginTop: '1rem',
   width: '100%',
   marginBottom: '1rem',
+
+  '&.empty': {
+    gridTemplateColumns: '1fr',
+  },
 
   '@media (min-width: 460px)': {
     gridTemplateColumns: '1fr 1fr',

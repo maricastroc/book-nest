@@ -17,6 +17,7 @@ export const config = {
 const getSingleString = (value: string | string[] | undefined): string => {
   if (Array.isArray(value)) return value[0]
   if (typeof value === 'string') return value
+
   throw new Error('Field is required')
 }
 

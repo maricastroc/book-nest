@@ -10,7 +10,7 @@ export function EmptyContainer({
   return (
     <Container>
       <p>It&apos;s a little empty around here!</p>
-      <span>{`We could not find any ${content} yet.`}</span>
+      <span>{`We couldn't find any ${content}.`}</span>
     </Container>
   )
 }

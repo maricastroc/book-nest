@@ -34,12 +34,10 @@ export default async function handler(
     searchQuery = String(req.query.search).toLowerCase()
   }
 
-  // Parâmetros de paginação
   const page = req.query.page ? Number(req.query.page) : 1
   const perPage = req.query.perPage ? Number(req.query.perPage) : 12
   const skip = (page - 1) * perPage
 
-  // Obter o total de livros para calcular o total de páginas
   const totalBooks = await prisma.book.count({
     where: {
       categories: categoriesQuery,
