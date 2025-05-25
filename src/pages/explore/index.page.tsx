@@ -1,4 +1,10 @@
-import { Binoculars, MagnifyingGlass, X } from 'phosphor-react'
+import {
+  Binoculars,
+  CaretLeft,
+  CaretRight,
+  MagnifyingGlass,
+  X,
+} from 'phosphor-react'
 import {
   Categories,
   SelectCategoryButton,
@@ -9,8 +15,11 @@ import {
   ExplorePageContent,
   HeadingTitle,
   TitleAndSearch,
+  ScrollContainer,
+  CaretLeftIcon,
+  CaretRightIcon,
 } from './styles'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { NextSeo } from 'next-seo'
@@ -44,6 +53,8 @@ export default function Explore() {
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const { data: books, isValidating } = useRequest<BookProps[] | null>({
     url: '/books',
     method: 'GET',
@@ -75,6 +86,16 @@ export default function Explore() {
 
       return updatedBooks
     })
+  }
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (containerRef.current) {
+      const scrollAmount = direction === 'right' ? 300 : -300
+      containerRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth',
+      })
+    }
   }
 
   useEffect(() => {
@@ -122,32 +143,41 @@ export default function Explore() {
                   )}
                 </SearchBar>
               </TitleAndSearch>
-              <Categories>
-                {!categories?.length ? (
-                  <SkeletonCategories />
-                ) : (
-                  <>
-                    <SelectCategoryButton
-                      selected={!selectedCategory}
-                      onClick={() => setSelectedCategory(null)}
-                    >
-                      All
-                    </SelectCategoryButton>
-                    {categories?.map((category) => (
+              <ScrollContainer>
+                <Categories ref={containerRef}>
+                  {!categories?.length ? (
+                    <SkeletonCategories />
+                  ) : (
+                    <>
                       <SelectCategoryButton
-                        selected={
-                          !isValidating && selectedCategory === category.id
-                        }
-                        key={category.id}
-                        onClick={() => setSelectedCategory(category.id)}
-                        className={isValidating ? 'loading' : ''}
+                        selected={!selectedCategory}
+                        onClick={() => setSelectedCategory(null)}
                       >
-                        {category.name}
+                        All
                       </SelectCategoryButton>
-                    ))}
-                  </>
-                )}
-              </Categories>
+                      {categories?.map((category) => (
+                        <SelectCategoryButton
+                          selected={
+                            !isValidating && selectedCategory === category.id
+                          }
+                          key={category.id}
+                          onClick={() => setSelectedCategory(category.id)}
+                          className={isValidating ? 'loading' : ''}
+                        >
+                          {category.name}
+                        </SelectCategoryButton>
+                      ))}
+                    </>
+                  )}
+
+                  <CaretLeftIcon onClick={() => handleScroll('left')}>
+                    <CaretLeft size={28} weight="bold" />
+                  </CaretLeftIcon>
+                  <CaretRightIcon onClick={() => handleScroll('right')}>
+                    <CaretRight size={28} weight="bold" />
+                  </CaretRightIcon>
+                </Categories>
+              </ScrollContainer>
             </ExplorePageHeading>
             <ExplorePageContent>
               <BooksContainer>

@@ -152,7 +152,7 @@ export const Categories = styled('div', {
   gap: '0.7rem',
   alignItems: 'center',
   width: '100%',
-  paddingBottom: '0.8rem',
+  padding: '0 1.8rem 0.8rem',
 
   '@media (min-width: 1024px)': {
     paddingBottom: '1.2rem',
@@ -177,8 +177,8 @@ export const SelectCategoryButton = styled('button', {
   borderRadius: 16,
   border: 'solid 1px $purple100',
   color: '$purple100',
-  padding: '0.3rem 0.8rem',
-  fontSize: '0.85rem',
+  padding: '0.4rem 1rem',
+  fontSize: '0.95rem',
   whiteSpace: 'nowrap',
 
   '&:hover': {
@@ -209,11 +209,6 @@ export const SelectCategoryButton = styled('button', {
       },
     },
   },
-
-  '@media (min-width: 768px)': {
-    padding: '0.4rem 1rem',
-    fontSize: '0.95rem',
-  },
 })
 
 export const BooksContainer = styled('div', {
@@ -242,5 +237,66 @@ export const BooksContainer = styled('div', {
 
   '@media (min-width: 1400px)': {
     gridTemplateColumns: '1fr 1fr 1fr',
+  },
+})
+
+export const ScrollContainer = styled('div', {
+  position: 'relative',
+  width: '100%',
+})
+
+export const CaretRightIcon = styled('div', {
+  position: 'absolute',
+  cursor: 'pointer',
+  right: 0,
+  top: '52%',
+  transform: 'translateY(-50%)',
+  zIndex: 997,
+  color: '$gray100',
+  width: '2rem',
+  height: '2rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: 0.9,
+  transition: 'all 0.2s',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+
+  '&:hover': {
+    opacity: 1,
+    transform: 'translateY(-50%) scale(1.1)',
+  },
+
+  '@media (min-width: 1024px)': {
+    right: 0,
+    top: '43%',
+  },
+})
+
+export const CaretLeftIcon = styled('div', {
+  position: 'absolute',
+  cursor: 'pointer',
+  left: 0,
+  top: '52%',
+  transform: 'translateY(-50%)',
+  zIndex: 997,
+  color: '$gray100',
+  width: '2rem',
+  height: '2rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: 0.7,
+  transition: 'all 0.2s',
+  boxShadow: '0 2px 4px rgba(73, 73, 73, 0.1)',
+
+  '&:hover': {
+    opacity: 1,
+    transform: 'translateY(-50%) scale(1.1)',
+  },
+
+  '@media (min-width: 1024px)': {
+    right: 0,
+    top: '43%',
   },
 })
