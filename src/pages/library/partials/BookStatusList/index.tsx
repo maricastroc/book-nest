@@ -19,6 +19,8 @@ import { CaretLeft, CaretRight, Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useRouter } from 'next/router'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
+import { useSession } from 'next-auth/react'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface BookStatusListProps {
   status: string
@@ -38,6 +40,13 @@ export function BookStatusList({
   onSelect,
 }: BookStatusListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const session = useSession()
+
+  const { loggedUser } = useAppContext()
+
+  const isLoggedUser =
+    String(session?.data?.user?.id) === String(loggedUser?.id)
 
   const [isOverflowing, setIsOverflowing] = useState(false)
 
@@ -103,11 +112,13 @@ export function BookStatusList({
                   </BookDetailsWrapper>
                 </BookContainer>
               ))}
-              <BookContainer>
-                <EmptyBookCover onClick={() => router.push('/explore')}>
-                  <Plus />
-                </EmptyBookCover>
-              </BookContainer>
+              {isLoggedUser && (
+                <BookContainer>
+                  <EmptyBookCover onClick={() => router.push('/explore')}>
+                    <Plus />
+                  </EmptyBookCover>
+                </BookContainer>
+              )}
             </>
           ) : (
             <EmptyBooksContainer>
