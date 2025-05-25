@@ -163,13 +163,21 @@ export default function Explore() {
                     type="text"
                     placeholder="Search for author or title"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                      setCurrentPage(1)
+                      setSearch(e.target.value)
+                    }}
                     spellCheck={false}
                   />
                   {search === '' ? (
                     <MagnifyingGlass />
                   ) : (
-                    <X onClick={() => setSearch('')} />
+                    <X
+                      onClick={() => {
+                        setCurrentPage(1)
+                        setSearch('')
+                      }}
+                    />
                   )}
                 </SearchBar>
               </TitleAndSearch>
