@@ -16,7 +16,7 @@ export function SkeletonCategories() {
   const getLength = () => {
     if (isSmallScreen) return 3
     if (isMediumScreen) return 6
-    return 12
+    return 9
   }
 
   return (

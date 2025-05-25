@@ -3,7 +3,6 @@ import { styled } from '@/styles'
 export const Container = styled('div', {
   cursor: 'pointer',
   display: 'flex',
-  flexWrap: 'wrap',
   borderRadius: 8,
   alignItems: 'center',
   justifyContent: 'center',
