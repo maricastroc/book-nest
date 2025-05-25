@@ -12,7 +12,7 @@ export const ExplorePageWrapper = styled('div', {
   height: '100vh',
   overflowX: 'hidden',
   minWidth: '100vw',
-  paddingBottom: '3rem',
+  paddingBottom: '5rem',
 
   '@media (min-width: 480px)': {
     marginTop: '5rem',
@@ -23,10 +23,8 @@ export const ExplorePageWrapper = styled('div', {
     marginTop: 0,
     flexDirection: 'row',
     alignItems: 'stretch',
-    padding: '0 2rem 0 1rem',
+    padding: '0 2rem 0 15.2rem',
     gap: '2.5rem',
-    paddingRight: '2rem',
-    paddingLeft: '15.2rem',
   },
 
   '@media (min-width: 980px)': {

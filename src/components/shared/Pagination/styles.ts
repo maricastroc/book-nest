@@ -5,7 +5,7 @@ export const PaginationContainer = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '0.5rem',
-  marginTop: '1.5rem',
+  marginTop: '1.2rem',
   width: '100%',
 })
 
