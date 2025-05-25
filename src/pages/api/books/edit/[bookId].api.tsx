@@ -15,6 +15,7 @@ type UpdateBookData = {
   name?: string
   author?: string
   summary?: string
+  language?: string
   publisher?: string
   totalPages?: number
   publishingYear?: string
@@ -94,7 +95,7 @@ export default async function handler(
 
       if (summary) updateData.summary = summary
       if (publisher) updateData.publisher = publisher
-      if (language) updateData.publisher = language
+      if (language) updateData.language = language
       if (totalPages) updateData.totalPages = totalPages
       if (publishingYear) updateData.publishingYear = publishingYear.toString()
 
