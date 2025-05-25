@@ -181,7 +181,10 @@ export default function Explore() {
                     <>
                       <SelectCategoryButton
                         selected={!selectedCategory}
-                        onClick={() => setSelectedCategory(null)}
+                        onClick={() => {
+                          setCurrentPage(1)
+                          setSelectedCategory(null)
+                        }}
                       >
                         All
                       </SelectCategoryButton>
@@ -191,7 +194,10 @@ export default function Explore() {
                             !isValidating && selectedCategory === category.id
                           }
                           key={category.id}
-                          onClick={() => setSelectedCategory(category.id)}
+                          onClick={() => {
+                            setCurrentPage(1)
+                            setSelectedCategory(category.id)
+                          }}
                           className={isValidating ? 'loading' : ''}
                         >
                           {category.name}

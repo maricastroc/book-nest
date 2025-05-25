@@ -13,6 +13,7 @@ import {
   SignIn,
   SignOut,
   User,
+  Users,
 } from 'phosphor-react'
 import {
   PageBtnWrapper,
@@ -95,6 +96,12 @@ export function MobileSidebar({ onClose }: Props) {
                 onClick={() => router.push('/explore')}
                 icon={Binoculars}
                 label="Explore"
+              />
+              <NavigationItem
+                active={router.pathname === '/readers'}
+                onClick={() => router.push('/readers')}
+                icon={Users}
+                label="Readers"
               />
               {loggedUser && (
                 <>

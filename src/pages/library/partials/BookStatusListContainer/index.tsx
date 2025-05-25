@@ -62,6 +62,7 @@ export function BookStatusListContainer({
       {bookStatusList.map(({ key, label, books }) => (
         <BookStatusList
           key={key}
+          isLoggedUser={isLoggedUser}
           className={key}
           status={key}
           statusLabel={label}

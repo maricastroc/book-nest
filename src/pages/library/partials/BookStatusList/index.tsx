@@ -19,10 +19,9 @@ import { CaretLeft, CaretRight, Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useRouter } from 'next/router'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
-import { useSession } from 'next-auth/react'
-import { useAppContext } from '@/contexts/AppContext'
 
 interface BookStatusListProps {
+  isLoggedUser: boolean
   status: string
   statusLabel: string
   books: BookProps[] | undefined
@@ -37,16 +36,10 @@ export function BookStatusList({
   books,
   className,
   emptyBoxMessage,
+  isLoggedUser,
   onSelect,
 }: BookStatusListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const session = useSession()
-
-  const { loggedUser } = useAppContext()
-
-  const isLoggedUser =
-    String(session?.data?.user?.id) === String(loggedUser?.id)
 
   const [isOverflowing, setIsOverflowing] = useState(false)
 
