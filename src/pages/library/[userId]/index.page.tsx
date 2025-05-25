@@ -35,7 +35,7 @@ export interface UserInfo {
   id: string
 }
 
-export default function Profile() {
+export default function Library() {
   const isRouteLoading = useLoadingOnRouteChange()
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)

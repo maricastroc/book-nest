@@ -50,6 +50,11 @@ export const UserProfileInfo = styled('div', {
     fontSize: '1.25rem',
     color: '$white',
   },
+
+  time: {
+    fontSize: '0.85rem',
+    color: '$gray400',
+  },
 })
 
 export const SubmittedBooksWrapper = styled('div', {

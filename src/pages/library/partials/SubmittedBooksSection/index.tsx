@@ -16,17 +16,18 @@ import { SubmitBookFormModal } from '../SubmitBookFormModal'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { BookCard } from '@/components/cards/BookCard'
 import { BookProps } from '@/@types/book'
-import { UserInfo } from '../../[userId]/index.page'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { DividerLine } from '@/styles/shared'
 import { useRouter } from 'next/router'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { Button } from '@/components/core/Button'
+import { UserProps } from '@/@types/user'
+import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
   userId: string | undefined
-  userInfo: UserInfo | undefined
+  userInfo: UserProps | undefined
   submittedBooks: BookProps[] | undefined
   isValidating: boolean
 }
@@ -43,6 +44,12 @@ export function SubmittedBooksSection({
   const { loggedUser } = useAppContext()
 
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
+
+  const [dateInfo, setDateInfo] = useState({
+    dateFormatted: '',
+    dateRelativeToNow: '',
+    dateString: '',
+  })
 
   const [updatedSubmittedBooks, setUpdatedSubmittedBooks] = useState<
     BookProps[] | null
@@ -81,6 +88,17 @@ export function SubmittedBooksSection({
     }
   }, [submittedBooks])
 
+  useEffect(() => {
+    if (userInfo && userInfo?.createdAt) {
+      const formattedUserCreatedAt = new Date(userInfo?.createdAt as string)
+      const dateFormattedData = getDateFormattedAndRelative(
+        formattedUserCreatedAt,
+      )
+
+      setDateInfo(dateFormattedData)
+    }
+  }, [userInfo])
+
   return (
     <SubmittedBooksSectionWrapper>
       {isValidating ? (
@@ -96,12 +114,18 @@ export function SubmittedBooksSection({
             <>
               <Avatar avatarUrl={userInfo?.avatarUrl} variant="large" />
               <h2>{userInfo?.name}</h2>
+              <time
+                title={dateInfo.dateFormatted}
+                dateTime={dateInfo.dateString}
+              >
+                joined {dateInfo.dateRelativeToNow}
+              </time>
             </>
             <Button
               isSmaller
               content="View Profile"
               onClick={() => router.push(`/profile/${userId}`)}
-              style={{ marginTop: '0.7rem' }}
+              style={{ marginTop: '1rem' }}
             />
             <DividerLine />
           </UserProfileInfo>

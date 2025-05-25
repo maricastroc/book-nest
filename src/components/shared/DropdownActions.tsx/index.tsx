@@ -68,36 +68,40 @@ export const DropdownActions = ({
         <Dropdown
           ref={dropdownRef}
           variant={variant}
-          className={`${isSubmission ? 'larger' : ''}`}
+          className={`${isSubmission ? 'submission_type' : ''}`}
         >
           <DropdownItem className="edit_icon" onClick={handleEditClick}>
             <Pencil />
             <p>{isSubmission ? 'Edit Submission' : 'Edit Review'}</p>
           </DropdownItem>
 
-          <DividerLine />
           {hasDeleteSection && (
-            <Dialog.Root
-              open={isDeleteSectionOpen}
-              onOpenChange={handleDeleteClick}
-            >
-              <Dialog.Trigger asChild>
-                <DropdownItem
-                  className="delete_icon"
-                  onClick={handleDeleteClick}
-                >
-                  <Trash />
-                  <p>{isSubmission ? 'Delete Submission' : 'Delete Review'}</p>
-                </DropdownItem>
-              </Dialog.Trigger>
+            <>
+              <DividerLine />
+              <Dialog.Root
+                open={isDeleteSectionOpen}
+                onOpenChange={handleDeleteClick}
+              >
+                <Dialog.Trigger asChild>
+                  <DropdownItem
+                    className="delete_icon"
+                    onClick={handleDeleteClick}
+                  >
+                    <Trash />
+                    <p>
+                      {isSubmission ? 'Delete Submission' : 'Delete Review'}
+                    </p>
+                  </DropdownItem>
+                </Dialog.Trigger>
 
-              <DeleteModal
-                onConfirm={handleDeleteConfirm}
-                onClose={() => {
-                  onToggleDropdown(false)
-                }}
-              />
-            </Dialog.Root>
+                <DeleteModal
+                  onConfirm={handleDeleteConfirm}
+                  onClose={() => {
+                    onToggleDropdown(false)
+                  }}
+                />
+              </Dialog.Root>
+            </>
           )}
         </Dropdown>
       )}

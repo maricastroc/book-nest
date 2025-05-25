@@ -26,7 +26,7 @@ export default async function handler(
 
   const user = await prisma.user.findUnique({
     where: { id: String(userId) },
-    select: { avatarUrl: true, name: true, id: true },
+    select: { avatarUrl: true, name: true, id: true, createdAt: true },
   })
 
   if (!user) {
@@ -132,6 +132,7 @@ export default async function handler(
       avatarUrl: user.avatarUrl,
       name: user.name,
       id: user.id,
+      createdAt: user.createdAt,
     },
     booksByStatus,
     submittedBooks: submittedBooksWithDetails,

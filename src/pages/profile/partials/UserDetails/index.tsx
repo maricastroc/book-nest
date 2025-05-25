@@ -114,7 +114,7 @@ export function UserDetails({
           </UserProfileInfo>
 
           {isCurrentUser ? (
-            <Dialog.Root>
+            <Dialog.Root open={isEditProfileModalOpen}>
               <Dialog.Trigger asChild>
                 <Button
                   isSmaller

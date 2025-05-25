@@ -44,9 +44,8 @@ export const Dropdown = styled('div', {
   top: '92%',
   zIndex: 9997,
 
-  '&.larger': {
-    width: '9.6rem',
-    padding: '0.7rem 0',
+  '&.submission_type': {
+    padding: '0.7rem',
   },
 
   variants: {

@@ -93,6 +93,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileFormSchema(changePassword)),
@@ -137,8 +138,26 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
   }
 
   async function handleEditProfile(data: EditProfileFormData) {
+    const hasChangedName = data.name !== loggedUser?.name
+    const hasChangedEmail = data.email !== loggedUser?.email
+    const hasChangedAvatar = !!data.avatarUrl || avatarPreview === null
+
+    const hasChangedPassword =
+      changePassword &&
+      (!!data.oldPassword || !!data.password || !!data.passwordConfirm)
+
+    if (
+      !hasChangedName &&
+      !hasChangedEmail &&
+      !hasChangedAvatar &&
+      !hasChangedPassword
+    ) {
+      onClose()
+    }
+
     if (session?.user) {
       const formData = new FormData()
+
       formData.append('email', data.email)
       formData.append('name', data.name)
       formData.append('user_id', session.user.id.toString())
@@ -168,6 +187,8 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
         onClose()
       } catch (error) {
         handleApiError(error)
+      } finally {
+        onClose()
       }
     }
   }
@@ -207,7 +228,14 @@ export function EditProfileModal({ onClose }: EditProfileModalProps) {
         />
       ) : (
         <>
-          <BaseModal onClose={onClose} title="Edit Profile">
+          <BaseModal
+            onClose={() => {
+              setChangePassword(false)
+              reset()
+              onClose()
+            }}
+            title="Edit Profile"
+          >
             <Form
               isProfileScreen
               onSubmit={handleSubmit(handleEditProfile)}
