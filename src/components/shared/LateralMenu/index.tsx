@@ -72,7 +72,7 @@ export function LateralMenu({
         <X />
       </CloseButton>
       <MenuBody>
-        {isValidating || isSubmitting ? (
+        {isSubmitting || isValidating ? (
           <SkeletonLateralMenu />
         ) : (
           <>
@@ -95,9 +95,7 @@ export function LateralMenu({
                 key={updatedBook.id}
                 book={updatedBook}
                 categories={updatedBook.categories as CategoryProps[]}
-                onUpdateBook={onUpdateBook}
                 onUpdateStatus={onUpdateStatus}
-                onCreateReview={onCreateReview}
               />
             )}
             <RatingsWrapper>
@@ -134,7 +132,7 @@ export function LateralMenu({
                     book={updatedBook}
                   />
                 )}
-                {!isValidating && !bookRatings?.length ? (
+                {!isValidating && !filteredRatings?.length ? (
                   <EmptyContainer content="reviews" />
                 ) : isValidating ? (
                   Array.from({ length: 3 }).map((_, index) => (

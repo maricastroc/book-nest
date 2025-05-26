@@ -59,14 +59,14 @@ export function useBookDetails(
     })
   }
 
-  const onCreateReview = (newRating: RatingProps) => {
+  const onCreateReview = async (newRating: RatingProps) => {
     const updatedRatings = [...bookRatings, newRating]
     setBookRatings(updatedRatings)
     setUserRating(newRating)
     updateBookWithRatings(updatedRatings, newRating.rate)
   }
 
-  const onUpdateReview = (updatedReview: RatingProps) => {
+  const onUpdateReview = async (updatedReview: RatingProps) => {
     const updatedRatings = bookRatings.map((rating) =>
       rating.id === updatedReview.id ? updatedReview : rating,
     )
@@ -76,7 +76,7 @@ export function useBookDetails(
     updateBookWithRatings(updatedRatings, updatedReview.rate)
   }
 
-  const onDeleteReview = (ratingId: string) => {
+  const onDeleteReview = async (ratingId: string) => {
     const updatedRatings = bookRatings.filter(
       (rating) => rating.id !== ratingId,
     )

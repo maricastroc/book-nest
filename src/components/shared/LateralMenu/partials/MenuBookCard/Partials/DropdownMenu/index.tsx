@@ -21,7 +21,6 @@ interface DropdownMenuProps {
   book: BookProps
   activeStatus: string | null
   dropdownRef: React.RefObject<HTMLDivElement>
-  handleOpenRatingBookModal: (status: string) => void
   onUpdateStatus: (
     book: BookProps,
     newStatus: string,
@@ -33,7 +32,6 @@ export const DropdownMenu = ({
   isOpen,
   activeStatus,
   book,
-  handleOpenRatingBookModal,
   onUpdateStatus,
   onClose,
   dropdownRef,
@@ -109,14 +107,6 @@ export const DropdownMenu = ({
                 formatToSnakeCase(activeStatus ?? '') ===
                 formatToSnakeCase(status.label)
               ) {
-                return
-              }
-
-              if (
-                !userRating &&
-                (status.label === 'Read' || status.label === 'Did not Finish')
-              ) {
-                handleOpenRatingBookModal(status.label)
                 return
               }
 

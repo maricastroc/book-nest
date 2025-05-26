@@ -48,9 +48,7 @@ export default async function handler(
     })
 
     if (!userLastRating) {
-      return res
-        .status(404)
-        .json({ message: 'No ratings found for this user.' })
+      return res.status(200).json(null)
     }
 
     const { book, user } = userLastRating

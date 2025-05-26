@@ -21,10 +21,8 @@ import { DropdownMenu } from './Partials/DropdownMenu'
 import { BookStats } from './Partials/BookStats'
 import { SignInModal } from '@/components/modals/SignInModal'
 import * as Dialog from '@radix-ui/react-dialog'
-import { RatingBookModal } from '@/components/shared/LateralMenu/partials/RatingBookModal'
 import { useAppContext } from '@/contexts/AppContext'
 import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
-import { RatingProps } from '@/@types/rating'
 
 interface MenuBookCardProps {
   book: BookProps
@@ -34,14 +32,10 @@ interface MenuBookCardProps {
     newStatus: string,
     userRating: number,
   ) => void
-  onUpdateBook: (book: BookProps) => void
-  onCreateReview: (newRating: RatingProps) => void
 }
 
 export function MenuBookCard({
   onUpdateStatus,
-  onCreateReview,
-  onUpdateBook,
   book,
   categories,
 }: MenuBookCardProps) {
@@ -55,8 +49,6 @@ export function MenuBookCard({
     useState(false)
 
   const [isRatingBookModalOpen, setIsRatingBookModalOpen] = useState(false)
-
-  const [selectedStatus, setSelectedStatus] = useState('')
 
   const { loggedUser } = useAppContext()
 
@@ -120,23 +112,8 @@ export function MenuBookCard({
                     dropdownRef={dropdownRef}
                     book={book}
                     onUpdateStatus={onUpdateStatus}
-                    handleOpenRatingBookModal={(status: string) => {
-                      setSelectedStatus(status)
-                      setIsRatingBookModalOpen(true)
-                    }}
                   />
                 </Dialog.Trigger>
-                {loggedUser && (
-                  <RatingBookModal
-                    userId={loggedUser.id}
-                    book={book}
-                    onClose={() => setIsRatingBookModalOpen(false)}
-                    bookStatus={selectedStatus}
-                    onCreateReview={onCreateReview}
-                    onUpdateStatus={onUpdateStatus}
-                    onUpdateBook={onUpdateBook}
-                  />
-                )}
               </Dialog.Root>
             </AddToLibrarySection>
           </BookOtherInfo>
