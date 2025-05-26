@@ -80,8 +80,8 @@ export default async function handler(
         ],
       }),
     },
-    skip, // Pular os registros das páginas anteriores
-    take: perPage, // Limitar a quantidade de registros por página
+    skip,
+    take: perPage,
     select: {
       id: true,
       name: true,
@@ -104,7 +104,7 @@ export default async function handler(
       }),
     },
     orderBy: {
-      name: 'asc', // Ordenar por nome (opcional)
+      name: 'asc',
     },
   })
 

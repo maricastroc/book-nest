@@ -51,23 +51,3 @@ export const DividerDropdown = styled('span', {
   padding: 0,
   opacity: 0.7,
 })
-
-export const WarningMessage = styled('div', {
-  display: 'flex',
-  alignItems: 'flex-start',
-  gap: '0.3rem',
-  padding: '0.75rem 1rem',
-  fontSize: '0.82rem',
-  color: '$gray200',
-  borderTop: '1px solid $gray600',
-  marginTop: '0.5rem',
-
-  svg: {
-    color: '$green100',
-    marginTop: '0.15rem',
-  },
-
-  strong: {
-    fontWeight: 600,
-  },
-})

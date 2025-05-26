@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
@@ -34,12 +35,14 @@ interface LateralMenuProps {
   bookId: string
   onClose: () => void
   onUpdateBook: (book: BookProps) => void
+  mutateUserLatestRating?: any
 }
 
 export function LateralMenu({
   bookId,
   onClose,
   onUpdateBook,
+  mutateUserLatestRating,
 }: LateralMenuProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
@@ -59,11 +62,7 @@ export function LateralMenu({
     onCreateReview,
     onDeleteReview,
     onUpdateStatus,
-  } = useBookDetails(bookId, onUpdateBook)
-
-  const filteredRatings = bookRatings?.filter((rating) => {
-    return rating.deletedAt === null
-  })
+  } = useBookDetails(bookId, onUpdateBook, mutateUserLatestRating)
 
   return (
     <LateralMenuWrapper>
@@ -132,7 +131,7 @@ export function LateralMenu({
                     book={updatedBook}
                   />
                 )}
-                {!isValidating && !filteredRatings?.length ? (
+                {!isValidating && !bookRatings?.length ? (
                   <EmptyContainer content="reviews" />
                 ) : isValidating ? (
                   Array.from({ length: 3 }).map((_, index) => (
@@ -140,7 +139,7 @@ export function LateralMenu({
                   ))
                 ) : (
                   updatedBook &&
-                  filteredRatings?.map((rating) => (
+                  bookRatings?.map((rating) => (
                     <UserRatingBox
                       key={rating.id}
                       book={updatedBook}

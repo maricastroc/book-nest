@@ -8,6 +8,7 @@ import useRequest from './useRequest'
 export function useBookDetails(
   bookId: string,
   onUpdateBook: (book: BookProps) => void,
+  mutateUserLatestRating?: () => Promise<void>,
 ) {
   const [updatedBook, setUpdatedBook] = useState<BookProps | null>(null)
 
@@ -37,7 +38,7 @@ export function useBookDetails(
     return { average, ratingCount }
   }
 
-  const updateBookWithRatings = (
+  const updateBookWithRatings = async (
     updatedRatings: RatingProps[],
     currentUserRating?: number,
   ) => {
@@ -57,6 +58,8 @@ export function useBookDetails(
       onUpdateBook(updatedBook)
       return updatedBook
     })
+
+    await mutateUserLatestRating?.()
   }
 
   const onCreateReview = async (newRating: RatingProps) => {
@@ -80,7 +83,7 @@ export function useBookDetails(
     const updatedRatings = bookRatings.filter(
       (rating) => rating.id !== ratingId,
     )
-
+    await mutateUserLatestRating?.()
     setBookRatings(updatedRatings)
     setUserRating(undefined)
     updateBookWithRatings(updatedRatings)

@@ -71,27 +71,15 @@ export default async function handler(
         .json({ message: 'UserId, BookId, and Status are required.' })
     }
 
-    if (status === 'Read' || status === 'Did not Finish') {
-      await prisma.rating.updateMany({
-        where: {
-          userId,
-          bookId,
-        },
-        data: {
-          deletedAt: null,
-        },
-      })
-    } else {
-      await prisma.rating.updateMany({
-        where: {
-          userId,
-          bookId,
-        },
-        data: {
-          deletedAt: new Date(),
-        },
-      })
-    }
+    await prisma.rating.updateMany({
+      where: {
+        userId,
+        bookId,
+      },
+      data: {
+        deletedAt: null,
+      },
+    })
 
     const updatedStatus = await prisma.readingStatus.upsert({
       where: {

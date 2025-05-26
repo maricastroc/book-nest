@@ -94,8 +94,6 @@ export default function Home() {
 
       return updatedBooks
     })
-
-    await mutateUserLatestRating()
   }
 
   useEffect(() => {
@@ -116,6 +114,7 @@ export default function Home() {
               bookId={selectedBook.id}
               onClose={() => setIsLateralMenuOpen(false)}
               onUpdateBook={onUpdateBook}
+              mutateUserLatestRating={mutateUserLatestRating}
             />
           )}
           {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
