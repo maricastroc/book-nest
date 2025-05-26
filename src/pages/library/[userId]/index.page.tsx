@@ -65,7 +65,7 @@ export default function Library() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const { data, mutate, isValidating } = useRequest<{
+  const { data, isValidating } = useRequest<{
     submittedBooks: BookProps[]
     booksByStatus: BooksByStatusProps
     user: UserProps
@@ -75,15 +75,17 @@ export default function Library() {
     params: { userId },
   })
 
-  const onUpdateSubmittedBook = (updatedBook: BookProps) => {
+  const onUpdateSubmittedBook = (book: BookProps) => {
     setSubmittedBooks((prevBooks) => {
-      if (!prevBooks) return prevBooks
+      if (!prevBooks) return [book]
 
-      const updatedBooks = prevBooks.map((book) =>
-        book.id === updatedBook.id ? updatedBook : book,
-      )
+      const bookExists = prevBooks.some((b) => b.id === book.id)
 
-      return updatedBooks
+      if (!bookExists) {
+        return [...prevBooks, book]
+      }
+
+      return prevBooks.map((b) => (b.id === book.id ? book : b))
     })
   }
 
@@ -95,13 +97,31 @@ export default function Library() {
         prevStatus[status as keyof BooksByStatusProps]?.some(
           (book) => book.id === updatedBook.id,
         ),
-      ) as keyof BooksByStatusProps
+      ) as keyof BooksByStatusProps | undefined
 
-      if (!oldStatus) return prevStatus
+      if (!updatedBook.readingStatus) {
+        if (oldStatus) {
+          return {
+            ...prevStatus,
+            [oldStatus]: prevStatus[oldStatus]?.filter(
+              (book) => book.id !== updatedBook.id,
+            ),
+          }
+        }
+        return prevStatus
+      }
 
       const newStatus = formatToSnakeCase(
-        updatedBook?.readingStatus,
+        updatedBook.readingStatus,
       ) as keyof BooksByStatusProps
+
+      if (!oldStatus) {
+        return {
+          ...prevStatus,
+          [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
+        }
+      }
+
       if (oldStatus === newStatus) {
         return {
           ...prevStatus,
@@ -149,7 +169,7 @@ export default function Library() {
           {openLateralMenu && selectedBook && (
             <LateralMenu
               bookId={selectedBook.id}
-              onUpdateBook={(book: BookProps) => {
+              onUpdateBook={(book) => {
                 onUpdateBookByStatus(book)
                 onUpdateSubmittedBook(book)
               }}
@@ -192,7 +212,10 @@ export default function Library() {
                   submittedBooks={submittedBooks}
                   userId={userId}
                   userInfo={userInfo}
-                  mutate={mutate}
+                  onUpdateBook={(book) => {
+                    onUpdateBookByStatus(book)
+                    onUpdateSubmittedBook(book)
+                  }}
                   isValidating={isValidating}
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)

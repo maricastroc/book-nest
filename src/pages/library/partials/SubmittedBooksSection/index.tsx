@@ -27,16 +27,16 @@ import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
+  onUpdateBook: (book: BookProps) => void
   userId: string | undefined
   userInfo: UserProps | undefined
   submittedBooks: BookProps[] | undefined
   isValidating: boolean
-  mutate: any
 }
 
 export function SubmittedBooksSection({
   onOpenDetails,
-  mutate,
+  onUpdateBook,
   isValidating,
   userId,
   userInfo,
@@ -59,35 +59,6 @@ export function SubmittedBooksSection({
   >([])
 
   const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
-
-  const onUpdateBook = (updatedBook: BookProps) => {
-    setUpdatedSubmittedBooks((prevBooks) => {
-      if (!prevBooks) return prevBooks
-
-      return prevBooks.map((book) =>
-        book.id === updatedBook.id
-          ? {
-              ...book,
-              coverUrl: updatedBook.coverUrl,
-              name: updatedBook.name,
-              author: updatedBook.author,
-            }
-          : book,
-      )
-    })
-
-    mutate?.()
-  }
-
-  const onCreateBook = (createdBook: BookProps) => {
-    setUpdatedSubmittedBooks((prevBooks) => {
-      if (!prevBooks) return [createdBook]
-
-      return [...prevBooks, createdBook]
-    })
-
-    mutate?.()
-  }
 
   useEffect(() => {
     if (submittedBooks) {
@@ -176,7 +147,6 @@ export function SubmittedBooksSection({
                     </Dialog.Trigger>
                     <SubmitBookFormModal
                       onUpdateBook={onUpdateBook}
-                      onCreateBook={onCreateBook}
                       onClose={() => setIsSubmitBookFormOpen(false)}
                     />
                   </Dialog.Root>
@@ -197,7 +167,6 @@ export function SubmittedBooksSection({
                 </Dialog.Trigger>
                 <SubmitBookFormModal
                   onUpdateBook={onUpdateBook}
-                  onCreateBook={onCreateBook}
                   onClose={() => setIsSubmitBookFormOpen(false)}
                 />
               </Dialog.Root>

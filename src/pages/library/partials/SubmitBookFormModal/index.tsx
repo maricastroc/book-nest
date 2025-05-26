@@ -30,13 +30,11 @@ interface SubmitBookFormModalProps {
   book?: BookProps | null
   onClose: () => void
   onUpdateBook?: (book: BookProps) => void
-  onCreateBook?: (book: BookProps) => void
 }
 
 export function SubmitBookFormModal({
   onClose,
   onUpdateBook,
-  onCreateBook,
   isEdit = false,
   book = null,
 }: SubmitBookFormModalProps) {
@@ -63,7 +61,6 @@ export function SubmitBookFormModal({
     book,
     onClose,
     onUpdateBook,
-    onCreateBook,
   })
 
   return (

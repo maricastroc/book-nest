@@ -95,6 +95,7 @@ export function LateralMenu({
                 key={updatedBook.id}
                 book={updatedBook}
                 categories={updatedBook.categories as CategoryProps[]}
+                onUpdateBook={onUpdateBook}
                 onUpdateStatus={onUpdateStatus}
                 onCreateReview={onCreateReview}
               />

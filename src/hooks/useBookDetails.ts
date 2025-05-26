@@ -100,6 +100,7 @@ export function useBookDetails(
         ratingCount: book?.ratings?.length,
         readingStatus: newStatus,
       }
+
       mutate()
       onUpdateBook(updatedBook)
 

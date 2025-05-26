@@ -62,7 +62,6 @@ interface UseBookFormProps {
   book?: BookProps | null
   onClose: () => void
   onUpdateBook?: (book: BookProps) => void
-  onCreateBook?: (book: BookProps) => void
 }
 
 export function useBookForm({
@@ -70,7 +69,6 @@ export function useBookForm({
   book,
   onClose,
   onUpdateBook,
-  onCreateBook,
 }: UseBookFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
@@ -174,6 +172,7 @@ export function useBookForm({
       if (!books?.length) throw new Error('Book not found')
 
       const googleBook = books[0].volumeInfo
+
       const bookCheck = await checkIfBookExists({
         isbn: cleanedIsbn,
         title: googleBook.title,
@@ -187,6 +186,7 @@ export function useBookForm({
         return
       }
 
+      console.log(googleBook)
       setIsValidBook(true)
       setValue('name', googleBook.title)
       setValue('author', googleBook.authors?.[0])
@@ -279,12 +279,8 @@ export function useBookForm({
 
       toast.success(response.data.message)
 
-      if (isEdit && onUpdateBook) {
+      if (onUpdateBook) {
         onUpdateBook(response.data.book)
-      }
-
-      if ((!isEdit || !book) && onCreateBook) {
-        onCreateBook(response.data.book)
       }
 
       onClose()

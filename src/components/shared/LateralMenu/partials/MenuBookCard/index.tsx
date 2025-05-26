@@ -34,12 +34,14 @@ interface MenuBookCardProps {
     newStatus: string,
     userRating: number,
   ) => void
+  onUpdateBook: (book: BookProps) => void
   onCreateReview: (newRating: RatingProps) => void
 }
 
 export function MenuBookCard({
   onUpdateStatus,
   onCreateReview,
+  onUpdateBook,
   book,
   categories,
 }: MenuBookCardProps) {
@@ -127,10 +129,12 @@ export function MenuBookCard({
                 {loggedUser && (
                   <RatingBookModal
                     userId={loggedUser.id}
-                    bookId={book.id}
+                    book={book}
                     onClose={() => setIsRatingBookModalOpen(false)}
                     bookStatus={selectedStatus}
                     onCreateReview={onCreateReview}
+                    onUpdateStatus={onUpdateStatus}
+                    onUpdateBook={onUpdateBook}
                   />
                 )}
               </Dialog.Root>

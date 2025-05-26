@@ -7,18 +7,27 @@ import { RatingProps } from '@/@types/rating'
 import { useAppContext } from '@/contexts/AppContext'
 import { BaseModal } from '@/components/modals/BaseModal'
 import { Button } from '@/components/core/Button'
+import { BookProps } from '@/@types/book'
 
 interface RatingBookModalProps {
   onClose: () => void
-  bookId: string
+  book: BookProps
   userId: string | number
+  onUpdateBook: (book: BookProps) => void
   onCreateReview: (newRating: RatingProps) => void
+  onUpdateStatus: (
+    book: BookProps,
+    newStatus: string,
+    userRating: number,
+  ) => void
   bookStatus: string
 }
 
 export function RatingBookModal({
   onCreateReview,
-  bookId,
+  onUpdateStatus,
+  onUpdateBook,
+  book,
   userId,
   bookStatus,
   onClose,
@@ -37,6 +46,8 @@ export function RatingBookModal({
     if (rate) {
       setIsLoading(true)
 
+      const bookId = book.id
+
       const payload = {
         rate,
         userId,
@@ -47,6 +58,8 @@ export function RatingBookModal({
 
       const createdRating = await handleCreateReview(payload)
       onCreateReview(createdRating)
+      onUpdateStatus(book, bookStatus, rate)
+      onUpdateBook(book)
       onClose()
 
       setIsLoading(false)
