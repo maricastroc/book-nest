@@ -119,8 +119,6 @@ export default function Library() {
         [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
       }
     })
-
-    mutate?.()
   }
 
   useEffect(() => {

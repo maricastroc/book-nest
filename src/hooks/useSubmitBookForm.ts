@@ -283,7 +283,7 @@ export function useBookForm({
         onUpdateBook(response.data.book)
       }
 
-      if (!isEdit && onCreateBook) {
+      if ((!isEdit || !book) && onCreateBook) {
         onCreateBook(response.data.book)
       }
 

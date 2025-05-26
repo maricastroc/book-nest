@@ -197,6 +197,7 @@ export function SubmittedBooksSection({
                 </Dialog.Trigger>
                 <SubmitBookFormModal
                   onUpdateBook={onUpdateBook}
+                  onCreateBook={onCreateBook}
                   onClose={() => setIsSubmitBookFormOpen(false)}
                 />
               </Dialog.Root>
