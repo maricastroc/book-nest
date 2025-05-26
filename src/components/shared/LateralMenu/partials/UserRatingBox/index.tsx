@@ -22,6 +22,7 @@ import { BookProps } from '@/@types/book'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { useClickOutside } from '@/hooks/useClickOutside'
+import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 
 interface UserRatingBoxProps {
   rating: RatingProps
@@ -53,7 +54,7 @@ export function UserRatingBox({
 
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const { handleDeleteReview } = useAppContext()
+  const { handleDeleteReview, isValidatingReview } = useAppContext()
 
   const session = useSession()
 
@@ -67,7 +68,9 @@ export function UserRatingBox({
     }
   })
 
-  return openEditReviewBox ? (
+  return isValidatingReview ? (
+    <SkeletonRatingCard />
+  ) : openEditReviewBox ? (
     <RatingCardForm
       isEdit
       rating={rating}

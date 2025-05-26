@@ -25,6 +25,7 @@ import { useSession } from 'next-auth/react'
 import { BookProps } from '@/@types/book'
 import { FormErrors } from '@/components/core/FormErrors'
 import { ActionButton } from '@/components/core/ActionButton'
+import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean
@@ -72,7 +73,12 @@ export function RatingCardForm({
 
   const session = useSession()
 
-  const { loggedUser, handleCreateReview, handleEditReview } = useAppContext()
+  const {
+    loggedUser,
+    handleCreateReview,
+    handleEditReview,
+    isValidatingReview,
+  } = useAppContext()
 
   const handleRating = (rate: number) => {
     setValue('rate', rate)
@@ -123,7 +129,10 @@ export function RatingCardForm({
   }
 
   return (
-    loggedUser && (
+    loggedUser &&
+    (isValidatingReview ? (
+      <SkeletonRatingCard />
+    ) : (
       <RatingCardFormWrapper
         onSubmit={handleSubmit(isEdit ? editReview : submitReview)}
         {...rest}
@@ -181,6 +190,6 @@ export function RatingCardForm({
           </UserActionsWrapper>
         </FooterWrapper>
       </RatingCardFormWrapper>
-    )
+    ))
   )
 }
