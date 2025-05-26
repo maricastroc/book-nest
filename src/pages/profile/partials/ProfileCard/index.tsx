@@ -96,6 +96,7 @@ export function ProfileCard({
           {rating.userId === loggedUser?.id && (
             <DropdownActions
               dropdownRef={dropdownRef}
+              readingStatus={book?.readingStatus || undefined}
               buttonRef={buttonRef}
               onToggleEditSection={(value) =>
                 setIsEditUserReviewCardOpen(value)

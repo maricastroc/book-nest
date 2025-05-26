@@ -35,7 +35,7 @@ export const Dropdown = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'center',
   position: 'absolute',
-  backgroundColor: '$gray600',
+  backgroundColor: '$gray500',
   borderRadius: 8,
   padding: '1rem 1rem',
   gap: '0.6rem',
@@ -99,7 +99,7 @@ export const DropdownItem = styled('button', {
     filter: 'brightness(1.5)',
   },
 
-  '&:hover': {
+  '&:not(:disabled):hover': {
     '&.edit_icon': {
       p: {
         color: '$green100',
@@ -110,6 +110,18 @@ export const DropdownItem = styled('button', {
       p: {
         color: '$red300',
       },
+    },
+  },
+
+  '&:disabled': {
+    cursor: 'not-allowed !important',
+
+    p: {
+      color: '$blue600',
+    },
+
+    svg: {
+      color: '$blue600',
     },
   },
 })

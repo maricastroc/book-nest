@@ -101,6 +101,7 @@ export function UserRatingBox({
             {isFromLoggedUser && (
               <DropdownActions
                 variant="secondary"
+                readingStatus={book?.readingStatus || undefined}
                 dropdownRef={dropdownRef}
                 buttonRef={buttonRef}
                 onToggleEditSection={(value) => setOpenEditReviewBox(value)}

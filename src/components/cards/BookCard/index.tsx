@@ -104,6 +104,7 @@ export function BookCard({
               <DropdownActions
                 isSubmission
                 hasDeleteSection={false}
+                readingStatus={book?.readingStatus || undefined}
                 isDropdownOpen={isDropdownOpen}
                 onToggleDropdown={(value) => setIsDropdownOpen(value)}
                 dropdownRef={dropdownRef}
