@@ -27,15 +27,13 @@ import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
 interface MenuBookCardProps {
   book: BookProps
   categories: CategoryProps[]
-  onUpdateStatus: (
-    book: BookProps,
-    newStatus: string,
-    userRating: number,
-  ) => void
+  setIsValidatingStatus: (value: boolean) => void
+  onUpdateStatus: (newStatus: string) => void
 }
 
 export function MenuBookCard({
   onUpdateStatus,
+  setIsValidatingStatus,
   book,
   categories,
 }: MenuBookCardProps) {
@@ -107,6 +105,9 @@ export function MenuBookCard({
                 <Dialog.Trigger asChild>
                   <DropdownMenu
                     isOpen={isAddToLibraryDropdownOpen}
+                    setIsValidatingStatus={(value) =>
+                      setIsValidatingStatus(value)
+                    }
                     activeStatus={book?.readingStatus ?? null}
                     onClose={() => setIsAddToLibraryDropdownOpen(false)}
                     dropdownRef={dropdownRef}

@@ -37,9 +37,9 @@ export interface CreateReviewData {
 }
 
 interface AppContextType {
-  isSubmitting: boolean
+  isValidatingReview: boolean
   loggedUser: UserProps | null
-  handleSetIsSubmitting: (value: boolean) => void
+  handleSetIsValidatingReview: (value: boolean) => void
   handleSetUserId: (value: string) => void
   handleSetLoggedUser: (data: UserProps) => void
   handleEditReview: (data: EditReviewData) => Promise<RatingProps>
@@ -56,7 +56,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [loggedUser, setLoggedUser] = useState<UserProps | null>(null)
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isValidatingReview, setIsValidatingReview] = useState(false)
 
   const [userId, setUserId] = useState('')
 
@@ -64,8 +64,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const session = useSession()
 
-  const handleSetIsSubmitting = (value: boolean) => {
-    setIsSubmitting(value)
+  const handleSetIsValidatingReview = (value: boolean) => {
+    setIsValidatingReview(value)
   }
 
   const handleSetLoggedUser = useCallback(
@@ -93,7 +93,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleDeleteReview = async (id: string) => {
     try {
-      setIsSubmitting(true)
+      setIsValidatingReview(true)
 
       const response = await api.delete('/ratings', { data: { id } })
 
@@ -101,13 +101,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       handleApiError(error)
     } finally {
-      setIsSubmitting(false)
+      setIsValidatingReview(false)
     }
   }
 
   const handleEditReview = async (data: EditReviewData) => {
     try {
-      setIsSubmitting(true)
+      setIsValidatingReview(true)
 
       const response = await api.put('/ratings', {
         id: data.ratingId,
@@ -121,13 +121,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       handleApiError(error)
     } finally {
-      setIsSubmitting(false)
+      setIsValidatingReview(false)
     }
   }
 
   const handleCreateReview = async (data: CreateReviewData) => {
     try {
-      setIsSubmitting(true)
+      setIsValidatingReview(true)
 
       const response = await api.post(`/ratings`, { data: { ...data } })
 
@@ -137,7 +137,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       handleApiError(error)
     } finally {
-      setIsSubmitting(false)
+      setIsValidatingReview(false)
     }
   }
 
@@ -151,8 +151,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     () => ({
       loggedUser,
       isValidatingLoggedUser,
-      isSubmitting,
-      handleSetIsSubmitting,
+      isValidatingReview,
+      handleSetIsValidatingReview,
       handleSetLoggedUser,
       handleCreateReview,
       handleEditReview,
@@ -160,7 +160,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       handleSetUserId,
       userId,
     }),
-    [loggedUser, userId, isSubmitting],
+    [loggedUser, userId, isValidatingReview],
   )
 
   return (

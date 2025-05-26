@@ -9,7 +9,7 @@ interface DeleteModalProps {
 }
 
 export function DeleteModal({ onConfirm, onClose }: DeleteModalProps) {
-  const { isSubmitting } = useAppContext()
+  const { isValidatingReview } = useAppContext()
 
   return (
     <Dialog.Portal>
@@ -20,8 +20,8 @@ export function DeleteModal({ onConfirm, onClose }: DeleteModalProps) {
         </p>
         <Button
           style={{ marginTop: '2rem' }}
-          content={isSubmitting ? 'Loading...' : 'Confirm & Delete'}
-          disabled={isSubmitting}
+          content={isValidatingReview ? 'Loading...' : 'Confirm & Delete'}
+          disabled={isValidatingReview}
           onClick={() => onConfirm()}
         />
       </BaseModal>

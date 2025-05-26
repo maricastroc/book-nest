@@ -131,11 +131,7 @@ export function useBookDetails(
     }
   }
 
-  const onUpdateStatus = (
-    book: BookProps,
-    newStatus: string,
-    userRating: number,
-  ) => {
+  const onUpdateStatus = (newStatus: string) => {
     setLoadingState((prev) => ({ ...prev, status: true }))
 
     try {
@@ -144,8 +140,6 @@ export function useBookDetails(
 
         const updatedBook = {
           ...prevBook,
-          userRating,
-          ratingCount: book?.ratings?.length,
           readingStatus: newStatus,
         }
 

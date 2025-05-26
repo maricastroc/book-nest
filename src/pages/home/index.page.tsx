@@ -59,7 +59,7 @@ export default function Home() {
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
-  const { loggedUser, isSubmitting } = useAppContext()
+  const { loggedUser, isValidatingReview } = useAppContext()
 
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
@@ -131,7 +131,7 @@ export default function Home() {
                       Your Last Review
                     </UserLatestReadingTitle>
                     <UserLatestReadingContainer>
-                      {isValidatingUserLatestReading || isSubmitting ? (
+                      {isValidatingUserLatestReading || isValidatingReview ? (
                         <SkeletonRatingCard withMarginBottom />
                       ) : userLatestRatingData && userLatestRatingData?.book ? (
                         <RatingCard

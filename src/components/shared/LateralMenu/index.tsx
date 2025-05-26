@@ -30,6 +30,7 @@ import { SignInModal } from '@/components/modals/SignInModal'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { EmptyContainer } from '../EmptyContainer'
 import { useBookDetails } from '@/hooks/useBookDetails'
+import { SkeletonMenuBookCard } from './partials/SkeletonMenuBookCard'
 
 interface LateralMenuProps {
   bookId: string
@@ -46,12 +47,14 @@ export function LateralMenu({
 }: LateralMenuProps) {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
+  const [isValidatingStatus, setIsValidatingStatus] = useState(false)
+
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
   const [isReviewWarningModalOpen, setIsReviewWarningModalOpen] =
     useState(false)
 
-  const { loggedUser, isSubmitting } = useAppContext()
+  const { loggedUser, isValidatingReview } = useAppContext()
 
   const {
     updatedBook,
@@ -90,14 +93,17 @@ export function LateralMenu({
               </Dialog.Root>
             )}
 
-            {updatedBook && (
+            {isValidatingStatus ? (
+              <SkeletonMenuBookCard />
+            ) : updatedBook ? (
               <MenuBookCard
                 key={updatedBook.id}
                 book={updatedBook}
+                setIsValidatingStatus={(value) => setIsValidatingStatus(value)}
                 categories={updatedBook.categories as CategoryProps[]}
                 onUpdateStatus={onUpdateStatus}
               />
-            )}
+            ) : null}
             <RatingsWrapper>
               <RatingsListHeader>
                 <p>Ratings</p>
@@ -134,7 +140,7 @@ export function LateralMenu({
                 )}
                 {!isValidating && !bookRatings?.length ? (
                   <EmptyContainer content="reviews" />
-                ) : loadingState?.reviews || isSubmitting ? (
+                ) : loadingState?.reviews || isValidatingReview ? (
                   Array.from({ length: 3 }).map((_, index) => (
                     <SkeletonRatingCard key={index} />
                   ))

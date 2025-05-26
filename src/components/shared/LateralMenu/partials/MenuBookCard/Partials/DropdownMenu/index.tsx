@@ -6,8 +6,6 @@ import {
 } from './styles'
 import { BookProps } from '@/@types/book'
 import { useAppContext } from '@/contexts/AppContext'
-import { RatingProps } from '@/@types/rating'
-import { useEffect, useState } from 'react'
 import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
 import { handleApiError } from '@/utils/handleApiError'
@@ -18,11 +16,8 @@ interface DropdownMenuProps {
   book: BookProps
   activeStatus: string | null
   dropdownRef: React.RefObject<HTMLDivElement>
-  onUpdateStatus: (
-    book: BookProps,
-    newStatus: string,
-    userRating: number,
-  ) => void
+  setIsValidatingStatus: (value: boolean) => void
+  onUpdateStatus: (newStatus: string) => void
 }
 
 export const DropdownMenu = ({
@@ -31,11 +26,10 @@ export const DropdownMenu = ({
   book,
   onUpdateStatus,
   onClose,
+  setIsValidatingStatus,
   dropdownRef,
 }: DropdownMenuProps) => {
-  const [userRating, setUserRating] = useState<RatingProps | null>(null)
-
-  const { loggedUser, handleSetIsSubmitting } = useAppContext()
+  const { loggedUser } = useAppContext()
 
   const statuses = [
     { label: 'Read', className: 'read' },
@@ -46,9 +40,9 @@ export const DropdownMenu = ({
 
   const handleSelectReadingStatus = async (book: BookProps, status: string) => {
     if (loggedUser && book) {
-      try {
-        handleSetIsSubmitting(true)
+      setIsValidatingStatus(true)
 
+      try {
         await api.post('/reading_status', {
           userId: loggedUser.id,
           bookId: book.id,
@@ -59,32 +53,10 @@ export const DropdownMenu = ({
       } catch (error) {
         handleApiError(error)
       } finally {
-        handleSetIsSubmitting(false)
+        setIsValidatingStatus(false)
       }
     }
   }
-
-  useEffect(() => {
-    async function fetchUserRating(bookId: string): Promise<void> {
-      try {
-        const response = await api.get(`/ratings/user`, {
-          params: {
-            bookId,
-          },
-        })
-
-        if (response.data) {
-          setUserRating(response.data.userRating)
-        }
-      } catch (error) {
-        console.error('Error fetching user rating:', error)
-      }
-    }
-
-    if (book) {
-      fetchUserRating(book.id)
-    }
-  }, [book])
 
   return isOpen ? (
     <AddToLibraryDropdown ref={dropdownRef}>
@@ -108,7 +80,7 @@ export const DropdownMenu = ({
               }
 
               await handleSelectReadingStatus(book, status.label)
-              onUpdateStatus(book, status.label, userRating?.rate || 0)
+              onUpdateStatus(status.label)
 
               onClose()
             }}
