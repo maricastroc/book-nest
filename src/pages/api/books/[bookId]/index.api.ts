@@ -65,10 +65,24 @@ export default async function handler(
     ? formatToSnakeCase(book.readingStatus[0].status)
     : null
 
+  let orderedRatings = book.ratings
+
+  if (session?.user?.id) {
+    const userId = session.user.id
+    const userRating = book.ratings.find((rating) => rating.userId === userId)
+    const otherRatings = book.ratings.filter(
+      (rating) => rating.userId !== userId,
+    )
+
+    if (userRating) {
+      orderedRatings = [userRating, ...otherRatings]
+    }
+  }
+
   const bookWithDetails = {
     ...book,
     categories: book.categories.map((category) => category.category),
-    ratings: book.ratings,
+    ratings: orderedRatings,
     rate: avgRate,
     readingStatus,
   }

@@ -107,7 +107,7 @@ export const RatingsWrapper = styled('div', {
 
 export const RatingsList = styled('div', {
   display: 'flex',
-  flexDirection: 'column-reverse',
+  flexDirection: 'column',
   minWidth: '100%',
   gap: '1.5rem',
 

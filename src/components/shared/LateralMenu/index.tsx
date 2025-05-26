@@ -58,6 +58,7 @@ export function LateralMenu({
     bookRatings,
     userRating,
     isValidating,
+    loadingState,
     onUpdateReview,
     onCreateReview,
     onDeleteReview,
@@ -71,7 +72,7 @@ export function LateralMenu({
         <X />
       </CloseButton>
       <MenuBody>
-        {isSubmitting || isValidating ? (
+        {loadingState?.initial ? (
           <SkeletonLateralMenu />
         ) : (
           <>
@@ -133,7 +134,7 @@ export function LateralMenu({
                 )}
                 {!isValidating && !bookRatings?.length ? (
                   <EmptyContainer content="reviews" />
-                ) : isValidating ? (
+                ) : loadingState?.reviews || isSubmitting ? (
                   Array.from({ length: 3 }).map((_, index) => (
                     <SkeletonRatingCard key={index} />
                   ))

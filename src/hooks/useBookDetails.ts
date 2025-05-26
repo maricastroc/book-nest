@@ -18,7 +18,25 @@ export function useBookDetails(
 
   const [bookRatings, setBookRatings] = useState<RatingProps[]>([])
 
+  const [loadingState, setLoadingState] = useState<{
+    initial: boolean
+    status: boolean
+    reviews: boolean
+  }>({
+    initial: true,
+    status: false,
+    reviews: false,
+  })
+
   const { loggedUser } = useAppContext()
+
+  const sortRatings = (ratings: RatingProps[], userId: string | undefined) => {
+    if (!userId) return ratings
+    return [
+      ...ratings.filter((r) => r.user.id === userId),
+      ...ratings.filter((r) => r.user.id !== userId),
+    ]
+  }
 
   const {
     data: book,
@@ -63,30 +81,54 @@ export function useBookDetails(
   }
 
   const onCreateReview = async (newRating: RatingProps) => {
-    const updatedRatings = [...bookRatings, newRating]
-    setBookRatings(updatedRatings)
-    setUserRating(newRating)
-    updateBookWithRatings(updatedRatings, newRating.rate)
+    setLoadingState((prev) => ({ ...prev, reviews: true }))
+
+    try {
+      const updatedRatings = sortRatings(
+        [...bookRatings, newRating],
+        loggedUser?.id as string,
+      )
+      setBookRatings(updatedRatings)
+      setUserRating(newRating)
+      updateBookWithRatings(updatedRatings, newRating.rate)
+    } finally {
+      setLoadingState((prev) => ({ ...prev, reviews: false }))
+    }
   }
 
   const onUpdateReview = async (updatedReview: RatingProps) => {
-    const updatedRatings = bookRatings.map((rating) =>
-      rating.id === updatedReview.id ? updatedReview : rating,
-    )
+    setLoadingState((prev) => ({ ...prev, reviews: true }))
 
-    setBookRatings(updatedRatings)
-    setUserRating(updatedReview)
-    updateBookWithRatings(updatedRatings, updatedReview.rate)
+    try {
+      const updatedRatings = sortRatings(
+        bookRatings.map((rating) =>
+          rating.id === updatedReview.id ? updatedReview : rating,
+        ),
+        loggedUser?.id as string,
+      )
+
+      setBookRatings(updatedRatings)
+      setUserRating(updatedReview)
+      await updateBookWithRatings(updatedRatings, updatedReview.rate)
+    } finally {
+      setLoadingState((prev) => ({ ...prev, reviews: false }))
+    }
   }
 
   const onDeleteReview = async (ratingId: string) => {
-    const updatedRatings = bookRatings.filter(
-      (rating) => rating.id !== ratingId,
-    )
-    await mutateUserLatestRating?.()
-    setBookRatings(updatedRatings)
-    setUserRating(undefined)
-    updateBookWithRatings(updatedRatings)
+    setLoadingState((prev) => ({ ...prev, reviews: true }))
+
+    try {
+      const updatedRatings = bookRatings.filter(
+        (rating) => rating.id !== ratingId,
+      )
+      await mutateUserLatestRating?.()
+      setBookRatings(updatedRatings)
+      setUserRating(undefined)
+      updateBookWithRatings(updatedRatings)
+    } finally {
+      setLoadingState((prev) => ({ ...prev, reviews: false }))
+    }
   }
 
   const onUpdateStatus = (
@@ -94,21 +136,27 @@ export function useBookDetails(
     newStatus: string,
     userRating: number,
   ) => {
-    setUpdatedBook((prevBook) => {
-      if (!prevBook) return prevBook
+    setLoadingState((prev) => ({ ...prev, status: true }))
 
-      const updatedBook = {
-        ...prevBook,
-        userRating,
-        ratingCount: book?.ratings?.length,
-        readingStatus: newStatus,
-      }
+    try {
+      setUpdatedBook((prevBook) => {
+        if (!prevBook) return prevBook
 
-      mutate()
-      onUpdateBook(updatedBook)
+        const updatedBook = {
+          ...prevBook,
+          userRating,
+          ratingCount: book?.ratings?.length,
+          readingStatus: newStatus,
+        }
 
-      return updatedBook
-    })
+        mutate()
+        onUpdateBook(updatedBook)
+
+        return updatedBook
+      })
+    } finally {
+      setLoadingState((prev) => ({ ...prev, status: false }))
+    }
   }
 
   useEffect(() => {
@@ -116,13 +164,12 @@ export function useBookDetails(
       setUpdatedBook(book)
 
       if (book?.ratings) {
-        setBookRatings(book?.ratings)
+        setBookRatings(book.ratings)
+        setUserRating(book.ratings.find((r) => r.user.id === loggedUser?.id))
+      }
 
-        const foundUserRating = book?.ratings.find(
-          (rating) => rating.user.id === loggedUser?.id,
-        )
-
-        setUserRating(foundUserRating)
+      if (loadingState.initial) {
+        setLoadingState((prev) => ({ ...prev, initial: false }))
       }
     }
   }, [book, bookId])
@@ -132,6 +179,7 @@ export function useBookDetails(
     userRating,
     bookRatings,
     isValidating,
+    loadingState,
     onUpdateBook,
     onUpdateStatus,
     onUpdateReview,
