@@ -127,12 +127,16 @@ export function ProfileCard({
                       maxHeight="5.8rem"
                       description={rating.description}
                     />
-                  ) : (
+                  ) : loggedUser?.id === rating.userId ? (
                     <EmptyCardContent
                       onClick={() => setIsEditUserReviewCardOpen(true)}
                     >
                       Add your Review
                       <Plus />
+                    </EmptyCardContent>
+                  ) : (
+                    <EmptyCardContent>
+                      No description available.
                     </EmptyCardContent>
                   ))}
               </BookSummaryWrapper>

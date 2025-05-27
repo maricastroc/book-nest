@@ -244,7 +244,7 @@ export const UserRatings = styled('div', {
   gap: '1rem',
 
   '@media (min-width: 768px)': {
-    '&.smaller': {
+    '&.with_padding_right': {
       paddingRight: '1rem',
     },
   },

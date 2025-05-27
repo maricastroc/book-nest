@@ -1,19 +1,14 @@
-import { useEffect, useState } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react'
 
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value)
-
+export function useDebounce<T extends (...args: any[]) => any>(
+  callback: T,
+  delay: number,
+  dependencies: any[] = [],
+): void {
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-
-  return debouncedValue
+    const timer = setTimeout(callback, delay)
+    return () => clearTimeout(timer)
+  }, dependencies)
 }
-
-export default useDebounce

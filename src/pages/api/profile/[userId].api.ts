@@ -13,6 +13,7 @@ export default async function handler(
     ? String(req.query.search).toLowerCase()
     : undefined
 
+  // Busca o perfil + avaliações (com busca se houver)
   const profile = await prisma.user.findUnique({
     where: { id: userId },
     include: {
@@ -37,8 +38,8 @@ export default async function handler(
           book: {
             include: {
               categories: { include: { category: true } },
-              readingStatus: { where: { userId } }, // Status específico do usuário
-              ratings: true, // Todas as avaliações do livro
+              readingStatus: { where: { userId } },
+              ratings: true,
             },
           },
         },
@@ -51,7 +52,7 @@ export default async function handler(
     return res.status(404).json({ message: 'User does not exist.' })
   }
 
-  const readBooks = await prisma.book.findMany({
+  const allReadBooks = await prisma.book.findMany({
     where: {
       readingStatus: {
         some: {
@@ -59,40 +60,53 @@ export default async function handler(
           status: { equals: 'read', mode: 'insensitive' },
         },
       },
-      ...(searchQuery
-        ? {
-            OR: [
-              { name: { contains: searchQuery, mode: 'insensitive' } },
-              { author: { contains: searchQuery, mode: 'insensitive' } },
-            ],
-          }
-        : {}),
     },
     include: {
       categories: { include: { category: true } },
-      readingStatus: { where: { userId } }, // Status específico do usuário
-      ratings: true, // Todas as avaliações do livro
+      readingStatus: { where: { userId } },
+      ratings: true,
     },
   })
 
-  // Processamento dos dados (igual ao seu código atual)
-  const readPages = readBooks.reduce((acc, book) => acc + book.totalPages, 0)
-  const authorsCount = readBooks.reduce((acc, book) => {
+  const readBooksToDisplay = searchQuery
+    ? await prisma.book.findMany({
+        where: {
+          readingStatus: {
+            some: {
+              userId,
+              status: { equals: 'read', mode: 'insensitive' },
+            },
+          },
+          OR: [
+            { name: { contains: searchQuery, mode: 'insensitive' } },
+            { author: { contains: searchQuery, mode: 'insensitive' } },
+          ],
+        },
+        include: {
+          categories: { include: { category: true } },
+          readingStatus: { where: { userId } },
+          ratings: true,
+        },
+      })
+    : allReadBooks
+
+  // Estatísticas baseadas em todos os livros lidos
+  const readPages = allReadBooks.reduce((acc, book) => acc + book.totalPages, 0)
+  const authorsCount = allReadBooks.reduce((acc, book) => {
     if (!acc.includes(book.author)) acc.push(book.author)
     return acc
   }, [] as string[]).length
-  const categories = readBooks.flatMap((book) =>
+  const categories = allReadBooks.flatMap((book) =>
     book.categories.map((cat) => cat.category.name),
   )
   const bestGenre = categories.length ? getMostFrequentString(categories) : null
 
-  // Formatação das ratings para incluir o status simplificado
   const formattedRatings = profile.ratings.map((rating) => ({
     ...rating,
     book: {
       ...rating.book,
-      readingStatus: rating.book.readingStatus[0]?.status || null, // Simplifica o status
-      ratings: rating.book.ratings, // Mantém todas as avaliações
+      readingStatus: rating.book.readingStatus[0]?.status || null,
+      ratings: rating.book.ratings,
     },
   }))
 
@@ -105,14 +119,14 @@ export default async function handler(
         email: profile.email,
         createdAt: profile.createdAt,
       },
-      ratings: formattedRatings, // Ratings formatadas
+      ratings: formattedRatings,
       readPages,
       ratedBooks: profile.ratings.length,
       authorsCount,
       bestGenre,
-      readBooks: readBooks.map((book) => ({
+      readBooks: readBooksToDisplay.map((book) => ({
         ...book,
-        readingStatus: book.readingStatus[0]?.status || null, // Status simplificado
+        readingStatus: book.readingStatus[0]?.status || null,
       })),
     },
   })

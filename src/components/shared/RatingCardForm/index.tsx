@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import 'react-toastify/dist/ReactToastify.css'
-import { REVIEW_MAX_LENGTH } from '@/utils/constants'
+import { REVIEW_MAX_LENGTH, REVIEW_MIN_LENGTH } from '@/utils/constants'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
@@ -38,7 +38,21 @@ interface RatingCardFormProps {
 }
 
 const ratingCardFormSchema = z.object({
-  description: z.string().nullable(),
+  description: z
+    .string()
+    .nullable()
+    .optional()
+    .superRefine((val, ctx) => {
+      if (val && val.length > 0 && val.length < 100) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_small,
+          minimum: 100,
+          type: 'string',
+          inclusive: true,
+          message: 'Description must be at least 100 characters long',
+        })
+      }
+    }),
   rate: z
     .number()
     .positive({ message: 'Please choose a rating from 1 to 5.' })
@@ -160,6 +174,7 @@ export function RatingCardForm({
           <ReviewForm
             placeholder="Write your review here"
             maxLength={REVIEW_MAX_LENGTH}
+            minLength={REVIEW_MIN_LENGTH}
             spellCheck={false}
             {...register('description')}
           />

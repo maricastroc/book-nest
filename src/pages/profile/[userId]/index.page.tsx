@@ -1,7 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
+import { MagnifyingGlass, User, X } from 'phosphor-react'
+import { useRouter } from 'next/router'
+
 import { Sidebar } from '@/components/shared/Sidebar'
+import { ProfileCard } from '@/pages/profile/partials/ProfileCard'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { UserDetails } from '@/pages/profile/partials/UserDetails'
+import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
+import { LoadingPage } from '@/components/shared/LoadingPage'
+import { MobileHeader } from '@/components/shared/MobileHeader'
+import { Pagination } from '@/components/shared/Pagination'
+
+import { useScreenSize } from '@/hooks/useScreenSize'
+import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
+import useRequest from '@/hooks/useRequest'
+import { useProfileRatings } from '@/hooks/useProfileRatings'
+
 import {
   UserRatings,
   UserRatingsContainer,
@@ -12,116 +28,70 @@ import {
   SearchBar,
   UserDetailsContainer,
   ProfilePageWrapper,
-  EmptyWrapper,
   UserRatingsTitle,
 } from './styles'
-import { MagnifyingGlass, User, X } from 'phosphor-react'
-import { ProfileCard } from '@/pages/profile/partials/ProfileCard'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { UserDetails } from '@/pages/profile/partials/UserDetails'
+
 import { RatingProps } from '@/@types/rating'
-import { useScreenSize } from '@/hooks/useScreenSize'
-import { useRouter } from 'next/router'
-import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { useAppContext, UserStatistics } from '@/contexts/AppContext'
-import { MobileHeader } from '@/components/shared/MobileHeader'
-import { api } from '@/lib/axios'
-import { handleApiError } from '@/utils/handleApiError'
+import { UserStatistics } from '@/@types/user_statistics'
 
 export default function Profile() {
-  const isRouteLoading = useLoadingOnRouteChange()
-
   const router = useRouter()
 
   const userId = Array.isArray(router.query.userId)
     ? router.query.userId[0]
     : router.query.userId
 
+  const isRouteLoading = useLoadingOnRouteChange()
+
+  const isSmallSize = useScreenSize(480)
+
+  const isMediumSize = useScreenSize(768)
+
   const [userStatistics, setUserStatistics] = useState<
     UserStatistics | undefined
   >(undefined)
 
-  const [userRatings, setUserRatings] = useState<RatingProps[]>([])
+  const {
+    ratings: userRatings,
+    totalPages,
+    currentPage,
+    setCurrentPage,
+    search,
+    setSearch,
+    isValidatingRatings,
+    mutateRatings,
+    onCreateReview,
+    onDeleteReview,
+    onUpdateReview,
+  } = useProfileRatings(userId)
 
-  const [search, setSearch] = useState('')
+  const {
+    data: userStatisticsData,
+    mutate: mutateStatistics,
+    isValidating: isValidatingStatistics,
+  } = useRequest<UserStatistics>({
+    url: userId ? `/profile/statistics/${userId}` : undefined,
+    method: 'GET',
+  })
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  const { handleSetUserId } = useAppContext()
-
-  const isSmallSize = useScreenSize(480)
-  const isMediumSize = useScreenSize(768)
-
-  const handleFetchUserStatistics = async (
-    userId: string | undefined,
-    search: string | undefined,
-  ) => {
-    try {
-      setIsLoading(true)
-
-      const response = await api.get(`/profile/${userId}`, {
-        params: { search },
-      })
-
-      return response.data.profile
-    } catch (error) {
-      handleApiError(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const onUpdateReview = async (updatedReview: RatingProps) => {
-    setUserRatings((prevRatings) =>
-      prevRatings.map((rating) =>
-        rating.id === updatedReview.id
-          ? {
-              ...rating,
-              rate: updatedReview.rate,
-              description: updatedReview.description,
-            }
-          : rating,
-      ),
-    )
-  }
-
-  const onCreateReview = (newRating: RatingProps) => {
-    setUserRatings((prevRatings) => [...(prevRatings || []), newRating])
-  }
-
-  const onDeleteReview = (ratingId: string) => {
-    setUserRatings((prevRatings) =>
-      prevRatings?.filter((rating) => rating.id !== ratingId),
-    )
-  }
-
-  useEffect(() => {
-    if (userStatistics) {
-      setUserRatings(userStatistics.ratings ?? [])
-    }
-  }, [userStatistics])
-
-  const loadUserStatistics = async () => {
-    setIsLoading(true)
-
-    const data = await handleFetchUserStatistics(userId, search)
-
-    if (data) {
-      setUserStatistics(data)
-    }
-
-    setIsLoading(false)
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   useEffect(() => {
     if (userId) {
-      handleSetUserId(userId)
-      loadUserStatistics()
+      mutateStatistics()
+      mutateRatings()
     }
-  }, [userId, search])
-  console.log(userRatings)
+  }, [userId])
+
+  useEffect(() => {
+    if (userStatisticsData) {
+      setUserStatistics(userStatisticsData)
+    }
+  }, [userStatisticsData])
+
   return (
     <>
       <NextSeo title="Profile | Book Wise" />
@@ -145,56 +115,69 @@ export default function Profile() {
                     type="text"
                     placeholder="Search for author or title"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                      setSearch(e.target.value)
+                      setCurrentPage(1)
+                    }}
                     spellCheck={false}
                   />
                   {search === '' ? (
                     <MagnifyingGlass />
                   ) : (
-                    <X onClick={() => setSearch('')} />
+                    <X
+                      onClick={() => {
+                        setSearch('')
+                        setCurrentPage(1)
+                      }}
+                    />
                   )}
                 </SearchBar>
-                {!userStatistics?.ratings?.length && !isLoading && (
-                  <EmptyWrapper>
-                    <EmptyContainer />
-                  </EmptyWrapper>
-                )}
                 <UserRatings
-                  className={
-                    isLoading || (userRatings?.length ?? 0) > 1 ? 'smaller' : ''
-                  }
+                  className={`${
+                    isValidatingRatings || userRatings?.length > 0
+                      ? 'with_padding_right'
+                      : ''
+                  }`}
                 >
-                  {isLoading
-                    ? Array.from({ length: 4 }).map((_, index) => (
-                        <SkeletonRatingCard key={index} />
-                      ))
-                    : userRatings?.length > 0 &&
-                      userRatings.map((rating: RatingProps) => {
-                        if (rating?.book) {
-                          return (
-                            <ProfileCard
-                              key={rating.id}
-                              book={rating.book}
-                              rating={rating}
-                              onUpdateReview={onUpdateReview}
-                              onCreateReview={onCreateReview}
-                              onDeleteReview={onDeleteReview}
-                            />
-                          )
-                        }
-                        return null
-                      })}
+                  {isValidatingRatings ? (
+                    Array.from({ length: 4 }).map((_, index) => (
+                      <SkeletonRatingCard key={index} />
+                    ))
+                  ) : userRatings?.length > 0 ? (
+                    userRatings.map((rating: RatingProps) => {
+                      if (rating?.book) {
+                        return (
+                          <ProfileCard
+                            key={rating.id}
+                            book={rating.book}
+                            rating={rating}
+                            onUpdateReview={onUpdateReview}
+                            onCreateReview={onCreateReview}
+                            onDeleteReview={onDeleteReview}
+                          />
+                        )
+                      }
+                      return null
+                    })
+                  ) : (
+                    <EmptyContainer content="ratings" />
+                  )}
+                  {totalPages > 1 && (
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  )}
                 </UserRatings>
               </UserRatingsContainer>
 
               <UserDetailsContainer>
-                {userId && (
-                  <UserDetails
-                    userStatistics={userStatistics}
-                    userId={userId as string}
-                    isLoading={isLoading}
-                  />
-                )}
+                <UserDetails
+                  userStatistics={userStatistics}
+                  userId={userId}
+                  isLoading={isValidatingStatistics}
+                />
               </UserDetailsContainer>
             </ProfilePageContent>
           </ProfilePageContainer>

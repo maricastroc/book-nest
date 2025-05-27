@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
-import { useAppContext, UserStatistics } from '@/contexts/AppContext'
+import { useAppContext } from '@/contexts/AppContext'
 import {
   UserProfileContainer,
   UserStatText,
@@ -16,9 +16,10 @@ import { BookOpen, BookmarkSimple, Books, UserList } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { DividerLine } from '@/styles/shared'
 import { Button } from '@/components/core/Button'
+import { UserStatistics } from '@/@types/user_statistics'
 
 interface UserDetailsProps {
-  userId: string
+  userId?: string
   userStatistics: UserStatistics | undefined
   isLoading: boolean
 }
@@ -75,7 +76,7 @@ export function UserDetails({
     },
     {
       icon: <Books />,
-      value: userStatistics?.ratings?.length,
+      value: userStatistics?.ratedBooks,
       label: 'Rated books',
     },
     {

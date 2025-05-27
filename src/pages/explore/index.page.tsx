@@ -151,7 +151,7 @@ export default function Explore() {
 
     return () => clearTimeout(timer)
   }, [search])
-  console.log(!updatedBooks?.length && !isValidating)
+
   return (
     <>
       <NextSeo title="Explore | Book Wise" />

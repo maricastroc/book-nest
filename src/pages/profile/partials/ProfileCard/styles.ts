@@ -97,13 +97,13 @@ export const BookSummaryWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  justifyContent: 'space-between',
+  justifyContent: 'flex-start',
   gap: '1rem',
   width: '100%',
   height: '100%',
 
   '@media (min-width: 480px)': {
-    gap: '0.5rem',
+    gap: '0.85rem',
   },
 })
 
