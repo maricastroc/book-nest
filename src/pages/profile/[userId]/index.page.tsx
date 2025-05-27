@@ -65,14 +65,18 @@ export default function Profile() {
     onUpdateReview,
   } = useProfileRatings(userId)
 
+  const userStatisticsRequest = userId
+    ? {
+        url: `/profile/statistics/${userId}`,
+        method: 'GET',
+      }
+    : null
+
   const {
     data: userStatisticsData,
     mutate: mutateStatistics,
     isValidating: isValidatingStatistics,
-  } = useRequest<UserStatistics>({
-    url: userId ? `/profile/statistics/${userId}` : undefined,
-    method: 'GET',
-  })
+  } = useRequest<UserStatistics>(userStatisticsRequest)
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)

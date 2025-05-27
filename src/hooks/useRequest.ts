@@ -34,7 +34,7 @@ export default function useRequest<Data = unknown, Error = unknown>(
     isValidating,
     mutate,
   } = useSWR<AxiosResponse<Data>, AxiosError<Error>>(
-    request,
+    request ?? null,
     /**
      * NOTE: Typescript thinks `request` can be `null` here, but the fetcher
      * function is actually only called by `useSWR` when it isn't.

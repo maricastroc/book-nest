@@ -57,19 +57,19 @@ export const submitBookFormSchema = z.object({
 
 export type SubmitBookFormData = z.infer<typeof submitBookFormSchema>
 
-interface UseBookFormProps {
+interface UseSubmitBookFormProps {
   isEdit: boolean
   book?: BookProps | null
   onClose: () => void
   onUpdateBook?: (book: BookProps) => void
 }
 
-export function useBookForm({
+export function useSubmitBookForm({
   isEdit,
   book,
   onClose,
   onUpdateBook,
-}: UseBookFormProps) {
+}: UseSubmitBookFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
   const [coverPreview, setCoverPreview] = useState<string | null>(null)

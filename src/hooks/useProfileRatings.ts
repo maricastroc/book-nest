@@ -35,6 +35,18 @@ export const useProfileRatings = (userId?: string) => {
     )
   }
 
+  const ratingsRequest = userId
+    ? {
+        url: `/profile/ratings/${userId}`,
+        method: 'GET',
+        params: {
+          search: debouncedSearch,
+          page: currentPage,
+          pageSize: 6,
+        },
+      }
+    : null
+
   const {
     data: ratingsData,
     mutate: mutateRatings,
@@ -47,22 +59,11 @@ export const useProfileRatings = (userId?: string) => {
       hasNextPage: boolean
       hasPreviousPage: boolean
     }
-  }>(
-    {
-      url: userId ? `/profile/ratings/${userId}` : undefined,
-      method: 'GET',
-      params: {
-        search: debouncedSearch,
-        page: currentPage,
-        pageSize: 6,
-      },
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
-      keepPreviousData: true,
-    },
-  )
+  }>(ratingsRequest, {
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    keepPreviousData: true,
+  })
 
   useEffect(() => {
     if (ratingsData) {

@@ -23,7 +23,7 @@ import { disabledCustomStyles } from '@/utils/getDisabledCustomStyles'
 import { customStyles } from '@/utils/getCustomStyles'
 import { Controller } from 'react-hook-form'
 import { BookProps } from '@/@types/book'
-import { useBookForm } from '@/hooks/useSubmitBookForm'
+import { useSubmitBookForm } from '@/hooks/useSubmitBookForm'
 
 interface SubmitBookFormModalProps {
   isEdit?: boolean
@@ -56,7 +56,7 @@ export function SubmitBookFormModal({
     errors,
     form,
     reset,
-  } = useBookForm({
+  } = useSubmitBookForm({
     isEdit,
     book,
     onClose,

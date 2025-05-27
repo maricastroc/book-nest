@@ -13,15 +13,7 @@ import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
-
-export interface UserStatistics {
-  ratings: RatingProps[] | undefined
-  readPages: number
-  booksCount: number
-  authorsCount: number
-  bestGenre: string | undefined
-  user: UserProps
-}
+import useRequest from '@/hooks/useRequest'
 
 export interface EditReviewData {
   ratingId: string
@@ -60,36 +52,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [userId, setUserId] = useState('')
 
-  const [isValidatingLoggedUser, setIsValidatingLoggedUser] = useState(false)
-
   const session = useSession()
+
+  const { data: user, isValidating: isValidatingLoggedUser } =
+    useRequest<UserProps | null>({
+      url: '/user',
+      method: 'GET',
+    })
 
   const handleSetIsValidatingReview = (value: boolean) => {
     setIsValidatingReview(value)
   }
 
-  const handleSetLoggedUser = useCallback(
-    (value: UserProps) => setLoggedUser(value),
-    [],
-  )
+  const handleSetLoggedUser = (user: UserProps) => {
+    setLoggedUser(user)
+  }
 
   const handleSetUserId = useCallback((value: string) => setUserId(value), [])
-
-  const fetchLoggedUser = async (): Promise<UserStatistics | undefined> => {
-    setIsValidatingLoggedUser(true)
-
-    if (session?.data?.user) {
-      try {
-        const response = await api.get(`/profile/${session?.data?.user.id}`)
-        setLoggedUser(response.data.profile.user)
-        return response.data.profile
-      } catch (error) {
-        handleApiError(error)
-      } finally {
-        setIsValidatingLoggedUser(false)
-      }
-    }
-  }
 
   const handleDeleteReview = async (id: string) => {
     try {
@@ -142,10 +121,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   useEffect(() => {
-    if (session?.data?.user) {
-      fetchLoggedUser()
+    if (session?.data?.user && user) {
+      setLoggedUser(user)
     }
-  }, [session?.data?.user])
+  }, [session?.data?.user, user])
 
   const contextValue = useMemo(
     () => ({
