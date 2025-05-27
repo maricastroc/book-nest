@@ -32,7 +32,6 @@ export const ProfilePageWrapper = styled('div', {
 
   '@media (min-width: 1800px)': {
     minWidth: 'auto',
-    maxWidth: '80rem',
     margin: '0 auto',
   },
 })
@@ -138,10 +137,6 @@ export const UserRatingsContainer = styled('div', {
     minWidth: '26rem',
     maxWidth: '100%',
     gap: 0,
-  },
-
-  '@media (min-width: 1200px)': {
-    maxWidth: '50rem',
   },
 })
 

@@ -5,10 +5,6 @@ export const Container = styled('div', {
   flexDirection: 'column',
   position: 'fixed',
   left: '1.5rem',
-
-  '@media(min-width: 1800px)': {
-    position: 'initial',
-  },
 })
 
 export const BackgroundContainer = styled('div', {

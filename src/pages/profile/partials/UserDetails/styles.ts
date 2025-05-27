@@ -45,6 +45,10 @@ export const UserStatsWrapper = styled('div', {
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  '@media (min-width: 1400px)': {
+    padding: '0 2rem',
+  },
 })
 
 export const UserStatItem = styled('div', {
@@ -87,7 +91,6 @@ export const UserStatItem = styled('div', {
   },
 
   '@media (min-width: 1024px)': {
-    maxWidth: '17rem',
     justifyContent: 'center',
 
     svg: {

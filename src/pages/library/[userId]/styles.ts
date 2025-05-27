@@ -31,7 +31,6 @@ export const UserLibraryPageWrapper = styled('div', {
 
   '@media (min-width: 1800px)': {
     minWidth: 'auto',
-    maxWidth: '80rem',
     margin: '0 auto',
   },
 })

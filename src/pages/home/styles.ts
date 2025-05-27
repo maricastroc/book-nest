@@ -111,10 +111,11 @@ export const HomePageHeading = styled('div', {
 
 export const HomePageContent = styled('div', {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column-reverse',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
+  paddingBottom: '2.5rem',
 
   '@media (min-width: 768px)': {
     justifyContent: 'flex-start',
@@ -190,7 +191,6 @@ export const LastRatingsTitle = styled('p', {
 export const PopularBooksWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  marginTop: '2.5rem',
   marginBottom: '2rem',
   width: '100%',
   gap: '1rem',
@@ -202,7 +202,7 @@ export const PopularBooksWrapper = styled('div', {
   '@media (min-width: 1200px)': {
     marginTop: 0,
     marginBottom: 0,
-    width: '45rem',
+    width: '40rem',
     overflowY: 'scroll',
     height: '100%',
   },
@@ -248,7 +248,7 @@ export const PopularBooksContent = styled('div', {
     flexDirection: 'column',
   },
 
-  '@media (min-width: 910px)': {
+  '@media (min-width: 840px)': {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
   },
