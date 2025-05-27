@@ -42,10 +42,13 @@ export const DropdownActions = ({
   onToggleDropdown,
   onToggleEditSection,
 }: Props) => {
-  const isEditDisabled = !['read', 'did_not_finish'].includes(
-    readingStatus || '',
-  )
-
+  const isEditDisabled = ![
+    'read',
+    'did_not_finish',
+    'Read',
+    'Did not Finish',
+  ].includes(readingStatus || '')
+  console.log(isEditDisabled)
   const tooltipMessage =
     "Available only for books marked as 'Read' or 'Did Not Finish'"
 

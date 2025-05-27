@@ -193,7 +193,7 @@ export const DividerLine = styled('span', {
   },
 })
 
-export const EmptyCardContent = styled('div', {
+export const EmptyCardContent = styled('button', {
   color: '$gray400',
   display: 'flex',
   cursor: 'pointer',
@@ -201,7 +201,9 @@ export const EmptyCardContent = styled('div', {
   justifyContent: 'center',
   alignItems: 'center',
   minWidth: '100%',
+  backgroundColor: 'transparent',
   minHeight: '4.5rem',
+  fontSize: '0.95rem',
   height: '100%',
   borderRadius: 8,
   border: '1px dashed $gray400',
@@ -211,7 +213,7 @@ export const EmptyCardContent = styled('div', {
     fontSize: '1.1rem',
   },
 
-  '&:hover': {
+  '&:not(:disabled):hover': {
     color: '$gray200',
     border: '1px dashed $gray200',
     transition: '200ms',
@@ -219,5 +221,9 @@ export const EmptyCardContent = styled('div', {
     svg: {
       color: '$gray200',
     },
+  },
+
+  '&:disabled': {
+    cursor: 'not-allowed !important',
   },
 })

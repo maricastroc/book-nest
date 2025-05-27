@@ -58,6 +58,13 @@ export function ProfileCard({
 
   const isMobile = useScreenSize(480)
 
+  const isEditDisabled = ![
+    'read',
+    'did_not_finish',
+    'Read',
+    'Did not Finish',
+  ].includes(book.readingStatus || '')
+  console.log(book.readingStatus)
   const deleteReview = async () => {
     if (loggedUser) {
       await handleDeleteReview(rating.id)
@@ -127,7 +134,7 @@ export function ProfileCard({
                       maxHeight="5.8rem"
                       description={rating.description}
                     />
-                  ) : loggedUser?.id === rating.userId ? (
+                  ) : loggedUser?.id === rating.userId && !isEditDisabled ? (
                     <EmptyCardContent
                       onClick={() => setIsEditUserReviewCardOpen(true)}
                     >
@@ -135,7 +142,7 @@ export function ProfileCard({
                       <Plus />
                     </EmptyCardContent>
                   ) : (
-                    <EmptyCardContent>
+                    <EmptyCardContent disabled>
                       No description available.
                     </EmptyCardContent>
                   ))}

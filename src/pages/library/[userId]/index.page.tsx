@@ -65,19 +65,36 @@ export default function Library() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const request = userId
+  const submittedBooksRequest = userId
     ? {
-        url: '/library',
+        url: '/library/submitted_books',
         method: 'GET',
         params: { userId },
       }
     : null
 
-  const { data, isValidating } = useRequest<{
+  const booksByStatusRequest = userId
+    ? {
+        url: '/library/books_by_status',
+        method: 'GET',
+        params: { userId },
+      }
+    : null
+
+  const {
+    data: submittedBooksData,
+    isValidating: isValidatingSubmittedBooksData,
+  } = useRequest<{
     submittedBooks: BookProps[]
-    booksByStatus: BooksByStatusProps
     user: UserProps
-  }>(request)
+  }>(submittedBooksRequest)
+
+  const {
+    data: booksByStatusData,
+    isValidating: isValidatingBooksByStatusData,
+  } = useRequest<{
+    booksByStatus: BooksByStatusProps
+  }>(booksByStatusRequest)
 
   const onUpdateSubmittedBook = (book: BookProps) => {
     setSubmittedBooks((prevBooks) => {
@@ -146,12 +163,17 @@ export default function Library() {
   }
 
   useEffect(() => {
-    if (data) {
-      setBooksByStatus(data.booksByStatus)
-      setSubmittedBooks(data.submittedBooks)
-      setUserInfo(data.user as UserInfo)
+    if (submittedBooksData) {
+      setSubmittedBooks(submittedBooksData.submittedBooks)
+      setUserInfo(submittedBooksData.user as UserInfo)
     }
-  }, [data])
+  }, [submittedBooksData])
+
+  useEffect(() => {
+    if (booksByStatusData) {
+      setBooksByStatus(booksByStatusData.booksByStatus)
+    }
+  }, [booksByStatusData])
 
   return (
     <>
@@ -195,7 +217,7 @@ export default function Library() {
             </UserLibraryHeading>
 
             <UserLibraryContent>
-              {isValidating ? (
+              {isValidatingBooksByStatusData ? (
                 <ListByBookStatusContainer>
                   {Array.from({ length: 3 }, (_, index) => (
                     <SkeletonBookStatusList key={index} />
@@ -220,7 +242,7 @@ export default function Library() {
                     onUpdateBookByStatus(book)
                     onUpdateSubmittedBook(book)
                   }}
-                  isValidating={isValidating}
+                  isValidating={isValidatingSubmittedBooksData}
                   onOpenDetails={(book: BookProps) => {
                     setSelectedBook(book)
                     setOpenLateralMenu(true)
