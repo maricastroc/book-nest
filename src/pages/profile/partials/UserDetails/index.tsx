@@ -14,9 +14,9 @@ import { EditProfileModal } from '../../../../components/modals/EditProfileModal
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { BookOpen, BookmarkSimple, Books, UserList } from 'phosphor-react'
 import { useRouter } from 'next/router'
-import { DividerLine } from '@/styles/shared'
 import { Button } from '@/components/core/Button'
 import { UserStatistics } from '@/@types/user_statistics'
+import { DividerLine } from '@/components/shared/DividerLine'
 
 interface UserDetailsProps {
   userId?: string

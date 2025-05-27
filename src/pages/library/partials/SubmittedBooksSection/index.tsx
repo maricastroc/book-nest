@@ -18,12 +18,12 @@ import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { BookCard } from '@/components/cards/BookCard'
 import { BookProps } from '@/@types/book'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
-import { DividerLine } from '@/styles/shared'
 import { useRouter } from 'next/router'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { Button } from '@/components/core/Button'
 import { UserProps } from '@/@types/user'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
+import { DividerLine } from '@/components/shared/DividerLine'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void

@@ -186,7 +186,6 @@ export function useSubmitBookForm({
         return
       }
 
-      console.log(googleBook)
       setIsValidBook(true)
       setValue('name', googleBook.title)
       setValue('author', googleBook.authors?.[0])

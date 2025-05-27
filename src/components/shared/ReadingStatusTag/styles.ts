@@ -1,6 +1,6 @@
 import { styled } from '@/styles'
 
-export const ReadNoticeContainer = styled('div', {
+export const Container = styled('div', {
   display: 'flex',
   position: 'absolute',
   top: 0,

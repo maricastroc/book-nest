@@ -17,7 +17,7 @@ import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useRouter } from 'next/router'
 import { RatingProps } from '@/@types/rating'
 import { useScreenSize } from '@/hooks/useScreenSize'
-import { ReadNotice } from '@/styles/shared'
+
 import { TextBox } from '@/components/shared/TextBox'
 
 interface RatingCardProps {
@@ -39,12 +39,6 @@ export function RatingCard({
 
   return (
     <RatingCardBox>
-      {rating?.book && rating?.book.alreadyRead && (
-        <ReadNotice>
-          <p>READ</p>
-        </ReadNotice>
-      )}
-
       <RatingCardHeader>
         <UserDetailsWrapper>
           <Avatar

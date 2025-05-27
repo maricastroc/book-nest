@@ -1,10 +1,4 @@
-import {
-  Binoculars,
-  CaretLeft,
-  CaretRight,
-  MagnifyingGlass,
-  X,
-} from 'phosphor-react'
+import { Binoculars, CaretLeft, CaretRight } from 'phosphor-react'
 import {
   Categories,
   SelectCategoryButton,
@@ -31,12 +25,12 @@ import { SkeletonCategories } from '@/pages/explore/partials/SkeletonCategories'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { MobileHeader } from '@/components/shared/MobileHeader'
-import { SearchBar } from '@/styles/shared'
 import useRequest from '@/hooks/useRequest'
 import { Pagination } from '@/components/shared/Pagination'
 import { ExploreCard } from './partials/ExploreCard'
 import { usePerPage } from '@/hooks/usePerPage'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { SearchBar } from '@/components/shared/SearchBar'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -176,28 +170,18 @@ export default function Explore() {
                   <Binoculars />
                   <h2>Explore</h2>
                 </HeadingTitle>
-                <SearchBar>
-                  <input
-                    type="text"
-                    placeholder="Search for author or title"
-                    value={search}
-                    onChange={(e) => {
-                      setCurrentPage(1)
-                      setSearch(e.target.value)
-                    }}
-                    spellCheck={false}
-                  />
-                  {search === '' ? (
-                    <MagnifyingGlass />
-                  ) : (
-                    <X
-                      onClick={() => {
-                        setCurrentPage(1)
-                        setSearch('')
-                      }}
-                    />
-                  )}
-                </SearchBar>
+                <SearchBar
+                  placeholder="Search for Author or Title"
+                  search={search}
+                  onChange={(e) => {
+                    setCurrentPage(1)
+                    setSearch(e.target.value)
+                  }}
+                  onClick={() => {
+                    setCurrentPage(1)
+                    setSearch('')
+                  }}
+                />
               </TitleAndSearch>
               <ScrollContainer>
                 <Categories ref={containerRef}>

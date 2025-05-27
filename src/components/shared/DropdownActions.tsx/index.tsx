@@ -73,7 +73,7 @@ export const DropdownActions = ({
     <DropdownItem
       data-tooltip-content={tooltipMessage}
       data-tooltip-id={EDIT_TOOLTIP_ID}
-      disabled={isEditDisabled}
+      disabled={isEditDisabled && !isSubmission}
       className="edit_icon"
       onClick={handleEditClick}
     >
@@ -86,7 +86,7 @@ export const DropdownActions = ({
     <Dialog.Root open={isDeleteSectionOpen} onOpenChange={handleDeleteClick}>
       <Dialog.Trigger asChild>
         <DropdownItem
-          disabled={isEditDisabled}
+          disabled={isEditDisabled && !isSubmission}
           className="delete_icon"
           onClick={handleDeleteClick}
           data-tooltip-id={DELETE_TOOLTIP_ID}
@@ -142,7 +142,7 @@ export const DropdownActions = ({
               {renderDeleteItem()}
             </>
           )}
-          {isEditDisabled && renderTooltips()}
+          {isEditDisabled && !isSubmission && renderTooltips()}
         </Dropdown>
       )}
     </>

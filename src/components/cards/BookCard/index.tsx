@@ -13,7 +13,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useAppContext } from '@/contexts/AppContext'
 import { useRef, useState } from 'react'
 import { SubmitBookFormModal } from '@/pages/library/partials/SubmitBookFormModal'
-import { ReadNotice } from '@/components/shared/ReadNotice'
+import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
 import { useClickOutside } from '@/hooks/useClickOutside'
@@ -71,12 +71,12 @@ export function BookCard({
         {isLibraryPage
           ? libraryPageUserId === loggedUser?.id &&
             book?.readingStatus && (
-              <ReadNotice
+              <ReadingStatusTag
                 readingStatus={formatToSnakeCase(book.readingStatus)}
               />
             )
           : book?.readingStatus && (
-              <ReadNotice
+              <ReadingStatusTag
                 readingStatus={formatToSnakeCase(book.readingStatus)}
               />
             )}

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
-import { MagnifyingGlass, User, X } from 'phosphor-react'
+import { User } from 'phosphor-react'
 import { useRouter } from 'next/router'
 
 import { Sidebar } from '@/components/shared/Sidebar'
@@ -25,7 +25,6 @@ import {
   ProfilePageHeading,
   ProfilePageHeadingTitle,
   ProfilePageContainer,
-  SearchBar,
   UserDetailsContainer,
   ProfilePageWrapper,
   UserRatingsTitle,
@@ -33,6 +32,7 @@ import {
 
 import { RatingProps } from '@/@types/rating'
 import { UserStatistics } from '@/@types/user_statistics'
+import { SearchBar } from '@/components/shared/SearchBar'
 
 export default function Profile() {
   const router = useRouter()
@@ -114,28 +114,19 @@ export default function Profile() {
             <ProfilePageContent>
               <UserRatingsContainer>
                 <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
-                <SearchBar>
-                  <input
-                    type="text"
-                    placeholder="Search for author or title"
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value)
-                      setCurrentPage(1)
-                    }}
-                    spellCheck={false}
-                  />
-                  {search === '' ? (
-                    <MagnifyingGlass />
-                  ) : (
-                    <X
-                      onClick={() => {
-                        setSearch('')
-                        setCurrentPage(1)
-                      }}
-                    />
-                  )}
-                </SearchBar>
+                <SearchBar
+                  fullWidth
+                  placeholder="Search for Author or Title"
+                  search={search}
+                  onChange={(e) => {
+                    setCurrentPage(1)
+                    setSearch(e.target.value)
+                  }}
+                  onClick={() => {
+                    setCurrentPage(1)
+                    setSearch('')
+                  }}
+                />
                 <UserRatings
                   className={`${
                     isValidatingRatings || userRatings?.length > 0

@@ -6,7 +6,7 @@ import {
   BookCardBox,
 } from './styles'
 import { useAppContext } from '@/contexts/AppContext'
-import { ReadNotice } from '@/components/shared/ReadNotice'
+import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 
 interface BookCardProps {
@@ -52,12 +52,12 @@ export function ExploreCard({
         {isLibraryPage
           ? libraryPageUserId === loggedUser?.id &&
             book?.readingStatus && (
-              <ReadNotice
+              <ReadingStatusTag
                 readingStatus={formatToSnakeCase(book.readingStatus)}
               />
             )
           : book?.readingStatus && (
-              <ReadNotice
+              <ReadingStatusTag
                 readingStatus={formatToSnakeCase(book.readingStatus)}
               />
             )}

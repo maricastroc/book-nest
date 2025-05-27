@@ -6,70 +6,22 @@ import {
   LogoAndLinksWrapper,
   Overlay,
 } from './styles'
-import {
-  Binoculars,
-  Books,
-  ChartLineUp,
-  SignIn,
-  SignOut,
-  User,
-  Users,
-} from 'phosphor-react'
-import {
-  PageBtnWrapper,
-  SidebarProfileContainer,
-  PageBtn,
-  SignInButton,
-  SignOutContainer,
-  SignInContainer,
-} from '@/styles/shared'
+import { Binoculars, Books, ChartLineUp, User, Users } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '@/contexts/AppContext'
-import { ComponentType, useCallback, useState } from 'react'
-import { Avatar } from '@/components/shared/Avatar'
-import { SkeletonUserSidebar } from '@/components/skeletons/SkeletonUserSidebar'
-import { SignInModal } from '../../modals/SignInModal'
-import { signOut } from 'next-auth/react'
-import { toast } from 'react-toastify'
 import Image from 'next/image'
 import Logo from '../../../../public/assets/logo.svg'
+import { NavigationItem } from '../NavigationItem'
+import { LogoutContainer } from '../LogoutContainer'
 
 interface Props {
   onClose: () => void
 }
 
-interface NavigationItemProps {
-  active: boolean
-  onClick: () => void
-  icon: ComponentType
-  label: string
-}
-
-const NavigationItem: React.FC<NavigationItemProps> = ({
-  active,
-  onClick,
-  icon: Icon,
-  label,
-}) => (
-  <PageBtnWrapper>
-    <PageBtn className={active ? 'active' : ''} onClick={onClick}>
-      <Icon />
-      <p>{label}</p>
-    </PageBtn>
-  </PageBtnWrapper>
-)
-
 export function MobileSidebar({ onClose }: Props) {
   const router = useRouter()
 
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
-
-  const { loggedUser, isValidatingLoggedUser } = useAppContext()
-
-  const handleLogout = useCallback(() => {
-    signOut({ callbackUrl: '/' })
-    toast.success('See you soon!')
-  }, [])
+  const { loggedUser } = useAppContext()
 
   return (
     <Dialog.Portal>
@@ -127,48 +79,7 @@ export function MobileSidebar({ onClose }: Props) {
               )}
             </ItemsContainer>
           </LogoAndLinksWrapper>
-          {loggedUser ? (
-            <SidebarProfileContainer>
-              {isValidatingLoggedUser ? (
-                <SkeletonUserSidebar />
-              ) : (
-                <>
-                  <Avatar
-                    isClickable
-                    variant="medium"
-                    isLoading={isValidatingLoggedUser}
-                    avatarUrl={loggedUser?.avatarUrl}
-                    onClick={() => {
-                      const currentPath = router.asPath
-                      const targetPath = currentPath.includes('/profile/')
-                        ? `/profile/${loggedUser.id}`
-                        : `profile/${loggedUser.id}`
-
-                      router.push(targetPath)
-                    }}
-                  />
-                  <SignOutContainer onClick={handleLogout}>
-                    <p>{loggedUser.name.split(' ')[0]}</p>
-                    <SignOut />
-                  </SignOutContainer>
-                </>
-              )}
-            </SidebarProfileContainer>
-          ) : (
-            <SignInContainer>
-              <Dialog.Root>
-                <Dialog.Trigger asChild>
-                  <SignInButton onClick={() => setIsSignInModalOpen(true)}>
-                    <p>Login</p>
-                    <SignIn />
-                  </SignInButton>
-                </Dialog.Trigger>
-                {isSignInModalOpen && (
-                  <SignInModal onClose={() => setIsSignInModalOpen(false)} />
-                )}
-              </Dialog.Root>
-            </SignInContainer>
-          )}
+          <LogoutContainer />
         </LateralMenuWrapper>
       </Content>
     </Dialog.Portal>

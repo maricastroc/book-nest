@@ -65,15 +65,19 @@ export default function Library() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
+  const request = userId
+    ? {
+        url: '/library',
+        method: 'GET',
+        params: { userId },
+      }
+    : null
+
   const { data, isValidating } = useRequest<{
     submittedBooks: BookProps[]
     booksByStatus: BooksByStatusProps
     user: UserProps
-  }>({
-    url: '/library',
-    method: 'GET',
-    params: { userId },
-  })
+  }>(request)
 
   const onUpdateSubmittedBook = (book: BookProps) => {
     setSubmittedBooks((prevBooks) => {

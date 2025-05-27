@@ -54,11 +54,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const session = useSession()
 
+  const userRequest = session?.data?.user
+    ? {
+        url: `/user`,
+        method: 'GET',
+      }
+    : null
+
   const { data: user, isValidating: isValidatingLoggedUser } =
-    useRequest<UserProps | null>({
-      url: '/user',
-      method: 'GET',
-    })
+    useRequest<UserProps | null>(userRequest)
 
   const handleSetIsValidatingReview = (value: boolean) => {
     setIsValidatingReview(value)
@@ -121,10 +125,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   useEffect(() => {
-    if (session?.data?.user && user) {
+    if (user) {
       setLoggedUser(user)
     }
-  }, [session?.data?.user, user])
+  }, [user])
 
   const contextValue = useMemo(
     () => ({

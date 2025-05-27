@@ -8,64 +8,16 @@ import {
 import Image from 'next/image'
 import SidebarBackground from '../../../../public/assets/sidebar.svg'
 import Logo from '../../../../public/assets/logo.svg'
-import {
-  Binoculars,
-  Books,
-  ChartLineUp,
-  SignIn,
-  SignOut,
-  User,
-  Users,
-} from 'phosphor-react'
+import { Binoculars, Books, ChartLineUp, User, Users } from 'phosphor-react'
 import { useRouter } from 'next/router'
-import { signOut } from 'next-auth/react'
-import { toast } from 'react-toastify'
-import { useCallback, ComponentType } from 'react'
-import { Avatar } from '../Avatar'
 import { useAppContext } from '@/contexts/AppContext'
-import { SkeletonUserSidebar } from '@/components/skeletons/SkeletonUserSidebar'
-import {
-  PageBtn,
-  PageBtnWrapper,
-  SignInButton,
-  SignOutContainer,
-  SidebarProfileContainer,
-} from '@/styles/shared'
-
-interface NavigationItemProps {
-  active: boolean
-  onClick: () => void
-  icon: ComponentType
-  label: string
-}
-
-const NavigationItem: React.FC<NavigationItemProps> = ({
-  active,
-  onClick,
-  icon: Icon,
-  label,
-}) => (
-  <PageBtnWrapper>
-    <PageBtn
-      style={{ paddingLeft: '1.5rem' }}
-      active={active}
-      onClick={onClick}
-    >
-      <Icon />
-      <p>{label}</p>
-    </PageBtn>
-  </PageBtnWrapper>
-)
+import { NavigationItem } from '../NavigationItem'
+import { LogoutContainer } from '../LogoutContainer'
 
 export function Sidebar() {
   const router = useRouter()
 
-  const { loggedUser, isValidatingLoggedUser } = useAppContext()
-
-  const handleLogout = useCallback(() => {
-    signOut({ callbackUrl: '/' })
-    toast.success('See you soon!')
-  }, [])
+  const { loggedUser } = useAppContext()
 
   return (
     <Container>
@@ -122,39 +74,7 @@ export function Sidebar() {
               )}
             </ItemsContainer>
           </SidebarMain>
-          {loggedUser ? (
-            <SidebarProfileContainer>
-              {isValidatingLoggedUser ? (
-                <SkeletonUserSidebar />
-              ) : (
-                <>
-                  <Avatar
-                    isClickable
-                    isLoading={isValidatingLoggedUser}
-                    avatarUrl={loggedUser?.avatarUrl}
-                    onClick={() => {
-                      const currentPath = router.asPath
-
-                      const targetPath = currentPath.includes('/profile/')
-                        ? `/profile/${loggedUser.id}`
-                        : `/profile/${loggedUser.id}`
-
-                      router.push(targetPath)
-                    }}
-                  />
-                  <SignOutContainer onClick={handleLogout}>
-                    <p>{loggedUser.name.split(' ')[0]}</p>
-                    <SignOut />
-                  </SignOutContainer>
-                </>
-              )}
-            </SidebarProfileContainer>
-          ) : (
-            <SignInButton onClick={() => router.push('/')}>
-              <p>Login</p>
-              <SignIn />
-            </SignInButton>
-          )}
+          <LogoutContainer />
         </SidebarContent>
         <Image
           src={SidebarBackground}

@@ -15,7 +15,7 @@ export function SignInModal({ onClose }: Props) {
 
   return (
     <Dialog.Portal>
-      <BaseModal title="You're not logged in!" onClose={onClose}>
+      <BaseModal title="You're logged out!" onClose={onClose}>
         <p>
           Log in to save your favorite books, share your thoughts through
           reviews, and enjoy everything our platform has to offer!

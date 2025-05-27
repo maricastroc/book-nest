@@ -1,4 +1,4 @@
-import { Users as UsersIcon, MagnifyingGlass, X } from 'phosphor-react'
+import { Users as UsersIcon } from 'phosphor-react'
 import {
   UsersPageWrapper,
   UsersPageContainer,
@@ -17,13 +17,13 @@ import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { UserCard } from './partials/UserCard'
-import { SearchBar } from '@/styles/shared'
 import { SkeletonUserCard } from './partials/SkeletonUserCard'
 import useRequest from '@/hooks/useRequest'
 import { UserProps } from 'next-auth'
 import { useEffect, useState } from 'react'
 import { Pagination } from '@/components/shared/Pagination'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { SearchBar } from '@/components/shared/SearchBar'
 
 export interface UsersProps {
   categories: CategoryProps[]
@@ -98,25 +98,15 @@ export default function Users() {
                   <UsersIcon />
                   <h2>Readers</h2>
                 </HeadingTitle>
-                <SearchBar>
-                  <input
-                    type="text"
-                    placeholder="Search for reader's name"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    spellCheck={false}
-                  />
-                  {search === '' ? (
-                    <MagnifyingGlass />
-                  ) : (
-                    <X
-                      onClick={() => {
-                        setSearch('')
-                        setCurrentPage(1)
-                      }}
-                    />
-                  )}
-                </SearchBar>
+                <SearchBar
+                  search={search}
+                  onClick={() => {
+                    setSearch('')
+                    setCurrentPage(1)
+                  }}
+                  placeholder={`Search for reader's name`}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </TitleAndSearch>
             </UsersPageHeading>
             <UsersPageContent>

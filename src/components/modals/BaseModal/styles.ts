@@ -19,14 +19,10 @@ export const Overlay = styled(RadixOverlay, {
 
 export const Header = styled('div', {
   display: 'flex',
-  alignItems: 'start',
+  alignItems: 'center',
   justifyContent: 'space-between',
   width: '100%',
   marginBottom: '1.5rem',
-
-  '@media (min-width: 480px)': {
-    alignItems: 'center',
-  },
 })
 
 export const Content = styled(RadixContent, {
@@ -82,10 +78,14 @@ export const Content = styled(RadixContent, {
 
 export const Title = styled(RadixTitle, {
   color: '$gray100',
-  fontSize: '$3xl',
+  fontSize: '$2xl',
   textAlign: 'start',
-  width: '100%',
+  width: '90%',
   fontWeight: 300,
+
+  '@media (min-width: 420px)': {
+    fontSize: '$3xl',
+  },
 
   variants: {
     hasAlignMiddleContent: {

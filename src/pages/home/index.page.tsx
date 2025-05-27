@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   HomePageWrapper,
   HomePageHeading,
@@ -64,6 +65,14 @@ export default function Home() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
+  const userLatestRatingRequest = loggedUser
+    ? {
+        url: `/ratings/user_latest`,
+        method: 'GET',
+        params: { userId: loggedUser?.id },
+      }
+    : null
+
   const { data: popularBooks } = useRequest<BookProps[]>({
     url: '/books/popular',
     method: 'GET',
@@ -78,11 +87,7 @@ export default function Home() {
     data: userLatestRatingData,
     mutate: mutateUserLatestRating,
     isValidating: isValidatingUserLatestReading,
-  } = useRequest<RatingProps | null>({
-    url: '/ratings/user_latest',
-    method: 'GET',
-    params: { userId: loggedUser?.id },
-  })
+  } = useRequest<RatingProps | null>(userLatestRatingRequest)
 
   const onUpdateBook = async (updatedBook: BookProps) => {
     setUpdatedPopularBooks((prevBooks) => {
@@ -95,6 +100,12 @@ export default function Home() {
       return updatedBooks
     })
   }
+
+  useEffect(() => {
+    if (loggedUser?.id) {
+      mutateUserLatestRating()
+    }
+  }, [loggedUser])
 
   useEffect(() => {
     if (popularBooks) {
@@ -176,10 +187,10 @@ export default function Home() {
               <PopularBooksWrapper>
                 <PopularBooksTitle>
                   <p>Popular Books</p>
-                  <span onClick={() => router.push('/explore')}>
+                  <button onClick={() => router.push('/explore')}>
                     View All
                     <CaretRight />
-                  </span>
+                  </button>
                 </PopularBooksTitle>
                 <PopularBooksContent>
                   {!updatedPopularBooks?.length
