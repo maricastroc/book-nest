@@ -179,13 +179,18 @@ export function RatingCardForm({
           <UserActionsWrapper>
             <ActionButton
               type="button"
+              className="delete_icon"
               disabled={isSubmitting}
               onClick={() => onClose()}
             >
-              <X className="delete_icon" />
+              <X />
             </ActionButton>
-            <ActionButton type="submit" disabled={isSubmitting}>
-              <Check className="edit_icon" />
+            <ActionButton
+              className="edit_icon"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              <Check />
             </ActionButton>
           </UserActionsWrapper>
         </FooterWrapper>

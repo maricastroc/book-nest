@@ -121,7 +121,7 @@ export default function Profile() {
       loadUserStatistics()
     }
   }, [userId, search])
-
+  console.log(userRatings)
   return (
     <>
       <NextSeo title="Profile | Book Wise" />

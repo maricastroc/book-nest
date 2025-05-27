@@ -5,29 +5,31 @@ export const StyledActionButton = styled('button', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: 'solid 1px $blue600',
+  border: 'none',
   backgroundColor: 'transparent',
-  borderRadius: 8,
   padding: '0.3rem',
+  borderRadius: 8,
 
   svg: {
-    fontSize: '1.2rem',
+    fontSize: '1.35rem',
     transition: '200ms all',
+  },
 
-    '&.edit_icon': {
-      color: '$green100',
+  '&.edit_icon': {
+    backgroundColor: '$purple200',
+    color: '$gray100',
 
-      '&:hover': {
-        filter: 'brightness(1.3)',
-      },
+    '&:hover': {
+      filter: 'brightness(1.3)',
     },
+  },
 
-    '&.delete_icon': {
-      color: '$red300',
+  '&.delete_icon': {
+    backgroundColor: '$red300',
+    color: '$gray100',
 
-      '&:hover': {
-        filter: 'brightness(1.3)',
-      },
+    '&:hover': {
+      filter: 'brightness(1.3)',
     },
   },
 

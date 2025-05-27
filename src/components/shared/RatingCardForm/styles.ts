@@ -21,6 +21,7 @@ export const RatingCardFormHeader = styled('div', {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '1rem',
+  marginBottom: '0.2rem',
 
   '@media (min-width: 580px)': {
     flexDirection: 'row',
@@ -51,6 +52,7 @@ export const UserDetailsWrapper = styled('div', {
 export const ReviewFormWrapper = styled('div', {
   position: 'relative',
   width: '100%',
+  backgroundColor: '$gray700',
 })
 
 export const ReviewForm = styled('textarea', {
@@ -58,14 +60,14 @@ export const ReviewForm = styled('textarea', {
   marginTop: '1rem',
   backgroundColor: 'transparent',
   padding: '0.875rem 0.875rem 1.25rem',
-  border: 'solid 1px $blue600',
+  border: '1.5px solid $blue600',
   borderRadius: 8,
   height: 188,
   minHeight: 80,
   color: '$gray300',
   lineHeight: '1.45rem',
   fontSize: '0.9rem',
-  resize: 'vertical',
+  resize: 'none',
 
   '&:focus': {
     outline: 'none',
