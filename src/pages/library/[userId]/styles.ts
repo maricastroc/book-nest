@@ -82,6 +82,10 @@ export const UserLibraryContent = styled('div', {
   justifyContent: 'flex-start',
   height: '100%',
 
+  '@media (min-width: 765px)': {
+    padding: '0 2rem 0 0',
+  },
+
   '@media (min-width: 1024px)': {
     padding: '0 3em 0 0',
   },

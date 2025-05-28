@@ -1,6 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
 
+const gridBreakpoints: [number, number][] = [
+  [1800, 7],
+  [1430, 6],
+  [1270, 5],
+  [1200, 4],
+  [1180, 7],
+  [1070, 6],
+  [880, 5],
+  [770, 4],
+  [640, 5],
+  [530, 4],
+  [380, 3],
+  [0, 1], // fallback
+]
+
+function getColumnsForWidth(width: number): number {
+  for (const [breakpoint, columns] of gridBreakpoints) {
+    if (width >= breakpoint) return columns
+  }
+  return 1
+}
+
 export function usePerPage(): number {
   const [perPage, setPerPage] = useState(12)
 
@@ -9,19 +31,15 @@ export function usePerPage(): number {
       if (typeof window === 'undefined') return
 
       const width = window.innerWidth
-      let newPerPage = 12
+      const columns = getColumnsForWidth(width)
 
-      if (width < 640) newPerPage = 8 // mobile
-      else if (width < 768) newPerPage = 10 // tablet pequeno
-      else if (width < 1024) newPerPage = 12 // tablet
-      else if (width < 1280) newPerPage = 12 // laptop
-      else newPerPage = 12 // desktop grande
+      const visibleRows = 2
+      const newPerPage = columns * visibleRows
 
       setPerPage(newPerPage)
     }, 100)
 
     handleResize()
-
     window.addEventListener('resize', handleResize)
 
     return () => {

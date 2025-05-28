@@ -1,4 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { styled } from '@/styles'
+
+const gridBreakpoints = {
+  380: 3,
+  530: 4,
+  640: 5,
+  770: 4,
+  880: 5,
+  1070: 6,
+  1180: 7,
+  1200: 4,
+  1270: 5,
+  1430: 6,
+  1800: 7,
+}
+
+const responsiveGrid = Object.entries(gridBreakpoints).reduce(
+  (acc, [bp, cols]) => {
+    acc[`@media (min-width: ${bp}px)`] = {
+      gridTemplateColumns: `repeat(${cols}, 1fr)`,
+    }
+    return acc
+  },
+  {} as Record<string, any>,
+)
 
 export const AllBooksWrapper = styled('div', {
   display: 'flex',
@@ -38,7 +63,8 @@ export const AllBooksContent = styled('div', {
   backgroundColor: '$gray700',
   alignContent: 'flex-start',
   width: '100%',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  ...responsiveGrid,
 
   '@media (min-width: 480px)': {
     padding: '2rem 1rem',
