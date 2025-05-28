@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar } from '@/components/shared/Avatar'
-import { useAppContext } from '@/contexts/AppContext'
 import * as Dialog from '@radix-ui/react-dialog'
 import {
-  EmptyBooksContainer,
   SkeletonContainer,
+  SubmittedBooksContent,
   SubmittedBooksHeading,
   SubmittedBooksSectionWrapper,
   SubmittedBooksWrapper,
@@ -24,6 +23,7 @@ import { Button } from '@/components/core/Button'
 import { UserProps } from '@/@types/user'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { DividerLine } from '@/components/shared/DividerLine'
+import { OutlineButton } from '@/components/core/OutlineButton'
 
 interface SubmittedBooksSectionProps {
   onOpenDetails: (book: BookProps) => void
@@ -44,8 +44,6 @@ export function SubmittedBooksSection({
 }: SubmittedBooksSectionProps) {
   const router = useRouter()
 
-  const { loggedUser } = useAppContext()
-
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
 
   const [dateInfo, setDateInfo] = useState({
@@ -57,8 +55,6 @@ export function SubmittedBooksSection({
   const [updatedSubmittedBooks, setUpdatedSubmittedBooks] = useState<
     BookProps[] | null
   >([])
-
-  const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
 
   useEffect(() => {
     if (submittedBooks) {
@@ -108,71 +104,47 @@ export function SubmittedBooksSection({
             <DividerLine />
           </UserProfileInfo>
           <SubmittedBooksWrapper>
-            <SubmittedBooksHeading>
-              <p>{`${
-                isLoggedUser
-                  ? 'Your Submitted Books'
-                  : `${userInfo?.name?.split(' ')[0]}'s Submitted Books`
-              }`}</p>
-            </SubmittedBooksHeading>
-            {isValidating ? (
-              Array.from({ length: 4 }).map((_, index) => (
-                <SkeletonBookCard key={index} />
-              ))
-            ) : updatedSubmittedBooks && updatedSubmittedBooks.length ? (
-              <>
-                {updatedSubmittedBooks.map((book) => (
-                  <BookCard
-                    isLibraryPage
-                    libraryPageUserId={userId}
-                    size="smaller"
-                    key={book.id}
-                    book={book}
-                    onUpdateBook={onUpdateBook}
-                    onOpenDetails={() => {
-                      onOpenDetails(book)
-                    }}
-                    onClose={() => setIsSubmitBookFormOpen(false)}
-                  />
-                ))}
-                {isLoggedUser && (
-                  <Dialog.Root open={isSubmitBookFormOpen}>
-                    <Dialog.Trigger asChild>
-                      <EmptyBooksContainer
-                        className={`variant ${!isLoggedUser && 'disabled'}`}
-                        onClick={() => setIsSubmitBookFormOpen(true)}
-                      >
-                        <Plus />
-                      </EmptyBooksContainer>
-                    </Dialog.Trigger>
-                    <SubmitBookFormModal
-                      onUpdateBook={onUpdateBook}
-                      onClose={() => setIsSubmitBookFormOpen(false)}
-                    />
-                  </Dialog.Root>
-                )}
-              </>
-            ) : isLoggedUser ? (
+            {isSubmitBookFormOpen && (
               <Dialog.Root open={isSubmitBookFormOpen}>
-                <Dialog.Trigger asChild>
-                  <EmptyBooksContainer
-                    onClick={
-                      isLoggedUser
-                        ? () => setIsSubmitBookFormOpen(true)
-                        : () => null
-                    }
-                  >
-                    <Plus />
-                  </EmptyBooksContainer>
-                </Dialog.Trigger>
                 <SubmitBookFormModal
                   onUpdateBook={onUpdateBook}
                   onClose={() => setIsSubmitBookFormOpen(false)}
                 />
               </Dialog.Root>
-            ) : (
-              <EmptyContainer content="submitted" />
             )}
+            <SubmittedBooksHeading>
+              <p>Submitted Books</p>
+              <OutlineButton onClick={() => setIsSubmitBookFormOpen(true)}>
+                Add
+                <Plus />
+              </OutlineButton>
+            </SubmittedBooksHeading>
+            <SubmittedBooksContent>
+              {isValidating ? (
+                Array.from({ length: 4 }).map((_, index) => (
+                  <SkeletonBookCard key={index} />
+                ))
+              ) : updatedSubmittedBooks && updatedSubmittedBooks.length ? (
+                <>
+                  {updatedSubmittedBooks.map((book) => (
+                    <BookCard
+                      isLibraryPage
+                      libraryPageUserId={userId}
+                      size="smaller"
+                      key={book.id}
+                      book={book}
+                      onUpdateBook={onUpdateBook}
+                      onOpenDetails={() => {
+                        onOpenDetails(book)
+                      }}
+                      onClose={() => setIsSubmitBookFormOpen(false)}
+                    />
+                  ))}
+                </>
+              ) : (
+                <EmptyContainer content="submitted" />
+              )}
+            </SubmittedBooksContent>
           </SubmittedBooksWrapper>
         </>
       )}

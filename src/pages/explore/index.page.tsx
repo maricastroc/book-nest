@@ -236,7 +236,6 @@ export default function Explore() {
                 ) : updatedBooks?.length ? (
                   updatedBooks?.map((book) => (
                     <ExploreCard
-                      isExplorePage
                       key={book.id}
                       book={book}
                       onOpenDetails={() => {

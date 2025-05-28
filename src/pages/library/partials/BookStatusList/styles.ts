@@ -4,7 +4,7 @@ export const LibraryContainerBox = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  padding: '1.2rem 0 1.5rem 2rem',
+  padding: '1.2rem 0 1.5rem',
   marginRight: '-1rem',
   width: '100%',
   marginBottom: '0.5rem',
@@ -15,7 +15,7 @@ export const LibraryContainerBox = styled('div', {
   },
 
   '@media (min-width: 480px)': {
-    padding: '1.5rem 0 1.5rem 2rem',
+    padding: '1.5rem 2rem 1.5rem',
 
     '&.smaller': {
       paddingRight: '2rem',
@@ -23,7 +23,7 @@ export const LibraryContainerBox = styled('div', {
   },
 
   '@media (min-width: 768px)': {
-    padding: '1.5rem 0 1.5rem 0rem',
+    padding: '1.5rem 1.5rem 1.5rem 0',
 
     '&.smaller': {
       paddingRight: '2rem',
@@ -52,6 +52,35 @@ export const LibraryContainerBox = styled('div', {
       backgroundColor: '$gray600',
       boxShadow: 'inset 0 0 0px 6px $gray600',
     },
+  },
+})
+
+export const Header = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+})
+
+export const ViewAllButton = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  fontWeight: 'bold',
+  fontSize: '$sm',
+  color: '$purple100',
+  backgroundColor: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+
+  svg: {
+    fontSize: '1rem',
+    color: '$purple100',
+    marginLeft: '0.4rem',
+  },
+
+  '&:hover': {
+    filter: 'brightness(1.4)',
+    transition: '200ms all',
   },
 })
 
@@ -162,8 +191,8 @@ export const BookContainer = styled('div', {
 
 export const BookCover = styled('img', {
   cursor: 'pointer',
-  width: '5.6rem',
-  height: '8.5rem',
+  width: '5.4rem',
+  height: '8.2rem',
   borderRadius: 8,
   opacity: 0.9,
   filter: 'brightness(0.95)',

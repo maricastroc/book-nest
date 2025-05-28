@@ -5,32 +5,28 @@ import {
   BookContentWrapper,
   BookCardBox,
 } from './styles'
-import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
+import { StarsRating } from '@/components/shared/StarsRating'
 
 interface BookCardProps {
   book: BookProps
-  onOpenDetails: () => void
+  onSelect: (value: BookProps) => void
   size?: string
   onClose?: () => void
-  onUpdateBook?: (book: BookProps) => void
 }
 
-export function ExploreCard({ book, onOpenDetails, size = '' }: BookCardProps) {
+export function LibraryBookCard({ book, onSelect, size = '' }: BookCardProps) {
   return (
     <BookCardBox
       onClick={() => {
-        onOpenDetails()
+        onSelect(book)
       }}
     >
-      <BookCover src={book.coverUrl} onClick={() => onOpenDetails()} />
+      <BookCover src={book.coverUrl} onClick={() => onSelect(book)} />
       <BookContentWrapper>
-        <ReadingStatusTag
-          readingStatus={formatToSnakeCase(book.readingStatus)}
-        />
         <BookTitleAndAuthor className={size}>
           <h2>{book.name}</h2>
           <p>{book.author}</p>
+          <StarsRating size="smaller" rating={book?.userRating || 0} />
         </BookTitleAndAuthor>
       </BookContentWrapper>
     </BookCardBox>

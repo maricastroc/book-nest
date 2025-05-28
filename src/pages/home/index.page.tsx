@@ -33,6 +33,7 @@ import { useAppContext } from '@/contexts/AppContext'
 import { useRouter } from 'next/router'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import useRequest from '@/hooks/useRequest'
+import { OutlineButton } from '@/components/core/OutlineButton'
 
 export interface EditReviewData {
   ratingId: string
@@ -187,10 +188,10 @@ export default function Home() {
               <PopularBooksWrapper>
                 <PopularBooksTitle>
                   <p>Popular Books</p>
-                  <button onClick={() => router.push('/explore')}>
+                  <OutlineButton onClick={() => router.push('/explore')}>
                     View All
                     <CaretRight />
-                  </button>
+                  </OutlineButton>
                 </PopularBooksTitle>
                 <PopularBooksContent>
                   {!updatedPopularBooks?.length

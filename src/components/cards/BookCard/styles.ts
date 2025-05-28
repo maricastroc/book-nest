@@ -130,8 +130,12 @@ export const BookCover = styled('img', {
 export const FooterWrapper = styled('div', {
   display: 'flex',
   alignItems: 'flex-end',
-  justifyContent: 'space-between',
+  justifyContent: 'flex-start',
   width: '100%',
+
+  '&.library_style': {
+    justifyContent: 'flex-end',
+  },
 })
 
 export const RatingWrapper = styled('div', {

@@ -12,6 +12,8 @@ import {
   CaretLeftIcon,
   CaretRightIcon,
   ScrollContainer,
+  Header,
+  ViewAllButton,
 } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
@@ -28,6 +30,7 @@ interface BookStatusListProps {
   className: string
   emptyBoxMessage?: string
   onSelect: (book: BookProps) => void
+  onStatusClick: () => void
 }
 
 export function BookStatusList({
@@ -37,6 +40,7 @@ export function BookStatusList({
   className,
   emptyBoxMessage,
   isLoggedUser,
+  onStatusClick,
   onSelect,
 }: BookStatusListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -74,10 +78,16 @@ export function BookStatusList({
 
   return (
     <LibraryContainerBox>
-      <TagStatus className={className}>
-        <FontAwesomeIcon icon={faBookmark} />
-        {statusLabel}
-      </TagStatus>
+      <Header>
+        <TagStatus className={className}>
+          <FontAwesomeIcon icon={faBookmark} />
+          {statusLabel}
+        </TagStatus>
+        <ViewAllButton onClick={onStatusClick}>
+          View All
+          <CaretRight />
+        </ViewAllButton>
+      </Header>
 
       <ScrollContainer>
         <ContainerWrapper

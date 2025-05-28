@@ -9,7 +9,7 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { userId } = req.query
+  const { userId, page = '1', perPage = '6' } = req.query
 
   if (!userId) {
     return res.status(400).json({ message: 'UserId is required' })
@@ -24,8 +24,20 @@ export default async function handler(
     return res.status(404).json({ message: 'User not found' })
   }
 
+  const pageNumber = Number(page)
+  const itemsPerPage = Number(perPage)
+  const skip = (pageNumber - 1) * itemsPerPage
+
+  // 👉 total de livros para controle de paginação
+  const totalBooks = await prisma.book.count({
+    where: { userId: String(userId) },
+  })
+
+  // 👉 livros com paginação
   const submittedBooks = await prisma.book.findMany({
     where: { userId: String(userId) },
+    skip,
+    take: itemsPerPage,
     select: {
       id: true,
       name: true,
@@ -73,6 +85,12 @@ export default async function handler(
     data: {
       user,
       submittedBooks: submittedBooksWithDetails,
+      pagination: {
+        total: totalBooks,
+        page: pageNumber,
+        perPage: itemsPerPage,
+        totalPages: Math.ceil(totalBooks / itemsPerPage),
+      },
     },
   })
 }

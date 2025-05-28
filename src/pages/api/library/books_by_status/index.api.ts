@@ -73,6 +73,10 @@ export default async function handler(
     return acc
   }, {} as { [status: string]: BookWithStatus[] })
 
+  Object.keys(booksByStatus).forEach((status) => {
+    booksByStatus[status] = booksByStatus[status].slice(0, 8)
+  })
+
   return res.json({
     data: {
       booksByStatus,

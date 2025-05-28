@@ -22,7 +22,6 @@ export const SubmittedBooksSectionWrapper = styled('div', {
   margin: '2.5rem auto 0',
   paddingTop: '0.5rem',
   paddingBottom: '1.5rem',
-  maxWidth: '30rem',
 
   '@media (min-width: 768px)': {
     margin: '0 auto',
@@ -33,7 +32,7 @@ export const SubmittedBooksSectionWrapper = styled('div', {
     overflowY: 'scroll',
     maxWidth: '100%',
     minWidth: '12rem',
-    paddingBottom: '2rem',
+    padding: '0.5rem 1.5rem 2rem',
   },
 })
 
@@ -64,20 +63,42 @@ export const SubmittedBooksWrapper = styled('div', {
   justifyContent: 'center',
   width: '100%',
   gap: '1rem',
-
-  '@media (min-width: 768px)': {
-    width: '85%',
-  },
 })
 
 export const SubmittedBooksHeading = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
 
   p: {
     color: 'gray$200',
     fontSize: '0.95rem',
+  },
+})
+
+export const SubmittedBooksContent = styled('div', {
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  minWidth: '100%',
+  gap: '0.9rem',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  '@media (min-width: 480px)': {
+    gridTemplateColumns: '1fr 1fr',
+  },
+
+  '@media (min-width: 1024px)': {
+    gridTemplateColumns: '1fr 1fr 1fr',
+  },
+
+  '@media (min-width: 1200px)': {
+    gridTemplateColumns: '1fr',
+  },
+
+  '@media (min-width: 1800px)': {
+    gridTemplateColumns: '1fr 1fr',
   },
 })
 
@@ -92,7 +113,7 @@ export const EmptyBooksContainer = styled('div', {
   height: '18rem',
   backgroundColor: 'transparent',
   borderRadius: 8,
-  width: '85%',
+  width: '100%',
   border: 'dashed 1px $gray400',
 
   svg: {

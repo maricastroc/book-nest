@@ -8,8 +8,10 @@ interface Props {
 
 export function ReadingStatusTag({ readingStatus }: Props) {
   return (
-    <Container className={readingStatus}>
-      <FontAwesomeIcon icon={faBookmark} />
-    </Container>
+    readingStatus && (
+      <Container className={readingStatus}>
+        <FontAwesomeIcon icon={faBookmark} />
+      </Container>
+    )
   )
 }

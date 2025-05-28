@@ -18,7 +18,7 @@ export const MobileHeaderWrapper = styled('div', {
   position: 'fixed',
   backgroundColor: '$gray800',
   top: 0,
-  zIndex: 10,
+  zIndex: 9999,
   borderBottom: 'solid 2px $gray700',
 
   '@media (min-width: 480px)': {

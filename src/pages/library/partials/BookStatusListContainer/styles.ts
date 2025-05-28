@@ -8,8 +8,7 @@ export const BookStatusListWrapper = styled('div', {
   '@media (min-width: 1024px)': {
     height: '100vh',
     overflow: 'scroll',
-    padding: 0,
-    paddingBottom: '7rem',
+    padding: '0 1rem 7rem',
     paddingRight: '1rem',
   },
 

@@ -84,11 +84,13 @@ export function BookCard({
           <h2>{book.name}</h2>
           <p>{book.author}</p>
         </BookTitleAndAuthor>
-        <FooterWrapper>
-          <RatingWrapper className={isLibraryPage ? 'library_style' : ''}>
-            <p>{getBookRatingsNumber(book)}</p>
-            <StarsRating size={size} rating={book?.rate ?? 0} />
-          </RatingWrapper>
+        <FooterWrapper className={isLibraryPage ? 'library_style' : ''}>
+          {!isLibraryPage && (
+            <RatingWrapper className={isLibraryPage ? 'library_style' : ''}>
+              <p>{getBookRatingsNumber(book)}</p>
+              <StarsRating size={size} rating={book?.rate ?? 0} />
+            </RatingWrapper>
+          )}
           {isLoggedUser && isLibraryPage && (
             <>
               <Dialog.Root open={isEditBookFormOpen}>

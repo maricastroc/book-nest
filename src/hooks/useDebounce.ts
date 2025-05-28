@@ -1,14 +1,46 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useEffect, useState } from 'react'
 
-export function useDebounce<T extends (...args: any[]) => any>(
-  callback: T,
-  delay: number,
-  dependencies: any[] = [],
-): void {
+export const useGridColumns = (gridRef: React.RefObject<HTMLElement>) => {
+  const [columns, setColumns] = useState(1)
+
   useEffect(() => {
-    const timer = setTimeout(callback, delay)
-    return () => clearTimeout(timer)
-  }, dependencies)
+    if (!gridRef.current) return
+
+    const calculateColumns = () => {
+      const grid = gridRef.current!
+      const gridStyle = window.getComputedStyle(grid)
+      const columnGap = parseFloat(gridStyle.gap)
+      const gridWidth = grid.clientWidth
+      const firstChild = grid.firstElementChild as HTMLElement
+
+      if (!firstChild) return 1
+
+      const itemWidth = firstChild.offsetWidth
+      const columns = Math.floor(
+        (gridWidth + columnGap) / (itemWidth + columnGap),
+      )
+
+      return Math.max(1, columns)
+    }
+
+    const updateColumns = () => {
+      setColumns(calculateColumns())
+    }
+
+    const resizeObserver = new ResizeObserver(updateColumns)
+    resizeObserver.observe(gridRef.current)
+
+    // Adicione um delay para garantir que os elementos estejam renderizados
+    const initTimer = setTimeout(updateColumns, 100)
+
+    return () => {
+      resizeObserver.disconnect()
+      clearTimeout(initTimer)
+    }
+  }, [gridRef])
+
+  return columns
 }

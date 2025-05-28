@@ -4,6 +4,8 @@ import { BooksByStatusProps } from '@/@types/books-status'
 import { BookStatusList } from '../BookStatusList'
 import { useAppContext } from '@/contexts/AppContext'
 import { UserInfo } from '../../[userId]/index.page'
+import { useState } from 'react'
+import { AllBooksContainer } from '../AllBooksContainer'
 
 interface BookStatusListContainerProps {
   data: BooksByStatusProps | undefined | null
@@ -19,6 +21,12 @@ export function BookStatusListContainer({
   const { loggedUser } = useAppContext()
 
   const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
+
+  const [selectedLabel, setSelectedLabel] = useState('')
+
+  const [selectedStatus, setSelectedStatus] = useState<
+    'read' | 'reading' | 'want_to_read' | 'did_not_finish' | null
+  >(null)
 
   const getEmptyBoxMessage = (
     status: 'read' | 'reading' | 'want_to_read' | 'did_not_finish',
@@ -57,7 +65,16 @@ export function BookStatusListContainer({
     },
   ]
 
-  return (
+  return selectedStatus ? (
+    <AllBooksContainer
+      setSelectedStatus={(value) => setSelectedStatus(value)}
+      setSelectedLabel={(value) => setSelectedLabel(value as string)}
+      selectedLabel={selectedLabel}
+      selectedStatus={selectedStatus}
+      onSelect={onSelect}
+      userId={userInfo?.id}
+    />
+  ) : (
     <BookStatusListWrapper>
       {bookStatusList.map(({ key, label, books }) => (
         <BookStatusList
@@ -69,6 +86,10 @@ export function BookStatusListContainer({
           books={books}
           onSelect={onSelect}
           emptyBoxMessage={getEmptyBoxMessage(key)}
+          onStatusClick={() => {
+            setSelectedStatus(key)
+            setSelectedLabel(label)
+          }}
         />
       ))}
     </BookStatusListWrapper>

@@ -17,7 +17,7 @@ export const ProfilePageWrapper = styled('div', {
     flexDirection: 'row',
     height: '100%',
     alignItems: 'flex-start',
-    padding: '0 2rem 0 1rem',
+    padding: '0 0 0 1rem',
     paddingLeft: '15.2rem',
   },
 
