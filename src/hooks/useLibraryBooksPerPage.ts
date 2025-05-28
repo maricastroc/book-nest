@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
 
-export function useLibraryBooksPerPage(): number {
+export function usePerPage(): number {
   const [perPage, setPerPage] = useState(12)
 
   useEffect(() => {

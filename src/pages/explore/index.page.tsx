@@ -28,7 +28,7 @@ import { MobileHeader } from '@/components/shared/MobileHeader'
 import useRequest from '@/hooks/useRequest'
 import { Pagination } from '@/components/shared/Pagination'
 import { ExploreCard } from './partials/ExploreCard'
-import { usePerPage } from '@/hooks/usePerPage'
+import { usePerPage } from '@/hooks/useExploreBooksPerPage'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { SearchBar } from '@/components/shared/SearchBar'
 

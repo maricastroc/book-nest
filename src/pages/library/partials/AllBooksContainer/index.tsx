@@ -16,7 +16,7 @@ import { BookProps } from '@/@types/book'
 import { formatStatusForAPI } from '@/utils/formatStatusToAPI'
 import { SkeletonLibraryCard } from '@/components/skeletons/SkeletonLibraryCard'
 import { SearchBar } from '@/components/shared/SearchBar'
-import { useLibraryBooksPerPage } from '@/hooks/useLibraryBooksPerPage'
+import { usePerPage } from '@/hooks/useLibraryBooksPerPage'
 import useRequest from '@/hooks/useRequest'
 
 interface Props {
@@ -40,7 +40,7 @@ export const AllBooksContainer = ({
 }: Props) => {
   const gridRef = useRef<HTMLDivElement>(null)
 
-  const perPage = useLibraryBooksPerPage()
+  const perPage = usePerPage()
 
   const [currentPage, setCurrentPage] = useState(1)
 
