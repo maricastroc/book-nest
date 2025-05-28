@@ -2,6 +2,7 @@
 import { styled } from '@/styles'
 
 const gridBreakpoints = {
+  0: 2,
   380: 3,
   530: 4,
   640: 5,
