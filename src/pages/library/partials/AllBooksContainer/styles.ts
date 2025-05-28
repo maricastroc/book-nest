@@ -59,7 +59,7 @@ export const AllBooksContent = styled('div', {
   display: 'grid',
   gap: '0.65rem',
   justifyContent: 'center',
-  padding: '2rem 0',
+  padding: '2rem 0.5rem',
   borderRadius: 12,
   backgroundColor: '$gray700',
   alignContent: 'flex-start',

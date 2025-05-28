@@ -60,6 +60,8 @@ export default function Explore() {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const gridRef = useRef<HTMLDivElement>(null)
+
   const { data: booksData, isValidating } = useRequest<{
     books: BookProps[]
     pagination: {
@@ -122,7 +124,6 @@ export default function Explore() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   useEffect(() => {
@@ -145,6 +146,12 @@ export default function Explore() {
 
     return () => clearTimeout(timer)
   }, [search])
+
+  useEffect(() => {
+    if (gridRef.current) {
+      gridRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [currentPage])
 
   return (
     <>
@@ -223,7 +230,7 @@ export default function Explore() {
                 </Categories>
               </ScrollContainer>
             </ExplorePageHeading>
-            <ExplorePageContent>
+            <ExplorePageContent ref={gridRef}>
               <BooksContainer
                 className={`${
                   !updatedBooks?.length && !isValidating ? 'empty' : ''

@@ -53,9 +53,7 @@ export const BookTitleAndAuthor = styled('div', {
 })
 
 export const BookCover = styled('img', {
-  width: '100%',
-  minWidth: '5.3rem',
-  maxWidth: '5.7rem',
+  width: '5.2rem',
   height: '7.5rem',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',

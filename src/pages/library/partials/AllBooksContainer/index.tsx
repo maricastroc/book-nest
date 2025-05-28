@@ -83,7 +83,14 @@ export const AllBooksContainer = ({
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    if (gridRef.current) {
+      const offset = 200
+      const top =
+        gridRef.current.getBoundingClientRect().top + window.scrollY - offset
+
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
   }
 
   useEffect(() => {
