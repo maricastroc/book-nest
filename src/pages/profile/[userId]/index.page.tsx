@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextSeo } from 'next-seo'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { User } from 'phosphor-react'
 import { useRouter } from 'next/router'
 
@@ -42,6 +42,8 @@ export default function Profile() {
     : router.query.userId
 
   const isRouteLoading = useLoadingOnRouteChange()
+
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const isSmallSize = useScreenSize(480)
 
@@ -96,6 +98,12 @@ export default function Profile() {
     }
   }, [userStatisticsData])
 
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [currentPage])
+
   return (
     <>
       <NextSeo title="Profile | Book Wise" />
@@ -128,6 +136,7 @@ export default function Profile() {
                   }}
                 />
                 <UserRatings
+                  ref={containerRef}
                   className={`${
                     isValidatingRatings || userRatings?.length > 0
                       ? 'with_padding_right'

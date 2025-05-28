@@ -20,7 +20,7 @@ import { UserCard } from './partials/UserCard'
 import { SkeletonUserCard } from './partials/SkeletonUserCard'
 import useRequest from '@/hooks/useRequest'
 import { UserProps } from 'next-auth'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Pagination } from '@/components/shared/Pagination'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -38,6 +38,8 @@ export default function Users() {
   const perPage = 18
 
   const [currentPage, setCurrentPage] = useState(1)
+
+  const gridRef = useRef<HTMLDivElement>(null)
 
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
@@ -83,6 +85,12 @@ export default function Users() {
     return () => clearTimeout(timer)
   }, [search])
 
+  useEffect(() => {
+    if (gridRef.current) {
+      gridRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [currentPage])
+
   return (
     <>
       <NextSeo title="Readers | Book Wise" />
@@ -109,7 +117,7 @@ export default function Users() {
                 />
               </TitleAndSearch>
             </UsersPageHeading>
-            <UsersPageContent>
+            <UsersPageContent ref={gridRef}>
               <UsersContainer
                 className={`${
                   !data?.users?.length && !isValidating ? 'empty' : ''
