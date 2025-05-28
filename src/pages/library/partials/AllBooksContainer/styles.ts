@@ -37,6 +37,7 @@ export const AllBooksWrapper = styled('div', {
     height: '100vh',
     overflow: 'scroll',
     padding: '0 1rem 9rem',
+    paddingLeft: 0,
   },
 
   '@media (min-width: 1200px)': {

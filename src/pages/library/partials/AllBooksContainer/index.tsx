@@ -18,6 +18,7 @@ import { SkeletonLibraryCard } from '@/components/skeletons/SkeletonLibraryCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { usePerPage } from '@/hooks/useLibraryBooksPerPage'
 import useRequest from '@/hooks/useRequest'
+import { LateralMenu } from '@/components/shared/LateralMenu'
 
 interface Props {
   userId: string | undefined
@@ -27,14 +28,12 @@ interface Props {
     value: 'read' | 'reading' | 'want_to_read' | 'did_not_finish' | null,
   ) => void
   setSelectedLabel: (value: string | null) => void
-  onSelect: (book: BookProps) => void
 }
 
 export const AllBooksContainer = ({
   userId,
   selectedStatus,
   selectedLabel,
-  onSelect,
   setSelectedLabel,
   setSelectedStatus,
 }: Props) => {
@@ -50,9 +49,13 @@ export const AllBooksContainer = ({
 
   const [totalPages, setTotalPages] = useState(1)
 
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
+
+  const [openLateralMenu, setOpenLateralMenu] = useState(false)
+
   const [filteredBooks, setFilteredBooks] = useState<BookProps[] | []>([])
 
-  const { data, isValidating } = useRequest<{
+  const { data, mutate, isValidating } = useRequest<{
     books: BookProps[]
     pagination: {
       page: number
@@ -74,7 +77,6 @@ export const AllBooksContainer = ({
     },
     {
       revalidateOnFocus: false,
-      revalidateIfStale: false,
       keepPreviousData: true,
     },
   )
@@ -102,6 +104,15 @@ export const AllBooksContainer = ({
 
   return (
     <AllBooksWrapper>
+      {openLateralMenu && selectedBook && (
+        <LateralMenu
+          bookId={selectedBook.id}
+          onUpdateBook={() => {
+            mutate()
+          }}
+          onClose={() => setOpenLateralMenu(false)}
+        />
+      )}
       <Header>
         <TagStatus className={selectedStatus}>
           <FontAwesomeIcon icon={faBookmark} />
@@ -142,7 +153,10 @@ export const AllBooksContainer = ({
                   <LibraryBookCard
                     key={book.id}
                     book={book}
-                    onSelect={onSelect}
+                    onSelect={() => {
+                      setOpenLateralMenu(true)
+                      setSelectedBook(book)
+                    }}
                   />
                 )
               })}

@@ -15,7 +15,7 @@ export const LibraryContainerBox = styled('div', {
   },
 
   '@media (min-width: 480px)': {
-    padding: '1.5rem 2rem 1.5rem',
+    padding: '1.5rem 0 1.5rem',
 
     '&.smaller': {
       paddingRight: '2rem',

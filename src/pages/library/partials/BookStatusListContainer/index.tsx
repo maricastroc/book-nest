@@ -71,7 +71,6 @@ export function BookStatusListContainer({
       setSelectedLabel={(value) => setSelectedLabel(value as string)}
       selectedLabel={selectedLabel}
       selectedStatus={selectedStatus}
-      onSelect={onSelect}
       userId={userInfo?.id}
     />
   ) : (

@@ -60,7 +60,6 @@ export const UserLibraryBody = styled('div', {
     maxWidth: '100%',
     justifyContent: 'flex-start',
     padding: '1.5rem 0',
-    gap: '1.8rem',
   },
 
   '@media (min-width: 1200px)': {
@@ -119,9 +118,9 @@ export const UserLibraryHeading = styled('div', {
     paddingLeft: 0,
   },
 
-  '@media (min-width: 1024px)': {
-    display: 'flex',
+  '@media (min-width: 1200px)': {
     marginTop: '0.5rem',
+    display: 'flex',
   },
 })
 
@@ -164,7 +163,7 @@ export const SubmittedBooksContainer = styled('div', {
     marginTop: '2.5rem',
   },
 
-  '@media (min-width: 1024px)': {
+  '@media (min-width: 1200px)': {
     height: '100vh',
     padding: 0,
     paddingBottom: '2.5rem',

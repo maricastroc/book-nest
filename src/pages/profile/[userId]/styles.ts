@@ -17,7 +17,7 @@ export const ProfilePageWrapper = styled('div', {
     flexDirection: 'row',
     height: '100%',
     alignItems: 'flex-start',
-    padding: '0 0 0 1rem',
+    padding: '0 2rem 0 1rem',
     paddingLeft: '15.2rem',
   },
 
@@ -151,11 +151,10 @@ export const UserDetailsContainer = styled('div', {
 
   '@media (min-width: 1024px)': {
     alignItems: 'center',
-    height: '100vh',
+    maxHeight: '80vh',
     overflow: 'scroll',
     padding: '1rem',
-    paddingBottom: '5rem',
-    marginTop: '-2.5rem',
+    marginTop: 0,
   },
 
   '@media (min-width: 1200px)': {

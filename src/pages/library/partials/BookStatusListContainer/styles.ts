@@ -5,14 +5,9 @@ export const BookStatusListWrapper = styled('div', {
   width: '100%',
   gap: '2rem',
 
-  '@media (min-width: 1024px)': {
-    height: '100vh',
-    overflow: 'scroll',
-    padding: '0 1rem 7rem',
-    paddingRight: '1rem',
-  },
-
   '@media (min-width: 1200px)': {
+    padding: '0 1rem 7rem 0',
+    paddingRight: '1rem',
     height: '100vh',
     overflow: 'scroll',
   },

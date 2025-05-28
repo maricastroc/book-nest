@@ -28,11 +28,17 @@ export const SubmittedBooksSectionWrapper = styled('div', {
   },
 
   '@media (min-width: 1024px)': {
-    minHeight: '100%',
+    marginBottom: '1.5rem',
+  },
+
+  '@media (min-width: 1200px)': {
     overflowY: 'scroll',
     maxWidth: '100%',
     minWidth: '12rem',
-    padding: '0.5rem 1.5rem 2rem',
+    alignItems: 'flex-start',
+    maxHeight: '80vh',
+    padding: '0.5rem 2rem 2rem',
+    marginTop: '3.5rem',
   },
 })
 
@@ -97,7 +103,7 @@ export const SubmittedBooksContent = styled('div', {
     gridTemplateColumns: '1fr',
   },
 
-  '@media (min-width: 1800px)': {
+  '@media (min-width: 1900px)': {
     gridTemplateColumns: '1fr 1fr',
   },
 })

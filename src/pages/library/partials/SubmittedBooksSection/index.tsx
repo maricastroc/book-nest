@@ -14,7 +14,6 @@ import { Plus } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { SubmitBookFormModal } from '../SubmitBookFormModal'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
-import { BookCard } from '@/components/cards/BookCard'
 import { BookProps } from '@/@types/book'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { useRouter } from 'next/router'
@@ -24,9 +23,9 @@ import { UserProps } from '@/@types/user'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { DividerLine } from '@/components/shared/DividerLine'
 import { OutlineButton } from '@/components/core/OutlineButton'
+import { SubmittedBookCard } from '../../SubmittedBookCard'
 
 interface SubmittedBooksSectionProps {
-  onOpenDetails: (book: BookProps) => void
   onUpdateBook: (book: BookProps) => void
   userId: string | undefined
   userInfo: UserProps | undefined
@@ -35,7 +34,6 @@ interface SubmittedBooksSectionProps {
 }
 
 export function SubmittedBooksSection({
-  onOpenDetails,
   onUpdateBook,
   isValidating,
   userId,
@@ -127,16 +125,11 @@ export function SubmittedBooksSection({
               ) : updatedSubmittedBooks && updatedSubmittedBooks.length ? (
                 <>
                   {updatedSubmittedBooks.map((book) => (
-                    <BookCard
-                      isLibraryPage
-                      libraryPageUserId={userId}
-                      size="smaller"
+                    <SubmittedBookCard
                       key={book.id}
+                      userId={userId}
                       book={book}
                       onUpdateBook={onUpdateBook}
-                      onOpenDetails={() => {
-                        onOpenDetails(book)
-                      }}
                       onClose={() => setIsSubmitBookFormOpen(false)}
                     />
                   ))}
