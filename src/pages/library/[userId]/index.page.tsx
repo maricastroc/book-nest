@@ -243,10 +243,6 @@ export default function Library() {
                     onUpdateSubmittedBook(book)
                   }}
                   isValidating={isValidatingSubmittedBooksData}
-                  onOpenDetails={(book: BookProps) => {
-                    setSelectedBook(book)
-                    setOpenLateralMenu(true)
-                  }}
                 />
               </SubmittedBooksContainer>
             </UserLibraryContent>
