@@ -1,4 +1,5 @@
 // https://github.com/vercel/swr/blob/main/examples/axios-typescript/libs/useRequest.ts
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr'
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { api } from '@/lib/axios'
@@ -44,9 +45,7 @@ export default function useRequest<Data = unknown, Error = unknown>(
     mutate,
   } = useSWR<AxiosResponse<Data>, AxiosError<Error>>(
     key, // <- chave estável
-    request
-      ? () => api.request<Data>(request)
-      : null,
+    request ? () => api.request<Data>(request) : null,
     {
       ...config,
       revalidateOnFocus: false,

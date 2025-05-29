@@ -72,25 +72,26 @@ export default function Home() {
     method: 'GET',
   })
 
-  const { data: latestRatings } = useRequest<RatingProps[]>({
-    url: '/ratings/latest',
-    method: 'GET',
-  },
+  const { data: latestRatings } = useRequest<RatingProps[]>(
+    {
+      url: '/ratings/latest',
+      method: 'GET',
+    },
     {
       revalidateOnFocus: false,
       keepPreviousData: true,
-    })
+    },
+  )
 
   const {
     data: userLatestRatingData,
     mutate: mutateUserLatestRating,
     isValidating: isValidatingUserLatestReading,
-  } = useRequest<RatingProps | null>(userLatestRatingRequest,
-    {
-      revalidateOnFocus: false,
-      keepPreviousData: true,
-      revalidateOnMount: !session?.data?.user, 
-    })
+  } = useRequest<RatingProps | null>(userLatestRatingRequest, {
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+    revalidateOnMount: !session?.data?.user,
+  })
 
   const renderUserLatestRating = () => {
     if (isValidatingUserLatestReading || isValidatingReview) {
