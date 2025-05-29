@@ -11,8 +11,6 @@ import {
   UserDetailsWrapper,
 } from './styles'
 
-import { Rating } from 'react-simple-star-rating'
-
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -26,6 +24,7 @@ import { BookProps } from '@/@types/book'
 import { FormErrors } from '@/components/core/FormErrors'
 import { ActionButton } from '@/components/core/ActionButton'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
+import { AnimatedRating } from '../AnimatedRating'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean
@@ -160,7 +159,7 @@ export function RatingCardForm({
             />
             <p>{loggedUser.name}</p>
           </UserDetailsWrapper>
-          <Rating
+          <AnimatedRating
             initialValue={rating?.rate}
             onClick={handleRating}
             emptyIcon={<Star size={20} />}

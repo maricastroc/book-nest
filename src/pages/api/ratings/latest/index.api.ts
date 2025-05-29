@@ -20,11 +20,10 @@ export default async function handler(
   try {
     const userId = String(session?.user.id)
 
-    // Consulta as avaliações com as informações necessárias dos livros
     const ratings = await prisma.rating.findMany({
       where: {
         ...(userId && { userId: { not: userId } }),
-        NOT: { description: '' }, // Filtra avaliações que possuem descrição
+        NOT: { description: '' },
       },
       orderBy: {
         createdAt: 'desc',

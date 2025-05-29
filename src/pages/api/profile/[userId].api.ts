@@ -9,11 +9,11 @@ export default async function handler(
   if (req.method !== 'GET') return res.status(405).end()
 
   const userId = String(req.query.userId)
+
   const searchQuery = req.query.search
     ? String(req.query.search).toLowerCase()
     : undefined
 
-  // Busca o perfil + avaliações (com busca se houver)
   const profile = await prisma.user.findUnique({
     where: { id: userId },
     include: {
@@ -90,12 +90,13 @@ export default async function handler(
       })
     : allReadBooks
 
-  // Estatísticas baseadas em todos os livros lidos
   const readPages = allReadBooks.reduce((acc, book) => acc + book.totalPages, 0)
+
   const authorsCount = allReadBooks.reduce((acc, book) => {
     if (!acc.includes(book.author)) acc.push(book.author)
     return acc
   }, [] as string[]).length
+
   const categories = allReadBooks.flatMap((book) =>
     book.categories.map((cat) => cat.category.name),
   )

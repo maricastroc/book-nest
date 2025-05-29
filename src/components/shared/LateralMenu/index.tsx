@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 
 import { useAppContext } from '@/contexts/AppContext'
-
 import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
-
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 
 import {
@@ -31,6 +30,8 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { EmptyContainer } from '../EmptyContainer'
 import { useBookDetails } from '@/hooks/useBookDetails'
 import { SkeletonMenuBookCard } from './partials/SkeletonMenuBookCard'
+import { FadeInUp } from '@/components/animations/FadeInUp'
+import { FadeInItem } from '@/components/animations/FadeInItem'
 
 interface LateralMenuProps {
   bookId: string
@@ -71,9 +72,11 @@ export function LateralMenu({
   return (
     <LateralMenuWrapper>
       <OverlayBackground onClick={onClose} />
+
       <CloseButton onClick={onClose}>
         <X />
       </CloseButton>
+
       <MenuBody>
         {loadingState?.initial || isValidating ? (
           <SkeletonLateralMenu />
@@ -104,6 +107,7 @@ export function LateralMenu({
                 onUpdateStatus={onUpdateStatus}
               />
             ) : null}
+
             <RatingsWrapper>
               <RatingsListHeader>
                 <p>Ratings</p>
@@ -127,17 +131,23 @@ export function LateralMenu({
                     </span>
                   ))}
               </RatingsListHeader>
+
               <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
-                {updatedBook && isReviewFormOpen && (
-                  <RatingCardForm
-                    isEdit={!!userRating}
-                    rating={userRating}
-                    onClose={() => setIsReviewFormOpen(false)}
-                    onUpdateReview={onUpdateReview}
-                    onCreateReview={onCreateReview}
-                    book={updatedBook}
-                  />
-                )}
+                <AnimatePresence>
+                  {updatedBook && isReviewFormOpen && (
+                    <FadeInUp>
+                      <RatingCardForm
+                        isEdit={!!userRating}
+                        rating={userRating}
+                        onClose={() => setIsReviewFormOpen(false)}
+                        onUpdateReview={onUpdateReview}
+                        onCreateReview={onCreateReview}
+                        book={updatedBook}
+                      />
+                    </FadeInUp>
+                  )}
+                </AnimatePresence>
+
                 {!isValidating && !bookRatings?.length && !isReviewFormOpen ? (
                   <EmptyContainer content="reviews" />
                 ) : loadingState?.reviews || isValidatingReview ? (
@@ -147,14 +157,15 @@ export function LateralMenu({
                 ) : (
                   updatedBook &&
                   bookRatings?.map((rating) => (
-                    <UserRatingBox
-                      key={rating.id}
-                      book={updatedBook}
-                      rating={rating}
-                      onUpdateReview={onUpdateReview}
-                      onCreateReview={onCreateReview}
-                      onDeleteReview={onDeleteReview}
-                    />
+                    <FadeInItem key={rating.id}>
+                      <UserRatingBox
+                        book={updatedBook}
+                        rating={rating}
+                        onUpdateReview={onUpdateReview}
+                        onCreateReview={onCreateReview}
+                        onDeleteReview={onDeleteReview}
+                      />
+                    </FadeInItem>
                   ))
                 )}
               </RatingsList>

@@ -9,6 +9,7 @@ import {
   Overlay,
   Title,
 } from './styles'
+import { ModalContent } from '@/components/animations/ModalAnimation'
 
 interface BaseModalProps {
   onClose: () => void
@@ -30,29 +31,32 @@ export function BaseModal({
   return (
     <Dialog.Portal>
       <Overlay className="DialogOverlay" onClick={onClose} />
-      <Content className="DialogContent" isLarger={isLarger}>
-        {title && (
-          <Header className="DialogHeader">
-            <Title
-              hasAlignMiddleContent={hasAlignMiddleContent}
-              className="DialogTitle"
-            >
-              {title}
-            </Title>
-            {showCloseButton && (
-              <CloseButton onClick={onClose}>
-                <X size={20} alt="Close modal" />
-              </CloseButton>
-            )}
-          </Header>
-        )}
-        <Description
-          hasAlignMiddleContent={hasAlignMiddleContent}
-          className="DialogDescription"
-        >
-          {children}
-        </Description>
-      </Content>
+
+      <ModalContent>
+        <Content className="DialogContent" isLarger={isLarger}>
+          {title && (
+            <Header className="DialogHeader">
+              <Title
+                hasAlignMiddleContent={hasAlignMiddleContent}
+                className="DialogTitle"
+              >
+                {title}
+              </Title>
+              {showCloseButton && (
+                <CloseButton onClick={onClose}>
+                  <X size={20} alt="Close modal" />
+                </CloseButton>
+              )}
+            </Header>
+          )}
+          <Description
+            hasAlignMiddleContent={hasAlignMiddleContent}
+            className="DialogDescription"
+          >
+            {children}
+          </Description>
+        </Content>
+      </ModalContent>
     </Dialog.Portal>
   )
 }
