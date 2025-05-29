@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { LibraryBookCard } from '../LibraryBookCard'
 import {
-  AllBooksMainContainer,
-  AllBooksContent,
-  AllBooksWrapper,
-  Header,
+  BooksGridMain,
+  BooksGridContent,
+  BooksGridWrapper,
+  BooksGridHeader,
   TagStatus,
 } from './styles'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
@@ -19,7 +19,7 @@ import { SearchBar } from '@/components/shared/SearchBar'
 import { usePerPage } from '@/hooks/useLibraryBooksPerPage'
 import useRequest from '@/hooks/useRequest'
 import { LateralMenu } from '@/components/shared/LateralMenu'
-import { useDebouncedValue } from '@/hooks/useDebounce'
+import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
 
 interface Props {
   userId: string | undefined
@@ -31,7 +31,7 @@ interface Props {
   setSelectedLabel: (value: string | null) => void
 }
 
-export const AllBooksContainer = ({
+export const BooksGridByStatus = ({
   userId,
   selectedStatus,
   selectedLabel,
@@ -39,12 +39,6 @@ export const AllBooksContainer = ({
   setSelectedStatus,
 }: Props) => {
   const gridRef = useRef<HTMLDivElement>(null)
-
-  const perPage = usePerPage()
-
-  const [currentPage, setCurrentPage] = useState(1)
-
-  const [search, setSearch] = useState('')
 
   const [totalPages, setTotalPages] = useState(1)
 
@@ -54,7 +48,14 @@ export const AllBooksContainer = ({
 
   const [filteredBooks, setFilteredBooks] = useState<BookProps[] | []>([])
 
-  const searchTerm = useDebouncedValue(search)
+  const {
+    currentPage,
+    setCurrentPage,
+    search,
+    setSearch,
+    searchTerm,
+    perPage,
+  } = usePaginationAndSearch({ perPage: usePerPage() })
 
   const { data, mutate, isValidating } = useRequest<{
     books: BookProps[]
@@ -102,7 +103,7 @@ export const AllBooksContainer = ({
   }, [data])
 
   return (
-    <AllBooksWrapper>
+    <BooksGridWrapper>
       {openLateralMenu && selectedBook && (
         <LateralMenu
           bookId={selectedBook.id}
@@ -112,7 +113,7 @@ export const AllBooksContainer = ({
           onClose={() => setOpenLateralMenu(false)}
         />
       )}
-      <Header>
+      <BooksGridHeader>
         <TagStatus className={selectedStatus}>
           <FontAwesomeIcon icon={faBookmark} />
           {selectedLabel}
@@ -127,7 +128,7 @@ export const AllBooksContainer = ({
           <CaretLeft />
           Go Back
         </OutlineButton>
-      </Header>
+      </BooksGridHeader>
       <SearchBar
         fullWidth
         placeholder="Search for Author or Title"
@@ -141,8 +142,8 @@ export const AllBooksContainer = ({
           setSearch('')
         }}
       />
-      <AllBooksMainContainer>
-        <AllBooksContent ref={gridRef}>
+      <BooksGridMain>
+        <BooksGridContent ref={gridRef}>
           {isValidating || !data
             ? Array.from({ length: perPage }).map((_, index) => (
                 <SkeletonLibraryCard key={index} />
@@ -159,7 +160,7 @@ export const AllBooksContainer = ({
                   />
                 )
               })}
-        </AllBooksContent>
+        </BooksGridContent>
 
         {totalPages > 1 && (
           <Pagination
@@ -168,7 +169,7 @@ export const AllBooksContainer = ({
             onPageChange={handlePageChange}
           />
         )}
-      </AllBooksMainContainer>
-    </AllBooksWrapper>
+      </BooksGridMain>
+    </BooksGridWrapper>
   )
 }

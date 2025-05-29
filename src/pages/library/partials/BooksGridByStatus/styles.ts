@@ -26,7 +26,7 @@ const responsiveGrid = Object.entries(gridBreakpoints).reduce(
   {} as Record<string, any>,
 )
 
-export const AllBooksWrapper = styled('div', {
+export const BooksGridWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -47,7 +47,15 @@ export const AllBooksWrapper = styled('div', {
   },
 })
 
-export const AllBooksMainContainer = styled('div', {
+export const BooksGridHeader = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+  marginBottom: '1rem',
+})
+
+export const BooksGridMain = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -56,7 +64,7 @@ export const AllBooksMainContainer = styled('div', {
   marginTop: '1rem',
 })
 
-export const AllBooksContent = styled('div', {
+export const BooksGridContent = styled('div', {
   display: 'grid',
   gap: '0.65rem',
   justifyContent: 'center',
@@ -110,12 +118,4 @@ export const TagStatus = styled('div', {
       color: '#cc803d',
     },
   },
-})
-
-export const Header = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
-  marginBottom: '1rem',
 })

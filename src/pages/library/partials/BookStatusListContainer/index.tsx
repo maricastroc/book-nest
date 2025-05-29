@@ -5,7 +5,7 @@ import { BookStatusList } from '../BookStatusList'
 import { useAppContext } from '@/contexts/AppContext'
 import { UserInfo } from '../../[userId]/index.page'
 import { useState } from 'react'
-import { AllBooksContainer } from '../AllBooksContainer'
+import { BooksGridByStatus } from '../BooksGridByStatus'
 
 interface BookStatusListContainerProps {
   data: BooksByStatusProps | undefined | null
@@ -66,7 +66,7 @@ export function BookStatusListContainer({
   ]
 
   return selectedStatus ? (
-    <AllBooksContainer
+    <BooksGridByStatus
       setSelectedStatus={(value) => setSelectedStatus(value)}
       setSelectedLabel={(value) => setSelectedLabel(value as string)}
       selectedLabel={selectedLabel}
