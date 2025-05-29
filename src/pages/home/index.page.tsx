@@ -37,13 +37,16 @@ import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import useRequest from '@/hooks/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
+import { useSession } from 'next-auth/react'
 
 export default function Home() {
   const router = useRouter()
 
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const { loggedUser, isValidatingReview } = useAppContext()
+  const session = useSession()
+
+  const { isValidatingReview } = useAppContext()
 
   const [updatedPopularBooks, setUpdatedPopularBooks] = useState<
     BookProps[] | []
@@ -56,11 +59,11 @@ export default function Home() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const userLatestRatingRequest = loggedUser
+  const userLatestRatingRequest = session?.data?.user
     ? {
         url: `/ratings/user_latest`,
         method: 'GET',
-        params: { userId: loggedUser?.id },
+        params: { userId: session?.data?.user?.id },
       }
     : null
 
@@ -72,13 +75,22 @@ export default function Home() {
   const { data: latestRatings } = useRequest<RatingProps[]>({
     url: '/ratings/latest',
     method: 'GET',
-  })
+  },
+    {
+      revalidateOnFocus: false,
+      keepPreviousData: true,
+    })
 
   const {
     data: userLatestRatingData,
     mutate: mutateUserLatestRating,
     isValidating: isValidatingUserLatestReading,
-  } = useRequest<RatingProps | null>(userLatestRatingRequest)
+  } = useRequest<RatingProps | null>(userLatestRatingRequest,
+    {
+      revalidateOnFocus: false,
+      keepPreviousData: true,
+      revalidateOnMount: !session?.data?.user, 
+    })
 
   const renderUserLatestRating = () => {
     if (isValidatingUserLatestReading || isValidatingReview) {
@@ -154,12 +166,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (loggedUser?.id) {
-      mutateUserLatestRating()
-    }
-  }, [loggedUser])
-
-  useEffect(() => {
     if (popularBooks) {
       setUpdatedPopularBooks(popularBooks)
     }
@@ -188,7 +194,7 @@ export default function Home() {
             </HomePageHeading>
             <HomePageContent>
               <LastRatingsWrapper>
-                {loggedUser && (
+                {session?.data?.user && (
                   <>
                     <UserLatestReadingTitle>
                       Your Last Review

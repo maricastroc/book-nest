@@ -2,6 +2,7 @@
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr'
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { api } from '@/lib/axios'
+import qs from 'qs'
 
 export type GetRequest = AxiosRequestConfig | null
 
@@ -24,23 +25,28 @@ export interface Config<Data = unknown, Error = unknown>
   fallbackData?: Data
 }
 
+const getRequestKey = (request: GetRequest) => {
+  if (!request) return null
+  const query = request.params ? `?${qs.stringify(request.params)}` : ''
+  return `${request.method || 'GET'} ${request.url}${query}`
+}
+
 export default function useRequest<Data = unknown, Error = unknown>(
   request: GetRequest,
   { fallbackData, ...config }: Config<Data, Error> = {},
 ): Return<Data, Error> {
+  const key = getRequestKey(request)
+
   const {
     data: response,
     error,
     isValidating,
     mutate,
   } = useSWR<AxiosResponse<Data>, AxiosError<Error>>(
-    request ?? null,
-    /**
-     * NOTE: Typescript thinks `request` can be `null` here, but the fetcher
-     * function is actually only called by `useSWR` when it isn't.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    () => api.request<Data>(request!),
+    key, // <- chave estável
+    request
+      ? () => api.request<Data>(request)
+      : null,
     {
       ...config,
       revalidateOnFocus: false,
@@ -49,7 +55,6 @@ export default function useRequest<Data = unknown, Error = unknown>(
         ({
           status: 200,
           statusText: 'InitialData',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           config: request!,
           headers: {},
           data: fallbackData,

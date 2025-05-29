@@ -78,7 +78,12 @@ export default function Profile() {
     data: userStatisticsData,
     mutate: mutateStatistics,
     isValidating: isValidatingStatistics,
-  } = useRequest<UserStatistics>(userStatisticsRequest)
+  } = useRequest<UserStatistics>(userStatisticsRequest,
+    {
+      revalidateOnFocus: false,
+      keepPreviousData: true,
+      revalidateOnMount: !userId, 
+    })
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)

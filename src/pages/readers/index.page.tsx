@@ -75,7 +75,6 @@ export default function Users() {
     },
     {
       revalidateOnFocus: false,
-      revalidateIfStale: false,
       revalidateOnReconnect: false,
       keepPreviousData: true,
     },

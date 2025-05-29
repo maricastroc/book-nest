@@ -65,7 +65,6 @@ export const useProfileRatings = (userId?: string) => {
     }
   }>(ratingsRequest, {
     revalidateOnFocus: false,
-    revalidateIfStale: false,
     keepPreviousData: true,
   })
 
