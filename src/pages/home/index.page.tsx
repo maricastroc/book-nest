@@ -89,8 +89,6 @@ export default function Home() {
     isValidating: isValidatingUserLatestReading,
   } = useRequest<RatingProps | null>(userLatestRatingRequest, {
     revalidateOnFocus: false,
-    keepPreviousData: true,
-    revalidateOnMount: !session?.data?.user,
   })
 
   const renderUserLatestRating = () => {
