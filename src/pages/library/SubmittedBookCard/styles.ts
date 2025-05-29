@@ -10,6 +10,7 @@ export const BookCardBox = styled('div', {
   width: '100%',
   position: 'relative',
   height: '10rem',
+  minWidth: '13rem',
 
   '@media (min-width: 480px)': {
     height: '11.5rem',
@@ -58,6 +59,12 @@ export const BookTitleAndAuthor = styled('div', {
     marginTop: '0.3rem',
     fontSize: '0.9rem',
     color: '$gray400',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    whiteSpace: 'normal',
   },
 })
 
@@ -93,5 +100,38 @@ export const RatingWrapper = styled('div', {
   p: {
     color: '$gray400',
     fontSize: '0.8rem',
+  },
+})
+
+export const EditButton = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '0.2rem',
+  width: '1.85rem',
+  height: '1.85rem',
+  backgroundColor: 'rgba(131, 129, 217, 0.3)',
+  borderRadius: '100%',
+  borderColor: 'transparent',
+  transition: 'all 200ms',
+  cursor: 'pointer',
+
+  svg: {
+    color: '$gray200',
+  },
+
+  '&:focus, &:focus-visible': {
+    border: 'none',
+    outline: 'none',
+    boxShadow: 'none',
+  },
+
+  '&:hover': {
+    transition: '200ms all',
+    backgroundColor: '$gray100',
+
+    svg: {
+      color: '$gray800',
+    },
   },
 })

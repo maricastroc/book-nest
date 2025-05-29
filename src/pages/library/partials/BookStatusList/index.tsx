@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { BookProps } from '@/@types/book'
 import {
   BookCover,
@@ -9,18 +9,17 @@ import {
   BookDetailsWrapper,
   EmptyBookCover,
   EmptyBooksContainer,
-  CaretLeftIcon,
-  CaretRightIcon,
-  ScrollContainer,
   Header,
   ViewAllButton,
 } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
-import { CaretLeft, CaretRight, Plus } from 'phosphor-react'
+import { CaretRight, Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useRouter } from 'next/router'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
+import { ScrollableSection } from '@/components/shared/ScrollableSection'
+import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
 
 interface BookStatusListProps {
   isLoggedUser: boolean
@@ -45,36 +44,9 @@ export function BookStatusList({
 }: BookStatusListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const [isOverflowing, setIsOverflowing] = useState(false)
+  const { handleScroll, isOverflowing } = useHorizontalScroll(containerRef)
 
   const router = useRouter()
-
-  useEffect(() => {
-    const checkOverflow = () => {
-      if (containerRef.current) {
-        setIsOverflowing(
-          containerRef.current.scrollWidth > containerRef.current.clientWidth,
-        )
-      }
-    }
-
-    checkOverflow()
-    window.addEventListener('resize', checkOverflow)
-
-    return () => {
-      window.removeEventListener('resize', checkOverflow)
-    }
-  }, [books])
-
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (containerRef.current) {
-      const scrollAmount = direction === 'right' ? 300 : -300
-      containerRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth',
-      })
-    }
-  }
 
   return (
     <LibraryContainerBox>
@@ -89,7 +61,10 @@ export function BookStatusList({
         </ViewAllButton>
       </Header>
 
-      <ScrollContainer>
+      <ScrollableSection
+        handleScroll={handleScroll}
+        showIcons={isOverflowing && books && books.length > 0}
+      >
         <ContainerWrapper
           ref={containerRef}
           className={books?.length ? '' : 'smaller'}
@@ -132,18 +107,7 @@ export function BookStatusList({
             </EmptyBooksContainer>
           )}
         </ContainerWrapper>
-
-        {isOverflowing && books && books.length > 0 && (
-          <>
-            <CaretLeftIcon onClick={() => handleScroll('left')}>
-              <CaretLeft size={24} weight="bold" />
-            </CaretLeftIcon>
-            <CaretRightIcon onClick={() => handleScroll('right')}>
-              <CaretRight size={24} weight="bold" />
-            </CaretRightIcon>
-          </>
-        )}
-      </ScrollContainer>
+      </ScrollableSection>
     </LibraryContainerBox>
   )
 }

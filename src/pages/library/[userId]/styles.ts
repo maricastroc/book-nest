@@ -190,3 +190,10 @@ export const ListByBookStatusContainer = styled('div', {
     overflow: 'scroll',
   },
 })
+
+export const DividerLine = styled('span', {
+  width: '100%',
+  height: 1,
+  backgroundColor: '$blue600',
+  opacity: 0.7,
+})

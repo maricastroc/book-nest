@@ -15,6 +15,7 @@ export function useExploreBooks() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const gridRef = useRef<HTMLDivElement>(null)
+
   const {
     currentPage,
     setCurrentPage,

@@ -6,6 +6,7 @@ export const Container = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
   padding: '0 1rem',
+  width: '100%',
 
   '@media (min-width: 580px)': {
     padding: '0 2rem',

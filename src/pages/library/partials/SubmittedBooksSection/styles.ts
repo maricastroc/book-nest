@@ -8,7 +8,6 @@ export const SkeletonContainer = styled('div', {
   width: '100%',
   gap: '1rem',
   height: '100%',
-  padding: '0 2rem',
 })
 
 export const SubmittedBooksSectionWrapper = styled('div', {
@@ -84,22 +83,15 @@ export const SubmittedBooksHeading = styled('div', {
 })
 
 export const SubmittedBooksContent = styled('div', {
-  display: 'grid',
-  gridTemplateColumns: '1fr',
-  minWidth: '100%',
+  display: 'flex',
+  width: '100%',
   gap: '0.9rem',
   alignItems: 'center',
-  justifyContent: 'center',
-
-  '@media (min-width: 480px)': {
-    gridTemplateColumns: '1fr 1fr',
-  },
-
-  '@media (min-width: 1024px)': {
-    gridTemplateColumns: '1fr 1fr 1fr',
-  },
+  justifyContent: 'flex-start',
+  overflowX: 'scroll',
 
   '@media (min-width: 1200px)': {
+    display: 'grid',
     gridTemplateColumns: '1fr',
   },
 

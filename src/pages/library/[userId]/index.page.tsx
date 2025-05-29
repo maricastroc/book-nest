@@ -2,7 +2,7 @@
 import { NextSeo } from 'next-seo'
 
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Books } from 'phosphor-react'
 
 import {
@@ -12,34 +12,27 @@ import {
   UserLibraryBody,
   UserLibraryPageWrapper,
   SubmittedBooksContainer,
-  ListByBookStatusContainer,
 } from './styles'
 
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { LateralMenu } from '@/components/shared/LateralMenu'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
-import { SkeletonBookStatusList } from '@/pages/library/partials/SkeletonBookStatusList'
 
-import { BookProps } from '@/@types/book'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { useUserLibraryData } from '@/hooks/useUserLibraryData'
 import { useScreenSize } from '@/hooks/useScreenSize'
-
-export interface UserInfo {
-  avatarUrl: string
-  name: string
-  id: string
-}
+import { UserProps } from '@/@types/user'
+import { useAppContext } from '@/contexts/AppContext'
 
 export default function Library() {
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
+  const [userInfo, setUserInfo] = useState<UserProps | null>(null)
 
-  const [openLateralMenu, setOpenLateralMenu] = useState(false)
+  const { loggedUser } = useAppContext()
+
+  const isLoggedUser = loggedUser?.id === userInfo?.id
 
   const router = useRouter()
 
@@ -50,46 +43,13 @@ export default function Library() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const {
-    submittedBooks,
-    booksByStatus,
-    userInfo,
-    isValidatingSubmittedBooksData,
-    isValidatingBooksByStatusData,
-    isLoggedUser,
-    userName,
-    onUpdateSubmittedBook,
-    onUpdateBookByStatus,
-  } = useUserLibraryData(userId)
-
   const libraryTitle = useMemo(() => {
     if (!userInfo) return 'Library'
+
     if (isLoggedUser) return 'My Library'
-    return `${userName}'s Library`
-  }, [userInfo, isLoggedUser, userName])
 
-  const renderBookStatusSection = useCallback(() => {
-    if (isValidatingBooksByStatusData) {
-      return (
-        <ListByBookStatusContainer>
-          {Array.from({ length: 3 }, (_, index) => (
-            <SkeletonBookStatusList key={index} />
-          ))}
-        </ListByBookStatusContainer>
-      )
-    }
-
-    return (
-      <BookStatusListContainer
-        data={booksByStatus}
-        userInfo={userInfo as UserInfo}
-        onSelect={(book: BookProps) => {
-          setSelectedBook(book)
-          setOpenLateralMenu(true)
-        }}
-      />
-    )
-  }, [isValidatingBooksByStatusData, booksByStatus, userInfo])
+    return `${userInfo.name}'s Library`
+  }, [userInfo, isLoggedUser, userInfo])
 
   return (
     <>
@@ -108,16 +68,6 @@ export default function Library() {
       ) : (
         <UserLibraryPageWrapper>
           {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
-          {openLateralMenu && selectedBook && (
-            <LateralMenu
-              bookId={selectedBook.id}
-              onUpdateBook={(book) => {
-                onUpdateBookByStatus(book)
-                onUpdateSubmittedBook(book)
-              }}
-              onClose={() => setOpenLateralMenu(false)}
-            />
-          )}
           <UserLibraryBody>
             <UserLibraryHeading>
               <UserLibraryHeadingTitle>
@@ -127,17 +77,12 @@ export default function Library() {
             </UserLibraryHeading>
 
             <UserLibraryContent>
-              {renderBookStatusSection()}
+              <BookStatusListContainer userInfo={userInfo} />
               <SubmittedBooksContainer>
                 <SubmittedBooksSection
-                  submittedBooks={submittedBooks}
-                  userId={userId}
                   userInfo={userInfo}
-                  onUpdateBook={(book) => {
-                    onUpdateBookByStatus(book)
-                    onUpdateSubmittedBook(book)
-                  }}
-                  isValidating={isValidatingSubmittedBooksData}
+                  setUserInfo={(value) => setUserInfo(value)}
+                  userId={userId}
                 />
               </SubmittedBooksContainer>
             </UserLibraryContent>

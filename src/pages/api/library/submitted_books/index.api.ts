@@ -9,7 +9,7 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { userId, page = '1', perPage = '6' } = req.query
+  const { userId, page = '1', perPage = '20' } = req.query
 
   if (!userId) {
     return res.status(400).json({ message: 'UserId is required' })

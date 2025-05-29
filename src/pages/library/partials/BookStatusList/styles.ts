@@ -10,6 +10,7 @@ export const LibraryContainerBox = styled('div', {
   marginBottom: '0.5rem',
   gap: '0.7rem',
   overflowX: 'scroll',
+
   '&.smaller': {
     paddingRight: '1.5rem',
   },
@@ -41,16 +42,6 @@ export const LibraryContainerBox = styled('div', {
         width: 2,
         height: 0,
       },
-    },
-
-    '*::-webkit-scrollbar': {
-      width: 2,
-      height: 8,
-    },
-
-    '*::-webkit-scrollbar-thumb': {
-      backgroundColor: '$gray600',
-      boxShadow: 'inset 0 0 0px 6px $gray600',
     },
   },
 })
@@ -259,57 +250,5 @@ export const EmptyBooksContainer = styled('div', {
 
   '@media (min-width: 1200px)': {
     height: '7.8rem',
-  },
-})
-
-export const CaretRightIcon = styled('div', {
-  position: 'absolute',
-  cursor: 'pointer',
-  right: '0.5rem',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  zIndex: 997,
-  color: '$gray100',
-  backgroundColor: '$blue600',
-  borderRadius: '50%',
-  width: '2rem',
-  height: '2rem',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  opacity: 0.9,
-  transition: 'all 0.2s',
-  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-
-  '&:hover': {
-    opacity: 1,
-    backgroundColor: '$gray500',
-    transform: 'translateY(-50%) scale(1.1)',
-  },
-})
-
-export const CaretLeftIcon = styled('div', {
-  position: 'absolute',
-  cursor: 'pointer',
-  left: '0.5rem',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  zIndex: 997,
-  color: '$gray100',
-  backgroundColor: '$blue600',
-  borderRadius: '50%',
-  width: '2rem',
-  height: '2rem',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  opacity: 0.7,
-  transition: 'all 0.2s',
-  boxShadow: '0 2px 4px rgba(73, 73, 73, 0.1)',
-
-  '&:hover': {
-    opacity: 1,
-    backgroundColor: '$gray500',
-    transform: 'translateY(-50%) scale(1.1)',
   },
 })

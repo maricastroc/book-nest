@@ -1,7 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Avatar } from '@/components/shared/Avatar'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
 import * as Dialog from '@radix-ui/react-dialog'
+import { Plus } from 'phosphor-react'
+
 import {
   SkeletonContainer,
   SubmittedBooksContent,
@@ -10,39 +13,44 @@ import {
   SubmittedBooksWrapper,
   UserProfileInfo,
 } from './styles'
-import { Plus } from 'phosphor-react'
-import { useEffect, useState } from 'react'
+
 import { SubmitBookFormModal } from '../SubmitBookFormModal'
+import { Avatar } from '@/components/shared/Avatar'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
-import { BookProps } from '@/@types/book'
-import { SkeletonUserDetails } from '../SkeletonUserDetails'
-import { useRouter } from 'next/router'
+import { ScrollableSection } from '@/components/shared/ScrollableSection'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { Button } from '@/components/core/Button'
-import { UserProps } from '@/@types/user'
-import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { DividerLine } from '@/components/shared/DividerLine'
 import { OutlineButton } from '@/components/core/OutlineButton'
 import { SubmittedBookCard } from '../../SubmittedBookCard'
 
+import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
+import { BookProps } from '@/@types/book'
+import { UserProps } from '@/@types/user'
+import useRequest from '@/hooks/useRequest'
+import { useScreenSize } from '@/hooks/useScreenSize'
+import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
+import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
+
 interface SubmittedBooksSectionProps {
-  onUpdateBook: (book: BookProps) => void
   userId: string | undefined
-  userInfo: UserProps | undefined
-  submittedBooks: BookProps[] | undefined
-  isValidating: boolean
+  userInfo: UserProps | null
+  setUserInfo: (user: UserProps | null) => void
 }
 
 export function SubmittedBooksSection({
-  onUpdateBook,
-  isValidating,
   userId,
   userInfo,
-  submittedBooks,
+  setUserInfo,
 }: SubmittedBooksSectionProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const router = useRouter()
 
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
+
+  const [submittedBooks, setSubmittedBooks] = useState<BookProps[] | null>([])
 
   const [dateInfo, setDateInfo] = useState({
     dateFormatted: '',
@@ -50,49 +58,94 @@ export function SubmittedBooksSection({
     dateString: '',
   })
 
-  const [updatedSubmittedBooks, setUpdatedSubmittedBooks] = useState<
-    BookProps[] | null
-  >([])
+  const isMediumSize = useScreenSize(1200)
 
-  useEffect(() => {
-    if (submittedBooks) {
-      setUpdatedSubmittedBooks(submittedBooks)
+  const { handleScroll, isOverflowing } = useHorizontalScroll(containerRef)
+
+  const submittedBooksRequest = userId
+    ? {
+        url: '/library/submitted_books',
+        method: 'GET',
+        params: { userId },
+      }
+    : null
+
+  const {
+    data: submittedBooksData,
+    mutate,
+    isValidating: isValidatingSubmittedBooksData,
+  } = useRequest<{
+    submittedBooks: BookProps[]
+    user: UserProps
+    pagination: {
+      page: number
+      perPage: number
+      total: number
+      totalPages: number
     }
-  }, [submittedBooks])
+  }>(submittedBooksRequest)
 
-  useEffect(() => {
-    if (userInfo && userInfo?.createdAt) {
-      const formattedUserCreatedAt = new Date(userInfo?.createdAt as string)
-      const dateFormattedData = getDateFormattedAndRelative(
-        formattedUserCreatedAt,
+  const renderSubmittedBooks = () => {
+    if (isValidatingSubmittedBooksData) {
+      return !isMediumSize ? (
+        Array.from({ length: 4 }).map((_, index) => (
+          <SkeletonBookCard key={index} />
+        ))
+      ) : (
+        <SkeletonBookStatusList />
       )
-
-      setDateInfo(dateFormattedData)
     }
+
+    if (submittedBooks && submittedBooks?.length > 0) {
+      return submittedBooks.map((book) => (
+        <SubmittedBookCard
+          key={book.id}
+          userId={userId}
+          book={book}
+          onUpdateBook={() => mutate()}
+          onClose={() => setIsSubmitBookFormOpen(false)}
+        />
+      ))
+    }
+
+    return <EmptyContainer content="submitted" />
+  }
+
+  useEffect(() => {
+    if (submittedBooksData) {
+      setSubmittedBooks(submittedBooksData.submittedBooks)
+      setUserInfo(submittedBooksData.user)
+    }
+  }, [submittedBooksData])
+
+  useEffect(() => {
+    if (!userInfo?.createdAt) return
+    const formattedUserCreatedAt = new Date(userInfo.createdAt)
+    setDateInfo(getDateFormattedAndRelative(formattedUserCreatedAt))
   }, [userInfo])
 
   return (
     <SubmittedBooksSectionWrapper>
-      {isValidating ? (
+      {isValidatingSubmittedBooksData ? (
         <SkeletonContainer>
           <SkeletonUserDetails />
-          {Array.from({ length: 4 }).map((_, index) => (
-            <SkeletonBookCard key={index} />
-          ))}
+
+          {!isMediumSize ? (
+            Array.from({ length: 4 }).map((_, index) => (
+              <SkeletonBookCard key={index} />
+            ))
+          ) : (
+            <SkeletonBookStatusList />
+          )}
         </SkeletonContainer>
       ) : (
         <>
           <UserProfileInfo>
-            <>
-              <Avatar avatarUrl={userInfo?.avatarUrl} variant="large" />
-              <h2>{userInfo?.name}</h2>
-              <time
-                title={dateInfo.dateFormatted}
-                dateTime={dateInfo.dateString}
-              >
-                joined {dateInfo.dateRelativeToNow}
-              </time>
-            </>
+            <Avatar avatarUrl={userInfo?.avatarUrl} variant="large" />
+            <h2>{userInfo?.name}</h2>
+            <time title={dateInfo.dateFormatted} dateTime={dateInfo.dateString}>
+              joined {dateInfo.dateRelativeToNow}
+            </time>
             <Button
               isSmaller
               content="View Profile"
@@ -101,43 +154,39 @@ export function SubmittedBooksSection({
             />
             <DividerLine />
           </UserProfileInfo>
+
           <SubmittedBooksWrapper>
-            {isSubmitBookFormOpen && (
-              <Dialog.Root open={isSubmitBookFormOpen}>
-                <SubmitBookFormModal
-                  onUpdateBook={onUpdateBook}
-                  onClose={() => setIsSubmitBookFormOpen(false)}
-                />
-              </Dialog.Root>
-            )}
+            <Dialog.Root open={isSubmitBookFormOpen}>
+              <SubmitBookFormModal
+                onUpdateBook={() => mutate()}
+                onClose={() => setIsSubmitBookFormOpen(false)}
+              />
+            </Dialog.Root>
+
             <SubmittedBooksHeading>
               <p>Submitted Books</p>
-              <OutlineButton onClick={() => setIsSubmitBookFormOpen(true)}>
+              <OutlineButton
+                onClick={() => setIsSubmitBookFormOpen(true)}
+                disabled={isValidatingSubmittedBooksData}
+              >
                 Add
                 <Plus />
               </OutlineButton>
             </SubmittedBooksHeading>
-            <SubmittedBooksContent>
-              {isValidating ? (
-                Array.from({ length: 4 }).map((_, index) => (
-                  <SkeletonBookCard key={index} />
-                ))
-              ) : updatedSubmittedBooks && updatedSubmittedBooks.length ? (
-                <>
-                  {updatedSubmittedBooks.map((book) => (
-                    <SubmittedBookCard
-                      key={book.id}
-                      userId={userId}
-                      book={book}
-                      onUpdateBook={onUpdateBook}
-                      onClose={() => setIsSubmitBookFormOpen(false)}
-                    />
-                  ))}
-                </>
-              ) : (
-                <EmptyContainer content="submitted" />
-              )}
-            </SubmittedBooksContent>
+
+            <ScrollableSection
+              showIcons={
+                isOverflowing &&
+                isMediumSize &&
+                !!submittedBooks &&
+                submittedBooks.length > 0
+              }
+              handleScroll={handleScroll}
+            >
+              <SubmittedBooksContent ref={containerRef}>
+                {renderSubmittedBooks()}
+              </SubmittedBooksContent>
+            </ScrollableSection>
           </SubmittedBooksWrapper>
         </>
       )}

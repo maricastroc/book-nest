@@ -1,17 +1,19 @@
-import { BookProps } from '@/@types/book'
+import { useState } from 'react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { PencilSimple } from 'phosphor-react'
+
 import {
   BookCover,
   BookTitleAndAuthor,
   BookContentWrapper,
   BookCardBox,
   FooterWrapper,
+  EditButton,
 } from './styles'
-import * as Dialog from '@radix-ui/react-dialog'
+
+import { BookProps } from '@/@types/book'
 import { useAppContext } from '@/contexts/AppContext'
-import { useRef, useState } from 'react'
 import { SubmitBookFormModal } from '@/pages/library/partials/SubmitBookFormModal'
-import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
-import { useClickOutside } from '@/hooks/useClickOutside'
 
 interface Props {
   userId?: string | undefined
@@ -25,17 +27,7 @@ export function SubmittedBookCard({ book, userId, onUpdateBook }: Props) {
 
   const [isEditBookFormOpen, setIsEditBookFormOpen] = useState(false)
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-
   const isLoggedUser = loggedUser?.id === userId
-
-  const dropdownRef = useRef<HTMLDivElement>(null)
-
-  const buttonRef = useRef<HTMLButtonElement>(null)
-
-  useClickOutside([dropdownRef, buttonRef], () => {
-    setIsDropdownOpen(false)
-  })
 
   return (
     <BookCardBox>
@@ -58,16 +50,9 @@ export function SubmittedBookCard({ book, userId, onUpdateBook }: Props) {
                   />
                 )}
               </Dialog.Root>
-              <DropdownActions
-                isSubmission
-                hasDeleteSection={false}
-                readingStatus={book?.readingStatus || undefined}
-                isDropdownOpen={isDropdownOpen}
-                onToggleDropdown={(value) => setIsDropdownOpen(value)}
-                dropdownRef={dropdownRef}
-                buttonRef={buttonRef}
-                onToggleEditSection={() => setIsEditBookFormOpen(true)}
-              />
+              <EditButton onClick={() => setIsEditBookFormOpen(true)}>
+                <PencilSimple size={22} />
+              </EditButton>
             </>
           )}
         </FooterWrapper>

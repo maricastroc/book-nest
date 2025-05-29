@@ -1,69 +1,111 @@
 import { BookProps } from '@/@types/book'
-import { BookStatusListWrapper } from './styles'
+import { BookStatusListWrapper, Container } from './styles'
 import { BooksByStatusProps } from '@/@types/books-status'
 import { BookStatusList } from '../BookStatusList'
 import { useAppContext } from '@/contexts/AppContext'
-import { UserInfo } from '../../[userId]/index.page'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BooksGridByStatus } from '../BooksGridByStatus'
+import { UserProps } from '@/@types/user'
+import { getBookStatusList } from '@/utils/getBookStatusList'
+import useRequest from '@/hooks/useRequest'
+import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
+import { LateralMenu } from '@/components/shared/LateralMenu'
+import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
+import { getEmptyBoxMessage } from '@/utils/getEmptyBoxMessage'
 
 interface BookStatusListContainerProps {
-  data: BooksByStatusProps | undefined | null
-  userInfo: UserInfo | undefined
-  onSelect: (book: BookProps) => void
+  userInfo: UserProps | null
 }
 
 export function BookStatusListContainer({
-  data,
   userInfo,
-  onSelect,
 }: BookStatusListContainerProps) {
   const { loggedUser } = useAppContext()
 
   const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
 
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
+
+  const [openLateralMenu, setOpenLateralMenu] = useState(false)
+
   const [selectedLabel, setSelectedLabel] = useState('')
+
+  const [booksByStatus, setBooksByStatus] = useState<BooksByStatusProps>()
 
   const [selectedStatus, setSelectedStatus] = useState<
     'read' | 'reading' | 'want_to_read' | 'did_not_finish' | null
   >(null)
 
-  const getEmptyBoxMessage = (
-    status: 'read' | 'reading' | 'want_to_read' | 'did_not_finish',
-  ): string => {
-    const userName = userInfo?.name?.split(' ')[0] || ''
+  const booksByStatusRequest = userInfo?.id
+    ? {
+        url: '/library/books_by_status',
+        method: 'GET',
+        params: { userId: userInfo.id },
+      }
+    : null
 
-    const messages = {
-      read: isLoggedUser
-        ? "This is where the books you've already read will be."
-        : `This is where the books ${userName} already read will be.`,
-      reading: isLoggedUser
-        ? "This is where the books you're currently reading will be."
-        : `This is where the books ${userName} is currently reading will be.`,
-      want_to_read: isLoggedUser
-        ? 'This is where the books you want to read will be.'
-        : `This is where the books ${userName} want to read will be.`,
-      did_not_finish: isLoggedUser
-        ? "This is where the books you didn't finish will be."
-        : `This is where the books ${userName} didn't finish will be.`,
-    }
-    return messages[status]
+  const {
+    data: booksByStatusData,
+    isValidating: isValidatingBooksByStatusData,
+  } = useRequest<{ booksByStatus: BooksByStatusProps }>(booksByStatusRequest)
+
+  const onUpdateBookByStatus = (updatedBook: BookProps) => {
+    setBooksByStatus((prevStatus) => {
+      if (!prevStatus) return prevStatus
+
+      const oldStatus = Object.keys(prevStatus).find((status) =>
+        prevStatus[status as keyof BooksByStatusProps]?.some(
+          (book) => book.id === updatedBook.id,
+        ),
+      ) as keyof BooksByStatusProps | undefined
+
+      if (!updatedBook.readingStatus) {
+        if (oldStatus) {
+          return {
+            ...prevStatus,
+            [oldStatus]: prevStatus[oldStatus]?.filter(
+              (book) => book.id !== updatedBook.id,
+            ),
+          }
+        }
+        return prevStatus
+      }
+
+      const newStatus = formatToSnakeCase(
+        updatedBook.readingStatus,
+      ) as keyof BooksByStatusProps
+
+      if (!oldStatus) {
+        return {
+          ...prevStatus,
+          [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
+        }
+      }
+
+      if (oldStatus === newStatus) {
+        return {
+          ...prevStatus,
+          [oldStatus]: prevStatus[oldStatus]?.map((book) =>
+            book.id === updatedBook.id ? updatedBook : book,
+          ),
+        }
+      }
+
+      return {
+        ...prevStatus,
+        [oldStatus]: prevStatus[oldStatus]?.filter(
+          (book) => book.id !== updatedBook.id,
+        ),
+        [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
+      }
+    })
   }
 
-  const bookStatusList: {
-    key: 'read' | 'reading' | 'want_to_read' | 'did_not_finish'
-    label: string
-    books: BookProps[] | undefined
-  }[] = [
-    { key: 'read', label: "I've already read", books: data?.read },
-    { key: 'reading', label: 'I am reading', books: data?.reading },
-    { key: 'want_to_read', label: 'I want to read', books: data?.want_to_read },
-    {
-      key: 'did_not_finish',
-      label: "I didn't finish",
-      books: data?.did_not_finish,
-    },
-  ]
+  useEffect(() => {
+    if (booksByStatusData) {
+      setBooksByStatus(booksByStatusData.booksByStatus)
+    }
+  }, [booksByStatusData])
 
   return selectedStatus ? (
     <BooksGridByStatus
@@ -71,26 +113,47 @@ export function BookStatusListContainer({
       setSelectedLabel={(value) => setSelectedLabel(value as string)}
       selectedLabel={selectedLabel}
       selectedStatus={selectedStatus}
-      userId={userInfo?.id}
+      userId={userInfo?.id as string}
     />
   ) : (
-    <BookStatusListWrapper>
-      {bookStatusList.map(({ key, label, books }) => (
-        <BookStatusList
-          key={key}
-          isLoggedUser={isLoggedUser}
-          className={key}
-          status={key}
-          statusLabel={label}
-          books={books}
-          onSelect={onSelect}
-          emptyBoxMessage={getEmptyBoxMessage(key)}
-          onStatusClick={() => {
-            setSelectedStatus(key)
-            setSelectedLabel(label)
+    <Container>
+      {openLateralMenu && selectedBook && (
+        <LateralMenu
+          bookId={selectedBook.id}
+          onUpdateBook={(book) => {
+            onUpdateBookByStatus(book)
           }}
+          onClose={() => setOpenLateralMenu(false)}
         />
-      ))}
-    </BookStatusListWrapper>
+      )}
+
+      {isValidatingBooksByStatusData ? (
+        Array.from({ length: 3 }, (_, index) => (
+          <SkeletonBookStatusList key={index} />
+        ))
+      ) : (
+        <BookStatusListWrapper>
+          {getBookStatusList(booksByStatus).map(({ key, label, books }) => (
+            <BookStatusList
+              key={key}
+              isLoggedUser={isLoggedUser}
+              className={key}
+              status={key}
+              statusLabel={label}
+              books={books}
+              onSelect={() => {
+                setOpenLateralMenu(true)
+                setSelectedBook(selectedBook)
+              }}
+              emptyBoxMessage={getEmptyBoxMessage(key, userInfo, loggedUser)}
+              onStatusClick={() => {
+                setSelectedStatus(key)
+                setSelectedLabel(label)
+              }}
+            />
+          ))}
+        </BookStatusListWrapper>
+      )}
+    </Container>
   )
 }

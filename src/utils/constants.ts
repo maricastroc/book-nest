@@ -15,3 +15,4 @@ export const TOOLTIP_STYLE = {
 }
 
 export const READERS_PER_PAGE = 18
+export const SUBMITTED_BOOKS_PER_PAGE = 6
