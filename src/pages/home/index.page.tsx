@@ -1,4 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
+import { useEffect, useState } from 'react'
+import { CaretRight, ChartLineUp } from 'phosphor-react'
+
 import {
   HomePageWrapper,
   HomePageHeading,
@@ -14,44 +19,31 @@ import {
   PopularBooksContent,
   PopularBooksTitle,
 } from './styles'
+
 import { RatingCard } from '@/components/cards/RatingCard'
-import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { BookCard } from '@/components/cards/BookCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { NextSeo } from 'next-seo'
-import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LateralMenu } from '@/components/shared/LateralMenu'
-import { BookProps } from '@/@types/book'
-import { useScreenSize } from '@/hooks/useScreenSize'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
+import { LoadingPage } from '@/components/shared/LoadingPage'
+import { OutlineButton } from '@/components/core/OutlineButton'
+import { MobileHeader } from '@/components/shared/MobileHeader'
+
+import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { useAppContext } from '@/contexts/AppContext'
-import { useRouter } from 'next/router'
-import { MobileHeader } from '@/components/shared/MobileHeader'
+import { useScreenSize } from '@/hooks/useScreenSize'
 import useRequest from '@/hooks/useRequest'
-import { OutlineButton } from '@/components/core/OutlineButton'
-
-export interface EditReviewData {
-  ratingId: string
-  description: string
-  rate: number
-}
-
-export interface CreateReviewData {
-  userId: string
-  bookId: string
-  description?: string
-  rate: number
-}
+import { useAppContext } from '@/contexts/AppContext'
 
 export default function Home() {
   const router = useRouter()
 
   const isRouteLoading = useLoadingOnRouteChange()
+
+  const { loggedUser, isValidatingReview } = useAppContext()
 
   const [updatedPopularBooks, setUpdatedPopularBooks] = useState<
     BookProps[] | []
@@ -60,8 +52,6 @@ export default function Home() {
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
-
-  const { loggedUser, isValidatingReview } = useAppContext()
 
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
@@ -89,6 +79,67 @@ export default function Home() {
     mutate: mutateUserLatestRating,
     isValidating: isValidatingUserLatestReading,
   } = useRequest<RatingProps | null>(userLatestRatingRequest)
+
+  const renderUserLatestRating = () => {
+    if (isValidatingUserLatestReading || isValidatingReview) {
+      return <SkeletonRatingCard withMarginBottom />
+    }
+
+    if (userLatestRatingData?.book) {
+      return (
+        <RatingCard
+          key={userLatestRatingData.id}
+          rating={userLatestRatingData}
+          onOpenDetails={() => {
+            setSelectedBook(userLatestRatingData.book as BookProps)
+            setIsLateralMenuOpen(true)
+          }}
+        />
+      )
+    }
+
+    return <EmptyContainer />
+  }
+
+  const renderLatestRatings = () => {
+    if (!latestRatings?.length) {
+      return Array.from({ length: 9 }).map((_, index) => (
+        <SkeletonRatingCard key={index} />
+      ))
+    }
+
+    return latestRatings.map((rating: RatingProps) => (
+      <RatingCard
+        key={rating.id}
+        rating={rating}
+        onOpenDetails={() => {
+          if (rating?.book) {
+            setSelectedBook(rating.book as BookProps)
+            setIsLateralMenuOpen(true)
+          }
+        }}
+      />
+    ))
+  }
+
+  const renderPopularBooks = () => {
+    if (!updatedPopularBooks?.length) {
+      return Array.from({ length: 12 }).map((_, index) => (
+        <SkeletonBookCard key={index} />
+      ))
+    }
+
+    return updatedPopularBooks.map((book) => (
+      <BookCard
+        key={book.id}
+        book={book}
+        onOpenDetails={() => {
+          setSelectedBook(book)
+          setIsLateralMenuOpen(true)
+        }}
+      />
+    ))
+  }
 
   const onUpdateBook = async (updatedBook: BookProps) => {
     setUpdatedPopularBooks((prevBooks) => {
@@ -143,44 +194,14 @@ export default function Home() {
                       Your Last Review
                     </UserLatestReadingTitle>
                     <UserLatestReadingContainer>
-                      {isValidatingUserLatestReading || isValidatingReview ? (
-                        <SkeletonRatingCard withMarginBottom />
-                      ) : userLatestRatingData && userLatestRatingData?.book ? (
-                        <RatingCard
-                          key={userLatestRatingData.id}
-                          rating={userLatestRatingData}
-                          onOpenDetails={() => {
-                            setSelectedBook(
-                              userLatestRatingData.book as BookProps,
-                            )
-                            setIsLateralMenuOpen(true)
-                          }}
-                        />
-                      ) : (
-                        <EmptyContainer />
-                      )}
+                      {renderUserLatestRating()}
                     </UserLatestReadingContainer>
                   </>
                 )}
                 <LastRatingsContainer>
                   <LastRatingsTitle>Last Ratings</LastRatingsTitle>
                   <LastRatingsContent>
-                    {!latestRatings?.length
-                      ? Array.from({ length: 9 }).map((_, index) => (
-                          <SkeletonRatingCard key={index} />
-                        ))
-                      : latestRatings?.map((rating: RatingProps) => (
-                          <RatingCard
-                            key={rating.id}
-                            rating={rating}
-                            onOpenDetails={() => {
-                              if (rating?.book) {
-                                setSelectedBook(rating.book as BookProps)
-                                setIsLateralMenuOpen(true)
-                              }
-                            }}
-                          />
-                        ))}
+                    {renderLatestRatings()}
                   </LastRatingsContent>
                 </LastRatingsContainer>
               </LastRatingsWrapper>
@@ -194,21 +215,7 @@ export default function Home() {
                   </OutlineButton>
                 </PopularBooksTitle>
                 <PopularBooksContent>
-                  {!updatedPopularBooks?.length
-                    ? Array.from({ length: 12 }).map((_, index) => (
-                        <SkeletonBookCard key={index} />
-                      ))
-                    : updatedPopularBooks?.length > 0 &&
-                      updatedPopularBooks?.map((book) => (
-                        <BookCard
-                          key={book.id}
-                          book={book}
-                          onOpenDetails={() => {
-                            setSelectedBook(book)
-                            setIsLateralMenuOpen(true)
-                          }}
-                        />
-                      ))}
+                  {renderPopularBooks()}
                 </PopularBooksContent>
               </PopularBooksWrapper>
             </HomePageContent>

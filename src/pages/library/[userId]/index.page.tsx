@@ -1,6 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextSeo } from 'next-seo'
-import { Sidebar } from '@/components/shared/Sidebar'
+
+import { useRouter } from 'next/router'
+import { useCallback, useMemo, useState } from 'react'
+import { Books } from 'phosphor-react'
+
 import {
   UserLibraryContent,
   UserLibraryHeading,
@@ -10,24 +14,19 @@ import {
   SubmittedBooksContainer,
   ListByBookStatusContainer,
 } from './styles'
-import { Books } from 'phosphor-react'
-import { useScreenSize } from '@/hooks/useScreenSize'
-import { useRouter } from 'next/router'
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { useAppContext } from '@/contexts/AppContext'
-import { BooksByStatusProps } from '@/@types/books-status'
-import { SkeletonBookStatusList } from '@/pages/library/partials/SkeletonBookStatusList'
 
-import { useEffect, useState } from 'react'
-import { BookProps } from '@/@types/book'
+import { Sidebar } from '@/components/shared/Sidebar'
+import { LoadingPage } from '@/components/shared/LoadingPage'
 import { LateralMenu } from '@/components/shared/LateralMenu'
+import { MobileHeader } from '@/components/shared/MobileHeader'
 import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
-import { MobileHeader } from '@/components/shared/MobileHeader'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
-import useRequest from '@/hooks/useRequest'
-import { UserProps } from '@/@types/user'
+import { SkeletonBookStatusList } from '@/pages/library/partials/SkeletonBookStatusList'
+
+import { BookProps } from '@/@types/book'
+import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
+import { useUserLibraryData } from '@/hooks/useUserLibraryData'
+import { useScreenSize } from '@/hooks/useScreenSize'
 
 export interface UserInfo {
   avatarUrl: string
@@ -42,20 +41,6 @@ export default function Library() {
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const [booksByStatus, setBooksByStatus] = useState<
-    BooksByStatusProps | undefined
-  >()
-
-  const [userInfo, setUserInfo] = useState<UserInfo | undefined>()
-
-  const { loggedUser } = useAppContext()
-
-  const isLoggedUser = loggedUser?.id.toString() === userInfo?.id.toString()
-
-  const userName = userInfo?.name?.split(' ')[0] || ''
-
-  const [submittedBooks, setSubmittedBooks] = useState<BookProps[]>()
-
   const router = useRouter()
 
   const userId = Array.isArray(router.query.userId)
@@ -65,115 +50,46 @@ export default function Library() {
   const isSmallSize = useScreenSize(480)
   const isMediumSize = useScreenSize(768)
 
-  const submittedBooksRequest = userId
-    ? {
-        url: '/library/submitted_books',
-        method: 'GET',
-        params: { userId },
-      }
-    : null
-
-  const booksByStatusRequest = userId
-    ? {
-        url: '/library/books_by_status',
-        method: 'GET',
-        params: { userId },
-      }
-    : null
-
   const {
-    data: submittedBooksData,
-    isValidating: isValidatingSubmittedBooksData,
-  } = useRequest<{
-    submittedBooks: BookProps[]
-    user: UserProps
-  }>(submittedBooksRequest)
+    submittedBooks,
+    booksByStatus,
+    userInfo,
+    isValidatingSubmittedBooksData,
+    isValidatingBooksByStatusData,
+    isLoggedUser,
+    userName,
+    onUpdateSubmittedBook,
+    onUpdateBookByStatus,
+  } = useUserLibraryData(userId)
 
-  const {
-    data: booksByStatusData,
-    isValidating: isValidatingBooksByStatusData,
-  } = useRequest<{
-    booksByStatus: BooksByStatusProps
-  }>(booksByStatusRequest)
+  const libraryTitle = useMemo(() => {
+    if (!userInfo) return 'Library'
+    if (isLoggedUser) return 'My Library'
+    return `${userName}'s Library`
+  }, [userInfo, isLoggedUser, userName])
 
-  const onUpdateSubmittedBook = (book: BookProps) => {
-    setSubmittedBooks((prevBooks) => {
-      if (!prevBooks) return [book]
-
-      const bookExists = prevBooks.some((b) => b.id === book.id)
-
-      if (!bookExists) {
-        return [...prevBooks, book]
-      }
-
-      return prevBooks.map((b) => (b.id === book.id ? book : b))
-    })
-  }
-
-  const onUpdateBookByStatus = (updatedBook: BookProps) => {
-    setBooksByStatus((prevStatus) => {
-      if (!prevStatus) return prevStatus
-
-      const oldStatus = Object.keys(prevStatus).find((status) =>
-        prevStatus[status as keyof BooksByStatusProps]?.some(
-          (book) => book.id === updatedBook.id,
-        ),
-      ) as keyof BooksByStatusProps | undefined
-
-      if (!updatedBook.readingStatus) {
-        if (oldStatus) {
-          return {
-            ...prevStatus,
-            [oldStatus]: prevStatus[oldStatus]?.filter(
-              (book) => book.id !== updatedBook.id,
-            ),
-          }
-        }
-        return prevStatus
-      }
-
-      const newStatus = formatToSnakeCase(
-        updatedBook.readingStatus,
-      ) as keyof BooksByStatusProps
-
-      if (!oldStatus) {
-        return {
-          ...prevStatus,
-          [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
-        }
-      }
-
-      if (oldStatus === newStatus) {
-        return {
-          ...prevStatus,
-          [oldStatus]: prevStatus[oldStatus]?.map((book) =>
-            book.id === updatedBook.id ? updatedBook : book,
-          ),
-        }
-      }
-
-      return {
-        ...prevStatus,
-        [oldStatus]: prevStatus[oldStatus]?.filter(
-          (book) => book.id !== updatedBook.id,
-        ),
-        [newStatus]: [...(prevStatus[newStatus] || []), updatedBook],
-      }
-    })
-  }
-
-  useEffect(() => {
-    if (submittedBooksData) {
-      setSubmittedBooks(submittedBooksData.submittedBooks)
-      setUserInfo(submittedBooksData.user as UserInfo)
+  const renderBookStatusSection = useCallback(() => {
+    if (isValidatingBooksByStatusData) {
+      return (
+        <ListByBookStatusContainer>
+          {Array.from({ length: 3 }, (_, index) => (
+            <SkeletonBookStatusList key={index} />
+          ))}
+        </ListByBookStatusContainer>
+      )
     }
-  }, [submittedBooksData])
 
-  useEffect(() => {
-    if (booksByStatusData) {
-      setBooksByStatus(booksByStatusData.booksByStatus)
-    }
-  }, [booksByStatusData])
+    return (
+      <BookStatusListContainer
+        data={booksByStatus}
+        userInfo={userInfo as UserInfo}
+        onSelect={(book: BookProps) => {
+          setSelectedBook(book)
+          setOpenLateralMenu(true)
+        }}
+      />
+    )
+  }, [isValidatingBooksByStatusData, booksByStatus, userInfo])
 
   return (
     <>
@@ -206,33 +122,12 @@ export default function Library() {
             <UserLibraryHeading>
               <UserLibraryHeadingTitle>
                 <Books />
-                <h2>
-                  {!userInfo
-                    ? 'Library'
-                    : isLoggedUser
-                    ? 'My Library'
-                    : `${userName}'s Library`}
-                </h2>
+                <h2>{libraryTitle}</h2>
               </UserLibraryHeadingTitle>
             </UserLibraryHeading>
 
             <UserLibraryContent>
-              {isValidatingBooksByStatusData ? (
-                <ListByBookStatusContainer>
-                  {Array.from({ length: 3 }, (_, index) => (
-                    <SkeletonBookStatusList key={index} />
-                  ))}
-                </ListByBookStatusContainer>
-              ) : (
-                <BookStatusListContainer
-                  data={booksByStatus}
-                  userInfo={userInfo}
-                  onSelect={(book: BookProps) => {
-                    setSelectedBook(book)
-                    setOpenLateralMenu(true)
-                  }}
-                />
-              )}
+              {renderBookStatusSection()}
               <SubmittedBooksContainer>
                 <SubmittedBooksSection
                   submittedBooks={submittedBooks}

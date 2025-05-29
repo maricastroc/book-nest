@@ -91,7 +91,7 @@ export const ProfilePageContent = styled('div', {
 })
 
 export const ProfilePageHeading = styled('div', {
-  display: 'none',
+  display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
@@ -102,7 +102,6 @@ export const ProfilePageHeading = styled('div', {
   width: '100%',
 
   '@media (min-width: 1024px)': {
-    display: 'flex',
     marginTop: '0.5rem',
   },
 })
