@@ -3,7 +3,7 @@ import { styled } from '@/styles'
 export const ProfilePageWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '0 1rem',
+  padding: '0 1.5rem',
   maxWidth: '100vw',
   alignItems: 'center',
   justifyContent: 'center',
@@ -45,13 +45,13 @@ export const ProfilePageContainer = styled('div', {
   justifyContent: 'center',
   margin: '0 auto',
   maxHeight: '100%',
-  padding: '1rem',
   marginTop: '5rem',
   maxWidth: '42rem',
+  paddingTop: '1rem',
   paddingBottom: '4rem',
 
   '@media (min-width: 480px)': {
-    padding: '1.5rem',
+    padding: '1.5rem 0',
     marginTop: '5.5rem',
   },
 

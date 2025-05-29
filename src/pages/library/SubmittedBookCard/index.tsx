@@ -51,7 +51,7 @@ export function SubmittedBookCard({ book, userId, onUpdateBook }: Props) {
                 )}
               </Dialog.Root>
               <EditButton onClick={() => setIsEditBookFormOpen(true)}>
-                <PencilSimple size={22} />
+                <PencilSimple size={20} />
               </EditButton>
             </>
           )}

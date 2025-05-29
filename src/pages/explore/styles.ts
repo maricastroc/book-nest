@@ -5,7 +5,7 @@ export const ExplorePageWrapper = styled('div', {
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
-  padding: '0 1rem',
+  padding: '0 1.5rem',
   maxWidth: '100%',
   alignItems: 'center',
   justifyContent: 'flex-start',
@@ -36,7 +36,6 @@ export const ExplorePageWrapper = styled('div', {
 export const ExplorePageContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '0 1rem',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',

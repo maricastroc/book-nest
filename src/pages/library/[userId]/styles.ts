@@ -74,7 +74,7 @@ export const UserLibraryBody = styled('div', {
 export const UserLibraryContent = styled('div', {
   display: 'flex',
   flexDirection: 'column-reverse',
-  padding: '0 2rem 0',
+  padding: '0 1.5rem 0',
   width: '100%',
   gap: 0,
   alignItems: 'flex-start',
@@ -104,10 +104,11 @@ export const UserLibraryHeading = styled('div', {
   gap: '0.8rem',
   textAlign: 'left',
   width: '100%',
-  paddingLeft: '2rem',
+  paddingLeft: '1.5rem',
   paddingTop: '4.5rem',
 
   '@media (min-width: 480px)': {
+    paddingLeft: '2rem',
     paddingTop: '5.5rem',
     marginBottom: '1rem',
   },

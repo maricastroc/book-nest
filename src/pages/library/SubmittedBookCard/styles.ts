@@ -9,17 +9,12 @@ export const BookCardBox = styled('div', {
   gap: '0.7rem',
   width: '100%',
   position: 'relative',
-  height: '10rem',
-  minWidth: '13rem',
+
+  minWidth: '14rem',
 
   '@media (min-width: 480px)': {
-    height: '11.5rem',
     gap: '0.9rem',
     padding: '1.2rem',
-  },
-
-  '@media (min-width: 1024px)': {
-    height: '9.2rem',
   },
 
   '@media (min-width: 1200px)': {
@@ -69,18 +64,10 @@ export const BookTitleAndAuthor = styled('div', {
 })
 
 export const BookCover = styled('img', {
-  width: '5.6rem',
-  height: 'auto',
+  width: '5.2rem',
+  height: '7.5rem',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
-
-  '@media (min-width: 480px)': {
-    width: '5.5rem',
-  },
-
-  '@media (min-width: 1024px)': {
-    width: '4.5rem',
-  },
 })
 
 export const FooterWrapper = styled('div', {
@@ -108,8 +95,8 @@ export const EditButton = styled('button', {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '0.2rem',
-  width: '1.85rem',
-  height: '1.85rem',
+  width: '1.7rem',
+  height: '1.7rem',
   backgroundColor: 'rgba(131, 129, 217, 0.3)',
   borderRadius: '100%',
   borderColor: 'transparent',

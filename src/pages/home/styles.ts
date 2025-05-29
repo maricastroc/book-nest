@@ -3,7 +3,7 @@ import { styled } from '@/styles'
 export const HomePageWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '0 1rem',
+  padding: '0 1.5rem',
   minWidth: '100vw',
   alignItems: 'center',
   justifyContent: 'center',
@@ -38,7 +38,6 @@ export const HomePageWrapper = styled('div', {
 export const HomePageContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  padding: '0 1rem',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center',
