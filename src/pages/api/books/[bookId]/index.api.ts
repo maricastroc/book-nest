@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth'
+import { getServerSession, Session } from 'next-auth'
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
 import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 
@@ -14,9 +14,11 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  let session = null
-
-  session = await getServerSession(req, res, buildNextAuthOptions(req, res))
+  const session: Session | null = await getServerSession(
+    req,
+    res,
+    buildNextAuthOptions(req, res),
+  )
 
   const book = await prisma.book.findUnique({
     where: {
