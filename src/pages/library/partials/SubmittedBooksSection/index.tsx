@@ -23,7 +23,7 @@ import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { Button } from '@/components/core/Button'
 import { DividerLine } from '@/components/shared/DividerLine'
 import { OutlineButton } from '@/components/core/OutlineButton'
-import { SubmittedBookCard } from '../../SubmittedBookCard'
+import { SubmittedBookCard } from '../SubmittedBookCard'
 
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { BookProps } from '@/@types/book'

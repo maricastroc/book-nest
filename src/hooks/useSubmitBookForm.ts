@@ -14,6 +14,7 @@ import toast from 'react-hot-toast'
 import useRequest from '@/hooks/useRequest'
 import { z } from 'zod'
 import { formatCategoryArray } from '@/utils/formatCategoryArray'
+import { handleApiError } from '@/utils/handleApiError'
 
 export const submitBookFormSchema = z.object({
   userId: z.string(),
@@ -284,7 +285,7 @@ export function useSubmitBookForm({
 
       onClose()
     } catch (error) {
-      toast.error('Error submitting book.')
+      handleApiError(error)
     } finally {
       setIsSubmitting(false)
       setShowErrors(false)

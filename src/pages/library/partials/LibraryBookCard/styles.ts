@@ -8,7 +8,7 @@ export const BookCardBox = styled('div', {
   alignItems: 'center',
   gap: '0.7rem',
   position: 'relative',
-  height: '13rem',
+  height: 'auto',
 })
 
 export const BookContentWrapper = styled('div', {

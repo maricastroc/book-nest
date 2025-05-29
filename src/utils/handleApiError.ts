@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 
 export function handleApiError(error: unknown) {
   if (axios.isAxiosError(error) && error.response) {

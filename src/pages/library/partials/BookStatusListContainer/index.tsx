@@ -26,7 +26,7 @@ export function BookStatusListContainer({
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
-  const [openLateralMenu, setOpenLateralMenu] = useState(false)
+  const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
   const [selectedLabel, setSelectedLabel] = useState('')
 
@@ -106,7 +106,7 @@ export function BookStatusListContainer({
       setBooksByStatus(booksByStatusData.booksByStatus)
     }
   }, [booksByStatusData])
-
+  console.log(isLateralMenuOpen && selectedBook)
   return selectedStatus ? (
     <BooksGridByStatus
       setSelectedStatus={(value) => setSelectedStatus(value)}
@@ -117,13 +117,13 @@ export function BookStatusListContainer({
     />
   ) : (
     <Container>
-      {openLateralMenu && selectedBook && (
+      {isLateralMenuOpen && !!selectedBook && (
         <LateralMenu
           bookId={selectedBook.id}
           onUpdateBook={(book) => {
             onUpdateBookByStatus(book)
           }}
-          onClose={() => setOpenLateralMenu(false)}
+          onClose={() => setIsLateralMenuOpen(false)}
         />
       )}
 
@@ -141,9 +141,9 @@ export function BookStatusListContainer({
               status={key}
               statusLabel={label}
               books={books}
-              onSelect={() => {
-                setOpenLateralMenu(true)
-                setSelectedBook(selectedBook)
+              onSelect={(book) => {
+                setIsLateralMenuOpen(true)
+                setSelectedBook(book)
               }}
               emptyBoxMessage={getEmptyBoxMessage(key, userInfo, loggedUser)}
               onStatusClick={() => {

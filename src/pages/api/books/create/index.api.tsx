@@ -74,12 +74,21 @@ export default async function handler(
       }
 
       const createBookSchema = z.object({
-        name: z.string().min(1),
-        author: z.string().min(1),
-        summary: z.string().min(1),
-        totalPages: z.number().positive(),
-        publishingYear: z.number().int(),
-        categories: z.array(z.string()).nonempty(),
+        name: z.string().min(1, { message: 'Book name is required.' }),
+        author: z.string().min(1, { message: 'Author name is required.' }),
+        summary: z.string().min(1, { message: 'Summary is required.' }),
+        publisher: z.string().min(1, { message: 'Publisher is required.' }),
+        totalPages: z
+          .number({ invalid_type_error: 'Total pages must be a number.' })
+          .positive({ message: 'Total pages must be greater than zero.' }),
+        publishingYear: z
+          .number({ invalid_type_error: 'Publishing year must be a number.' })
+          .int({ message: 'Publishing year must be an integer.' }),
+        categories: z
+          .array(z.string(), {
+            invalid_type_error: 'Categories must be an array of strings.',
+          })
+          .nonempty({ message: 'At least one category is required.' }),
       })
 
       await createBookSchema.parseAsync({
@@ -87,6 +96,7 @@ export default async function handler(
         author,
         summary,
         totalPages,
+        publisher,
         publishingYear,
         categories,
       })

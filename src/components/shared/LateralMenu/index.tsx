@@ -75,7 +75,7 @@ export function LateralMenu({
         <X />
       </CloseButton>
       <MenuBody>
-        {loadingState?.initial ? (
+        {loadingState?.initial || isValidating ? (
           <SkeletonLateralMenu />
         ) : (
           <>
@@ -138,7 +138,7 @@ export function LateralMenu({
                     book={updatedBook}
                   />
                 )}
-                {!isValidating && !bookRatings?.length ? (
+                {!isValidating && !bookRatings?.length && !isReviewFormOpen ? (
                   <EmptyContainer content="reviews" />
                 ) : loadingState?.reviews || isValidatingReview ? (
                   Array.from({ length: 3 }).map((_, index) => (

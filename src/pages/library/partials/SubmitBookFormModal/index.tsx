@@ -308,7 +308,13 @@ export function SubmitBookFormModal({
 
               <Button
                 type="submit"
-                content={isEdit ? 'Save Changes' : 'Submit New Book'}
+                content={
+                  isSubmitting
+                    ? 'Loading... '
+                    : isEdit
+                    ? 'Save Changes'
+                    : 'Submit New Book'
+                }
                 disabled={isSubmitting || !isValidBook}
                 style={{ marginTop: '1rem' }}
               />
