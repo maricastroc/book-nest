@@ -19,6 +19,7 @@ import { SearchBar } from '@/components/shared/SearchBar'
 import { usePerPage } from '@/hooks/useLibraryBooksPerPage'
 import useRequest from '@/hooks/useRequest'
 import { LateralMenu } from '@/components/shared/LateralMenu'
+import { useDebouncedValue } from '@/hooks/useDebounce'
 
 interface Props {
   userId: string | undefined
@@ -45,8 +46,6 @@ export const AllBooksContainer = ({
 
   const [search, setSearch] = useState('')
 
-  const [searchTerm, setSearchTerm] = useState('')
-
   const [totalPages, setTotalPages] = useState(1)
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
@@ -54,6 +53,8 @@ export const AllBooksContainer = ({
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
   const [filteredBooks, setFilteredBooks] = useState<BookProps[] | []>([])
+
+  const searchTerm = useDebouncedValue(search)
 
   const { data, mutate, isValidating } = useRequest<{
     books: BookProps[]
@@ -92,15 +93,6 @@ export const AllBooksContainer = ({
       window.scrollTo({ top, behavior: 'smooth' })
     }
   }
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchTerm(search)
-      setCurrentPage(1)
-    }, 300)
-
-    return () => clearTimeout(timer)
-  }, [search])
 
   useEffect(() => {
     if (data) {

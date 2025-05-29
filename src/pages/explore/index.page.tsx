@@ -1,7 +1,27 @@
-import { Binoculars, CaretLeft, CaretRight } from 'phosphor-react'
+import { useState } from 'react'
+import { NextSeo } from 'next-seo'
+
+import { Binoculars } from 'phosphor-react'
+
+import { CategoryProps } from '@/@types/category'
+import { BookProps } from '@/@types/book'
+
+import { useScreenSize } from '@/hooks/useScreenSize'
+import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
+
+import { Sidebar } from '@/components/shared/Sidebar'
+import { LateralMenu } from '@/components/shared/LateralMenu'
+import { LoadingPage } from '@/components/shared/LoadingPage'
+import { MobileHeader } from '@/components/shared/MobileHeader'
+import { Pagination } from '@/components/shared/Pagination'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { SearchBar } from '@/components/shared/SearchBar'
+
+import { SkeletonExploreCard } from '@/components/skeletons/SkeletonExploreCard'
+
+import { ExploreCard } from './partials/ExploreCard'
+
 import {
-  Categories,
-  SelectCategoryButton,
   ExplorePageWrapper,
   ExplorePageContainer,
   ExplorePageHeading,
@@ -9,28 +29,9 @@ import {
   ExplorePageContent,
   HeadingTitle,
   TitleAndSearch,
-  ScrollContainer,
-  CaretLeftIcon,
-  CaretRightIcon,
 } from './styles'
-import { useEffect, useRef, useState } from 'react'
-import { Sidebar } from '@/components/shared/Sidebar'
-import { LateralMenu } from '@/components/shared/LateralMenu'
-import { NextSeo } from 'next-seo'
-import { CategoryProps } from '@/@types/category'
-import { BookProps } from '@/@types/book'
-import { useScreenSize } from '@/hooks/useScreenSize'
-import { SkeletonExploreCard } from '@/components/skeletons/SkeletonExploreCard'
-import { SkeletonCategories } from '@/pages/explore/partials/SkeletonCategories'
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { MobileHeader } from '@/components/shared/MobileHeader'
-import useRequest from '@/hooks/useRequest'
-import { Pagination } from '@/components/shared/Pagination'
-import { ExploreCard } from './partials/ExploreCard'
-import { usePerPage } from '@/hooks/useExploreBooksPerPage'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { useExploreBooks } from '@/hooks/useExploreBooks'
+import { CategoriesSection } from './partials/CategoriesSection'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -40,118 +41,53 @@ export interface ExploreProps {
 export default function Explore() {
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const [updatedBooks, setUpdatedBooks] = useState<BookProps[] | []>([])
+  const isSmallSize = useScreenSize(480)
 
-  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
-
-  const perPage = usePerPage()
-
-  const [currentPage, setCurrentPage] = useState(1)
-
-  const [totalPages, setTotalPages] = useState(1)
-
-  const [search, setSearch] = useState('')
-
-  const [searchTerm, setSearchTerm] = useState('')
-
-  const [selectedCategory, setSelectedCategory] = useState<string | null>('')
+  const isMediumSize = useScreenSize(768)
 
   const [openLateralMenu, setOpenLateralMenu] = useState(false)
 
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
-  const gridRef = useRef<HTMLDivElement>(null)
+  const {
+    search,
+    setSearch,
+    selectedCategory,
+    setSelectedCategory,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    updatedBooks,
+    onUpdateBook,
+    categories,
+    isValidating,
+    containerRef,
+    gridRef,
+    perPage,
+  } = useExploreBooks()
 
-  const { data: booksData, isValidating } = useRequest<{
-    books: BookProps[]
-    pagination: {
-      page: number
-      perPage: number
-      total: number
-      totalPages: number
+  const renderBookCards = () => {
+    if (isValidating) {
+      return Array.from({ length: perPage }).map((_, index) => (
+        <SkeletonExploreCard key={index} />
+      ))
     }
-  } | null>(
-    {
-      url: '/books',
-      method: 'GET',
-      params: {
-        category: selectedCategory,
-        ...(searchTerm?.length ? { search: searchTerm } : {}),
-        page: currentPage,
-        perPage,
-      },
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
-      keepPreviousData: true,
-    },
-  )
 
-  const { data: categories } = useRequest<CategoryProps[] | null>({
-    url: '/categories',
-    method: 'GET',
-  })
+    if (!updatedBooks?.length && !isValidating) {
+      return <EmptyContainer content="books" />
+    }
 
-  const isSmallSize = useScreenSize(480)
-  const isMediumSize = useScreenSize(768)
-
-  function handleCloseLateralMenu() {
-    setOpenLateralMenu(false)
+    return updatedBooks.map((book) => (
+      <ExploreCard
+        key={book.id}
+        book={book}
+        onOpenDetails={() => {
+          setSelectedBook(book)
+          setOpenLateralMenu(true)
+        }}
+      />
+    ))
   }
-
-  const onUpdateBook = (updatedBook: BookProps) => {
-    setUpdatedBooks((prevBooks) => {
-      if (!prevBooks) return prevBooks
-
-      const updatedBooks = prevBooks.map((book) =>
-        book.id === updatedBook.id ? updatedBook : book,
-      )
-
-      return updatedBooks
-    })
-  }
-
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (containerRef.current) {
-      const scrollAmount = direction === 'right' ? 300 : -300
-      containerRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth',
-      })
-    }
-  }
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
-
-  useEffect(() => {
-    if (booksData?.pagination) {
-      setTotalPages(booksData.pagination.totalPages)
-    }
-  }, [booksData])
-
-  useEffect(() => {
-    if (booksData?.books) {
-      setUpdatedBooks(booksData.books)
-    }
-  }, [booksData])
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchTerm(search)
-      setCurrentPage(1)
-    }, 300)
-
-    return () => clearTimeout(timer)
-  }, [search])
-
-  useEffect(() => {
-    if (gridRef.current) {
-      gridRef.current.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-  }, [currentPage])
 
   return (
     <>
@@ -164,8 +100,8 @@ export default function Explore() {
             <LateralMenu
               bookId={selectedBook.id}
               onUpdateBook={onUpdateBook}
-              onClose={async () => {
-                handleCloseLateralMenu()
+              onClose={() => {
+                setOpenLateralMenu(false)
               }}
             />
           )}
@@ -190,45 +126,14 @@ export default function Explore() {
                   }}
                 />
               </TitleAndSearch>
-              <ScrollContainer>
-                <Categories ref={containerRef}>
-                  {!categories?.length ? (
-                    <SkeletonCategories />
-                  ) : (
-                    <>
-                      <SelectCategoryButton
-                        selected={!selectedCategory}
-                        onClick={() => {
-                          setCurrentPage(1)
-                          setSelectedCategory(null)
-                        }}
-                      >
-                        All
-                      </SelectCategoryButton>
-                      {categories?.map((category) => (
-                        <SelectCategoryButton
-                          selected={selectedCategory === category.id}
-                          key={category.id}
-                          onClick={() => {
-                            setCurrentPage(1)
-                            setSelectedCategory(category.id)
-                          }}
-                          className={isValidating ? 'loading' : ''}
-                        >
-                          {category.name}
-                        </SelectCategoryButton>
-                      ))}
-                    </>
-                  )}
-
-                  <CaretLeftIcon onClick={() => handleScroll('left')}>
-                    <CaretLeft size={28} weight="bold" />
-                  </CaretLeftIcon>
-                  <CaretRightIcon onClick={() => handleScroll('right')}>
-                    <CaretRight size={28} weight="bold" />
-                  </CaretRightIcon>
-                </Categories>
-              </ScrollContainer>
+              <CategoriesSection
+                categories={categories}
+                containerRef={containerRef}
+                isValidating={isValidating}
+                setCurrentPage={(value) => setCurrentPage(value)}
+                setSelectedCategory={(value) => setSelectedCategory(value)}
+                selectedCategory={selectedCategory}
+              />
             </ExplorePageHeading>
             <ExplorePageContent ref={gridRef}>
               <BooksContainer
@@ -236,30 +141,13 @@ export default function Explore() {
                   !updatedBooks?.length && !isValidating ? 'empty' : ''
                 }`}
               >
-                {isValidating ? (
-                  Array.from({ length: perPage }).map((_, index) => (
-                    <SkeletonExploreCard key={index} />
-                  ))
-                ) : updatedBooks?.length ? (
-                  updatedBooks?.map((book) => (
-                    <ExploreCard
-                      key={book.id}
-                      book={book}
-                      onOpenDetails={() => {
-                        setSelectedBook(book)
-                        setOpenLateralMenu(true)
-                      }}
-                    />
-                  ))
-                ) : (
-                  <EmptyContainer content="books" />
-                )}
+                {renderBookCards()}
               </BooksContainer>
               {totalPages > 1 && (
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
-                  onPageChange={handlePageChange}
+                  onPageChange={(page) => setCurrentPage(page)}
                 />
               )}
             </ExplorePageContent>

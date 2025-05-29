@@ -1,4 +1,25 @@
+import { useEffect, useRef, useState } from 'react'
+import { NextSeo } from 'next-seo'
 import { Users as UsersIcon } from 'phosphor-react'
+
+import { CategoryProps } from '@/@types/category'
+import { BookProps } from '@/@types/book'
+import { UserProps } from 'next-auth'
+
+import { useScreenSize } from '@/hooks/useScreenSize'
+import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
+import useRequest from '@/hooks/useRequest'
+
+import { Sidebar } from '@/components/shared/Sidebar'
+import { LoadingPage } from '@/components/shared/LoadingPage'
+import { MobileHeader } from '@/components/shared/MobileHeader'
+import { Pagination } from '@/components/shared/Pagination'
+import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { SearchBar } from '@/components/shared/SearchBar'
+
+import { UserCard } from './partials/UserCard'
+import { SkeletonUserCard } from './partials/SkeletonUserCard'
+
 import {
   UsersPageWrapper,
   UsersPageContainer,
@@ -8,22 +29,8 @@ import {
   HeadingTitle,
   TitleAndSearch,
 } from './styles'
-import { Sidebar } from '@/components/shared/Sidebar'
-import { NextSeo } from 'next-seo'
-import { CategoryProps } from '@/@types/category'
-import { BookProps } from '@/@types/book'
-import { useScreenSize } from '@/hooks/useScreenSize'
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { MobileHeader } from '@/components/shared/MobileHeader'
-import { UserCard } from './partials/UserCard'
-import { SkeletonUserCard } from './partials/SkeletonUserCard'
-import useRequest from '@/hooks/useRequest'
-import { UserProps } from 'next-auth'
-import { useEffect, useRef, useState } from 'react'
-import { Pagination } from '@/components/shared/Pagination'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { READERS_PER_PAGE } from '@/utils/constants'
+import { useDebouncedValue } from '@/hooks/useDebounce'
 
 export interface UsersProps {
   categories: CategoryProps[]
@@ -31,20 +38,19 @@ export interface UsersProps {
 }
 
 export default function Users() {
-  const isRouteLoading = useLoadingOnRouteChange()
-
   const [search, setSearch] = useState('')
-
-  const perPage = 18
 
   const [currentPage, setCurrentPage] = useState(1)
 
   const gridRef = useRef<HTMLDivElement>(null)
 
   const isSmallSize = useScreenSize(480)
+
   const isMediumSize = useScreenSize(768)
 
-  const [searchTerm, setSearchTerm] = useState('')
+  const isRouteLoading = useLoadingOnRouteChange()
+
+  const searchTerm = useDebouncedValue(search)
 
   const { data, isValidating } = useRequest<{
     users: UserProps[]
@@ -61,7 +67,7 @@ export default function Users() {
       params: {
         search: searchTerm,
         page: currentPage,
-        perPage,
+        perPage: READERS_PER_PAGE,
       },
     },
     {
@@ -76,14 +82,19 @@ export default function Users() {
 
   const totalPages = data?.pagination?.totalPages || 1
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchTerm(search)
-      setCurrentPage(1)
-    }, 300)
+  const renderUsers = () => {
+    if (isValidating) {
+      return Array.from({ length: 12 }).map((_, index) => (
+        <SkeletonUserCard key={index} />
+      ))
+    }
 
-    return () => clearTimeout(timer)
-  }, [search])
+    if (!users.length) {
+      return <EmptyContainer content="users" />
+    }
+
+    return users.map((user) => <UserCard key={user.id} user={user} />)
+  }
 
   useEffect(() => {
     if (gridRef.current) {
@@ -123,15 +134,7 @@ export default function Users() {
                   !data?.users?.length && !isValidating ? 'empty' : ''
                 }`}
               >
-                {isValidating ? (
-                  Array.from({ length: 12 }).map((_, index) => (
-                    <SkeletonUserCard key={index} />
-                  ))
-                ) : data?.users && data?.users?.length > 0 ? (
-                  users.map((user) => <UserCard key={user.id} user={user} />)
-                ) : (
-                  <EmptyContainer content="users" />
-                )}
+                {renderUsers()}
               </UsersContainer>
 
               {totalPages > 1 && (

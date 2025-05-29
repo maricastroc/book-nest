@@ -13,3 +13,5 @@ export const TOOLTIP_STYLE = {
   border: 'solid 1px #D1D6E4',
   maxWidth: '12rem',
 }
+
+export const READERS_PER_PAGE = 18
