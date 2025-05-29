@@ -22,8 +22,13 @@ export default async function handler(
 
     const ratings = await prisma.rating.findMany({
       where: {
-        ...(userId && { userId: { not: userId } }),
+        deletedAt: null,
         NOT: { description: '' },
+        ...(userId
+          ? {
+              userId: { not: userId },
+            }
+          : {}),
       },
       orderBy: {
         createdAt: 'desc',

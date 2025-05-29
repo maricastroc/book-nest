@@ -4,14 +4,8 @@ import { Pencil, Trash } from 'phosphor-react'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Tooltip } from 'react-tooltip'
 import { DeleteModal } from '@/components/modals/DeleteModal'
-import { DividerLine, Dropdown, DropdownButton, DropdownItem } from './styles'
-import {
-  DELETE_TOOLTIP_ID,
-  EDIT_TOOLTIP_ID,
-  TOOLTIP_STYLE,
-} from '@/utils/constants'
+import { Dropdown, DropdownButton, DropdownItem } from './styles'
 
 interface Props {
   variant?: 'default' | 'secondary'
@@ -21,7 +15,6 @@ interface Props {
   dropdownRef: RefObject<HTMLDivElement>
   isDropdownOpen: boolean
   isDeleteSectionOpen?: boolean
-  readingStatus?: string
   onToggleDeleteSection?: (value: boolean) => void
   onDelete?: () => void
   onToggleDropdown: (value: boolean) => void
@@ -29,29 +22,17 @@ interface Props {
 }
 
 export const DropdownActions = ({
-  hasDeleteSection = true,
   isSubmission = false,
   variant = 'default',
   buttonRef,
   isDropdownOpen,
   dropdownRef,
   isDeleteSectionOpen,
-  readingStatus,
   onToggleDeleteSection,
   onDelete,
   onToggleDropdown,
   onToggleEditSection,
 }: Props) => {
-  const isEditDisabled = ![
-    'read',
-    'did_not_finish',
-    'Read',
-    'Did not Finish',
-  ].includes(readingStatus || '')
-  console.log(isEditDisabled)
-  const tooltipMessage =
-    "Available only for books marked as 'Read' or 'Did Not Finish'"
-
   const handleDeleteClick = () => {
     onToggleDeleteSection?.(true)
   }
@@ -73,13 +54,7 @@ export const DropdownActions = ({
   }, [isDropdownOpen])
 
   const renderEditItem = () => (
-    <DropdownItem
-      data-tooltip-content={tooltipMessage}
-      data-tooltip-id={EDIT_TOOLTIP_ID}
-      disabled={isEditDisabled && !isSubmission}
-      className="edit_icon"
-      onClick={handleEditClick}
-    >
+    <DropdownItem className="edit_icon" onClick={handleEditClick}>
       <Pencil />
       <p>{isSubmission ? 'Edit Submission' : 'Edit Review'}</p>
     </DropdownItem>
@@ -88,13 +63,7 @@ export const DropdownActions = ({
   const renderDeleteItem = () => (
     <Dialog.Root open={isDeleteSectionOpen} onOpenChange={handleDeleteClick}>
       <Dialog.Trigger asChild>
-        <DropdownItem
-          disabled={isEditDisabled && !isSubmission}
-          className="delete_icon"
-          onClick={handleDeleteClick}
-          data-tooltip-id={DELETE_TOOLTIP_ID}
-          data-tooltip-content={tooltipMessage}
-        >
+        <DropdownItem className="delete_icon" onClick={handleDeleteClick}>
           <Trash />
           <p>{isSubmission ? 'Delete Submission' : 'Delete Review'}</p>
         </DropdownItem>
@@ -104,23 +73,6 @@ export const DropdownActions = ({
         onClose={() => onToggleDropdown(false)}
       />
     </Dialog.Root>
-  )
-
-  const renderTooltips = () => (
-    <>
-      <Tooltip
-        id={EDIT_TOOLTIP_ID}
-        place="right"
-        className="custom-tooltip"
-        style={TOOLTIP_STYLE}
-      />
-      <Tooltip
-        id={DELETE_TOOLTIP_ID}
-        place="right"
-        className="custom-tooltip"
-        style={TOOLTIP_STYLE}
-      />
-    </>
   )
 
   return (
@@ -139,13 +91,7 @@ export const DropdownActions = ({
           className={`${isSubmission ? 'submission_type' : ''}`}
         >
           {renderEditItem()}
-          {hasDeleteSection && (
-            <>
-              <DividerLine />
-              {renderDeleteItem()}
-            </>
-          )}
-          {isEditDisabled && !isSubmission && renderTooltips()}
+          {renderDeleteItem()}
         </Dropdown>
       )}
     </>

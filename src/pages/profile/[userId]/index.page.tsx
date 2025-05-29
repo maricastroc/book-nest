@@ -158,6 +158,7 @@ export default function Profile() {
                             key={rating.id}
                             book={rating.book}
                             rating={rating}
+                            userId={userId}
                             onUpdateReview={onUpdateReview}
                             onCreateReview={onCreateReview}
                             onDeleteReview={onDeleteReview}

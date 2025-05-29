@@ -65,7 +65,17 @@ export default async function handler(
     ? formatToSnakeCase(book.readingStatus[0].status)
     : null
 
-  let orderedRatings = book.ratings
+  const filteredRatings = book.ratings.filter((rating) => {
+    if (rating.deletedAt === null) {
+      return true
+    }
+    if (session?.user?.id && rating.userId === session.user.id) {
+      return true
+    }
+    return false
+  })
+
+  let orderedRatings = filteredRatings
 
   if (session?.user?.id) {
     const userId = session.user.id

@@ -196,7 +196,7 @@ export default function Home() {
                 {session?.data?.user && (
                   <>
                     <UserLatestReadingTitle>
-                      Your Last Review
+                      Your Last Rating
                     </UserLatestReadingTitle>
                     <UserLatestReadingContainer>
                       {renderUserLatestRating()}
