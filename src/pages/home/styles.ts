@@ -9,11 +9,6 @@ export const HomePageWrapper = styled('div', {
   justifyContent: 'center',
   maxWidth: '100vw',
   overflowX: 'hidden',
-  paddingBottom: '5rem',
-
-  '@media (min-width: 480px)': {
-    paddingBottom: 0,
-  },
 
   '@media (min-width: 768px)': {
     flexDirection: 'row',

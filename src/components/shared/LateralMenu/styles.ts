@@ -16,7 +16,7 @@ export const LateralMenuWrapper = styled('section', {
   right: '0',
   display: 'flex',
   justifyContent: 'flex-end',
-  zIndex: 9998,
+  zIndex: 9996,
   overflow: 'scroll',
   width: '100%',
   maxWidth: '100%',
