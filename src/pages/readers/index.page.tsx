@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { NextSeo } from 'next-seo'
 import { Users as UsersIcon } from 'phosphor-react'
 
@@ -9,6 +9,8 @@ import { UserProps } from 'next-auth'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import useRequest from '@/hooks/useRequest'
+import { READERS_PER_PAGE } from '@/utils/constants'
+import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
 
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LoadingPage } from '@/components/shared/LoadingPage'
@@ -29,8 +31,6 @@ import {
   HeadingTitle,
   TitleAndSearch,
 } from './styles'
-import { READERS_PER_PAGE } from '@/utils/constants'
-import { useDebouncedValue } from '@/hooks/useDebounce'
 
 export interface UsersProps {
   categories: CategoryProps[]
@@ -38,10 +38,6 @@ export interface UsersProps {
 }
 
 export default function Users() {
-  const [search, setSearch] = useState('')
-
-  const [currentPage, setCurrentPage] = useState(1)
-
   const gridRef = useRef<HTMLDivElement>(null)
 
   const isSmallSize = useScreenSize(480)
@@ -50,7 +46,14 @@ export default function Users() {
 
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const searchTerm = useDebouncedValue(search)
+  const {
+    currentPage,
+    setCurrentPage,
+    search,
+    setSearch,
+    searchTerm,
+    perPage,
+  } = usePaginationAndSearch({ perPage: READERS_PER_PAGE })
 
   const { data, isValidating } = useRequest<{
     users: UserProps[]
@@ -67,7 +70,7 @@ export default function Users() {
       params: {
         search: searchTerm,
         page: currentPage,
-        perPage: READERS_PER_PAGE,
+        perPage,
       },
     },
     {

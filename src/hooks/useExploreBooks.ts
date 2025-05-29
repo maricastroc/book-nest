@@ -3,26 +3,26 @@ import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
 import useRequest from '@/hooks/useRequest'
 import { usePerPage } from '@/hooks/useExploreBooksPerPage'
-import { useDebouncedValue } from './useDebounce'
+import { usePaginationAndSearch } from './usePaginationAndSearchParams'
 
 export function useExploreBooks() {
-  const [search, setSearch] = useState('')
-
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-
-  const [currentPage, setCurrentPage] = useState(1)
 
   const [totalPages, setTotalPages] = useState(1)
 
   const [updatedBooks, setUpdatedBooks] = useState<BookProps[]>([])
 
-  const perPage = usePerPage()
-
   const containerRef = useRef<HTMLDivElement>(null)
 
   const gridRef = useRef<HTMLDivElement>(null)
-
-  const searchTerm = useDebouncedValue(search)
+  const {
+    currentPage,
+    setCurrentPage,
+    search,
+    setSearch,
+    searchTerm,
+    perPage,
+  } = usePaginationAndSearch({ perPage: usePerPage() })
 
   const { data: booksData, isValidating } = useRequest<{
     books: BookProps[]

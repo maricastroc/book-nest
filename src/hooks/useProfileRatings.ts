@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react'
 import useRequest from './useRequest'
 import { RatingProps } from '@/@types/rating'
+import { usePaginationAndSearch } from './usePaginationAndSearchParams'
 
 export const useProfileRatings = (userId?: string) => {
-  const [search, setSearch] = useState('')
-
-  const [debouncedSearch, setDebouncedSearch] = useState('')
-
-  const [currentPage, setCurrentPage] = useState(1)
-
   const [userRatings, setUserRatings] = useState<RatingProps[] | undefined>()
 
   const onUpdateReview = async (updatedReview: RatingProps) => {
@@ -35,14 +30,23 @@ export const useProfileRatings = (userId?: string) => {
     )
   }
 
+  const {
+    currentPage,
+    setCurrentPage,
+    search,
+    setSearch,
+    searchTerm,
+    perPage,
+  } = usePaginationAndSearch({ perPage: 6 })
+
   const ratingsRequest = userId
     ? {
         url: `/profile/ratings/${userId}`,
         method: 'GET',
         params: {
-          search: debouncedSearch,
+          search: searchTerm,
           page: currentPage,
-          pageSize: 6,
+          perPage,
         },
       }
     : null
@@ -70,15 +74,6 @@ export const useProfileRatings = (userId?: string) => {
       setUserRatings(ratingsData.ratings)
     }
   }, [ratingsData])
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search)
-      setCurrentPage(1)
-    }, 500)
-
-    return () => clearTimeout(timer)
-  }, [search])
 
   return {
     ratings: userRatings || [],

@@ -10,11 +10,14 @@ export default async function handler(
   if (req.method !== 'GET') return res.status(405).end()
 
   const userId = String(req.query.userId)
+
   const searchQuery = req.query.search
     ? String(req.query.search).toLowerCase()
     : undefined
+
   const page = Number(req.query.page) || 1
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE
+
+  const perPage = Number(req.query.perPage) || DEFAULT_PAGE_SIZE
 
   const totalRatings = await prisma.rating.count({
     where: {
@@ -28,7 +31,7 @@ export default async function handler(
     },
   })
 
-  const totalPages = Math.ceil(totalRatings / pageSize)
+  const totalPages = Math.ceil(totalRatings / perPage)
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -60,8 +63,8 @@ export default async function handler(
           },
         },
         orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
+        skip: (page - 1) * perPage,
+        take: perPage,
       },
     },
   })
@@ -80,7 +83,7 @@ export default async function handler(
       })),
       pagination: {
         currentPage: page,
-        pageSize,
+        perPage,
         totalItems: totalRatings,
         totalPages,
         hasNextPage: page < totalPages,
