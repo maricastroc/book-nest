@@ -1,14 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { LibraryBookCard } from '../LibraryBookCard'
 import {
   BooksGridMain,
   BooksGridContent,
   BooksGridWrapper,
   BooksGridHeader,
-  TagStatus,
+  TagContainer,
 } from './styles'
-import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import { OutlineButton } from '@/components/core/OutlineButton'
 import { CaretLeft } from 'phosphor-react'
 import { Pagination } from '@/components/shared/Pagination'
@@ -21,6 +19,7 @@ import { usePerPage } from '@/hooks/useLibraryBooksPerPage'
 import useRequest from '@/hooks/useRequest'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
+import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
 
 interface Props {
   userId: string | undefined
@@ -121,10 +120,10 @@ export const BooksGridByStatus = ({
         />
       )}
       <BooksGridHeader>
-        <TagStatus className={selectedStatus}>
-          <FontAwesomeIcon icon={faBookmark} />
+        <TagContainer>
+          <ReadingStatusTag type="relative" readingStatus={selectedStatus} />
           {selectedLabel}
-        </TagStatus>
+        </TagContainer>
 
         <OutlineButton
           onClick={() => {

@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Container } from './styles'
 
 interface Props {
-  readingStatus: string
+  readingStatus: 'read' | 'reading' | 'wantToRead' | 'didNotFinish' | null
+  type?: 'relative' | 'absolute'
 }
 
-export function ReadingStatusTag({ readingStatus }: Props) {
+export function ReadingStatusTag({ readingStatus, type = 'absolute' }: Props) {
   return (
     readingStatus && (
-      <Container className={readingStatus}>
+      <Container status={readingStatus} type={type}>
         <FontAwesomeIcon icon={faBookmark} />
       </Container>
     )

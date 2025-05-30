@@ -143,7 +143,6 @@ export function BookStatusListContainer({
             <BookStatusList
               key={key}
               isLoggedUser={isLoggedUser}
-              className={key}
               status={key}
               statusLabel={label}
               books={books}

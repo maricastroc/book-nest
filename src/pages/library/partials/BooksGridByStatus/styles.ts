@@ -81,41 +81,10 @@ export const BooksGridContent = styled('div', {
   },
 })
 
-export const TagStatus = styled('div', {
+export const TagContainer = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-start',
   gap: '0.7rem',
   fontWeight: 600,
-  borderRadius: 15,
-  color: '$gray300',
-
-  svg: {
-    color: '$green100',
-    fontSize: '1.05rem',
-  },
-
-  '&.reading': {
-    svg: {
-      color: '#ca4036',
-    },
-  },
-
-  '&.read': {
-    svg: {
-      color: '$green100',
-    },
-  },
-
-  '&.wantToRead': {
-    svg: {
-      color: '#c64a96',
-    },
-  },
-
-  '&.didNotFinish': {
-    svg: {
-      color: '#cc803d',
-    },
-  },
 })

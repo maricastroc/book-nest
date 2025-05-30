@@ -5,28 +5,26 @@ import {
   BookContainer,
   LibraryContainerBox,
   ContainerWrapper,
-  TagStatus,
   BookDetailsWrapper,
   EmptyBookCover,
   EmptyBooksContainer,
   Header,
   ViewAllButton,
+  TagContainer,
 } from './styles'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import { CaretRight, Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/shared/StarsRating'
 import { useRouter } from 'next/router'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 import { ScrollableSection } from '@/components/shared/ScrollableSection'
 import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
+import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
 
 interface BookStatusListProps {
   isLoggedUser: boolean
-  status: string
+  status: 'read' | 'reading' | 'wantToRead' | 'didNotFinish' | null
   statusLabel: string
   books: BookProps[] | undefined
-  className: string
   emptyBoxMessage?: string
   onSelect: (book: BookProps) => void
   onStatusClick: () => void
@@ -36,7 +34,6 @@ export function BookStatusList({
   status,
   statusLabel,
   books,
-  className,
   emptyBoxMessage,
   isLoggedUser,
   onStatusClick,
@@ -51,10 +48,10 @@ export function BookStatusList({
   return (
     <LibraryContainerBox>
       <Header>
-        <TagStatus className={className}>
-          <FontAwesomeIcon icon={faBookmark} />
+        <TagContainer>
+          <ReadingStatusTag readingStatus={status} type="relative" />
           {statusLabel}
-        </TagStatus>
+        </TagContainer>
         <ViewAllButton onClick={onStatusClick}>
           View All
           <CaretRight />
