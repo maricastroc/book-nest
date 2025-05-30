@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { LibraryBookCard } from '../LibraryBookCard'
 import {
@@ -25,6 +26,7 @@ interface Props {
   userId: string | undefined
   selectedStatus: 'read' | 'reading' | 'want_to_read' | 'did_not_finish'
   selectedLabel: string
+  refreshKey: number
   setSelectedStatus: (
     value: 'read' | 'reading' | 'want_to_read' | 'did_not_finish' | null,
   ) => void
@@ -35,6 +37,7 @@ export const BooksGridByStatus = ({
   userId,
   selectedStatus,
   selectedLabel,
+  refreshKey,
   setSelectedLabel,
   setSelectedStatus,
 }: Props) => {
@@ -101,6 +104,10 @@ export const BooksGridByStatus = ({
       setTotalPages(data.pagination.totalPages)
     }
   }, [data])
+
+  useEffect(() => {
+    mutate()
+  }, [refreshKey])
 
   return (
     <BooksGridWrapper>

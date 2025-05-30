@@ -2,7 +2,7 @@
 import { NextSeo } from 'next-seo'
 
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Books } from 'phosphor-react'
 
 import {
@@ -33,6 +33,12 @@ export default function Library() {
   const { loggedUser } = useAppContext()
 
   const isLoggedUser = loggedUser?.id === userInfo?.id
+
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const triggerRefresh = useCallback(() => {
+    setRefreshKey((prev) => prev + 1)
+  }, [])
 
   const router = useRouter()
 
@@ -77,12 +83,16 @@ export default function Library() {
             </UserLibraryHeading>
 
             <UserLibraryContent>
-              <BookStatusListContainer userInfo={userInfo} />
+              <BookStatusListContainer
+                refreshKey={refreshKey}
+                userInfo={userInfo}
+              />
               <SubmittedBooksContainer>
                 <SubmittedBooksSection
                   userInfo={userInfo}
                   setUserInfo={(value) => setUserInfo(value)}
                   userId={userId}
+                  onUpdateBook={triggerRefresh}
                 />
               </SubmittedBooksContainer>
             </UserLibraryContent>

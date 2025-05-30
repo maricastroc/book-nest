@@ -64,10 +64,16 @@ export const BookTitleAndAuthor = styled('div', {
 })
 
 export const BookCover = styled('img', {
+  cursor: 'pointer',
   width: '5.2rem',
   height: '7.5rem',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
+
+  '&:hover': {
+    filter: 'brightness(1.4)',
+    transition: '200ms all',
+  },
 })
 
 export const FooterWrapper = styled('div', {

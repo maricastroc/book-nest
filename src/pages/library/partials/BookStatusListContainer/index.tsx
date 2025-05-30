@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { BookProps } from '@/@types/book'
 import { BookStatusListWrapper, Container } from './styles'
 import { BooksByStatusProps } from '@/@types/books-status'
@@ -15,10 +16,12 @@ import { getEmptyBoxMessage } from '@/utils/getEmptyBoxMessage'
 
 interface BookStatusListContainerProps {
   userInfo: UserProps | null
+  refreshKey: number
 }
 
 export function BookStatusListContainer({
   userInfo,
+  refreshKey,
 }: BookStatusListContainerProps) {
   const { loggedUser } = useAppContext()
 
@@ -46,6 +49,7 @@ export function BookStatusListContainer({
 
   const {
     data: booksByStatusData,
+    mutate,
     isValidating: isValidatingBooksByStatusData,
   } = useRequest<{ booksByStatus: BooksByStatusProps }>(booksByStatusRequest)
 
@@ -106,7 +110,11 @@ export function BookStatusListContainer({
       setBooksByStatus(booksByStatusData.booksByStatus)
     }
   }, [booksByStatusData])
-  console.log(isLateralMenuOpen && selectedBook)
+
+  useEffect(() => {
+    mutate()
+  }, [refreshKey])
+
   return selectedStatus ? (
     <BooksGridByStatus
       setSelectedStatus={(value) => setSelectedStatus(value)}
@@ -114,6 +122,7 @@ export function BookStatusListContainer({
       selectedLabel={selectedLabel}
       selectedStatus={selectedStatus}
       userId={userInfo?.id as string}
+      refreshKey={refreshKey}
     />
   ) : (
     <Container>

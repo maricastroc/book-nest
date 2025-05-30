@@ -32,17 +32,20 @@ import useRequest from '@/hooks/useRequest'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
 import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
+import { LateralMenu } from '@/components/shared/LateralMenu'
 
 interface SubmittedBooksSectionProps {
   userId: string | undefined
   userInfo: UserProps | null
   setUserInfo: (user: UserProps | null) => void
+  onUpdateBook: () => void
 }
 
 export function SubmittedBooksSection({
   userId,
   userInfo,
   setUserInfo,
+  onUpdateBook,
 }: SubmittedBooksSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -51,6 +54,10 @@ export function SubmittedBooksSection({
   const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
 
   const [submittedBooks, setSubmittedBooks] = useState<BookProps[] | null>([])
+
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
+
+  const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
   const [dateInfo, setDateInfo] = useState({
     dateFormatted: '',
@@ -103,6 +110,10 @@ export function SubmittedBooksSection({
           userId={userId}
           book={book}
           onUpdateBook={() => mutate()}
+          onSelect={() => {
+            setSelectedBook(book)
+            setIsLateralMenuOpen(true)
+          }}
           onClose={() => setIsSubmitBookFormOpen(false)}
         />
       ))
@@ -126,6 +137,18 @@ export function SubmittedBooksSection({
 
   return (
     <SubmittedBooksSectionWrapper>
+      {isLateralMenuOpen && !!selectedBook && (
+        <LateralMenu
+          bookId={selectedBook.id}
+          onUpdateBook={() => {
+            onUpdateBook()
+          }}
+          onClose={() => {
+            setIsLateralMenuOpen(false)
+          }}
+        />
+      )}
+
       {isValidatingSubmittedBooksData ? (
         <SkeletonContainer>
           <SkeletonUserDetails />

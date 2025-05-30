@@ -20,9 +20,15 @@ interface Props {
   book: BookProps
   onClose?: () => void
   onUpdateBook?: (book: BookProps) => void
+  onSelect: () => void
 }
 
-export function SubmittedBookCard({ book, userId, onUpdateBook }: Props) {
+export function SubmittedBookCard({
+  book,
+  userId,
+  onUpdateBook,
+  onSelect,
+}: Props) {
   const { loggedUser } = useAppContext()
 
   const [isEditBookFormOpen, setIsEditBookFormOpen] = useState(false)
@@ -31,7 +37,7 @@ export function SubmittedBookCard({ book, userId, onUpdateBook }: Props) {
 
   return (
     <BookCardBox>
-      <BookCover src={book.coverUrl} />
+      <BookCover src={book.coverUrl} onClick={onSelect} />
       <BookContentWrapper>
         <BookTitleAndAuthor>
           <h2>{book.name}</h2>

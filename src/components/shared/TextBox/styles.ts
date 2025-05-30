@@ -18,6 +18,7 @@ export const TextBoxContent = styled('div', {
   width: '100%',
 
   p: {
+    textAlign: 'left',
     color: '$gray300',
     lineHeight: '1.4rem',
     fontSize: '0.9rem',
