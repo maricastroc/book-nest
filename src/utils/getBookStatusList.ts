@@ -1,6 +1,6 @@
 import { BookProps } from '@/@types/book'
 
-type BookStatusKey = 'read' | 'reading' | 'want_to_read' | 'did_not_finish'
+type BookStatusKey = 'read' | 'reading' | 'wantToRead' | 'didNotFinish'
 
 type BookStatusListItem = {
   key: BookStatusKey
@@ -16,11 +16,11 @@ export function getBookStatusList(
   return [
     { key: 'read', label: "I've already read", books: data?.read },
     { key: 'reading', label: 'I am reading', books: data?.reading },
-    { key: 'want_to_read', label: 'I want to read', books: data?.want_to_read },
+    { key: 'wantToRead', label: 'I want to read', books: data?.wantToRead },
     {
-      key: 'did_not_finish',
+      key: 'didNotFinish',
       label: "I didn't finish",
-      books: data?.did_not_finish,
+      books: data?.didNotFinish,
     },
   ]
 }

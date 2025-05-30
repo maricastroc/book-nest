@@ -2,7 +2,6 @@ import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../auth/[...nextauth].api'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 
 export default async function handler(
   req: NextApiRequest,
@@ -132,9 +131,7 @@ export default async function handler(
     const avgRate = bookRatingStats?._avg.rate ?? NaN
     const ratingCount = bookRatingStats?._count.rate ?? 0
 
-    const readingStatus = book.readingStatus?.[0]?.status
-      ? formatToSnakeCase(book.readingStatus[0].status)
-      : null
+    const readingStatus = book.readingStatus?.[0]?.status || null
 
     return {
       ...book,

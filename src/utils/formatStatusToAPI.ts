@@ -1,11 +1,11 @@
 export function formatStatusForAPI(
-  status: 'read' | 'reading' | 'want_to_read' | 'did_not_finish',
+  status: 'read' | 'reading' | 'wantToRead' | 'didNotFinish',
 ): string {
   const statusMap: Record<typeof status, string> = {
     read: 'Read',
     reading: 'Reading',
-    want_to_read: 'Want to Read',
-    did_not_finish: 'Did not Finish',
+    wantToRead: 'Want to Read',
+    didNotFinish: 'Did not Finish',
   }
 
   return statusMap[status]

@@ -11,7 +11,6 @@ import { getBookStatusList } from '@/utils/getBookStatusList'
 import useRequest from '@/hooks/useRequest'
 import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
 import { LateralMenu } from '@/components/shared/LateralMenu'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { getEmptyBoxMessage } from '@/utils/getEmptyBoxMessage'
 
 interface BookStatusListContainerProps {
@@ -36,7 +35,7 @@ export function BookStatusListContainer({
   const [booksByStatus, setBooksByStatus] = useState<BooksByStatusProps>()
 
   const [selectedStatus, setSelectedStatus] = useState<
-    'read' | 'reading' | 'want_to_read' | 'did_not_finish' | null
+    'read' | 'reading' | 'wantToRead' | 'didNotFinish' | null
   >(null)
 
   const booksByStatusRequest = userInfo?.id
@@ -75,9 +74,7 @@ export function BookStatusListContainer({
         return prevStatus
       }
 
-      const newStatus = formatToSnakeCase(
-        updatedBook.readingStatus,
-      ) as keyof BooksByStatusProps
+      const newStatus = updatedBook.readingStatus as keyof BooksByStatusProps
 
       if (!oldStatus) {
         return {

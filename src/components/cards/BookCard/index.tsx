@@ -10,7 +10,6 @@ import {
 } from './styles'
 import { getBookRatingsNumber } from '@/utils/getBookRatingsNumber'
 import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 
 interface BookCardProps {
   book: BookProps
@@ -28,9 +27,7 @@ export function BookCard({ book, onOpenDetails }: BookCardProps) {
       <BookCover src={book.coverUrl} onClick={() => onOpenDetails()} />
       <BookContentWrapper>
         {book?.readingStatus && (
-          <ReadingStatusTag
-            readingStatus={formatToSnakeCase(book.readingStatus)}
-          />
+          <ReadingStatusTag readingStatus={book.readingStatus} />
         )}
         <BookTitleAndAuthor>
           <h2>{book.name}</h2>

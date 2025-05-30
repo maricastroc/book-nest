@@ -12,6 +12,8 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Pagination } from '@/components/shared/Pagination'
+import { LateralMenu } from '@/components/shared/LateralMenu'
+import { SearchBar } from '@/components/shared/SearchBar'
 
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
@@ -32,7 +34,7 @@ import {
 
 import { RatingProps } from '@/@types/rating'
 import { UserStatistics } from '@/@types/user_statistics'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { BookProps } from '@/@types/book'
 
 export default function Profile() {
   const router = useRouter()
@@ -48,6 +50,10 @@ export default function Profile() {
   const isSmallSize = useScreenSize(480)
 
   const isMediumSize = useScreenSize(768)
+
+  const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
+
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [userStatistics, setUserStatistics] = useState<
     UserStatistics | undefined
@@ -116,6 +122,17 @@ export default function Profile() {
         <ProfilePageWrapper>
           {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <ProfilePageContainer>
+            {isLateralMenuOpen && selectedBook && (
+              <LateralMenu
+                bookId={selectedBook.id}
+                onUpdateBook={() => {
+                  mutateRatings()
+                }}
+                onClose={() => {
+                  setIsLateralMenuOpen(false)
+                }}
+              />
+            )}
             <ProfilePageHeading>
               <ProfilePageHeadingTitle>
                 <User />
@@ -159,6 +176,10 @@ export default function Profile() {
                             book={rating.book}
                             rating={rating}
                             userId={userId}
+                            onSelect={() => {
+                              setSelectedBook(rating.book as BookProps)
+                              setIsLateralMenuOpen(true)
+                            }}
                             onUpdateReview={onUpdateReview}
                             onCreateReview={onCreateReview}
                             onDeleteReview={onDeleteReview}

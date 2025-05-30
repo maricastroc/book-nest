@@ -5,6 +5,8 @@ import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
 import { RatingProps } from '@/@types/rating'
 import { BookProps } from '@/@types/book'
+import { useClickOutside } from '@/hooks/useClickOutside'
+import { useScreenSize } from '@/hooks/useScreenSize'
 
 import {
   BookDetailsContainer,
@@ -18,12 +20,11 @@ import {
   ProfileCardWrapper,
   EmptyCardContent,
 } from './styles'
+
 import { StarsRating } from '@/components/shared/StarsRating'
-import { useScreenSize } from '@/hooks/useScreenSize'
 import { TextBox } from '@/components/shared/TextBox'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
-import { useClickOutside } from '@/hooks/useClickOutside'
 import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
 
 interface ProfileCardProps {
@@ -33,6 +34,7 @@ interface ProfileCardProps {
   onUpdateReview: (updatedReview: RatingProps) => void
   onCreateReview: (newRating: RatingProps) => void
   onDeleteReview: (ratingId: string) => void
+  onSelect: () => void
 }
 
 export function ProfileCard({
@@ -42,6 +44,7 @@ export function ProfileCard({
   onUpdateReview,
   onCreateReview,
   onDeleteReview,
+  onSelect,
 }: ProfileCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
@@ -63,12 +66,9 @@ export function ProfileCard({
 
   const isFromLoggedUser = userId === loggedUser?.id
 
-  const isEditDisabled = ![
-    'read',
-    'did_not_finish',
-    'Read',
-    'Did not Finish',
-  ].includes(book.readingStatus || '')
+  const isEditDisabled = !['read', 'didNotFinish'].includes(
+    book.readingStatus || '',
+  )
   console.log(book.readingStatus)
   const deleteReview = async () => {
     if (loggedUser) {
@@ -127,7 +127,7 @@ export function ProfileCard({
           {book && (
             <ProfileCardBody>
               <BookDetailsContainer>
-                <BookCover src={book.coverUrl} alt="" />
+                <BookCover src={book.coverUrl} alt="" onClick={onSelect} />
                 <BookSummaryWrapper>
                   <BookTitleAndAuthor>
                     <h2>{book.name}</h2>

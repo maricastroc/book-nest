@@ -1,7 +1,7 @@
 import { UserProps } from '@/@types/user'
 
 export const getEmptyBoxMessage = (
-  status: 'read' | 'reading' | 'want_to_read' | 'did_not_finish',
+  status: 'read' | 'reading' | 'wantToRead' | 'didNotFinish',
   userInfo: UserProps | null,
   loggedUser: UserProps | null,
 ): string => {
@@ -15,10 +15,10 @@ export const getEmptyBoxMessage = (
     reading: isLoggedUser
       ? "This is where the books you're currently reading will be."
       : `This is where the books ${userName} is currently reading will be.`,
-    want_to_read: isLoggedUser
+    wantToRead: isLoggedUser
       ? 'This is where the books you want to read will be.'
       : `This is where the books ${userName} want to read will be.`,
-    did_not_finish: isLoggedUser
+    didNotFinish: isLoggedUser
       ? "This is where the books you didn't finish will be."
       : `This is where the books ${userName} didn't finish will be.`,
   }

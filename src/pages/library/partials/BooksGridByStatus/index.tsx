@@ -24,11 +24,11 @@ import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
 
 interface Props {
   userId: string | undefined
-  selectedStatus: 'read' | 'reading' | 'want_to_read' | 'did_not_finish'
+  selectedStatus: 'read' | 'reading' | 'wantToRead' | 'didNotFinish'
   selectedLabel: string
   refreshKey: number
   setSelectedStatus: (
-    value: 'read' | 'reading' | 'want_to_read' | 'did_not_finish' | null,
+    value: 'read' | 'reading' | 'wantToRead' | 'didNotFinish' | null,
   ) => void
   setSelectedLabel: (value: string | null) => void
 }

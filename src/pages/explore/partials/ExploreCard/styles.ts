@@ -21,13 +21,6 @@ export const BookCardBox = styled('div', {
     backgroundColor: '$gray600',
     transition: '200ms ease-in-out',
   },
-
-  '&.library_style': {
-    '&:hover': {
-      backgroundColor: '$gray700',
-      transition: '200ms ease-in-out',
-    },
-  },
 })
 
 export const BookContentWrapper = styled('div', {
@@ -82,13 +75,6 @@ export const BookCover = styled('img', {
   height: '8rem',
   borderRadius: 8,
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
-
-  '&.library_style': {
-    '&:hover': {
-      transition: '200ms all',
-      filter: 'brightness(1.15)',
-    },
-  },
 
   '@media (min-width: 380px)': {
     width: '6.2rem',

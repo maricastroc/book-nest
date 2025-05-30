@@ -90,6 +90,7 @@ export function BookStatusList({
                   </BookDetailsWrapper>
                 </BookContainer>
               ))}
+
               {isLoggedUser && (
                 <BookContainer>
                   <EmptyBookCover onClick={() => router.push('/explore')}>

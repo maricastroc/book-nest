@@ -1,4 +1,3 @@
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import {
   AddToLibraryDropdown,
   ReadingStatusItem,
@@ -34,8 +33,8 @@ export const DropdownMenu = ({
   const statuses = [
     { label: 'Read', className: 'read' },
     { label: 'Reading', className: 'reading' },
-    { label: 'Did not Finish', className: 'dnf' },
-    { label: 'Want to Read', className: 'wantread' },
+    { label: 'Did not Finish', className: 'didNotFinish' },
+    { label: 'Want to Read', className: 'wantToRead' },
   ]
 
   const handleSelectReadingStatus = async (book: BookProps, status: string) => {
@@ -65,22 +64,18 @@ export const DropdownMenu = ({
           <ReadingStatusItem
             className={
               activeStatus
-                ? formatToSnakeCase(activeStatus) ===
-                  formatToSnakeCase(status.label)
+                ? activeStatus === status.className
                   ? 'selected'
                   : ''
                 : ''
             }
             onClick={async () => {
-              if (
-                formatToSnakeCase(activeStatus ?? '') ===
-                formatToSnakeCase(status.label)
-              ) {
+              if (activeStatus === status.className) {
                 return
               }
 
-              await handleSelectReadingStatus(book, status.label)
-              onUpdateStatus(status.label)
+              await handleSelectReadingStatus(book, status.className)
+              onUpdateStatus(status.className)
 
               onClose()
             }}

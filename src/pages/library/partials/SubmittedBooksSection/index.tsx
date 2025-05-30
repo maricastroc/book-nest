@@ -131,7 +131,9 @@ export function SubmittedBooksSection({
 
   useEffect(() => {
     if (!userInfo?.createdAt) return
+
     const formattedUserCreatedAt = new Date(userInfo.createdAt)
+
     setDateInfo(getDateFormattedAndRelative(formattedUserCreatedAt))
   }, [userInfo])
 

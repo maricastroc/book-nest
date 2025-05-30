@@ -107,13 +107,13 @@ export const TagStatus = styled('div', {
     },
   },
 
-  '&.want_to_read': {
+  '&.wantToRead': {
     svg: {
       color: '#c64a96',
     },
   },
 
-  '&.did_not_finish': {
+  '&.didNotFinish': {
     svg: {
       color: '#cc803d',
     },

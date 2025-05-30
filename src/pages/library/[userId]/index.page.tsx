@@ -26,15 +26,15 @@ import { UserProps } from '@/@types/user'
 import { useAppContext } from '@/contexts/AppContext'
 
 export default function Library() {
-  const isRouteLoading = useLoadingOnRouteChange()
-
   const [userInfo, setUserInfo] = useState<UserProps | null>(null)
+
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const isRouteLoading = useLoadingOnRouteChange()
 
   const { loggedUser } = useAppContext()
 
   const isLoggedUser = loggedUser?.id === userInfo?.id
-
-  const [refreshKey, setRefreshKey] = useState(0)
 
   const triggerRefresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1)

@@ -12,10 +12,10 @@ export const getReadingStatusLabel = (
     case 'reading':
     case 'Reading':
       return 'Reading'
-    case 'want_to_read':
+    case 'wantToRead':
     case 'Want to Read':
       return 'Want to Read'
-    case 'did_not_finish':
+    case 'didNotFinish':
     case 'Did not Finish':
       return 'Did not Finish'
     default:

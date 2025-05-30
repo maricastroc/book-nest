@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { Prisma } from '@prisma/client'
 
 export default async function handler(
@@ -84,9 +83,7 @@ export default async function handler(
 
   const booksWithDetails = books.map((book) => {
     const userRating = book.ratings.length > 0 ? book.ratings[0].rate : null
-    const readingStatus = book.readingStatus[0]?.status
-      ? formatToSnakeCase(book.readingStatus[0].status)
-      : null
+    const readingStatus = book.readingStatus[0]?.status || null
 
     return {
       id: book.id,

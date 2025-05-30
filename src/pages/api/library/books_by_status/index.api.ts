@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 interface BookWithStatus {
@@ -55,7 +54,7 @@ export default async function handler(
 
   const booksByStatus = books.reduce((acc, book) => {
     const userRating = book.ratings.length > 0 ? book.ratings[0].rate : null
-    const status = formatToSnakeCase(book.readingStatus[0]?.status || 'unknown')
+    const status = book.readingStatus[0]?.status || 'unknown'
 
     const bookWithDetails: BookWithStatus = {
       id: book.id,

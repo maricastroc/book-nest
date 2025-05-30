@@ -1,6 +1,5 @@
 import { BookProps } from '@/@types/book'
 import { BooksByStatusProps } from '@/@types/books-status'
-import { formatToSnakeCase } from './formatToSnakeCase'
 
 interface Props {
   updatedBook: BookProps
@@ -34,9 +33,7 @@ export const updateBookByStatus = ({
       return prevStatus
     }
 
-    const newStatus = formatToSnakeCase(
-      updatedBook.readingStatus,
-    ) as keyof BooksByStatusProps
+    const newStatus = updatedBook.readingStatus as keyof BooksByStatusProps
 
     if (!oldStatus) {
       return {
