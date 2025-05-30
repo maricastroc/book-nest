@@ -7,11 +7,6 @@ export const Container = styled('div', {
     height: '100vh',
     overflow: 'scroll',
   },
-
-  '@media (min-width: 1200px)': {
-    height: '100vh',
-    overflow: 'scroll',
-  },
 })
 
 export const BookStatusListWrapper = styled('div', {
@@ -22,7 +17,5 @@ export const BookStatusListWrapper = styled('div', {
   '@media (min-width: 1200px)': {
     padding: '0 1rem 7rem 0',
     paddingRight: '1rem',
-    height: '100vh',
-    overflow: 'scroll',
   },
 })

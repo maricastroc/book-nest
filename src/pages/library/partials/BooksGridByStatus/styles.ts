@@ -35,15 +35,10 @@ export const BooksGridWrapper = styled('div', {
   padding: '1rem 0 1rem 0',
 
   '@media (min-width: 1024px)': {
-    height: '100vh',
+    maxHeight: '80vh',
     overflow: 'scroll',
-    padding: '0 1rem 9rem',
+    padding: '0 1rem 3rem',
     paddingLeft: 0,
-  },
-
-  '@media (min-width: 1200px)': {
-    height: '100vh',
-    overflow: 'scroll',
   },
 })
 

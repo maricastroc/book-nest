@@ -185,11 +185,6 @@ export const ListByBookStatusContainer = styled('div', {
     height: '100vh',
     overflow: 'scroll',
   },
-
-  '@media (min-width: 1200px)': {
-    height: '100vh',
-    overflow: 'scroll',
-  },
 })
 
 export const DividerLine = styled('span', {
