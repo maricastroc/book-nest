@@ -59,7 +59,7 @@ export const BookCover = styled('img', {
   boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.2)',
 
   '&:hover': {
-    filter: 'brightness(1.4)',
+    filter: 'brightness(1.3)',
     transition: '200ms all',
   },
 })
