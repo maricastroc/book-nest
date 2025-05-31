@@ -4,6 +4,12 @@ export const Container = styled('div', {
   display: 'flex',
   fontWeight: 600,
 
+  '&.smaller': {
+    svg: {
+      fontSize: '0.92rem',
+    },
+  },
+
   variants: {
     type: {
       relative: {
@@ -12,10 +18,6 @@ export const Container = styled('div', {
         gap: '0.7rem',
         borderRadius: 15,
         color: '$gray300',
-
-        svg: {
-          fontSize: '1.05rem',
-        },
       },
       absolute: {
         position: 'absolute',
@@ -26,6 +28,10 @@ export const Container = styled('div', {
         fontWeight: 700,
         borderRadius: '0 8px 0 8px',
         color: '$green100',
+      },
+
+      svg: {
+        fontSize: '1.05rem',
       },
     },
     status: {

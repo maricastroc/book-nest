@@ -23,6 +23,8 @@ import { SignInModal } from '@/components/modals/SignInModal'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useAppContext } from '@/contexts/AppContext'
 import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
+import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
+import { ReadingStatus } from '@/@types/reading-status'
 
 interface MenuBookCardProps {
   book: BookProps
@@ -90,6 +92,10 @@ export function MenuBookCard({
                         : setIsAddToLibraryDropdownOpen(true)
                     }}
                   >
+                    <ReadingStatusTag
+                      type="relative"
+                      readingStatus={updatedBook.readingStatus as ReadingStatus}
+                    />
                     {updatedBook?.readingStatus
                       ? getReadingStatusLabel(updatedBook.readingStatus)
                       : 'Add to Library'}
@@ -108,7 +114,7 @@ export function MenuBookCard({
                     setIsValidatingStatus={(value) =>
                       setIsValidatingStatus(value)
                     }
-                    activeStatus={book?.readingStatus ?? null}
+                    activeStatus={book?.readingStatus as ReadingStatus}
                     onClose={() => setIsAddToLibraryDropdownOpen(false)}
                     dropdownRef={dropdownRef}
                     book={book}

@@ -8,15 +8,17 @@ import { useAppContext } from '@/contexts/AppContext'
 import { api } from '@/lib/axios'
 import { toast } from 'react-toastify'
 import { handleApiError } from '@/utils/handleApiError'
+import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
+import { ReadingStatus, statuses } from '@/@types/reading-status'
 
 interface DropdownMenuProps {
   isOpen: boolean
   onClose: () => void
   book: BookProps
-  activeStatus: string | null
+  activeStatus: ReadingStatus | null
   dropdownRef: React.RefObject<HTMLDivElement>
   setIsValidatingStatus: (value: boolean) => void
-  onUpdateStatus: (newStatus: string) => void
+  onUpdateStatus: (newStatus: ReadingStatus) => void
 }
 
 export const DropdownMenu = ({
@@ -30,14 +32,10 @@ export const DropdownMenu = ({
 }: DropdownMenuProps) => {
   const { loggedUser } = useAppContext()
 
-  const statuses = [
-    { label: 'Read', className: 'read' },
-    { label: 'Reading', className: 'reading' },
-    { label: 'Did not Finish', className: 'didNotFinish' },
-    { label: 'Want to Read', className: 'wantToRead' },
-  ]
-
-  const handleSelectReadingStatus = async (book: BookProps, status: string) => {
+  const handleSelectReadingStatus = async (
+    book: BookProps,
+    status: ReadingStatus,
+  ) => {
     if (loggedUser && book) {
       setIsValidatingStatus(true)
 
@@ -59,27 +57,31 @@ export const DropdownMenu = ({
 
   return isOpen ? (
     <AddToLibraryDropdown ref={dropdownRef}>
-      {statuses.map((status) => (
+      {statuses?.map((status) => (
         <>
           <ReadingStatusItem
             className={
               activeStatus
-                ? activeStatus === status.className
+                ? activeStatus === status.value
                   ? 'selected'
                   : ''
                 : ''
             }
             onClick={async () => {
-              if (activeStatus === status.className) {
+              if (activeStatus === status.value) {
                 return
               }
 
-              await handleSelectReadingStatus(book, status.className)
-              onUpdateStatus(status.className)
+              await handleSelectReadingStatus(book, status.value)
+              onUpdateStatus(status.value)
 
               onClose()
             }}
           >
+            <ReadingStatusTag
+              type="relative"
+              readingStatus={status.value as ReadingStatus}
+            />
             {status.label}
           </ReadingStatusItem>
 

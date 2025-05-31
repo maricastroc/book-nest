@@ -144,6 +144,7 @@ export function useBookDetails(
         }
 
         mutate()
+        mutateUserLatestRating?.()
         onUpdateBook(updatedBook)
 
         return updatedBook

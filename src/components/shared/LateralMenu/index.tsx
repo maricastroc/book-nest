@@ -1,37 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 
 import { useAppContext } from '@/contexts/AppContext'
+import { useBookDetails } from '@/hooks/useBookDetails'
+
 import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
-import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 
 import {
   CloseButton,
   LateralMenuWrapper,
   OverlayBackground,
   MenuBody,
-  RatingsWrapper,
-  RatingsList,
-  RatingsListHeader,
 } from './styles'
 
 import { MenuBookCard } from './partials/MenuBookCard'
-import { UserRatingBox } from './partials/UserRatingBox'
 import { ReviewWarningModal } from './partials/ReviewWarningModal'
 import { SkeletonLateralMenu } from './partials/SkeletonLateralMenu'
-
-import { RatingCardForm } from '../RatingCardForm'
-import { SignInModal } from '@/components/modals/SignInModal'
-import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { EmptyContainer } from '../EmptyContainer'
-import { useBookDetails } from '@/hooks/useBookDetails'
 import { SkeletonMenuBookCard } from './partials/SkeletonMenuBookCard'
-import { FadeInUp } from '@/components/animations/FadeInUp'
-import { FadeInItem } from '@/components/animations/FadeInItem'
+
+import { SignInModal } from '@/components/modals/SignInModal'
+import { RatingsSection } from './partials/RatingsSection'
 
 interface LateralMenuProps {
   bookId: string
@@ -46,8 +37,6 @@ export function LateralMenu({
   onUpdateBook,
   mutateUserLatestRating,
 }: LateralMenuProps) {
-  const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
-
   const [isValidatingStatus, setIsValidatingStatus] = useState(false)
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
@@ -55,19 +44,13 @@ export function LateralMenu({
   const [isReviewWarningModalOpen, setIsReviewWarningModalOpen] =
     useState(false)
 
-  const { loggedUser, isValidatingReview } = useAppContext()
+  const { isValidatingReview } = useAppContext()
 
-  const {
-    updatedBook,
-    bookRatings,
-    userRating,
-    isValidating,
-    loadingState,
-    onUpdateReview,
-    onCreateReview,
-    onDeleteReview,
-    onUpdateStatus,
-  } = useBookDetails(bookId, onUpdateBook, mutateUserLatestRating)
+  const { updatedBook, loadingState, onUpdateStatus } = useBookDetails(
+    bookId,
+    onUpdateBook,
+    mutateUserLatestRating,
+  )
 
   return (
     <LateralMenuWrapper>
@@ -78,7 +61,7 @@ export function LateralMenu({
       </CloseButton>
 
       <MenuBody>
-        {loadingState?.initial || isValidating ? (
+        {loadingState?.initial ? (
           <SkeletonLateralMenu />
         ) : (
           <>
@@ -108,68 +91,16 @@ export function LateralMenu({
               />
             ) : null}
 
-            <RatingsWrapper>
-              <RatingsListHeader>
-                <p>Ratings</p>
-                {!userRating &&
-                  (updatedBook?.readingStatus === READ_STATUS ||
-                  updatedBook?.readingStatus === DID_NOT_FINISH_STATUS ? (
-                    <span onClick={() => setIsReviewFormOpen(true)}>
-                      Review
-                    </span>
-                  ) : (
-                    <span
-                      onClick={() => {
-                        if (loggedUser) {
-                          setIsReviewWarningModalOpen(true)
-                        } else {
-                          setIsSignInModalOpen(true)
-                        }
-                      }}
-                    >
-                      Review
-                    </span>
-                  ))}
-              </RatingsListHeader>
-
-              <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
-                <AnimatePresence>
-                  {updatedBook && isReviewFormOpen && (
-                    <FadeInUp>
-                      <RatingCardForm
-                        isEdit={!!userRating}
-                        rating={userRating}
-                        onClose={() => setIsReviewFormOpen(false)}
-                        onUpdateReview={onUpdateReview}
-                        onCreateReview={onCreateReview}
-                        book={updatedBook}
-                      />
-                    </FadeInUp>
-                  )}
-                </AnimatePresence>
-
-                {!isValidating && !bookRatings?.length && !isReviewFormOpen ? (
-                  <EmptyContainer content="reviews" />
-                ) : loadingState?.reviews || isValidatingReview ? (
-                  Array.from({ length: 3 }).map((_, index) => (
-                    <SkeletonRatingCard key={index} />
-                  ))
-                ) : (
-                  updatedBook &&
-                  bookRatings?.map((rating) => (
-                    <FadeInItem key={rating.id}>
-                      <UserRatingBox
-                        book={updatedBook}
-                        rating={rating}
-                        onUpdateReview={onUpdateReview}
-                        onCreateReview={onCreateReview}
-                        onDeleteReview={onDeleteReview}
-                      />
-                    </FadeInItem>
-                  ))
-                )}
-              </RatingsList>
-            </RatingsWrapper>
+            <RatingsSection
+              bookId={bookId}
+              isValidatingReview={isValidatingReview}
+              isValidatingStatus={isValidatingStatus}
+              onUpdateBook={onUpdateBook}
+              setIsSignInModalOpen={(value) => setIsSignInModalOpen(value)}
+              setIsReviewWarningModalOpen={(value) =>
+                setIsReviewWarningModalOpen(value)
+              }
+            />
           </>
         )}
       </MenuBody>

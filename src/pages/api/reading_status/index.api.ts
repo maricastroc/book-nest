@@ -71,7 +71,7 @@ export default async function handler(
         .json({ message: 'UserId, BookId, and Status are required.' })
     }
 
-    const isPublicRating = ['read', 'wantToRead'].includes(status)
+    const isPublicRating = ['read', 'didNotFinish'].includes(status)
 
     await prisma.rating.updateMany({
       where: {

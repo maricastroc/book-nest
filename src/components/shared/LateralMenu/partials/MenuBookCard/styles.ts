@@ -159,6 +159,10 @@ export const AddToLibrarySection = styled('div', {
 export const AddToLibraryButton = styled('button', {
   color: '$green100',
   width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  justifyContent: 'center',
   textAlign: 'center',
   padding: '0.5rem',
   cursor: 'pointer',
