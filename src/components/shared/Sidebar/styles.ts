@@ -38,8 +38,15 @@ export const SidebarContent = styled('div', {
   transform: 'translate(-50%, -50%)',
 
   img: {
-    width: '8rem',
+    width: '8.5rem',
     height: 'auto',
+  },
+
+  '@media(min-width: 1200px)': {
+    img: {
+      width: '9.3rem',
+      height: 'auto',
+    },
   },
 })
 

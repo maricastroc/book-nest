@@ -74,7 +74,7 @@ export default function SignInForm({ onClose }: SignInFormProps) {
       if (result?.error) {
         toast.error(result?.error)
       } else {
-        toast.success('Welcome to the Book Wise!')
+        toast.success('Welcome to the Book Nest!')
         router.push('/home')
       }
     } catch (error) {

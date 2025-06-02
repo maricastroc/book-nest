@@ -106,7 +106,7 @@ export default function Users() {
 
   return (
     <>
-      <NextSeo title="Readers | Book Wise" />
+      <NextSeo title="Readers | Book Nest" />
       {isRouteLoading ? (
         <LoadingPage />
       ) : (

@@ -115,7 +115,7 @@ export default function Profile() {
 
   return (
     <>
-      <NextSeo title="Profile | Book Wise" />
+      <NextSeo title="Profile | Book Nest" />
       {isRouteLoading ? (
         <LoadingPage />
       ) : (

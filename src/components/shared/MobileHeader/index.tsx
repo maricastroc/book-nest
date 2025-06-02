@@ -4,7 +4,7 @@ import {
   MobileHeaderWrapper,
   MobileHeaderContent,
 } from './styles'
-import Logo from '../../../../public/assets/logo.svg'
+import Logo from '../../../../public/assets/logo2.svg'
 import { List } from 'phosphor-react'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'

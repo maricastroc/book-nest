@@ -7,7 +7,7 @@ import {
 } from './styles'
 import Image from 'next/image'
 import SidebarBackground from '../../../../public/assets/sidebar.svg'
-import Logo from '../../../../public/assets/logo.svg'
+import Logo from '../../../../public/assets/logo2.svg'
 import { Binoculars, Books, ChartLineUp, User, Users } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '@/contexts/AppContext'

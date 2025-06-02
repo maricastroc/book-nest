@@ -7,7 +7,7 @@ import { Container, LogoWrapper } from './styles'
 import SignInForm from '@/pages/login/partials/SignInForm'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { LoadingComponent } from '@/components/core/LoadingComponent'
-import Logo from '../../../public/assets/logo.svg'
+import Logo from '../../../public/assets/logo2.svg'
 
 export default function Login() {
   const isRouteLoading = useLoadingOnRouteChange()
@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <>
       <NextSeo
-        title="Login | Book Wise"
+        title="Login | Book Nest"
         additionalMetaTags={[
           {
             name: 'viewport',

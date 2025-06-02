@@ -18,6 +18,6 @@ export const LogoWrapper = styled('div', {
   gap: '0.75rem',
 
   img: {
-    scale: '0.8',
+    scale: '0.85',
   },
 })

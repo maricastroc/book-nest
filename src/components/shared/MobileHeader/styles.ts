@@ -40,7 +40,7 @@ export const MobileHeaderContent = styled('header', {
 
   '@media (min-width: 480px)': {
     img: {
-      width: '8.5rem',
+      width: '9rem',
       height: 'auto',
     },
   },

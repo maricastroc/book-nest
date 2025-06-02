@@ -172,7 +172,7 @@ export default function Home() {
 
   return (
     <>
-      <NextSeo title="Home | Book Wise" />
+      <NextSeo title="Home | Book Nest" />
       {isRouteLoading ? (
         <LoadingPage />
       ) : (

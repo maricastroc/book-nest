@@ -91,7 +91,7 @@ export default function Explore() {
 
   return (
     <>
-      <NextSeo title="Explore | Book Wise" />
+      <NextSeo title="Explore | Book Nest" />
       {isRouteLoading ? (
         <LoadingPage />
       ) : (

@@ -60,7 +60,7 @@ export default function Library() {
   return (
     <>
       <NextSeo
-        title="Library | Book Wise"
+        title="Library | Book Nest"
         additionalMetaTags={[
           {
             name: 'viewport',
