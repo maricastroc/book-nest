@@ -89,6 +89,10 @@ export default async function handler(
             invalid_type_error: 'Categories must be an array of strings.',
           })
           .nonempty({ message: 'At least one category is required.' }),
+        language: z.string().min(1, { message: 'Language is required.' }),
+        isbn: z
+          .string()
+          .min(10, { message: 'ISBN must be at least 10 characters.' }),
       })
 
       await createBookSchema.parseAsync({
@@ -99,6 +103,8 @@ export default async function handler(
         publisher,
         publishingYear,
         categories,
+        language,
+        isbn,
       })
 
       let finalCoverUrl: string
