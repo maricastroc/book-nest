@@ -1,5 +1,5 @@
 # Book Nest
-![book-wise](https://github.com/maricastroc/book-wise/assets/121824373/57a7d61b-dd04-4727-9e77-e5e7197d276c)
+![image](https://github.com/user-attachments/assets/da853ec9-6255-407e-aa46-e555673bd59f)
 
 
 ## 📚 Project Description
