@@ -14,12 +14,16 @@ export const MobileHeaderWrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-  padding: '1.4rem 1.25rem 1.2rem',
+  padding: '1.4rem 1.5rem 1.2rem',
   position: 'fixed',
   backgroundColor: '$gray800',
   top: 0,
   zIndex: 9995,
   borderBottom: 'solid 2px $gray700',
+
+  '@media (min-width: 480px)': {
+    padding: '2rem 2rem 1.5rem',
+  },
 
   '@media (min-width: 768px)': {
     padding: '2rem 1.8rem 1.5rem',
@@ -40,7 +44,7 @@ export const MobileHeaderContent = styled('header', {
 
   '@media (min-width: 480px)': {
     img: {
-      width: '9rem',
+      width: '9.5rem',
       height: 'auto',
     },
   },
