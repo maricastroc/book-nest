@@ -28,12 +28,10 @@ export default async function handler(
   const itemsPerPage = Number(perPage)
   const skip = (pageNumber - 1) * itemsPerPage
 
-  // 👉 total de livros para controle de paginação
   const totalBooks = await prisma.book.count({
     where: { userId: String(userId) },
   })
 
-  // 👉 livros com paginação
   const submittedBooks = await prisma.book.findMany({
     where: { userId: String(userId) },
     skip,

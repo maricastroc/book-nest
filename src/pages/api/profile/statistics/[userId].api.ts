@@ -1,4 +1,3 @@
-// /pages/api/profile/stats.ts
 import { prisma } from '@/lib/prisma'
 import { getMostFrequentString } from '@/utils/getMostFrequentString'
 import { NextApiRequest, NextApiResponse } from 'next'
