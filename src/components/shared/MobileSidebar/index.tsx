@@ -10,7 +10,7 @@ import { Binoculars, Books, ChartLineUp, User, Users } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '@/contexts/AppContext'
 import Image from 'next/image'
-import Logo from '../../../../public/assets/logo.svg'
+import Logo from '../../../../public/assets/logo2.svg'
 import { NavigationItem } from '../NavigationItem'
 import { LogoutContainer } from '../LogoutContainer'
 
