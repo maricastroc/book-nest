@@ -6,39 +6,27 @@
 
 The application consists of a book rating platform, where the reader can see recommendations from other readers and also make their own ratings of the books they have already read. Additionally, users can search for books by categories and check data about their reading history, such as the total number of pages and authors they have read. The app also features social authentication through a Google or GitHub account.
 
+Users can track their reading progress by marking books with different statuses: read, reading, did not finish, and want to read. This feature helps users organize and monitor their personal reading history.
 
+Users can also submit new books to the platform by providing the ISBN. Upon submission, the app fetches detailed technical data from external sources using the Google Books API and the Open Library API, enriching the platform’s book database.
 
 ## 📌 What did I learn?
 
-The most challenging part of this project was creating routes and endpoints for interacting with the database. Since the registered data had many relationships among themselves, and there were some data that needed to be calculated in the request body, it required a well-thought-out logic to obtain them at times.
-
-I leveraged Next.js's server-side rendering feature, using `getServerSideProps`, to render database information on the server-side. Additionally, I used a seed.ts file to populate the database. NextAuth.js library was employed to implement social user authentication.
+The most challenging part of this project was creating routes and endpoints for interacting with the database. Since the registered data had many relationships among themselves, and there were some data that needed to be calculated in the request body, it required a well-thought-out logic to obtain them at times. The application is also covered by automated tests implemented with Jest, ensuring reliability and maintainability of the codebase.
 
 ## 🔍 Links
 [Preview Site](https://book-wise-puce.vercel.app/)
 
-## 💻 My Process
-### Built with:
+## 🛠️ Tech Stack
 
-- [React](https://reactjs.org/)
-- [Typescript](https://www.typescriptlang.org/)
-- [Next.Js](https://nextjs.org/)
-- [Prisma](https://www.prisma.io/)
-- [Next Auth](https://next-auth.js.org/)
-- [Stitches](https://stitches.dev/)
-- [axios](https://axios-http.com/docs/intro)
-- [date-fns](https://date-fns.org/)
-- [font-awesome](https://fontawesome.com/)
-- [nookies](https://npm.io/package/nookies)
-- [zod](https://zod.dev/)
-- [react-hook-form](https://react-hook-form.com/)
-- [phosphor-react](https://phosphoricons.com/)
-- [radix-ui](https://www.radix-ui.com/)
-- [react-simple-star-rating](https://www.npmjs.com/package/react-simple-star-rating)
-- [react-toastify](https://fkhadra.github.io/react-toastify/introduction)
-- [ESLint](https://eslint.org/)
-- [Prettier](https://prettier.io/)
-<br/>
+| Category        | Technologies                          |
+|----------------|----------------------------------------|
+| **Framework**   | Next.js 13 (App Router)               |
+| **Styling**     | Stitches, CSS Modules                 |
+| **Database**    | PostgreSQL + Prisma ORM               |
+| **Authentication** | NextAuth.js                      |
+| **Testing**     | Jest, React Testing Library           |
+| **Tooling**     | ESLint, Prettier                      |
 
 ## ℹ️ How to run the application?
 
@@ -54,18 +42,26 @@ git clone https://github.com/maricastroc/book-wise
 npm install
 ```
 
-> Switch to the commit that contains the local SQLite server:
+> Rename the .env.example file to .env and add the necessary information to it.
+
+> Generate the Prisma client and apply database migrations:
 
 ```bash
-git checkout f7b5aa42e70e25077697366192171bcec89dc3ab
+npx prisma generate
+npx prisma migrate dev
 ```
-
-> Rename the .env.example file to .env and add the necessary information to it.
 
 > Start the service:
 
 ```bash
 npm run dev
+```
+
+> Run all tests:
+
+```bash
+npm test
+npm run test:coverage
 ```
 
 > ⏩ Access [http://localhost:3000](http://localhost:3000) to view the web application.
