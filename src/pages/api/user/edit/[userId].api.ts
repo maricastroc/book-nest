@@ -99,7 +99,9 @@ export default async function handler(
         const fileContent = await fs.promises.readFile(avatarFile.filepath)
 
         if (fileContent.length > MAX_SIZE) {
-          throw new Error('Image must be a maximum of 2MB!')
+          return res
+            .status(400)
+            .json({ message: 'Image must be a maximum of 2MB!' })
         }
 
         const base64Image = fileContent.toString('base64')

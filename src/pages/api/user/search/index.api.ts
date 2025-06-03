@@ -14,11 +14,13 @@ export default async function handler(
       ? String(req.query.search).trim().toLowerCase()
       : ''
 
-    const page = req.query.page ? Math.max(1, Number(req.query.page)) : 1
-    const perPage = req.query.perPage
-      ? Math.max(1, Number(req.query.perPage))
-      : 12
-    const skip = (page - 1) * perPage
+    const page = Number(req.query.page)
+    const perPage = Number(req.query.perPage)
+
+    const validPage = !isNaN(page) && page > 0 ? page : 1
+    const validPerPage = !isNaN(perPage) && perPage > 0 ? perPage : 12
+
+    const skip = (validPage - 1) * validPerPage
 
     const totalUsers = await prisma.user.count({
       where: searchQuery
@@ -31,7 +33,7 @@ export default async function handler(
         : undefined,
     })
 
-    const totalPages = Math.ceil(totalUsers / perPage)
+    const totalPages = Math.ceil(totalUsers / validPerPage)
 
     const users = await prisma.user.findMany({
       where: searchQuery
@@ -50,7 +52,7 @@ export default async function handler(
         createdAt: true,
       },
       skip,
-      take: perPage,
+      take: validPerPage,
       orderBy: {
         createdAt: 'desc',
       },
@@ -60,12 +62,12 @@ export default async function handler(
       data: {
         users,
         pagination: {
-          page,
-          perPage,
+          page: validPage,
+          perPage: validPerPage,
           total: totalUsers,
           totalPages,
-          hasNextPage: page < totalPages,
-          hasPreviousPage: page > 1,
+          hasNextPage: validPage < totalPages,
+          hasPreviousPage: validPage > 1,
         },
       },
     })
