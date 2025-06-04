@@ -120,10 +120,7 @@ export function ProfileCard({
                   </BookTitleAndAuthor>
                   {!isMobile &&
                     (rating.description !== '' ? (
-                      <TextBox
-                        maxHeight="5.8rem"
-                        description={rating.description}
-                      />
+                      <TextBox description={rating.description} />
                     ) : loggedUser?.id === rating.userId && !isEditDisabled ? (
                       <EmptyCardContent
                         onClick={() => setIsEditUserReviewCardOpen(true)}
@@ -143,10 +140,7 @@ export function ProfileCard({
                 (rating.description !== '' ? (
                   <>
                     <DividerLine />
-                    <TextBox
-                      maxHeight="5.8rem"
-                      description={rating.description}
-                    />
+                    <TextBox description={rating.description} />
                   </>
                 ) : (
                   <>

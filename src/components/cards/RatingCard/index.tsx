@@ -76,7 +76,7 @@ export function RatingCard({
               {isMobile ? (
                 <StarsRating rating={rating.rate} />
               ) : (
-                <TextBox maxHeight="5.8rem" description={rating.description} />
+                <TextBox description={rating.description} />
               )}
             </BookSummaryWrapper>
           </BookDetailsContainer>
@@ -84,7 +84,7 @@ export function RatingCard({
           {isMobile && (
             <>
               <DividerLine />
-              <TextBox maxHeight="5.8rem" description={rating.description} />
+              <TextBox description={rating.description} />
             </>
           )}
         </BookContentWrapper>

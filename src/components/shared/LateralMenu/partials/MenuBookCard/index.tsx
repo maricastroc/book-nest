@@ -127,7 +127,7 @@ export function MenuBookCard({
         </BookDetailsWrapper>
       </BookCardContent>
       <DividerLine />
-      <TextBox maxHeight="4.5rem" description={book.summary} />
+      <TextBox description={book.summary} />
       <DividerLine />
       <BookStats
         categoryNames={categoryNames}
