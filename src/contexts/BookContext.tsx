@@ -12,6 +12,7 @@ import {
   useCallback,
 } from 'react'
 import { useAppContext } from './AppContext'
+import { useRatings } from './RatingsContext'
 
 type LoadingState = {
   initial: boolean
@@ -95,6 +96,8 @@ export function BookProvider({
 
   const { loggedUser } = useAppContext()
 
+  const { registerRatingGroup } = useRatings()
+
   const onUpdateUserRating = (rating: RatingProps | null) => {
     setUserRating(rating)
   }
@@ -145,6 +148,7 @@ export function BookProvider({
 
       if (book?.ratings) {
         setBookRatings(book.ratings)
+        registerRatingGroup('lateralMenu', book.ratings)
       }
 
       if (loadingState.initial) {

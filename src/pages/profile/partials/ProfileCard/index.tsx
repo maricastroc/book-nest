@@ -19,6 +19,7 @@ import {
   BookTitleAndAuthor,
   ProfileCardWrapper,
   EmptyCardContent,
+  RatingVoteWrapper,
 } from './styles'
 
 import { StarsRating } from '@/components/shared/StarsRating'
@@ -27,6 +28,7 @@ import { RatingCardForm } from '@/components/shared/RatingCardForm'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
 import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
 import { useBookContext } from '@/contexts/BookContext'
+import { RatingVoteSection } from '@/components/shared/RatingVoteSection'
 
 interface ProfileCardProps {
   book: BookProps
@@ -65,6 +67,8 @@ export function ProfileCard({
     book.readingStatus || '',
   )
 
+  const belongsToLoggedUser = rating.userId === loggedUser?.id
+
   const { activeStatus } = useBookContext()
 
   useClickOutside([dropdownRef, buttonRef], () => {
@@ -91,75 +95,96 @@ export function ProfileCard({
         <ProfileCardBox>
           <ProfileCardHeader>
             <StarsRating rating={rating.rate} />
-            {rating.userId === loggedUser?.id && rating.deletedAt === null && (
-              <DropdownActions
-                ratingId={rating.id}
-                dropdownRef={dropdownRef}
-                buttonRef={buttonRef}
-                onToggleEditSection={(value) =>
-                  setIsEditUserReviewCardOpen(value)
-                }
-                isDropdownOpen={isDropdownOpen}
-                onToggleDropdown={(value: boolean) => setIsDropdownOpen(value)}
-                isDeleteSectionOpen={isDeleteModalOpen}
-                onToggleDeleteSection={(value: boolean) =>
-                  setIsDeleteModalOpen(value)
-                }
-              />
-            )}
+            <RatingVoteWrapper>
+              {!isMobile && (
+                <RatingVoteSection
+                  style={{
+                    marginTop: 0,
+                    paddingRight: `${belongsToLoggedUser ? '1rem' : '0'}`,
+                  }}
+                  rating={rating}
+                />
+              )}
+              {belongsToLoggedUser && (
+                <DropdownActions
+                  ratingId={rating.id}
+                  dropdownRef={dropdownRef}
+                  buttonRef={buttonRef}
+                  onToggleEditSection={(value) =>
+                    setIsEditUserReviewCardOpen(value)
+                  }
+                  isDropdownOpen={isDropdownOpen}
+                  onToggleDropdown={(value: boolean) =>
+                    setIsDropdownOpen(value)
+                  }
+                  isDeleteSectionOpen={isDeleteModalOpen}
+                  onToggleDeleteSection={(value: boolean) =>
+                    setIsDeleteModalOpen(value)
+                  }
+                />
+              )}
+            </RatingVoteWrapper>
           </ProfileCardHeader>
 
           {book && (
-            <ProfileCardBody>
-              <BookDetailsContainer>
-                <BookCover src={book.coverUrl} alt="" onClick={onSelect} />
-                <BookSummaryWrapper>
-                  <BookTitleAndAuthor>
-                    <h2>{book.name}</h2>
-                    <p>{book.author}</p>
-                  </BookTitleAndAuthor>
-                  {!isMobile &&
-                    (rating.description !== '' ? (
+            <>
+              <ProfileCardBody>
+                <BookDetailsContainer>
+                  <BookCover src={book.coverUrl} alt="" onClick={onSelect} />
+                  <BookSummaryWrapper>
+                    <BookTitleAndAuthor>
+                      <h2>{book.name}</h2>
+                      <p>{book.author}</p>
+                    </BookTitleAndAuthor>
+                    {!isMobile &&
+                      (rating.description !== '' ? (
+                        <TextBox description={rating.description} />
+                      ) : loggedUser?.id === rating.userId &&
+                        !isEditDisabled ? (
+                        <EmptyCardContent
+                          onClick={() => setIsEditUserReviewCardOpen(true)}
+                        >
+                          Add your Review
+                          <Plus />
+                        </EmptyCardContent>
+                      ) : (
+                        <EmptyCardContent disabled>
+                          No description available.
+                        </EmptyCardContent>
+                      ))}
+                  </BookSummaryWrapper>
+                </BookDetailsContainer>
+
+                {isMobile &&
+                  (rating.description !== '' ? (
+                    <>
+                      <DividerLine />
                       <TextBox description={rating.description} />
-                    ) : loggedUser?.id === rating.userId && !isEditDisabled ? (
+                    </>
+                  ) : (
+                    <>
+                      <DividerLine />
                       <EmptyCardContent
                         onClick={() => setIsEditUserReviewCardOpen(true)}
                       >
                         Add your Review
                         <Plus />
                       </EmptyCardContent>
-                    ) : (
-                      <EmptyCardContent disabled>
-                        No description available.
-                      </EmptyCardContent>
-                    ))}
-                </BookSummaryWrapper>
-              </BookDetailsContainer>
-
-              {isMobile &&
-                (rating.description !== '' ? (
-                  <>
-                    <DividerLine />
-                    <TextBox description={rating.description} />
-                  </>
-                ) : (
-                  <>
-                    <DividerLine />
-                    <EmptyCardContent
-                      onClick={() => setIsEditUserReviewCardOpen(true)}
-                    >
-                      Add your Review
-                      <Plus />
-                    </EmptyCardContent>
-                  </>
-                ))}
-              {isFromLoggedUser && rating.deletedAt !== null && (
-                <ArchivedWarning
-                  style={{ margin: '0.85 0 0' }}
-                  activeStatus={activeStatus || null}
-                />
-              )}
-            </ProfileCardBody>
+                    </>
+                  ))}
+                {isFromLoggedUser && (
+                  <ArchivedWarning
+                    style={{ margin: '0.85 0 0' }}
+                    activeStatus={activeStatus || null}
+                  />
+                )}
+                {isMobile && (
+                  <RatingVoteWrapper>
+                    <RatingVoteSection rating={rating} />
+                  </RatingVoteWrapper>
+                )}
+              </ProfileCardBody>
+            </>
           )}
         </ProfileCardBox>
       </ProfileCardWrapper>

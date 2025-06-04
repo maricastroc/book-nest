@@ -8,29 +8,23 @@ import { useRatings } from '@/contexts/RatingsContext'
 
 interface Props {
   rating: RatingProps
+  style?: React.CSSProperties // 👈 permite passar estilos inline
 }
 
-export const RatingVoteSection = ({ rating }: Props) => {
-  const { updateRating, updatedRating } = useRatings()
-
+export const RatingVoteSection = ({ rating, style }: Props) => {
+  const { updateRating, getRating } = useRatings()
   const { data: session } = useSession()
 
-  const userVote = updatedRating
-    ? updatedRating.votes?.userVote
-    : rating.votes?.userVote
+  const currentRating = getRating(rating.id) || rating
+  const userVote = currentRating.votes?.userVote
+  const isOwner = rating.userId === session?.user?.id
 
   async function handleVote(type: 'UP' | 'DOWN') {
-    if (!session) {
-      return
-    }
+    if (!session || isOwner) return
 
     try {
-      const currentUp = updatedRating
-        ? updatedRating.votes.up
-        : rating.votes?.up ?? 0
-      const currentDown = updatedRating
-        ? updatedRating.votes.down
-        : rating.votes?.down ?? 0
+      const currentUp = currentRating.votes?.up ?? 0
+      const currentDown = currentRating.votes?.down ?? 0
 
       let newUp = currentUp
       let newDown = currentDown
@@ -46,10 +40,9 @@ export const RatingVoteSection = ({ rating }: Props) => {
         type === 'UP' ? newUp++ : newDown++
       }
 
-      updateRating({
-        ...rating,
+      updateRating(rating.id, {
+        ...currentRating,
         votes: {
-          ...rating.votes,
           up: newUp,
           down: newDown,
           userVote: newUserVote,
@@ -58,34 +51,30 @@ export const RatingVoteSection = ({ rating }: Props) => {
 
       await api.post('/ratings/vote', { ratingId: rating.id, type })
     } catch (error) {
-      updateRating(rating)
+      updateRating(rating.id, currentRating)
       handleApiError(error)
     }
   }
 
   return (
-    <RatingActions>
-      <RatingButton disabled={rating.userId === session?.user?.id}>
+    <RatingActions style={style}>
+      {' '}
+      {/* 👈 repassando style */}
+      <RatingButton disabled={isOwner}>
         <ThumbsUp
           onClick={() => handleVote('UP')}
           weight={userVote === 'UP' ? 'fill' : 'regular'}
           color={userVote === 'UP' ? '#50B2C0' : undefined}
         />
-        <p>
-          Helpful •{' '}
-          {updatedRating ? updatedRating.votes.up : rating.votes?.up ?? 0}
-        </p>
+        <p>Helpful • {currentRating.votes?.up ?? 0}</p>
       </RatingButton>
-
-      <RatingButton disabled={rating.userId === session?.user?.id}>
+      <RatingButton disabled={isOwner}>
         <ThumbsDown
           onClick={() => handleVote('DOWN')}
           weight={userVote === 'DOWN' ? 'fill' : 'regular'}
           color={userVote === 'DOWN' ? '#50B2C0' : undefined}
         />
-        <p>
-          {updatedRating ? updatedRating.votes.down : rating.votes?.down ?? 0}
-        </p>
+        <p>{currentRating.votes?.down ?? 0}</p>
       </RatingButton>
     </RatingActions>
   )

@@ -26,7 +26,6 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
 import { useBookContext } from '@/contexts/BookContext'
 import { RatingVoteSection } from '@/components/shared/RatingVoteSection'
-import { RatingsProvider } from '@/contexts/RatingsContext'
 
 interface UserRatingBoxProps {
   rating: RatingProps
@@ -51,7 +50,7 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
 
   const { isValidatingReview } = useAppContext()
 
-  const { activeStatus, bookRatings } = useBookContext()
+  const { activeStatus } = useBookContext()
 
   const session = useSession()
 
@@ -76,68 +75,66 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
     />
   ) : (
     <>
-      <RatingsProvider initialRatings={bookRatings}>
-        <UserRatingBoxWrapper>
-          <UserRatingBoxContent>
-            <UserRatingBoxHeader>
-              <UserDetailsWrapper>
-                <Avatar
-                  isClickable
-                  variant="regular"
-                  avatarUrl={rating.user?.avatarUrl}
-                  onClick={() => {
-                    router.push(`/profile/${rating.userId}`)
-                  }}
-                />
-                <UserNameDateWrapper>
-                  <p>{rating.user.name}</p>
-                  <time title={dateFormatted} dateTime={dateString}>
-                    {dateRelativeToNow}
-                  </time>
-                </UserNameDateWrapper>
-              </UserDetailsWrapper>
-              <UserRatingAndActionsWrapper>
-                {!isMobile && <StarsRating rating={rating.rate} />}
-                {isFromLoggedUser && (
-                  <DropdownActions
-                    variant="secondary"
-                    ratingId={rating.id}
-                    dropdownRef={dropdownRef}
-                    buttonRef={buttonRef}
-                    onToggleEditSection={(value) => setOpenEditReviewBox(value)}
-                    isDropdownOpen={isDropdownOpen}
-                    onToggleDropdown={(value: boolean) =>
-                      setIsDropdownOpen(value)
-                    }
-                    isDeleteSectionOpen={isDeleteModalOpen}
-                    onToggleDeleteSection={(value: boolean) =>
-                      setIsDeleteModalOpen(value)
-                    }
-                  />
-                )}
-              </UserRatingAndActionsWrapper>
-            </UserRatingBoxHeader>
-            {isMobile && (
-              <StarsRatingWrapper>
-                <StarsRating rating={rating.rate} />
-              </StarsRatingWrapper>
-            )}
-            {openEditReviewBox ? (
-              <RatingCardForm
-                book={book}
-                onClose={() => setOpenEditReviewBox(false)}
+      <UserRatingBoxWrapper>
+        <UserRatingBoxContent>
+          <UserRatingBoxHeader>
+            <UserDetailsWrapper>
+              <Avatar
+                isClickable
+                variant="regular"
+                avatarUrl={rating.user?.avatarUrl}
+                onClick={() => {
+                  router.push(`/profile/${rating.userId}`)
+                }}
               />
-            ) : (
-              <TextBox description={rating.description ?? ''} />
-            )}
-            {isFromLoggedUser && rating.deletedAt !== null && (
-              <ArchivedWarning activeStatus={activeStatus || null} />
-            )}
+              <UserNameDateWrapper>
+                <p>{rating.user.name}</p>
+                <time title={dateFormatted} dateTime={dateString}>
+                  {dateRelativeToNow}
+                </time>
+              </UserNameDateWrapper>
+            </UserDetailsWrapper>
+            <UserRatingAndActionsWrapper>
+              {!isMobile && <StarsRating rating={rating.rate} />}
+              {isFromLoggedUser && (
+                <DropdownActions
+                  variant="secondary"
+                  ratingId={rating.id}
+                  dropdownRef={dropdownRef}
+                  buttonRef={buttonRef}
+                  onToggleEditSection={(value) => setOpenEditReviewBox(value)}
+                  isDropdownOpen={isDropdownOpen}
+                  onToggleDropdown={(value: boolean) =>
+                    setIsDropdownOpen(value)
+                  }
+                  isDeleteSectionOpen={isDeleteModalOpen}
+                  onToggleDeleteSection={(value: boolean) =>
+                    setIsDeleteModalOpen(value)
+                  }
+                />
+              )}
+            </UserRatingAndActionsWrapper>
+          </UserRatingBoxHeader>
+          {isMobile && (
+            <StarsRatingWrapper>
+              <StarsRating rating={rating.rate} />
+            </StarsRatingWrapper>
+          )}
+          {openEditReviewBox ? (
+            <RatingCardForm
+              book={book}
+              onClose={() => setOpenEditReviewBox(false)}
+            />
+          ) : (
+            <TextBox description={rating.description ?? ''} />
+          )}
+          {isFromLoggedUser && rating.deletedAt !== null && (
+            <ArchivedWarning activeStatus={activeStatus || null} />
+          )}
 
-            <RatingVoteSection rating={rating} />
-          </UserRatingBoxContent>
-        </UserRatingBoxWrapper>
-      </RatingsProvider>
+          <RatingVoteSection rating={rating} />
+        </UserRatingBoxContent>
+      </UserRatingBoxWrapper>
     </>
   )
 }

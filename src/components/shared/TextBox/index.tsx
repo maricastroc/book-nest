@@ -47,6 +47,11 @@ export function TextBox({ description, variant = 'primary' }: TextBoxProps) {
                   <ViewMoreButton
                     className={variant}
                     onClick={() => setIsExpanded(!isExpanded)}
+                    style={{
+                      display: 'inline',
+                      padding: 0,
+                      marginLeft: `${isExpanded ? '4px' : ''}`,
+                    }}
                   >
                     {isExpanded ? 'view less' : 'view more'}
                   </ViewMoreButton>

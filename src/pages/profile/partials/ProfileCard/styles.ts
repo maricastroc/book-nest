@@ -38,7 +38,7 @@ export const ProfileCardHeader = styled('div', {
   borderTopLeftRadius: 8,
   borderTopRightRadius: 8,
   marginBottom: '1rem',
-  padding: '0.8rem 1.5rem 0.8rem',
+  padding: '1rem 1.5rem',
   backgroundColor: '$gray650',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.1)',
 
@@ -225,4 +225,10 @@ export const EmptyCardContent = styled('button', {
   '&:disabled': {
     cursor: 'not-allowed !important',
   },
+})
+
+export const RatingVoteWrapper = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 })

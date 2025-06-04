@@ -1,10 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import useRequest from './useRequest'
 import { RatingProps } from '@/@types/rating'
 import { usePaginationAndSearch } from './usePaginationAndSearchParams'
+import { useRatings } from '@/contexts/RatingsContext'
 
 export const useProfileRatings = (userId?: string) => {
   const [userRatings, setUserRatings] = useState<RatingProps[] | undefined>()
+
+  const { registerRatingGroup } = useRatings()
 
   const onUpdateReview = async (updatedReview: RatingProps) => {
     setUserRatings((prevRatings) =>
@@ -71,6 +75,7 @@ export const useProfileRatings = (userId?: string) => {
   useEffect(() => {
     if (ratingsData) {
       setUserRatings(ratingsData.ratings)
+      registerRatingGroup('profile', ratingsData.ratings)
     }
   }, [ratingsData])
 

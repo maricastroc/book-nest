@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react'
 import 'react-toastify/dist/ReactToastify.css'
 import { AppProvider } from '@/contexts/AppContext'
 import { Toaster } from 'react-hot-toast'
+import { RatingsProvider } from '@/contexts/RatingsContext'
 
 globalStyles()
 
@@ -34,7 +35,9 @@ export default function App({
         }}
       />
       <AppProvider>
-        <Component {...pageProps} />
+        <RatingsProvider>
+          <Component {...pageProps} />
+        </RatingsProvider>
       </AppProvider>
     </SessionProvider>
   )
