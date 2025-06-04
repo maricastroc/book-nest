@@ -43,7 +43,7 @@ export default function Profile() {
   const userId = Array.isArray(router.query.userId)
     ? router.query.userId[0]
     : router.query.userId
-  console.log(userId)
+
   const isRouteLoading = useLoadingOnRouteChange()
 
   const containerRef = useRef<HTMLDivElement>(null)

@@ -70,6 +70,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleSetLoggedUser = (user: UserProps) => {
     setLoggedUser(user)
+    localStorage.setItem('loggedUser', JSON.stringify(user))
   }
 
   const handleSetUserId = useCallback((value: string) => setUserId(value), [])
@@ -124,10 +125,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   useEffect(() => {
-    if (user) {
-      setLoggedUser(user)
+    const storedUser = localStorage.getItem('loggedUser')
+    if (storedUser) {
+      setLoggedUser(JSON.parse(storedUser))
     }
-  }, [user])
+  }, [])
+
+  useEffect(() => {
+    if (user && !loggedUser) {
+      setLoggedUser(user)
+      localStorage.setItem('loggedUser', JSON.stringify(user))
+    }
+  }, [user, loggedUser])
 
   const contextValue = useMemo(
     () => ({

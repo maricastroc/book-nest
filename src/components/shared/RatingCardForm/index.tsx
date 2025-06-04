@@ -26,6 +26,7 @@ import { ActionButton } from '@/components/core/ActionButton'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { AnimatedRating } from '../AnimatedRating'
 import { useBookContext } from '@/contexts/BookContext'
+import { useRatings } from '@/contexts/RatingsContext'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean
@@ -90,6 +91,8 @@ export function RatingCardForm({
     isValidatingReview,
   } = useAppContext()
 
+  const { updateRating } = useRatings()
+
   const { onUpdateRating, onUpdateUserRating } = useBookContext()
 
   const handleRating = (rate: number) => {
@@ -137,7 +140,7 @@ export function RatingCardForm({
 
       const updatedRating = await handleEditReview(payload)
 
-      await onUpdateRating?.()
+      updateRating(rating.id, updatedRating)
       onUpdateUserRating(updatedRating)
       onClose()
     }
