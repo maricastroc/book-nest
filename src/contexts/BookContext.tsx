@@ -29,6 +29,7 @@ type BookContextType = {
   bookRatings: RatingProps[]
   mutateBookData: any
   mutateUserRating: any
+  onUpdateBookRatings: (ratings: RatingProps[]) => void
   onUpdateUserRating: (rating: RatingProps | null) => void
   onUpdateRating?: () => Promise<void>
   onUpdateActiveStatus: (newStatus: string) => void
@@ -50,20 +51,6 @@ export function BookProvider({
   onUpdateRating,
   onUpdateBook,
 }: BookProviderProps) {
-  const [updatedBook, setUpdatedBook] = useState<BookProps | null>(null)
-
-  const [userRating, setUserRating] = useState<RatingProps | null>(null)
-
-  const [bookRatings, setBookRatings] = useState<RatingProps[]>([])
-
-  const [loadingState, setLoadingState] = useState<LoadingState>({
-    initial: true,
-    status: false,
-    reviews: false,
-  })
-
-  const { loggedUser } = useAppContext()
-
   const bookRequest = bookId
     ? {
         url: `/books/${bookId}`,
@@ -94,6 +81,20 @@ export function BookProvider({
     book?.readingStatus || null,
   )
 
+  const [updatedBook, setUpdatedBook] = useState<BookProps | null>(null)
+
+  const [userRating, setUserRating] = useState<RatingProps | null>(null)
+
+  const [bookRatings, setBookRatings] = useState<RatingProps[]>([])
+
+  const [loadingState, setLoadingState] = useState<LoadingState>({
+    initial: true,
+    status: false,
+    reviews: false,
+  })
+
+  const { loggedUser } = useAppContext()
+
   const onUpdateUserRating = (rating: RatingProps | null) => {
     setUserRating(rating)
   }
@@ -101,6 +102,10 @@ export function BookProvider({
   const onUpdateActiveStatus = useCallback((newStatus: string) => {
     setActiveStatus(newStatus)
   }, [])
+
+  const onUpdateBookRatings = (ratings: RatingProps[]) => {
+    setBookRatings(ratings)
+  }
 
   const onUpdateStatus = useCallback(
     async (newStatus: string) => {
@@ -167,6 +172,7 @@ export function BookProvider({
       mutateUserRating,
       onUpdateActiveStatus,
       onUpdateStatus,
+      onUpdateBookRatings,
     }),
     [
       updatedBook,
@@ -181,6 +187,7 @@ export function BookProvider({
       mutateUserRating,
       onUpdateActiveStatus,
       onUpdateStatus,
+      onUpdateBookRatings,
     ],
   )
 

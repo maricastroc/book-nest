@@ -8,6 +8,11 @@ datasource db {
   directUrl = env("DATABASE_DIRECT_URL")
 }
 
+enum VoteType {
+  UP
+  DOWN
+}
+
 model User {
   id            String          @id @default(uuid())
   name          String
@@ -22,6 +27,8 @@ model User {
   ratings       Rating[]
   books         Book[]
   readingStatus ReadingStatus[]
+
+  votes         Vote[]  
 
   @@map("users")
 }
@@ -100,9 +107,27 @@ model Rating {
   user    User   @relation(fields: [userId], references: [id])
   userId  String
 
+  votes         Vote[]  
+
   @@index([bookId])
   @@index([userId])
   @@map("ratings")
+}
+
+model Vote {
+  id               String         @id @default(uuid())
+  type             VoteType
+  createdAt        DateTime       @default(now())
+
+  userId           String
+  user             User           @relation(fields: [userId], references: [id])
+
+  ratingId         String
+  rating           Rating        @relation(fields: [ratingId], references: [id])
+
+  @@unique([userId, ratingId])
+
+  @@map("votes")
 }
 
 model Account {

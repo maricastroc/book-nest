@@ -177,59 +177,59 @@ export default function Home() {
       {isRouteLoading ? (
         <LoadingPage />
       ) : (
-        <HomePageWrapper>
-          {isLateralMenuOpen && selectedBook && (
-            <BookProvider
-              bookId={selectedBook.id}
-              onUpdateBook={handleUpdatePopularBooks}
-              onUpdateRating={async () => {
-                await mutateUserLatestRating()
-              }}
-            >
+        <BookProvider
+          bookId={selectedBook?.id}
+          onUpdateBook={handleUpdatePopularBooks}
+          onUpdateRating={async () => {
+            await mutateUserLatestRating()
+          }}
+        >
+          <HomePageWrapper>
+            {isLateralMenuOpen && selectedBook && (
               <LateralMenu onClose={() => setIsLateralMenuOpen(false)} />
-            </BookProvider>
-          )}
-          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
-          <HomePageContainer>
-            <HomePageHeading>
-              <ChartLineUp />
-              <h2>Home</h2>
-            </HomePageHeading>
-            <HomePageContent>
-              <LastRatingsWrapper>
-                {session?.data?.user && (
-                  <>
-                    <UserLatestReadingTitle>
-                      Your Last Rating
-                    </UserLatestReadingTitle>
-                    <UserLatestReadingContainer>
-                      {renderUserLatestRating()}
-                    </UserLatestReadingContainer>
-                  </>
-                )}
-                <LastRatingsContainer>
-                  <LastRatingsTitle>Last Ratings</LastRatingsTitle>
-                  <LastRatingsContent>
-                    {renderLatestRatings()}
-                  </LastRatingsContent>
-                </LastRatingsContainer>
-              </LastRatingsWrapper>
+            )}
+            {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
+            <HomePageContainer>
+              <HomePageHeading>
+                <ChartLineUp />
+                <h2>Home</h2>
+              </HomePageHeading>
+              <HomePageContent>
+                <LastRatingsWrapper>
+                  {session?.data?.user && (
+                    <>
+                      <UserLatestReadingTitle>
+                        Your Last Rating
+                      </UserLatestReadingTitle>
+                      <UserLatestReadingContainer>
+                        {renderUserLatestRating()}
+                      </UserLatestReadingContainer>
+                    </>
+                  )}
+                  <LastRatingsContainer>
+                    <LastRatingsTitle>Last Ratings</LastRatingsTitle>
+                    <LastRatingsContent>
+                      {renderLatestRatings()}
+                    </LastRatingsContent>
+                  </LastRatingsContainer>
+                </LastRatingsWrapper>
 
-              <PopularBooksWrapper>
-                <PopularBooksTitle>
-                  <p>Popular Books</p>
-                  <OutlineButton onClick={() => router.push('/explore')}>
-                    View All
-                    <CaretRight />
-                  </OutlineButton>
-                </PopularBooksTitle>
-                <PopularBooksContent>
-                  {renderPopularBooks()}
-                </PopularBooksContent>
-              </PopularBooksWrapper>
-            </HomePageContent>
-          </HomePageContainer>
-        </HomePageWrapper>
+                <PopularBooksWrapper>
+                  <PopularBooksTitle>
+                    <p>Popular Books</p>
+                    <OutlineButton onClick={() => router.push('/explore')}>
+                      View All
+                      <CaretRight />
+                    </OutlineButton>
+                  </PopularBooksTitle>
+                  <PopularBooksContent>
+                    {renderPopularBooks()}
+                  </PopularBooksContent>
+                </PopularBooksWrapper>
+              </HomePageContent>
+            </HomePageContainer>
+          </HomePageWrapper>
+        </BookProvider>
       )}
     </>
   )

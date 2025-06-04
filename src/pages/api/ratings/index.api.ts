@@ -38,6 +38,7 @@ export default async function handler(
             name: true,
           },
         },
+        votes: true,
       },
     })
 
@@ -95,6 +96,7 @@ export default async function handler(
         },
         include: {
           user: true,
+          votes: true,
         },
       })
 
@@ -124,6 +126,7 @@ export default async function handler(
       },
       include: {
         user: true,
+        votes: true,
       },
     })
 

@@ -43,11 +43,31 @@ export default async function handler(
           },
         },
         user: true,
+        votes: true,
       },
       take: 5,
     })
 
-    return res.status(200).json({ ratings })
+    const ratingsWithGroupedVotes = ratings.map((rating) => {
+      const upVotes = rating.votes.filter((v) => v.type === 'UP').length
+
+      const downVotes = rating.votes.filter((v) => v.type === 'DOWN').length
+
+      const userVote = session?.user?.id
+        ? rating.votes.find((v) => v.userId === session.user.id)?.type || null
+        : null
+
+      return {
+        ...rating,
+        votes: {
+          up: upVotes,
+          down: downVotes,
+          userVote,
+        },
+      }
+    })
+
+    return res.status(200).json({ ratings: ratingsWithGroupedVotes })
   } catch (error) {
     console.error('Error fetching ratings:', error)
     return res.status(500).json({ message: 'Internal Server Error' })

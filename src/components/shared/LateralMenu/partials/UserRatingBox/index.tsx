@@ -25,6 +25,7 @@ import { useClickOutside } from '@/hooks/useClickOutside'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
 import { useBookContext } from '@/contexts/BookContext'
+import { RatingVoteSection } from '@/components/shared/RatingVoteSection'
 
 interface UserRatingBoxProps {
   rating: RatingProps
@@ -130,6 +131,8 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
           {isFromLoggedUser && rating.deletedAt !== null && (
             <ArchivedWarning activeStatus={activeStatus || null} />
           )}
+
+          <RatingVoteSection rating={rating} />
         </UserRatingBoxContent>
       </UserRatingBoxWrapper>
     </>

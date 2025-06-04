@@ -14,4 +14,13 @@ export interface RatingProps {
   userId: string
 
   deletedAt: Date | null
+
+  updated_votes_up?: number
+  updated_votes_down?: number
+
+  votes: {
+    up: number
+    down: number
+    userVote?: 'UP' | 'DOWN' | null
+  }
 }

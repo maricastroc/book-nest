@@ -27,6 +27,7 @@ export default async function handler(
       ratings: {
         include: {
           user: true,
+          votes: true,
         },
       },
       categories: {
@@ -64,14 +65,37 @@ export default async function handler(
 
   const readingStatus = book.readingStatus?.[0]?.status || null
 
+  const ratingsWithGroupedVotes = book.ratings.map((rating) => {
+    const upVotes = rating.votes.filter((v) => v.type === 'UP').length
+
+    const downVotes = rating.votes.filter((v) => v.type === 'DOWN').length
+
+    const userVote = session?.user?.id
+      ? rating.votes.find((v) => v.userId === session.user.id)?.type || null
+      : null
+
+    return {
+      ...rating,
+      votes: {
+        up: upVotes,
+        down: downVotes,
+        userVote,
+      },
+    }
+  })
+
   const bookWithDetails = {
     ...book,
     categories: book.categories.map((category) => category.category),
     ratings: session?.user?.id
-      ? book.ratings.filter((rating) => rating.userId !== session.user.id)
-      : book.ratings.filter((rating) => rating.deletedAt === null),
+      ? ratingsWithGroupedVotes.filter(
+          (rating) => rating.userId !== session.user.id,
+        )
+      : ratingsWithGroupedVotes.filter((rating) => rating.deletedAt === null),
     userRating: session?.user?.id
-      ? book.ratings.find((rating) => rating.userId === session.user.id)
+      ? ratingsWithGroupedVotes.find(
+          (rating) => rating.userId === session.user.id,
+        )
       : undefined,
     rate: avgRate,
     readingStatus,

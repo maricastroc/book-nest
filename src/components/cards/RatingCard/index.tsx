@@ -23,6 +23,7 @@ import { TextBox } from '@/components/shared/TextBox'
 interface RatingCardProps {
   rating: RatingProps
   onOpenDetails: () => void
+  updatedLatestRatings?: RatingProps[]
 }
 
 export function RatingCard({
