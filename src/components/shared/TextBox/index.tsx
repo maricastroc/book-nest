@@ -1,74 +1,64 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import {
   ViewMoreButton,
   TextBoxContent,
   TextBoxWrapper,
   EmptyRating,
 } from './styles'
+import { useScreenSize } from '@/hooks/useScreenSize'
 
 interface TextBoxProps {
-  maxHeight?: string
   description: string | undefined
   variant?: 'primary' | 'secondary'
 }
 
-export function TextBox({
-  maxHeight = '4.2rem',
-  description,
-  variant = 'primary',
-}: TextBoxProps) {
+export function TextBox({ description, variant = 'primary' }: TextBoxProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const [isOverflowing, setIsOverflowing] = useState(false)
+  const isSmallSize = useScreenSize(480)
 
-  const summaryRef = useRef<HTMLDivElement | null>(null)
+  const MAX_CHARS = isSmallSize ? 150 : 250
 
-  const checkOverflow = () => {
-    const el = summaryRef.current
-    if (el) {
-      setIsOverflowing(el.scrollHeight > el.clientHeight)
-    }
+  if (!description || description.length === 0) {
+    return (
+      <TextBoxWrapper>
+        <EmptyRating>No description available</EmptyRating>
+      </TextBoxWrapper>
+    )
   }
 
-  useEffect(() => {
-    checkOverflow()
-    window.addEventListener('resize', checkOverflow)
-
-    return () => {
-      window.removeEventListener('resize', checkOverflow)
-    }
-  }, [description])
+  const isTruncated = description.length > MAX_CHARS
+  const truncatedText = description.slice(0, MAX_CHARS).trimEnd()
+  const descriptionLines = isExpanded
+    ? description.split('\n')
+    : truncatedText.split('\n')
 
   return (
     <TextBoxWrapper>
-      <TextBoxContent
-        ref={summaryRef}
-        style={{
-          maxHeight: isExpanded ? 'none' : maxHeight,
-          overflowY: isExpanded ? 'visible' : 'hidden',
-        }}
-      >
-        {description && description?.length ? (
-          <p>
-            {description.split('\n').map((line, index) => (
+      <TextBoxContent>
+        <p>
+          {descriptionLines.map((line, index) => {
+            const isLastLine = index === descriptionLines.length - 1
+            return (
               <span key={index}>
                 {line}
+                {isLastLine && !isExpanded && isTruncated && '... '}
+                {isLastLine && (isTruncated || isExpanded) && (
+                  <ViewMoreButton
+                    className={variant}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    style={{ display: 'inline', padding: 0, marginLeft: 4 }}
+                  >
+                    {isExpanded ? 'view less' : 'view more'}
+                  </ViewMoreButton>
+                )}
+
                 <br />
               </span>
-            ))}
-          </p>
-        ) : (
-          <EmptyRating>No description available</EmptyRating>
-        )}
+            )
+          })}
+        </p>
       </TextBoxContent>
-      {isOverflowing && description && description?.length && (
-        <ViewMoreButton
-          className={variant}
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? 'view less' : 'view more'}
-        </ViewMoreButton>
-      )}
     </TextBoxWrapper>
   )
 }
