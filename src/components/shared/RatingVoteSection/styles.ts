@@ -8,6 +8,15 @@ export const RatingActions = styled('div', {
   gap: '0.6rem',
   marginTop: '0.75rem',
   borderRadius: 8,
+})
+
+export const RatingButton = styled('button', {
+  display: 'flex',
+  backgroundColor: 'transparent',
+  border: 'none',
+  alignItems: 'center',
+  gap: '0.3rem',
+  color: '$gray100',
 
   svg: {
     cursor: 'pointer',
@@ -19,12 +28,23 @@ export const RatingActions = styled('div', {
       transition: '200ms ease-in-out',
     },
   },
-})
 
-export const RatingWrapper = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.3rem',
+  variants: {
+    disabled: {
+      true: {
+        cursor: 'not-allowed',
+
+        svg: {
+          cursor: 'not-allowed',
+
+          '&:hover': {
+            filter: 'none',
+            transition: 'none',
+          },
+        },
+      },
+    },
+  },
 
   p: {
     fontSize: '0.85rem',

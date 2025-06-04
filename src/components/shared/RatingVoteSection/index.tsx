@@ -1,23 +1,23 @@
 import { ThumbsDown, ThumbsUp } from 'phosphor-react'
-import { RatingActions, RatingWrapper } from './styles'
-import { useBookContext } from '@/contexts/BookContext'
+import { RatingActions, RatingButton } from './styles'
 import { RatingProps } from '@/@types/rating'
 import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
 import { useSession } from 'next-auth/react'
+import { useRatings } from '@/contexts/RatingsContext'
 
 interface Props {
   rating: RatingProps
 }
 
 export const RatingVoteSection = ({ rating }: Props) => {
-  const { onUpdateBookRatings, bookRatings } = useBookContext()
+  const { updateRating, updatedRating } = useRatings()
 
   const { data: session } = useSession()
 
-  const currentRating = bookRatings.find((r) => r.id === rating.id) ?? rating
-
-  const userVote = currentRating.votes?.userVote
+  const userVote = updatedRating
+    ? updatedRating.votes?.userVote
+    : rating.votes?.userVote
 
   async function handleVote(type: 'UP' | 'DOWN') {
     if (!session) {
@@ -25,8 +25,12 @@ export const RatingVoteSection = ({ rating }: Props) => {
     }
 
     try {
-      const currentUp = currentRating.votes?.up ?? 0
-      const currentDown = currentRating.votes?.down ?? 0
+      const currentUp = updatedRating
+        ? updatedRating.votes.up
+        : rating.votes?.up ?? 0
+      const currentDown = updatedRating
+        ? updatedRating.votes.down
+        : rating.votes?.down ?? 0
 
       let newUp = currentUp
       let newDown = currentDown
@@ -42,47 +46,47 @@ export const RatingVoteSection = ({ rating }: Props) => {
         type === 'UP' ? newUp++ : newDown++
       }
 
-      const updatedRatings = bookRatings.map((r) =>
-        r.id === currentRating.id
-          ? {
-              ...r,
-              votes: {
-                ...r.votes,
-                up: newUp,
-                down: newDown,
-                userVote: newUserVote,
-              },
-            }
-          : r,
-      )
+      updateRating({
+        ...rating,
+        votes: {
+          ...rating.votes,
+          up: newUp,
+          down: newDown,
+          userVote: newUserVote,
+        },
+      })
 
-      onUpdateBookRatings(updatedRatings)
-
-      await api.post('/ratings/vote', { ratingId: currentRating.id, type })
+      await api.post('/ratings/vote', { ratingId: rating.id, type })
     } catch (error) {
-      onUpdateBookRatings(bookRatings)
+      updateRating(rating)
       handleApiError(error)
     }
   }
 
   return (
     <RatingActions>
-      <RatingWrapper>
+      <RatingButton disabled={rating.userId === session?.user?.id}>
         <ThumbsUp
           onClick={() => handleVote('UP')}
           weight={userVote === 'UP' ? 'fill' : 'regular'}
           color={userVote === 'UP' ? '#50B2C0' : undefined}
         />
-        <p>Helpful • {currentRating.votes?.up ?? 0}</p>
-      </RatingWrapper>
-      <RatingWrapper>
+        <p>
+          Helpful •{' '}
+          {updatedRating ? updatedRating.votes.up : rating.votes?.up ?? 0}
+        </p>
+      </RatingButton>
+
+      <RatingButton disabled={rating.userId === session?.user?.id}>
         <ThumbsDown
           onClick={() => handleVote('DOWN')}
           weight={userVote === 'DOWN' ? 'fill' : 'regular'}
           color={userVote === 'DOWN' ? '#50B2C0' : undefined}
         />
-        <p>{currentRating.votes?.down ?? 0}</p>
-      </RatingWrapper>
+        <p>
+          {updatedRating ? updatedRating.votes.down : rating.votes?.down ?? 0}
+        </p>
+      </RatingButton>
     </RatingActions>
   )
 }

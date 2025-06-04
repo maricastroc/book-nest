@@ -35,6 +35,7 @@ export const ViewMoreButton = styled('button', {
   cursor: 'pointer',
   fontSize: '0.92rem',
   fontWeight: 700,
+  marginLeft: '0.3rem',
 
   '&.secondary': {
     color: '$purple100',
