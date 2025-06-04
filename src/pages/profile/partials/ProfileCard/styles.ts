@@ -72,8 +72,9 @@ export const BookDetailsContainer = styled('div', {
 })
 
 export const BookCover = styled('img', {
+  minWidth: '5.8rem',
   width: '5.8rem',
-  height: 'auto',
+  height: '8rem',
   borderRadius: 8,
   cursor: 'pointer',
   boxShadow:
@@ -85,17 +86,9 @@ export const BookCover = styled('img', {
   },
 
   '@media (min-width: 480px)': {
+    minWidth: '6.5rem',
     width: '6.5rem',
-    marginTop: '1rem',
-  },
-
-  '@media (min-width: 768px)': {
-    width: '6.9rem',
-  },
-
-  '@media (min-width: 1200px)': {
-    width: '7.2rem',
-    marginTop: '0.7rem',
+    height: '9.5rem',
   },
 })
 

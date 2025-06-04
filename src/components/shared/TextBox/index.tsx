@@ -15,7 +15,7 @@ interface TextBoxProps {
 export function TextBox({ description, variant = 'primary' }: TextBoxProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const isSmallSize = useScreenSize(480)
+  const isSmallSize = useScreenSize(580)
 
   const MAX_CHARS = isSmallSize ? 150 : 250
 
@@ -47,7 +47,6 @@ export function TextBox({ description, variant = 'primary' }: TextBoxProps) {
                   <ViewMoreButton
                     className={variant}
                     onClick={() => setIsExpanded(!isExpanded)}
-                    style={{ display: 'inline', padding: 0, marginLeft: 4 }}
                   >
                     {isExpanded ? 'view less' : 'view more'}
                   </ViewMoreButton>

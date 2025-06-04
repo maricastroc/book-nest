@@ -28,11 +28,11 @@ export const TextBoxContent = styled('div', {
 })
 
 export const ViewMoreButton = styled('button', {
+  display: 'inline',
   backgroundColor: 'transparent',
   color: '$green100',
   border: 'none',
   cursor: 'pointer',
-  padding: '0.5rem 0',
   fontSize: '0.92rem',
   fontWeight: 700,
 
