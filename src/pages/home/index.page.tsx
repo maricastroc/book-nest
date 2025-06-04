@@ -38,6 +38,7 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import useRequest from '@/hooks/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
+import { BookProvider } from '@/contexts/BookContext'
 
 export default function Home() {
   const router = useRouter()
@@ -178,12 +179,13 @@ export default function Home() {
       ) : (
         <HomePageWrapper>
           {isLateralMenuOpen && selectedBook && (
-            <LateralMenu
+            <BookProvider
               bookId={selectedBook.id}
-              onClose={() => setIsLateralMenuOpen(false)}
               onUpdateBook={onUpdateBook}
               mutateUserLatestRating={mutateUserLatestRating}
-            />
+            >
+              <LateralMenu onClose={() => setIsLateralMenuOpen(false)} />
+            </BookProvider>
           )}
           {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <HomePageContainer>

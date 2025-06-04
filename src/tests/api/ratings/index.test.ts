@@ -190,7 +190,7 @@ describe('API /api/ratings', () => {
       expect(status).toHaveBeenCalledWith(200)
       expect(json).toHaveBeenCalledWith({
         rating: updatedRating,
-        message: 'Rating successfully updated!.',
+        message: 'Rating successfully updated!',
       })
     })
 

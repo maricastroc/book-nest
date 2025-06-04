@@ -25,6 +25,7 @@ import { FormErrors } from '@/components/core/FormErrors'
 import { ActionButton } from '@/components/core/ActionButton'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { AnimatedRating } from '../AnimatedRating'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean
@@ -32,8 +33,6 @@ interface RatingCardFormProps {
   rating?: RatingProps | null
   book: BookProps
   onClose: () => void
-  onUpdateReview: (updatedReview: RatingProps) => void
-  onCreateReview: (newRating: RatingProps) => void
 }
 
 const ratingCardFormSchema = z.object({
@@ -62,12 +61,10 @@ type RatingCardFormData = z.infer<typeof ratingCardFormSchema>
 
 export function RatingCardForm({
   book,
-  onClose,
   isProfileScreen = false,
   isEdit = false,
   rating = null,
-  onUpdateReview,
-  onCreateReview,
+  onClose,
   ...rest
 }: RatingCardFormProps) {
   const {
@@ -93,6 +90,8 @@ export function RatingCardForm({
     isValidatingReview,
   } = useAppContext()
 
+  const { onUpdateRating, onUpdateUserRating } = useBookContext()
+
   const handleRating = (rate: number) => {
     setValue('rate', rate)
   }
@@ -111,8 +110,9 @@ export function RatingCardForm({
         status: book.readingStatus,
       }
 
-      const createdRating = await handleCreateReview(payload)
-      onCreateReview(createdRating)
+      const newRating = await handleCreateReview(payload)
+      await onUpdateRating?.()
+      onUpdateUserRating(newRating)
       onClose()
     }
   }
@@ -136,7 +136,9 @@ export function RatingCardForm({
       }
 
       const updatedRating = await handleEditReview(payload)
-      onUpdateReview(updatedRating)
+
+      await onUpdateRating?.()
+      onUpdateUserRating(updatedRating)
       onClose()
     }
   }

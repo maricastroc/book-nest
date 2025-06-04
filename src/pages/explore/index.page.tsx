@@ -32,6 +32,7 @@ import {
 } from './styles'
 import { useExploreBooks } from '@/hooks/useExploreBooks'
 import { CategoriesSection } from './partials/CategoriesSection'
+import { BookProvider } from '@/contexts/BookContext'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -97,13 +98,13 @@ export default function Explore() {
       ) : (
         <ExplorePageWrapper>
           {openLateralMenu && selectedBook && (
-            <LateralMenu
-              bookId={selectedBook.id}
-              onUpdateBook={onUpdateBook}
-              onClose={() => {
-                setOpenLateralMenu(false)
-              }}
-            />
+            <BookProvider bookId={selectedBook.id} onUpdateBook={onUpdateBook}>
+              <LateralMenu
+                onClose={() => {
+                  setOpenLateralMenu(false)
+                }}
+              />
+            </BookProvider>
           )}
           {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <ExplorePageContainer>

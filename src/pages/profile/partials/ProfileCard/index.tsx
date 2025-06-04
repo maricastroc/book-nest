@@ -26,14 +26,12 @@ import { TextBox } from '@/components/shared/TextBox'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
 import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
 import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface ProfileCardProps {
   book: BookProps
   rating: RatingProps
   userId: string | undefined
-  onUpdateReview: (updatedReview: RatingProps) => void
-  onCreateReview: (newRating: RatingProps) => void
-  onDeleteReview: (ratingId: string) => void
   onSelect: () => void
 }
 
@@ -41,9 +39,6 @@ export function ProfileCard({
   book,
   rating,
   userId,
-  onUpdateReview,
-  onCreateReview,
-  onDeleteReview,
   onSelect,
 }: ProfileCardProps) {
   const { dateFormatted, dateRelativeToNow, dateString } =
@@ -56,7 +51,7 @@ export function ProfileCard({
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  const { loggedUser, handleDeleteReview } = useAppContext()
+  const { loggedUser } = useAppContext()
 
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -69,16 +64,8 @@ export function ProfileCard({
   const isEditDisabled = !['read', 'didNotFinish'].includes(
     book.readingStatus || '',
   )
-  console.log(book.readingStatus)
-  const deleteReview = async () => {
-    if (loggedUser) {
-      await handleDeleteReview(rating.id)
 
-      onDeleteReview(rating.id)
-
-      setIsDeleteModalOpen(false)
-    }
-  }
+  const { activeStatus } = useBookContext()
 
   useClickOutside([dropdownRef, buttonRef], () => {
     if (!isDeleteModalOpen) {
@@ -91,8 +78,6 @@ export function ProfileCard({
       isEdit
       rating={rating}
       book={book}
-      onUpdateReview={onUpdateReview}
-      onCreateReview={onCreateReview}
       onClose={() => {
         setIsEditUserReviewCardOpen(false)
       }}
@@ -108,6 +93,7 @@ export function ProfileCard({
             <StarsRating rating={rating.rate} />
             {rating.userId === loggedUser?.id && rating.deletedAt === null && (
               <DropdownActions
+                ratingId={rating.id}
                 dropdownRef={dropdownRef}
                 buttonRef={buttonRef}
                 onToggleEditSection={(value) =>
@@ -119,7 +105,6 @@ export function ProfileCard({
                 onToggleDeleteSection={(value: boolean) =>
                   setIsDeleteModalOpen(value)
                 }
-                onDelete={deleteReview}
               />
             )}
           </ProfileCardHeader>
@@ -175,7 +160,10 @@ export function ProfileCard({
                   </>
                 ))}
               {isFromLoggedUser && rating.deletedAt !== null && (
-                <ArchivedWarning style={{ margin: '0.85 0 0' }} />
+                <ArchivedWarning
+                  style={{ margin: '0.85 0 0' }}
+                  activeStatus={activeStatus || null}
+                />
               )}
             </ProfileCardBody>
           )}

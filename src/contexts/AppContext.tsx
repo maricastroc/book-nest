@@ -99,7 +99,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       })
 
       toast.success(response?.data?.message)
-
       return response.data.rating
     } catch (error) {
       handleApiError(error)

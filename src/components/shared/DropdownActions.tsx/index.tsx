@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Dialog from '@radix-ui/react-dialog'
 import { DeleteModal } from '@/components/modals/DeleteModal'
 import { Dropdown, DropdownButton, DropdownItem } from './styles'
+import { useAppContext } from '@/contexts/AppContext'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface Props {
   variant?: 'default' | 'secondary'
@@ -15,8 +17,8 @@ interface Props {
   dropdownRef: RefObject<HTMLDivElement>
   isDropdownOpen: boolean
   isDeleteSectionOpen?: boolean
+  ratingId: string
   onToggleDeleteSection?: (value: boolean) => void
-  onDelete?: () => void
   onToggleDropdown: (value: boolean) => void
   onToggleEditSection: (value: boolean) => void
 }
@@ -28,11 +30,14 @@ export const DropdownActions = ({
   isDropdownOpen,
   dropdownRef,
   isDeleteSectionOpen,
+  ratingId,
   onToggleDeleteSection,
-  onDelete,
   onToggleDropdown,
   onToggleEditSection,
 }: Props) => {
+  const { handleDeleteReview } = useAppContext()
+  const { onUpdateRating } = useBookContext()
+
   const handleDeleteClick = () => {
     onToggleDeleteSection?.(true)
   }
@@ -43,7 +48,8 @@ export const DropdownActions = ({
   }
 
   const handleDeleteConfirm = () => {
-    onDelete?.()
+    handleDeleteReview(ratingId)
+    onUpdateRating?.()
     onToggleDropdown(false)
   }
 

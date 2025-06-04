@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { RatingsList, RatingsListHeader, RatingsWrapper } from './styles'
-import { useBookDetails } from '@/hooks/useBookDetails'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
 import { AnimatePresence } from 'framer-motion'
@@ -9,53 +8,35 @@ import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { UserRatingBox } from '../UserRatingBox'
 import { FadeInItem } from '@/components/animations/FadeInItem'
-import { BookProps } from '@/@types/book'
 import { useAppContext } from '@/contexts/AppContext'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface Props {
-  bookId: string
-  isValidatingReview: boolean
   isValidatingStatus: boolean
   setIsSignInModalOpen: (value: boolean) => void
   setIsReviewWarningModalOpen: (value: boolean) => void
-  onUpdateBook: (book: BookProps) => void
-  mutateUserLatestRating?: () => Promise<void>
 }
 
 export const RatingsSection = ({
-  bookId,
-  isValidatingReview,
   isValidatingStatus,
-  onUpdateBook,
-  mutateUserLatestRating,
   setIsReviewWarningModalOpen,
   setIsSignInModalOpen,
 }: Props) => {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
-  const { loggedUser } = useAppContext()
+  const { loggedUser, isValidatingReview } = useAppContext()
 
-  const {
-    updatedBook,
-    bookRatings,
-    userRating,
-    isValidating,
-    loadingState,
-    onUpdateReview,
-    onCreateReview,
-    onDeleteReview,
-  } = useBookDetails(bookId, onUpdateBook, mutateUserLatestRating)
+  const { userRating, updatedBook, bookRatings } = useBookContext()
 
   const shouldShowEmpty =
-    !isValidating && !bookRatings?.length && !isReviewFormOpen
+    !isValidatingReview &&
+    !bookRatings?.length &&
+    !isReviewFormOpen &&
+    !userRating
 
-  const shouldShowSkeletons =
-    loadingState?.reviews ||
-    isValidatingReview ||
-    isValidatingStatus ||
-    isValidating
+  const shouldShowSkeletons = isValidatingReview || isValidatingStatus
 
-  const shouldShowRatings = updatedBook && bookRatings?.length
+  const shouldShowRatings = updatedBook && (bookRatings?.length || !!userRating)
 
   const canUserReview =
     !userRating &&
@@ -92,8 +73,6 @@ export const RatingsSection = ({
                 isEdit={!!userRating}
                 rating={userRating}
                 onClose={() => setIsReviewFormOpen(false)}
-                onUpdateReview={onUpdateReview}
-                onCreateReview={onCreateReview}
                 book={updatedBook}
               />
             </FadeInUp>
@@ -107,17 +86,16 @@ export const RatingsSection = ({
             <SkeletonRatingCard key={index} />
           ))
         ) : shouldShowRatings ? (
-          bookRatings.map((rating) => (
-            <FadeInItem key={rating.id}>
-              <UserRatingBox
-                book={updatedBook}
-                rating={rating}
-                onUpdateReview={onUpdateReview}
-                onCreateReview={onCreateReview}
-                onDeleteReview={onDeleteReview}
-              />
-            </FadeInItem>
-          ))
+          <>
+            {userRating && (
+              <UserRatingBox book={updatedBook} rating={userRating} />
+            )}
+            {bookRatings.map((rating) => (
+              <FadeInItem key={rating.id}>
+                <UserRatingBox book={updatedBook} rating={rating} />
+              </FadeInItem>
+            ))}
+          </>
         ) : null}
       </RatingsList>
     </RatingsWrapper>

@@ -20,6 +20,7 @@ import useRequest from '@/hooks/useRequest'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
 import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
+import { BookProvider } from '@/contexts/BookContext'
 
 interface Props {
   userId: string | undefined
@@ -111,13 +112,17 @@ export const BooksGridByStatus = ({
   return (
     <BooksGridWrapper>
       {openLateralMenu && selectedBook && (
-        <LateralMenu
+        <BookProvider
           bookId={selectedBook.id}
-          onUpdateBook={() => {
+          onUpdateBook={async () => {
             mutate()
           }}
-          onClose={() => setOpenLateralMenu(false)}
-        />
+          onUpdateRating={async () => {
+            mutate()
+          }}
+        >
+          <LateralMenu onClose={() => setOpenLateralMenu(false)} />
+        </BookProvider>
       )}
       <BooksGridHeader>
         <TagContainer>

@@ -12,6 +12,7 @@ import useRequest from '@/hooks/useRequest'
 import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { getEmptyBoxMessage } from '@/utils/getEmptyBoxMessage'
+import { BookProvider } from '@/contexts/BookContext'
 
 interface BookStatusListContainerProps {
   userInfo: UserProps | null
@@ -124,13 +125,18 @@ export function BookStatusListContainer({
   ) : (
     <Container>
       {isLateralMenuOpen && !!selectedBook && (
-        <LateralMenu
+        <BookProvider
           bookId={selectedBook.id}
-          onUpdateBook={(book) => {
+          onUpdateBook={async (book) => {
+            await mutate()
             onUpdateBookByStatus(book)
           }}
-          onClose={() => setIsLateralMenuOpen(false)}
-        />
+          onUpdateRating={async () => {
+            await mutate()
+          }}
+        >
+          <LateralMenu onClose={() => setIsLateralMenuOpen(false)} />
+        </BookProvider>
       )}
 
       {isValidatingBooksByStatusData ? (

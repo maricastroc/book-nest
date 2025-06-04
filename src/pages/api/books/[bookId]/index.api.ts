@@ -64,34 +64,15 @@ export default async function handler(
 
   const readingStatus = book.readingStatus?.[0]?.status || null
 
-  const filteredRatings = book.ratings.filter((rating) => {
-    if (rating.deletedAt === null) {
-      return true
-    }
-    if (session?.user?.id && rating.userId === session.user.id) {
-      return true
-    }
-    return false
-  })
-
-  let orderedRatings = filteredRatings
-
-  if (session?.user?.id) {
-    const userId = session.user.id
-    const userRating = book.ratings.find((rating) => rating.userId === userId)
-    const otherRatings = book.ratings.filter(
-      (rating) => rating.userId !== userId,
-    )
-
-    if (userRating) {
-      orderedRatings = [userRating, ...otherRatings]
-    }
-  }
-
   const bookWithDetails = {
     ...book,
     categories: book.categories.map((category) => category.category),
-    ratings: orderedRatings,
+    ratings: session?.user?.id
+      ? book.ratings.filter((rating) => rating.userId !== session.user.id)
+      : book.ratings.filter((rating) => rating.deletedAt === null),
+    userRating: session?.user?.id
+      ? book.ratings.find((rating) => rating.userId === session.user.id)
+      : undefined,
     rate: avgRate,
     readingStatus,
   }

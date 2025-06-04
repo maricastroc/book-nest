@@ -33,6 +33,7 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
 import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
 import { LateralMenu } from '@/components/shared/LateralMenu'
+import { BookProvider } from '@/contexts/BookContext'
 
 interface SubmittedBooksSectionProps {
   userId: string | undefined
@@ -140,15 +141,21 @@ export function SubmittedBooksSection({
   return (
     <SubmittedBooksSectionWrapper>
       {isLateralMenuOpen && !!selectedBook && (
-        <LateralMenu
+        <BookProvider
           bookId={selectedBook.id}
           onUpdateBook={() => {
             onUpdateBook()
           }}
-          onClose={() => {
-            setIsLateralMenuOpen(false)
+          onUpdateRating={async () => {
+            onUpdateBook()
           }}
-        />
+        >
+          <LateralMenu
+            onClose={() => {
+              setIsLateralMenuOpen(false)
+            }}
+          />
+        </BookProvider>
       )}
 
       {isValidatingSubmittedBooksData ? (

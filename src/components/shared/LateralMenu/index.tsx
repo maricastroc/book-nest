@@ -3,10 +3,6 @@ import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 
-import { useAppContext } from '@/contexts/AppContext'
-import { useBookDetails } from '@/hooks/useBookDetails'
-
-import { BookProps } from '@/@types/book'
 import { CategoryProps } from '@/@types/category'
 
 import {
@@ -23,20 +19,13 @@ import { SkeletonMenuBookCard } from './partials/SkeletonMenuBookCard'
 
 import { SignInModal } from '@/components/modals/SignInModal'
 import { RatingsSection } from './partials/RatingsSection'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface LateralMenuProps {
-  bookId: string
   onClose: () => void
-  onUpdateBook: (book: BookProps) => void
-  mutateUserLatestRating?: any
 }
 
-export function LateralMenu({
-  bookId,
-  onClose,
-  onUpdateBook,
-  mutateUserLatestRating,
-}: LateralMenuProps) {
+export function LateralMenu({ onClose }: LateralMenuProps) {
   const [isValidatingStatus, setIsValidatingStatus] = useState(false)
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
@@ -44,13 +33,7 @@ export function LateralMenu({
   const [isReviewWarningModalOpen, setIsReviewWarningModalOpen] =
     useState(false)
 
-  const { isValidatingReview } = useAppContext()
-
-  const { updatedBook, loadingState, onUpdateStatus } = useBookDetails(
-    bookId,
-    onUpdateBook,
-    mutateUserLatestRating,
-  )
+  const { loadingState, onUpdateStatus, updatedBook } = useBookContext()
 
   return (
     <LateralMenuWrapper>
@@ -92,10 +75,7 @@ export function LateralMenu({
             ) : null}
 
             <RatingsSection
-              bookId={bookId}
-              isValidatingReview={isValidatingReview}
               isValidatingStatus={isValidatingStatus}
-              onUpdateBook={onUpdateBook}
               setIsSignInModalOpen={(value) => setIsSignInModalOpen(value)}
               setIsReviewWarningModalOpen={(value) =>
                 setIsReviewWarningModalOpen(value)

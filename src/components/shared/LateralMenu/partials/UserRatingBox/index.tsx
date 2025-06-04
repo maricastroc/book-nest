@@ -24,22 +24,14 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface UserRatingBoxProps {
   rating: RatingProps
   book: BookProps
-  onUpdateReview: (updatedReview: RatingProps) => void
-  onCreateReview: (newRating: RatingProps) => void
-  onDeleteReview: (ratingId: string) => void
 }
 
-export function UserRatingBox({
-  rating,
-  book,
-  onUpdateReview,
-  onCreateReview,
-  onDeleteReview,
-}: UserRatingBoxProps) {
+export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
   const router = useRouter()
 
   const { dateFormatted, dateRelativeToNow, dateString } =
@@ -55,7 +47,9 @@ export function UserRatingBox({
 
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const { handleDeleteReview, isValidatingReview } = useAppContext()
+  const { isValidatingReview } = useAppContext()
+
+  const { activeStatus } = useBookContext()
 
   const session = useSession()
 
@@ -77,8 +71,6 @@ export function UserRatingBox({
       rating={rating}
       book={book}
       onClose={() => setOpenEditReviewBox(false)}
-      onUpdateReview={onUpdateReview}
-      onCreateReview={onCreateReview}
     />
   ) : (
     <>
@@ -103,9 +95,10 @@ export function UserRatingBox({
             </UserDetailsWrapper>
             <UserRatingAndActionsWrapper>
               {!isMobile && <StarsRating rating={rating.rate} />}
-              {isFromLoggedUser && rating?.deletedAt === null && (
+              {isFromLoggedUser && (
                 <DropdownActions
                   variant="secondary"
+                  ratingId={rating.id}
                   dropdownRef={dropdownRef}
                   buttonRef={buttonRef}
                   onToggleEditSection={(value) => setOpenEditReviewBox(value)}
@@ -117,10 +110,6 @@ export function UserRatingBox({
                   onToggleDeleteSection={(value: boolean) =>
                     setIsDeleteModalOpen(value)
                   }
-                  onDelete={() => {
-                    onDeleteReview(rating.id)
-                    handleDeleteReview(rating.id)
-                  }}
                 />
               )}
             </UserRatingAndActionsWrapper>
@@ -134,13 +123,13 @@ export function UserRatingBox({
             <RatingCardForm
               book={book}
               onClose={() => setOpenEditReviewBox(false)}
-              onUpdateReview={onUpdateReview}
-              onCreateReview={onCreateReview}
             />
           ) : (
             <TextBox description={rating.description ?? ''} />
           )}
-          {isFromLoggedUser && rating.deletedAt !== null && <ArchivedWarning />}
+          {isFromLoggedUser && rating.deletedAt !== null && (
+            <ArchivedWarning activeStatus={activeStatus || null} />
+          )}
         </UserRatingBoxContent>
       </UserRatingBoxWrapper>
     </>

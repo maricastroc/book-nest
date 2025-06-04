@@ -35,6 +35,7 @@ import {
 import { RatingProps } from '@/@types/rating'
 import { UserStatistics } from '@/@types/user_statistics'
 import { BookProps } from '@/@types/book'
+import { BookProvider } from '@/contexts/BookContext'
 
 export default function Profile() {
   const router = useRouter()
@@ -68,9 +69,6 @@ export default function Profile() {
     setSearch,
     isValidatingRatings,
     mutateRatings,
-    onCreateReview,
-    onDeleteReview,
-    onUpdateReview,
   } = useProfileRatings(userId)
 
   const userStatisticsRequest = userId
@@ -123,15 +121,19 @@ export default function Profile() {
           {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
           <ProfilePageContainer>
             {isLateralMenuOpen && selectedBook && (
-              <LateralMenu
+              <BookProvider
                 bookId={selectedBook.id}
-                onUpdateBook={() => {
-                  mutateRatings()
+                onUpdateBook={async () => await mutateRatings()}
+                onUpdateRating={async () => {
+                  await mutateRatings()
                 }}
-                onClose={() => {
-                  setIsLateralMenuOpen(false)
-                }}
-              />
+              >
+                <LateralMenu
+                  onClose={() => {
+                    setIsLateralMenuOpen(false)
+                  }}
+                />
+              </BookProvider>
             )}
             <ProfilePageHeading>
               <ProfilePageHeadingTitle>
@@ -168,26 +170,31 @@ export default function Profile() {
                       <SkeletonRatingCard key={index} />
                     ))
                   ) : userRatings?.length > 0 ? (
-                    userRatings.map((rating: RatingProps) => {
-                      if (rating?.book) {
-                        return (
-                          <ProfileCard
-                            key={rating.id}
-                            book={rating.book}
-                            rating={rating}
-                            userId={userId}
-                            onSelect={() => {
-                              setSelectedBook(rating.book as BookProps)
-                              setIsLateralMenuOpen(true)
-                            }}
-                            onUpdateReview={onUpdateReview}
-                            onCreateReview={onCreateReview}
-                            onDeleteReview={onDeleteReview}
-                          />
-                        )
-                      }
-                      return null
-                    })
+                    <BookProvider
+                      bookId={selectedBook?.id}
+                      onUpdateBook={async () => await mutateRatings()}
+                      onUpdateRating={async () => {
+                        await mutateRatings()
+                      }}
+                    >
+                      {userRatings.map((rating: RatingProps) => {
+                        if (rating?.book) {
+                          return (
+                            <ProfileCard
+                              key={rating.id}
+                              book={rating.book}
+                              rating={rating}
+                              userId={userId}
+                              onSelect={() => {
+                                setSelectedBook(rating.book as BookProps)
+                                setIsLateralMenuOpen(true)
+                              }}
+                            />
+                          )
+                        }
+                        return null
+                      })}
+                    </BookProvider>
                   ) : (
                     <EmptyContainer content="ratings" />
                   )}
