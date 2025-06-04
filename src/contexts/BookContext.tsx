@@ -64,23 +64,31 @@ export function BookProvider({
 
   const { loggedUser } = useAppContext()
 
+  const bookRequest = bookId
+    ? {
+        url: `/books/${bookId}`,
+        method: 'GET',
+      }
+    : null
+
+  const userRequest = bookId
+    ? {
+        url: `/books/${bookId}/user_rating`,
+        method: 'GET',
+      }
+    : null
+
   const {
     data: book,
     mutate: mutateBookData,
     isValidating: isValidatingBookData,
-  } = useRequest<BookProps | null>({
-    url: `/books/${bookId}`,
-    method: 'GET',
-  })
+  } = useRequest<BookProps | null>(bookRequest)
 
   const {
     data: userRatingData,
     mutate: mutateUserRating,
     isValidating: isValidatingUserRating,
-  } = useRequest<RatingProps | undefined>({
-    url: `/books/${bookId}/user_rating`,
-    method: 'GET',
-  })
+  } = useRequest<RatingProps | undefined>(userRequest)
 
   const [activeStatus, setActiveStatus] = useState<string | null | undefined>(
     book?.readingStatus || null,

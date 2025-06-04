@@ -1,5 +1,5 @@
 export const REVIEW_MIN_LENGTH = 100
-export const REVIEW_MAX_LENGTH = 2000
+export const REVIEW_MAX_LENGTH = 5000
 
 export const READ_STATUS = 'read'
 export const READING_STATUS = 'reading'
