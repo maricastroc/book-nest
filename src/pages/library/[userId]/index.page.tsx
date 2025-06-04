@@ -92,7 +92,7 @@ export default function Library() {
                   userInfo={userInfo}
                   setUserInfo={(value) => setUserInfo(value)}
                   userId={userId}
-                  onUpdateBook={triggerRefresh}
+                  onTriggerRefresh={triggerRefresh}
                 />
               </SubmittedBooksContainer>
             </UserLibraryContent>

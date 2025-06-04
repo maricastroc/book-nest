@@ -153,7 +153,7 @@ export default function Home() {
     ))
   }
 
-  const onUpdateBook = async (updatedBook: BookProps) => {
+  const handleUpdatePopularBooks = async (updatedBook: BookProps) => {
     setUpdatedPopularBooks((prevBooks) => {
       if (!prevBooks) return prevBooks
 
@@ -181,8 +181,10 @@ export default function Home() {
           {isLateralMenuOpen && selectedBook && (
             <BookProvider
               bookId={selectedBook.id}
-              onUpdateBook={onUpdateBook}
-              mutateUserLatestRating={mutateUserLatestRating}
+              onUpdateBook={handleUpdatePopularBooks}
+              onUpdateRating={async () => {
+                await mutateUserLatestRating()
+              }}
             >
               <LateralMenu onClose={() => setIsLateralMenuOpen(false)} />
             </BookProvider>

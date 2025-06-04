@@ -115,10 +115,10 @@ export const BooksGridByStatus = ({
         <BookProvider
           bookId={selectedBook.id}
           onUpdateBook={async () => {
-            mutate()
+            await mutate()
           }}
           onUpdateRating={async () => {
-            mutate()
+            await mutate()
           }}
         >
           <LateralMenu onClose={() => setOpenLateralMenu(false)} />

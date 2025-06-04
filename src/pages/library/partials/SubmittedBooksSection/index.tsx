@@ -39,14 +39,14 @@ interface SubmittedBooksSectionProps {
   userId: string | undefined
   userInfo: UserProps | null
   setUserInfo: (user: UserProps | null) => void
-  onUpdateBook: () => void
+  onTriggerRefresh: () => void
 }
 
 export function SubmittedBooksSection({
   userId,
   userInfo,
   setUserInfo,
-  onUpdateBook,
+  onTriggerRefresh,
 }: SubmittedBooksSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -144,10 +144,10 @@ export function SubmittedBooksSection({
         <BookProvider
           bookId={selectedBook.id}
           onUpdateBook={() => {
-            onUpdateBook()
+            onTriggerRefresh()
           }}
           onUpdateRating={async () => {
-            onUpdateBook()
+            onTriggerRefresh()
           }}
         >
           <LateralMenu
@@ -190,7 +190,7 @@ export function SubmittedBooksSection({
           <SubmittedBooksWrapper>
             <Dialog.Root open={isSubmitBookFormOpen}>
               <SubmitBookFormModal
-                onUpdateBook={() => mutate()}
+                onUpdateBook={async () => await mutate()}
                 onClose={() => setIsSubmitBookFormOpen(false)}
               />
             </Dialog.Root>

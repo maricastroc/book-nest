@@ -12,7 +12,6 @@ import {
   useCallback,
 } from 'react'
 import { useAppContext } from './AppContext'
-import { AxiosResponse } from 'axios'
 
 type LoadingState = {
   initial: boolean
@@ -41,9 +40,6 @@ const BookContext = createContext<BookContextType | undefined>(undefined)
 type BookProviderProps = {
   children: React.ReactNode
   bookId: string | undefined
-  mutateUserLatestRating?: () => Promise<
-    void | AxiosResponse<RatingProps | null, any> | undefined
-  >
   onUpdateBook: (book: BookProps) => void
   onUpdateRating?: () => Promise<void>
 }
@@ -52,7 +48,6 @@ export function BookProvider({
   children,
   bookId,
   onUpdateRating,
-  mutateUserLatestRating,
   onUpdateBook,
 }: BookProviderProps) {
   const [updatedBook, setUpdatedBook] = useState<BookProps | null>(null)
@@ -119,12 +114,11 @@ export function BookProvider({
 
         await mutateUserRating()
         await mutateBookData()
-        await mutateUserLatestRating?.()
       } finally {
         setLoadingState((prev) => ({ ...prev, status: false }))
       }
     },
-    [mutateBookData, mutateUserLatestRating, onUpdateBook, mutateUserRating],
+    [mutateBookData, onUpdateBook, mutateUserRating],
   )
 
   useEffect(() => {
