@@ -26,7 +26,6 @@ import { ActionButton } from '@/components/core/ActionButton'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { AnimatedRating } from '../AnimatedRating'
 import { useBookContext } from '@/contexts/BookContext'
-import { useRatings } from '@/contexts/RatingsContext'
 
 interface RatingCardFormProps {
   isProfileScreen?: boolean
@@ -81,7 +80,7 @@ export function RatingCardForm({
       rate: isEdit ? rating?.rate : 0,
     },
   })
-
+  console.log(rating)
   const session = useSession()
 
   const {
@@ -91,9 +90,7 @@ export function RatingCardForm({
     isValidatingReview,
   } = useAppContext()
 
-  const { updateRating } = useRatings()
-
-  const { onUpdateRating, onUpdateUserRating } = useBookContext()
+  const { actions } = useBookContext()
 
   const handleRating = (rate: number) => {
     setValue('rate', rate)
@@ -102,7 +99,7 @@ export function RatingCardForm({
   const characterCount = watch('description')?.split('').length || 0
 
   async function submitReview() {
-    if (session.data?.user && handleCreateReview) {
+    if (session.data?.user) {
       const data = watch()
 
       const payload = {
@@ -114,13 +111,14 @@ export function RatingCardForm({
       }
 
       const newRating = await handleCreateReview(payload)
-      await onUpdateRating?.()
-      onUpdateUserRating(newRating)
+      actions.updateUserRating?.(newRating)
+      await actions.updateRating?.()
       onClose()
     }
   }
 
   async function editReview() {
+    console.log('oi')
     if (
       rating?.description === watch()?.description &&
       rating?.rate === watch()?.rate
@@ -139,9 +137,8 @@ export function RatingCardForm({
       }
 
       const updatedRating = await handleEditReview(payload)
-
-      updateRating(rating.id, updatedRating)
-      onUpdateUserRating(updatedRating)
+      actions.updateUserRating?.(updatedRating)
+      await actions.updateRating?.()
       onClose()
     }
   }
@@ -208,6 +205,14 @@ export function RatingCardForm({
               className="edit_icon"
               type="submit"
               disabled={isSubmitting}
+              onClick={() => {
+                if (isEdit) {
+                  editReview()
+                  return
+                }
+
+                submitReview()
+              }}
             >
               <Check />
             </ActionButton>

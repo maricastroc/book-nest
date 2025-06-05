@@ -69,7 +69,7 @@ export function ProfileCard({
 
   const belongsToLoggedUser = rating.userId === loggedUser?.id
 
-  const { activeStatus } = useBookContext()
+  const { status } = useBookContext()
 
   useClickOutside([dropdownRef, buttonRef], () => {
     if (!isDeleteModalOpen) {
@@ -175,7 +175,7 @@ export function ProfileCard({
                 {isFromLoggedUser && (
                   <ArchivedWarning
                     style={{ margin: '0.85 0 0' }}
-                    activeStatus={activeStatus || null}
+                    activeStatus={status.active || null}
                   />
                 )}
                 {isMobile && (

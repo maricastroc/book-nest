@@ -50,7 +50,7 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
 
   const { isValidatingReview } = useAppContext()
 
-  const { activeStatus } = useBookContext()
+  const { status, userRating } = useBookContext()
 
   const session = useSession()
 
@@ -64,7 +64,7 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
     }
   })
 
-  return isValidatingReview ? (
+  return isValidatingReview || userRating.isValidating ? (
     <SkeletonRatingCard />
   ) : openEditReviewBox ? (
     <RatingCardForm
@@ -129,7 +129,7 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
             <TextBox description={rating.description ?? ''} />
           )}
           {isFromLoggedUser && rating.deletedAt !== null && (
-            <ArchivedWarning activeStatus={activeStatus || null} />
+            <ArchivedWarning activeStatus={status.active || null} />
           )}
 
           <RatingVoteSection rating={rating} />

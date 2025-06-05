@@ -10,6 +10,7 @@ import { UserRatingBox } from '../UserRatingBox'
 import { FadeInItem } from '@/components/animations/FadeInItem'
 import { useAppContext } from '@/contexts/AppContext'
 import { useBookContext } from '@/contexts/BookContext'
+import { BookProps } from '@/@types/book'
 
 interface Props {
   isValidatingStatus: boolean
@@ -26,31 +27,32 @@ export const RatingsSection = ({
 
   const { loggedUser, isValidatingReview } = useAppContext()
 
-  const { userRating, updatedBook, bookRatings } = useBookContext()
+  const { userRating, bookData } = useBookContext()
 
   const shouldShowEmpty =
     !isValidatingReview &&
-    !bookRatings?.length &&
+    !bookData.ratings?.length &&
     !isReviewFormOpen &&
-    !userRating
+    !userRating.rating
 
   const shouldShowSkeletons = isValidatingReview || isValidatingStatus
 
-  const shouldShowRatings = updatedBook && (bookRatings?.length || !!userRating)
+  const shouldShowRatings =
+    bookData.book && (bookData.ratings?.length || !!userRating.rating)
 
   const canUserReview =
-    !userRating &&
-    (updatedBook?.readingStatus === READ_STATUS ||
-      updatedBook?.readingStatus === DID_NOT_FINISH_STATUS)
+    !userRating.rating &&
+    (bookData.book?.readingStatus === READ_STATUS ||
+      bookData.book?.readingStatus === DID_NOT_FINISH_STATUS)
 
   return (
     <RatingsWrapper>
       <RatingsListHeader>
         <p>Ratings</p>
-        {!userRating &&
-          (canUserReview ? (
-            <span onClick={() => setIsReviewFormOpen(true)}>Review</span>
-          ) : (
+        {canUserReview ? (
+          <span onClick={() => setIsReviewFormOpen(true)}>Review</span>
+        ) : (
+          !loggedUser && (
             <span
               onClick={() => {
                 if (loggedUser) {
@@ -62,18 +64,19 @@ export const RatingsSection = ({
             >
               Review
             </span>
-          ))}
+          )
+        )}
       </RatingsListHeader>
 
       <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
         <AnimatePresence>
-          {updatedBook && isReviewFormOpen && (
+          {bookData.book && isReviewFormOpen && (
             <FadeInUp>
               <RatingCardForm
-                isEdit={!!userRating}
-                rating={userRating}
+                isEdit={!!userRating.rating}
+                rating={userRating.rating}
                 onClose={() => setIsReviewFormOpen(false)}
-                book={updatedBook}
+                book={bookData.book}
               />
             </FadeInUp>
           )}
@@ -87,12 +90,18 @@ export const RatingsSection = ({
           ))
         ) : shouldShowRatings ? (
           <>
-            {userRating && (
-              <UserRatingBox book={updatedBook} rating={userRating} />
+            {userRating.rating && (
+              <UserRatingBox
+                book={bookData.book as BookProps}
+                rating={userRating.rating}
+              />
             )}
-            {bookRatings.map((rating) => (
+            {bookData.ratings.map((rating) => (
               <FadeInItem key={rating.id}>
-                <UserRatingBox book={updatedBook} rating={rating} />
+                <UserRatingBox
+                  book={bookData.book as BookProps}
+                  rating={rating}
+                />
               </FadeInItem>
             ))}
           </>

@@ -123,7 +123,7 @@ model Vote {
   user             User           @relation(fields: [userId], references: [id])
 
   ratingId         String
-  rating           Rating        @relation(fields: [ratingId], references: [id])
+  rating    Rating   @relation(fields: [ratingId], references: [id], onDelete: Cascade)
 
   @@unique([userId, ratingId])
 

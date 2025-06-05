@@ -36,7 +36,7 @@ export const DropdownActions = ({
   onToggleEditSection,
 }: Props) => {
   const { handleDeleteReview } = useAppContext()
-  const { onUpdateRating, onUpdateUserRating } = useBookContext()
+  const { actions } = useBookContext()
 
   const handleDeleteClick = () => {
     onToggleDeleteSection?.(true)
@@ -47,10 +47,11 @@ export const DropdownActions = ({
     onToggleDropdown(false)
   }
 
-  const handleDeleteConfirm = () => {
-    handleDeleteReview(ratingId)
-    onUpdateUserRating(null)
-    onUpdateRating?.()
+  const handleDeleteConfirm = async () => {
+    actions.updateUserRating(null)
+
+    await handleDeleteReview(ratingId)
+    await actions.updateRating?.()
     onToggleDropdown(false)
   }
 

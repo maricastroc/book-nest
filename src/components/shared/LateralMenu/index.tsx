@@ -33,18 +33,21 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
   const [isReviewWarningModalOpen, setIsReviewWarningModalOpen] =
     useState(false)
 
-  const { loadingState, onUpdateStatus, updatedBook } = useBookContext()
+  const { bookData, status } = useBookContext()
+
+  const isLoadingInitial =
+    (bookData.book === null || bookData.book === undefined) &&
+    bookData.isValidating
 
   return (
     <LateralMenuWrapper>
       <OverlayBackground onClick={onClose} />
-
       <CloseButton onClick={onClose}>
         <X />
       </CloseButton>
 
       <MenuBody>
-        {loadingState?.initial ? (
+        {isLoadingInitial ? (
           <SkeletonLateralMenu />
         ) : (
           <>
@@ -64,22 +67,20 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
 
             {isValidatingStatus ? (
               <SkeletonMenuBookCard />
-            ) : updatedBook ? (
+            ) : bookData.book ? (
               <MenuBookCard
-                key={updatedBook.id}
-                book={updatedBook}
-                setIsValidatingStatus={(value) => setIsValidatingStatus(value)}
-                categories={updatedBook.categories as CategoryProps[]}
-                onUpdateStatus={onUpdateStatus}
+                key={bookData.book.id}
+                book={bookData.book}
+                setIsValidatingStatus={setIsValidatingStatus}
+                categories={bookData.book.categories as CategoryProps[]}
+                onUpdateStatus={status.update}
               />
             ) : null}
 
             <RatingsSection
               isValidatingStatus={isValidatingStatus}
-              setIsSignInModalOpen={(value) => setIsSignInModalOpen(value)}
-              setIsReviewWarningModalOpen={(value) =>
-                setIsReviewWarningModalOpen(value)
-              }
+              setIsSignInModalOpen={setIsSignInModalOpen}
+              setIsReviewWarningModalOpen={setIsReviewWarningModalOpen}
             />
           </>
         )}
