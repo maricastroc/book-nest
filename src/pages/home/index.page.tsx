@@ -4,9 +4,6 @@ import { useEffect, useState } from 'react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 
 import {
-  HomePageWrapper,
-  HomePageHeading,
-  HomePageContainer,
   HomePageContent,
   LastRatingsContainer,
   LastRatingsContent,
@@ -162,6 +159,8 @@ export default function Home() {
   return (
     <MainLayout
       title="Home | Book Nest"
+      icon={<ChartLineUp />}
+      pageTitle="Home"
       selectedBook={selectedBook}
       isLateralMenuOpen={isLateralMenuOpen}
       setIsLateralMenuOpen={(value) => setIsLateralMenuOpen(value)}
@@ -170,43 +169,33 @@ export default function Home() {
         await mutateUserLatestRating()
       }}
     >
-      <HomePageWrapper>
-        <HomePageContainer>
-          <HomePageHeading>
-            <ChartLineUp />
-            <h2>Home</h2>
-          </HomePageHeading>
-          <HomePageContent>
-            <LastRatingsWrapper>
-              {session?.data?.user && (
-                <>
-                  <UserLatestReadingTitle>
-                    Your Last Rating
-                  </UserLatestReadingTitle>
-                  <UserLatestReadingContainer>
-                    {renderUserLatestRating()}
-                  </UserLatestReadingContainer>
-                </>
-              )}
-              <LastRatingsContainer>
-                <LastRatingsTitle>Last Ratings</LastRatingsTitle>
-                <LastRatingsContent>{renderLatestRatings()}</LastRatingsContent>
-              </LastRatingsContainer>
-            </LastRatingsWrapper>
+      <HomePageContent>
+        <LastRatingsWrapper>
+          {session?.data?.user && (
+            <>
+              <UserLatestReadingTitle>Your Last Rating</UserLatestReadingTitle>
+              <UserLatestReadingContainer>
+                {renderUserLatestRating()}
+              </UserLatestReadingContainer>
+            </>
+          )}
+          <LastRatingsContainer>
+            <LastRatingsTitle>Last Ratings</LastRatingsTitle>
+            <LastRatingsContent>{renderLatestRatings()}</LastRatingsContent>
+          </LastRatingsContainer>
+        </LastRatingsWrapper>
 
-            <PopularBooksWrapper>
-              <PopularBooksTitle>
-                <p>Popular Books</p>
-                <OutlineButton onClick={() => router.push('/explore')}>
-                  View All
-                  <CaretRight />
-                </OutlineButton>
-              </PopularBooksTitle>
-              <PopularBooksContent>{renderPopularBooks()}</PopularBooksContent>
-            </PopularBooksWrapper>
-          </HomePageContent>
-        </HomePageContainer>
-      </HomePageWrapper>
+        <PopularBooksWrapper>
+          <PopularBooksTitle>
+            <p>Popular Books</p>
+            <OutlineButton onClick={() => router.push('/explore')}>
+              View All
+              <CaretRight />
+            </OutlineButton>
+          </PopularBooksTitle>
+          <PopularBooksContent>{renderPopularBooks()}</PopularBooksContent>
+        </PopularBooksWrapper>
+      </HomePageContent>
     </MainLayout>
   )
 }

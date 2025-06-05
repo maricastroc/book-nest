@@ -17,11 +17,7 @@ import {
   UserRatings,
   UserRatingsContainer,
   ProfilePageContent,
-  ProfilePageHeading,
-  ProfilePageHeadingTitle,
-  ProfilePageContainer,
   UserDetailsContainer,
-  ProfilePageWrapper,
   UserRatingsTitle,
 } from './styles'
 
@@ -102,6 +98,9 @@ export default function Profile() {
   return (
     <MainLayout
       title="Profile | Book Nest"
+      variant="tertiary"
+      icon={<User />}
+      pageTitle="Profile"
       isLateralMenuOpen={isLateralMenuOpen}
       setIsLateralMenuOpen={(value) => setIsLateralMenuOpen(value)}
       onUpdateBook={async () => await mutateRatings()}
@@ -110,91 +109,81 @@ export default function Profile() {
       }}
       selectedBook={selectedBook}
     >
-      <ProfilePageWrapper>
-        <ProfilePageContainer>
-          <ProfilePageHeading>
-            <ProfilePageHeadingTitle>
-              <User />
-              <h2>Profile</h2>
-            </ProfilePageHeadingTitle>
-          </ProfilePageHeading>
-          <ProfilePageContent>
-            <UserRatingsContainer>
-              <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
-              <SearchBar
-                fullWidth
-                placeholder="Search for Author or Title"
-                search={search}
-                onChange={(e) => {
-                  setCurrentPage(1)
-                  setSearch(e.target.value)
+      <ProfilePageContent>
+        <UserRatingsContainer>
+          <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
+          <SearchBar
+            fullWidth
+            placeholder="Search for Author or Title"
+            search={search}
+            onChange={(e) => {
+              setCurrentPage(1)
+              setSearch(e.target.value)
+            }}
+            onClick={() => {
+              setCurrentPage(1)
+              setSearch('')
+            }}
+          />
+          <UserRatings
+            ref={containerRef}
+            className={`${
+              isValidatingRatings || userRatings?.length > 0
+                ? 'with_padding_right'
+                : ''
+            }`}
+          >
+            {isValidatingRatings ? (
+              Array.from({ length: 4 }).map((_, index) => (
+                <SkeletonRatingCard key={index} />
+              ))
+            ) : userRatings?.length > 0 ? (
+              <BookProvider
+                bookId={selectedBook?.id}
+                onUpdateBook={async () => await mutateRatings()}
+                onUpdateRating={async () => {
+                  await mutateRatings()
                 }}
-                onClick={() => {
-                  setCurrentPage(1)
-                  setSearch('')
-                }}
-              />
-              <UserRatings
-                ref={containerRef}
-                className={`${
-                  isValidatingRatings || userRatings?.length > 0
-                    ? 'with_padding_right'
-                    : ''
-                }`}
               >
-                {isValidatingRatings ? (
-                  Array.from({ length: 4 }).map((_, index) => (
-                    <SkeletonRatingCard key={index} />
-                  ))
-                ) : userRatings?.length > 0 ? (
-                  <BookProvider
-                    bookId={selectedBook?.id}
-                    onUpdateBook={async () => await mutateRatings()}
-                    onUpdateRating={async () => {
-                      await mutateRatings()
-                    }}
-                  >
-                    {userRatings.map((rating: RatingProps) => {
-                      if (rating?.book) {
-                        return (
-                          <ProfileCard
-                            key={rating.id}
-                            book={rating.book}
-                            rating={rating}
-                            userId={userId}
-                            onSelect={() => {
-                              setSelectedBook(rating.book as BookProps)
-                              setIsLateralMenuOpen(true)
-                            }}
-                          />
-                        )
-                      }
-                      return null
-                    })}
-                  </BookProvider>
-                ) : (
-                  <EmptyContainer content="ratings" />
-                )}
-                {totalPages > 1 && (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                )}
-              </UserRatings>
-            </UserRatingsContainer>
-
-            <UserDetailsContainer>
-              <UserDetails
-                userStatistics={userStatistics}
-                userId={userId}
-                isLoading={isValidatingStatistics}
+                {userRatings.map((rating: RatingProps) => {
+                  if (rating?.book) {
+                    return (
+                      <ProfileCard
+                        key={rating.id}
+                        book={rating.book}
+                        rating={rating}
+                        userId={userId}
+                        onSelect={() => {
+                          setSelectedBook(rating.book as BookProps)
+                          setIsLateralMenuOpen(true)
+                        }}
+                      />
+                    )
+                  }
+                  return null
+                })}
+              </BookProvider>
+            ) : (
+              <EmptyContainer content="ratings" />
+            )}
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
               />
-            </UserDetailsContainer>
-          </ProfilePageContent>
-        </ProfilePageContainer>
-      </ProfilePageWrapper>
+            )}
+          </UserRatings>
+        </UserRatingsContainer>
+
+        <UserDetailsContainer>
+          <UserDetails
+            userStatistics={userStatistics}
+            userId={userId}
+            isLoading={isValidatingStatistics}
+          />
+        </UserDetailsContainer>
+      </ProfilePageContent>
     </MainLayout>
   )
 }

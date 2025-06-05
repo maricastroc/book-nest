@@ -1,36 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { NextSeo } from 'next-seo'
-
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
 import { Books } from 'phosphor-react'
 
-import {
-  UserLibraryContent,
-  UserLibraryHeading,
-  UserLibraryHeadingTitle,
-  UserLibraryBody,
-  UserLibraryPageWrapper,
-  SubmittedBooksContainer,
-} from './styles'
+import { UserLibraryContent, SubmittedBooksContainer } from './styles'
 
-import { Sidebar } from '@/components/shared/Sidebar'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import { BookStatusListContainer } from '../partials/BookStatusListContainer'
 import { SubmittedBooksSection } from '../partials/SubmittedBooksSection'
 
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { useScreenSize } from '@/hooks/useScreenSize'
 import { UserProps } from '@/@types/user'
 import { useAppContext } from '@/contexts/AppContext'
+import { MainLayout } from '@/layouts/MainLayout'
 
 export default function Library() {
   const [userInfo, setUserInfo] = useState<UserProps | null>(null)
 
   const [refreshKey, setRefreshKey] = useState(0)
-
-  const isRouteLoading = useLoadingOnRouteChange()
 
   const { loggedUser } = useAppContext()
 
@@ -46,9 +31,6 @@ export default function Library() {
     ? router.query.userId[0]
     : router.query.userId
 
-  const isSmallSize = useScreenSize(480)
-  const isMediumSize = useScreenSize(768)
-
   const libraryTitle = useMemo(() => {
     if (!userInfo) return 'Library'
 
@@ -58,47 +40,22 @@ export default function Library() {
   }, [userInfo, isLoggedUser, userInfo])
 
   return (
-    <>
-      <NextSeo
-        title="Library | Book Nest"
-        additionalMetaTags={[
-          {
-            name: 'viewport',
-            content:
-              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
-          },
-        ]}
-      />
-      {isRouteLoading ? (
-        <LoadingPage />
-      ) : (
-        <UserLibraryPageWrapper>
-          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
-          <UserLibraryBody>
-            <UserLibraryHeading>
-              <UserLibraryHeadingTitle>
-                <Books />
-                <h2>{libraryTitle}</h2>
-              </UserLibraryHeadingTitle>
-            </UserLibraryHeading>
-
-            <UserLibraryContent>
-              <BookStatusListContainer
-                refreshKey={refreshKey}
-                userInfo={userInfo}
-              />
-              <SubmittedBooksContainer>
-                <SubmittedBooksSection
-                  userInfo={userInfo}
-                  setUserInfo={(value) => setUserInfo(value)}
-                  userId={userId}
-                  onTriggerRefresh={triggerRefresh}
-                />
-              </SubmittedBooksContainer>
-            </UserLibraryContent>
-          </UserLibraryBody>
-        </UserLibraryPageWrapper>
-      )}
-    </>
+    <MainLayout
+      title="Library | Book Nest"
+      icon={<Books />}
+      pageTitle={libraryTitle}
+    >
+      <UserLibraryContent>
+        <BookStatusListContainer refreshKey={refreshKey} userInfo={userInfo} />
+        <SubmittedBooksContainer>
+          <SubmittedBooksSection
+            userInfo={userInfo}
+            setUserInfo={(value) => setUserInfo(value)}
+            userId={userId}
+            onTriggerRefresh={triggerRefresh}
+          />
+        </SubmittedBooksContainer>
+      </UserLibraryContent>
+    </MainLayout>
   )
 }

@@ -8,6 +8,7 @@ export const UserProfileContainer = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  marginTop: '0.5rem',
 })
 
 export const UserProfileInfo = styled('div', {

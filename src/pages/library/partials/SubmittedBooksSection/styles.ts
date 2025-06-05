@@ -18,7 +18,6 @@ export const SubmittedBooksSectionWrapper = styled('div', {
   width: '100%',
   height: '100%',
   textAlign: 'center',
-  margin: '2.5rem auto 0',
   paddingTop: '0.5rem',
   paddingBottom: '1.5rem',
 

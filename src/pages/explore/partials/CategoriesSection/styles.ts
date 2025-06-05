@@ -6,7 +6,7 @@ export const ScrollContainer = styled('div', {
 })
 
 export const Categories = styled('div', {
-  marginTop: '1rem',
+  marginTop: '2rem',
   display: 'flex',
   overflowX: 'scroll',
   gap: '0.7rem',
