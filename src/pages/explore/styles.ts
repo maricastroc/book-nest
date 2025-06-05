@@ -23,7 +23,7 @@ export const ExplorePageWrapper = styled('div', {
     marginTop: 0,
     flexDirection: 'row',
     alignItems: 'stretch',
-    padding: '0 2rem 0 15.2rem',
+    padding: '0 3rem 0 15.2rem',
     gap: '2.5rem',
   },
 

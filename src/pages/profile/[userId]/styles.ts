@@ -57,7 +57,7 @@ export const ProfilePageContainer = styled('div', {
 
   '@media (min-width: 768px)': {
     padding: '1.5rem 0',
-    marginTop: 0,
+    marginTop: '1.3rem',
   },
 
   '@media (min-width: 980px)': {
@@ -143,10 +143,6 @@ export const UserDetailsContainer = styled('div', {
   alignItems: 'flex-start',
   flexDirection: 'column',
   width: '100%',
-
-  '@media (min-width: 768px)': {
-    marginTop: '2.5rem',
-  },
 
   '@media (min-width: 1024px)': {
     alignItems: 'center',
