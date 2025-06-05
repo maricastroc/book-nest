@@ -61,7 +61,7 @@ export function MenuBookCard({
       setUpdatedBook(book)
     }
   }, [book])
-  console.log(book?.readingStatus)
+
   return (
     <BookCardWrapper>
       <BookCardContent>

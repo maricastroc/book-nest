@@ -80,7 +80,7 @@ export function RatingCardForm({
       rate: isEdit ? rating?.rate : 0,
     },
   })
-  console.log(rating)
+
   const session = useSession()
 
   const {
@@ -118,7 +118,6 @@ export function RatingCardForm({
   }
 
   async function editReview() {
-    console.log('oi')
     if (
       rating?.description === watch()?.description &&
       rating?.rate === watch()?.rate
