@@ -41,8 +41,6 @@ export function MenuBookCard({
 }: MenuBookCardProps) {
   const [updatedBook, setUpdatedBook] = useState(book)
 
-  const categoryNames = categories.map((category) => category?.name)
-
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
   const [isAddToLibraryDropdownOpen, setIsAddToLibraryDropdownOpen] =
@@ -51,6 +49,8 @@ export function MenuBookCard({
   const [isRatingBookModalOpen, setIsRatingBookModalOpen] = useState(false)
 
   const { loggedUser } = useAppContext()
+
+  const categoryNames = categories.map((category) => category?.name)
 
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
@@ -61,7 +61,7 @@ export function MenuBookCard({
       setUpdatedBook(book)
     }
   }, [book])
-
+  console.log(book?.readingStatus)
   return (
     <BookCardWrapper>
       <BookCardContent>

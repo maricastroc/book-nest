@@ -88,7 +88,7 @@ export function BookStatusListContainer({
         </BookProvider>
       )}
 
-      {isValidatingBooksByStatusData ? (
+      {isValidatingBooksByStatusData || !booksByStatusData ? (
         Array.from({ length: 3 }, (_, index) => (
           <SkeletonBookStatusList key={index} />
         ))

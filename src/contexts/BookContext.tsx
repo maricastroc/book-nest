@@ -29,7 +29,7 @@ type UserRatingData = {
 
 type StatusData = {
   active: string | null | undefined
-  loading: boolean
+  isUpdating: boolean
   update: (newStatus: string) => Promise<void>
 }
 
@@ -79,7 +79,9 @@ export function BookProvider({
     isValidating: isValidatingUserRating,
   } = useRequest<RatingProps | undefined>(userRequest)
 
-  const [statusLoading, setStatusLoading] = useState(false)
+  const [isStatusUpdating, setIsStatusUpdating] = useState(false)
+
+  const [optimisticStatus, setOptimisticStatus] = useState<string | null>(null)
 
   const [userRating, setUserRating] = useState<RatingProps | null>(null)
 
@@ -91,7 +93,9 @@ export function BookProvider({
 
   const updateStatus = useCallback(
     async (newStatus: string) => {
-      setStatusLoading(true)
+      setIsStatusUpdating(true)
+      setOptimisticStatus(newStatus)
+
       try {
         if (book) {
           const updatedBook = { ...book, readingStatus: newStatus }
@@ -100,7 +104,7 @@ export function BookProvider({
           await mutateBookData()
         }
       } finally {
-        setStatusLoading(false)
+        setIsStatusUpdating(false)
       }
     },
     [book, mutateBookData, onUpdateBook, mutateUserRating],
@@ -117,10 +121,15 @@ export function BookProvider({
     setUserRating(rating)
   }, [])
 
+  const currentStatus = optimisticStatus || book?.readingStatus || null
+
   const contextValue: BookContextType = useMemo(
     () => ({
       bookData: {
-        book,
+        book:
+          optimisticStatus && book
+            ? { ...book, readingStatus: optimisticStatus }
+            : book,
         ratings: book?.ratings || [],
         isValidating: isValidatingBookData,
         mutate: mutateBookData,
@@ -131,8 +140,8 @@ export function BookProvider({
         mutate: mutateUserRating,
       },
       status: {
-        active: book?.readingStatus || null,
-        loading: statusLoading,
+        active: currentStatus,
+        isUpdating: isStatusUpdating,
         update: updateStatus,
       },
       actions: {
@@ -143,10 +152,11 @@ export function BookProvider({
     }),
     [
       book,
+      currentStatus,
       userRating,
       isValidatingBookData,
       isValidatingUserRating,
-      statusLoading,
+      isStatusUpdating,
       updateStatus,
       updateBookRatings,
       onUpdateRating,
