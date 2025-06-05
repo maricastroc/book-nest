@@ -5,6 +5,7 @@ export const Container = styled('div', {
   flexDirection: 'column',
   position: 'fixed',
   left: '1.5rem',
+  zIndex: 1,
 })
 
 export const BackgroundContainer = styled('div', {

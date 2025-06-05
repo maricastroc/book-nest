@@ -1,22 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { NextSeo } from 'next-seo'
 import { useEffect, useRef, useState } from 'react'
 import { User } from 'phosphor-react'
 import { useRouter } from 'next/router'
 
-import { Sidebar } from '@/components/shared/Sidebar'
 import { ProfileCard } from '@/pages/profile/partials/ProfileCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { UserDetails } from '@/pages/profile/partials/UserDetails'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Pagination } from '@/components/shared/Pagination'
-import { LateralMenu } from '@/components/shared/LateralMenu'
 import { SearchBar } from '@/components/shared/SearchBar'
 
-import { useScreenSize } from '@/hooks/useScreenSize'
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import useRequest from '@/hooks/useRequest'
 import { useProfileRatings } from '@/hooks/useProfileRatings'
 
@@ -36,6 +29,7 @@ import { RatingProps } from '@/@types/rating'
 import { UserStatistics } from '@/@types/user_statistics'
 import { BookProps } from '@/@types/book'
 import { BookProvider } from '@/contexts/BookContext'
+import { MainLayout } from '@/layouts/MainLayout'
 
 export default function Profile() {
   const router = useRouter()
@@ -44,13 +38,7 @@ export default function Profile() {
     ? router.query.userId[0]
     : router.query.userId
 
-  const isRouteLoading = useLoadingOnRouteChange()
-
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const isSmallSize = useScreenSize(480)
-
-  const isMediumSize = useScreenSize(768)
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
@@ -112,113 +100,101 @@ export default function Profile() {
   }, [currentPage])
 
   return (
-    <>
-      <NextSeo title="Profile | Book Nest" />
-      {isRouteLoading ? (
-        <LoadingPage />
-      ) : (
-        <ProfilePageWrapper>
-          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
-          <ProfilePageContainer>
-            {isLateralMenuOpen && selectedBook && (
-              <BookProvider
-                bookId={selectedBook.id}
-                onUpdateBook={async () => await mutateRatings()}
-                onUpdateRating={async () => {
-                  await mutateRatings()
+    <MainLayout
+      title="Profile | Book Nest"
+      isLateralMenuOpen={isLateralMenuOpen}
+      setIsLateralMenuOpen={(value) => setIsLateralMenuOpen(value)}
+      onUpdateBook={async () => await mutateRatings()}
+      onUpdateRating={async () => {
+        await mutateRatings()
+      }}
+      selectedBook={selectedBook}
+    >
+      <ProfilePageWrapper>
+        <ProfilePageContainer>
+          <ProfilePageHeading>
+            <ProfilePageHeadingTitle>
+              <User />
+              <h2>Profile</h2>
+            </ProfilePageHeadingTitle>
+          </ProfilePageHeading>
+          <ProfilePageContent>
+            <UserRatingsContainer>
+              <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
+              <SearchBar
+                fullWidth
+                placeholder="Search for Author or Title"
+                search={search}
+                onChange={(e) => {
+                  setCurrentPage(1)
+                  setSearch(e.target.value)
                 }}
+                onClick={() => {
+                  setCurrentPage(1)
+                  setSearch('')
+                }}
+              />
+              <UserRatings
+                ref={containerRef}
+                className={`${
+                  isValidatingRatings || userRatings?.length > 0
+                    ? 'with_padding_right'
+                    : ''
+                }`}
               >
-                <LateralMenu
-                  onClose={() => {
-                    setIsLateralMenuOpen(false)
-                  }}
-                />
-              </BookProvider>
-            )}
-            <ProfilePageHeading>
-              <ProfilePageHeadingTitle>
-                <User />
-                <h2>Profile</h2>
-              </ProfilePageHeadingTitle>
-            </ProfilePageHeading>
-            <ProfilePageContent>
-              <UserRatingsContainer>
-                <UserRatingsTitle>User&apos;s Reviews</UserRatingsTitle>
-                <SearchBar
-                  fullWidth
-                  placeholder="Search for Author or Title"
-                  search={search}
-                  onChange={(e) => {
-                    setCurrentPage(1)
-                    setSearch(e.target.value)
-                  }}
-                  onClick={() => {
-                    setCurrentPage(1)
-                    setSearch('')
-                  }}
-                />
-                <UserRatings
-                  ref={containerRef}
-                  className={`${
-                    isValidatingRatings || userRatings?.length > 0
-                      ? 'with_padding_right'
-                      : ''
-                  }`}
-                >
-                  {isValidatingRatings ? (
-                    Array.from({ length: 4 }).map((_, index) => (
-                      <SkeletonRatingCard key={index} />
-                    ))
-                  ) : userRatings?.length > 0 ? (
-                    <BookProvider
-                      bookId={selectedBook?.id}
-                      onUpdateBook={async () => await mutateRatings()}
-                      onUpdateRating={async () => {
-                        await mutateRatings()
-                      }}
-                    >
-                      {userRatings.map((rating: RatingProps) => {
-                        if (rating?.book) {
-                          return (
-                            <ProfileCard
-                              key={rating.id}
-                              book={rating.book}
-                              rating={rating}
-                              userId={userId}
-                              onSelect={() => {
-                                setSelectedBook(rating.book as BookProps)
-                                setIsLateralMenuOpen(true)
-                              }}
-                            />
-                          )
-                        }
-                        return null
-                      })}
-                    </BookProvider>
-                  ) : (
-                    <EmptyContainer content="ratings" />
-                  )}
-                  {totalPages > 1 && (
-                    <Pagination
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={handlePageChange}
-                    />
-                  )}
-                </UserRatings>
-              </UserRatingsContainer>
+                {isValidatingRatings ? (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <SkeletonRatingCard key={index} />
+                  ))
+                ) : userRatings?.length > 0 ? (
+                  <BookProvider
+                    bookId={selectedBook?.id}
+                    onUpdateBook={async () => await mutateRatings()}
+                    onUpdateRating={async () => {
+                      await mutateRatings()
+                    }}
+                  >
+                    {userRatings.map((rating: RatingProps) => {
+                      if (rating?.book) {
+                        return (
+                          <ProfileCard
+                            key={rating.id}
+                            book={rating.book}
+                            rating={rating}
+                            userId={userId}
+                            onSelect={() => {
+                              setSelectedBook(rating.book as BookProps)
+                              setIsLateralMenuOpen(true)
+                            }}
+                          />
+                        )
+                      }
+                      return null
+                    })}
+                  </BookProvider>
+                ) : (
+                  <EmptyContainer content="ratings" />
+                )}
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </UserRatings>
+            </UserRatingsContainer>
 
-              <UserDetailsContainer>
-                <UserDetails
-                  userStatistics={userStatistics}
-                  userId={userId}
-                  isLoading={isValidatingStatistics}
-                />
-              </UserDetailsContainer>
-            </ProfilePageContent>
-          </ProfilePageContainer>
-        </ProfilePageWrapper>
-      )}
-    </>
+            <UserDetailsContainer>
+              <UserDetails
+                userStatistics={userStatistics}
+                userId={userId}
+                isLoading={isValidatingStatistics}
+              />
+            </UserDetailsContainer>
+          </ProfilePageContent>
+        </ProfilePageContainer>
+      </ProfilePageWrapper>
+    </MainLayout>
   )
 }

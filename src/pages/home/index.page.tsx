@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
 import { useEffect, useState } from 'react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
 
@@ -23,27 +22,19 @@ import {
 import { RatingCard } from '@/components/cards/RatingCard'
 import { BookCard } from '@/components/cards/BookCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { Sidebar } from '@/components/shared/Sidebar'
-import { LateralMenu } from '@/components/shared/LateralMenu'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { LoadingPage } from '@/components/shared/LoadingPage'
 import { OutlineButton } from '@/components/core/OutlineButton'
-import { MobileHeader } from '@/components/shared/MobileHeader'
 
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { useScreenSize } from '@/hooks/useScreenSize'
 import useRequest from '@/hooks/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
-import { BookProvider } from '@/contexts/BookContext'
+import { MainLayout } from '@/layouts/MainLayout'
 
 export default function Home() {
   const router = useRouter()
-
-  const isRouteLoading = useLoadingOnRouteChange()
 
   const session = useSession()
 
@@ -56,9 +47,6 @@ export default function Home() {
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
-
-  const isSmallSize = useScreenSize(480)
-  const isMediumSize = useScreenSize(768)
 
   const userLatestRatingRequest = session?.data?.user
     ? {
@@ -172,65 +160,53 @@ export default function Home() {
   }, [popularBooks])
 
   return (
-    <>
-      <NextSeo title="Home | Book Nest" />
-      {isRouteLoading ? (
-        <LoadingPage />
-      ) : (
-        <BookProvider
-          bookId={selectedBook?.id}
-          onUpdateBook={handleUpdatePopularBooks}
-          onUpdateRating={async () => {
-            await mutateUserLatestRating()
-          }}
-        >
-          <HomePageWrapper>
-            {isLateralMenuOpen && selectedBook && (
-              <LateralMenu onClose={() => setIsLateralMenuOpen(false)} />
-            )}
-            {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
-            <HomePageContainer>
-              <HomePageHeading>
-                <ChartLineUp />
-                <h2>Home</h2>
-              </HomePageHeading>
-              <HomePageContent>
-                <LastRatingsWrapper>
-                  {session?.data?.user && (
-                    <>
-                      <UserLatestReadingTitle>
-                        Your Last Rating
-                      </UserLatestReadingTitle>
-                      <UserLatestReadingContainer>
-                        {renderUserLatestRating()}
-                      </UserLatestReadingContainer>
-                    </>
-                  )}
-                  <LastRatingsContainer>
-                    <LastRatingsTitle>Last Ratings</LastRatingsTitle>
-                    <LastRatingsContent>
-                      {renderLatestRatings()}
-                    </LastRatingsContent>
-                  </LastRatingsContainer>
-                </LastRatingsWrapper>
+    <MainLayout
+      title="Home | Book Nest"
+      selectedBook={selectedBook}
+      isLateralMenuOpen={isLateralMenuOpen}
+      setIsLateralMenuOpen={(value) => setIsLateralMenuOpen(value)}
+      onUpdateBook={handleUpdatePopularBooks}
+      onUpdateRating={async () => {
+        await mutateUserLatestRating()
+      }}
+    >
+      <HomePageWrapper>
+        <HomePageContainer>
+          <HomePageHeading>
+            <ChartLineUp />
+            <h2>Home</h2>
+          </HomePageHeading>
+          <HomePageContent>
+            <LastRatingsWrapper>
+              {session?.data?.user && (
+                <>
+                  <UserLatestReadingTitle>
+                    Your Last Rating
+                  </UserLatestReadingTitle>
+                  <UserLatestReadingContainer>
+                    {renderUserLatestRating()}
+                  </UserLatestReadingContainer>
+                </>
+              )}
+              <LastRatingsContainer>
+                <LastRatingsTitle>Last Ratings</LastRatingsTitle>
+                <LastRatingsContent>{renderLatestRatings()}</LastRatingsContent>
+              </LastRatingsContainer>
+            </LastRatingsWrapper>
 
-                <PopularBooksWrapper>
-                  <PopularBooksTitle>
-                    <p>Popular Books</p>
-                    <OutlineButton onClick={() => router.push('/explore')}>
-                      View All
-                      <CaretRight />
-                    </OutlineButton>
-                  </PopularBooksTitle>
-                  <PopularBooksContent>
-                    {renderPopularBooks()}
-                  </PopularBooksContent>
-                </PopularBooksWrapper>
-              </HomePageContent>
-            </HomePageContainer>
-          </HomePageWrapper>
-        </BookProvider>
-      )}
-    </>
+            <PopularBooksWrapper>
+              <PopularBooksTitle>
+                <p>Popular Books</p>
+                <OutlineButton onClick={() => router.push('/explore')}>
+                  View All
+                  <CaretRight />
+                </OutlineButton>
+              </PopularBooksTitle>
+              <PopularBooksContent>{renderPopularBooks()}</PopularBooksContent>
+            </PopularBooksWrapper>
+          </HomePageContent>
+        </HomePageContainer>
+      </HomePageWrapper>
+    </MainLayout>
   )
 }

@@ -51,7 +51,7 @@ const BookContext = createContext<BookContextType | undefined>(undefined)
 type BookProviderProps = {
   children: React.ReactNode
   bookId: string | undefined
-  onUpdateBook: (book: BookProps) => void
+  onUpdateBook?: (book: BookProps) => void
   onUpdateRating?: () => Promise<void>
 }
 
@@ -99,7 +99,7 @@ export function BookProvider({
       try {
         if (book) {
           const updatedBook = { ...book, readingStatus: newStatus }
-          onUpdateBook(updatedBook)
+          onUpdateBook?.(updatedBook)
           await mutateUserRating()
           await mutateBookData()
         }

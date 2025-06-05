@@ -1,18 +1,10 @@
 import { useState } from 'react'
-import { NextSeo } from 'next-seo'
 
 import { Binoculars } from 'phosphor-react'
 
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
 
-import { useScreenSize } from '@/hooks/useScreenSize'
-import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-
-import { Sidebar } from '@/components/shared/Sidebar'
-import { LateralMenu } from '@/components/shared/LateralMenu'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Pagination } from '@/components/shared/Pagination'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -32,7 +24,7 @@ import {
 } from './styles'
 import { useExploreBooks } from '@/hooks/useExploreBooks'
 import { CategoriesSection } from './partials/CategoriesSection'
-import { BookProvider } from '@/contexts/BookContext'
+import { MainLayout } from '@/layouts/MainLayout'
 
 export interface ExploreProps {
   categories: CategoryProps[]
@@ -40,13 +32,7 @@ export interface ExploreProps {
 }
 
 export default function Explore() {
-  const isRouteLoading = useLoadingOnRouteChange()
-
-  const isSmallSize = useScreenSize(480)
-
-  const isMediumSize = useScreenSize(768)
-
-  const [openLateralMenu, setOpenLateralMenu] = useState(false)
+  const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
@@ -84,77 +70,68 @@ export default function Explore() {
         book={book}
         onOpenDetails={() => {
           setSelectedBook(book)
-          setOpenLateralMenu(true)
+          setIsLateralMenuOpen(true)
         }}
       />
     ))
   }
 
   return (
-    <>
-      <NextSeo title="Explore | Book Nest" />
-      {isRouteLoading ? (
-        <LoadingPage />
-      ) : (
-        <ExplorePageWrapper>
-          {openLateralMenu && selectedBook && (
-            <BookProvider bookId={selectedBook.id} onUpdateBook={onUpdateBook}>
-              <LateralMenu
-                onClose={() => {
-                  setOpenLateralMenu(false)
+    <MainLayout
+      title="Explore | Book Nest"
+      isLateralMenuOpen={isLateralMenuOpen}
+      setIsLateralMenuOpen={(value) => setIsLateralMenuOpen(value)}
+      onUpdateBook={onUpdateBook}
+      selectedBook={selectedBook}
+    >
+      <ExplorePageWrapper>
+        <ExplorePageContainer>
+          <ExplorePageHeading>
+            <TitleAndSearch>
+              <HeadingTitle>
+                <Binoculars />
+                <h2>Explore</h2>
+              </HeadingTitle>
+              <SearchBar
+                placeholder="Search for Author or Title"
+                search={search}
+                onChange={(e) => {
+                  setCurrentPage(1)
+                  setSearch(e.target.value)
+                }}
+                onClick={() => {
+                  setCurrentPage(1)
+                  setSearch('')
                 }}
               />
-            </BookProvider>
-          )}
-          {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
-          <ExplorePageContainer>
-            <ExplorePageHeading>
-              <TitleAndSearch>
-                <HeadingTitle>
-                  <Binoculars />
-                  <h2>Explore</h2>
-                </HeadingTitle>
-                <SearchBar
-                  placeholder="Search for Author or Title"
-                  search={search}
-                  onChange={(e) => {
-                    setCurrentPage(1)
-                    setSearch(e.target.value)
-                  }}
-                  onClick={() => {
-                    setCurrentPage(1)
-                    setSearch('')
-                  }}
-                />
-              </TitleAndSearch>
-              <CategoriesSection
-                categories={categories}
-                containerRef={containerRef}
-                isValidating={isValidating}
-                setCurrentPage={(value) => setCurrentPage(value)}
-                setSelectedCategory={(value) => setSelectedCategory(value)}
-                selectedCategory={selectedCategory}
+            </TitleAndSearch>
+            <CategoriesSection
+              categories={categories}
+              containerRef={containerRef}
+              isValidating={isValidating}
+              setCurrentPage={(value) => setCurrentPage(value)}
+              setSelectedCategory={(value) => setSelectedCategory(value)}
+              selectedCategory={selectedCategory}
+            />
+          </ExplorePageHeading>
+          <ExplorePageContent ref={gridRef}>
+            <BooksContainer
+              className={`${
+                !updatedBooks?.length && !isValidating ? 'empty' : ''
+              }`}
+            >
+              {renderBookCards()}
+            </BooksContainer>
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
               />
-            </ExplorePageHeading>
-            <ExplorePageContent ref={gridRef}>
-              <BooksContainer
-                className={`${
-                  !updatedBooks?.length && !isValidating ? 'empty' : ''
-                }`}
-              >
-                {renderBookCards()}
-              </BooksContainer>
-              {totalPages > 1 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={(page) => setCurrentPage(page)}
-                />
-              )}
-            </ExplorePageContent>
-          </ExplorePageContainer>
-        </ExplorePageWrapper>
-      )}
-    </>
+            )}
+          </ExplorePageContent>
+        </ExplorePageContainer>
+      </ExplorePageWrapper>
+    </MainLayout>
   )
 }
