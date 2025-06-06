@@ -36,6 +36,11 @@ describe('GET /api/books', () => {
           userId: 'user-123',
           deletedAt: null,
           user: { id: 'user-123', name: 'User One' },
+          votes: [
+            { type: 'UP', userId: 'user789' },
+            { type: 'DOWN', userId: 'user456' },
+            { type: 'UP', userId: 'user999' },
+          ],
         },
       ],
       categories: [

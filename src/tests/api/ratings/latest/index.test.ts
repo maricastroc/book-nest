@@ -54,6 +54,11 @@ describe('GET /api/ratings', () => {
           id: 'user456',
           name: 'User Two',
         },
+        votes: [
+          { type: 'UP', userId: 'user789' },
+          { type: 'DOWN', userId: 'user456' },
+          { type: 'UP', userId: 'user999' },
+        ],
       },
     ]
 
@@ -73,18 +78,22 @@ describe('GET /api/ratings', () => {
           NOT: { description: '' },
           userId: { not: 'user123' },
         }),
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-        include: {
-          book: {
-            select: { id: true, name: true, author: true, coverUrl: true },
-          },
-          user: true,
-        },
       }),
     )
+
     expect(status).toHaveBeenCalledWith(200)
-    expect(json).toHaveBeenCalledWith({ ratings: fakeRatings })
+    expect(json).toHaveBeenCalledWith({
+      ratings: [
+        {
+          ...fakeRatings[0],
+          votes: {
+            up: 2,
+            down: 1,
+            userVote: null,
+          },
+        },
+      ],
+    })
   })
 
   it('handles missing session gracefully and returns ratings without user exclusion', async () => {
@@ -104,6 +113,11 @@ describe('GET /api/ratings', () => {
           id: 'user789',
           name: 'User Three',
         },
+        votes: [
+          { type: 'UP', userId: 'user111' },
+          { type: 'UP', userId: 'user222' },
+          { type: 'DOWN', userId: 'user333' },
+        ],
       },
     ]
 
@@ -122,18 +136,21 @@ describe('GET /api/ratings', () => {
           deletedAt: null,
           NOT: { description: '' },
         }),
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-        include: {
-          book: {
-            select: { id: true, name: true, author: true, coverUrl: true },
-          },
-          user: true,
-        },
       }),
     )
     expect(status).toHaveBeenCalledWith(200)
-    expect(json).toHaveBeenCalledWith({ ratings: fakeRatings })
+    expect(json).toHaveBeenCalledWith({
+      ratings: [
+        {
+          ...fakeRatings[0],
+          votes: {
+            up: 2,
+            down: 1,
+            userVote: null,
+          },
+        },
+      ],
+    })
   })
 
   it('returns 500 on error', async () => {

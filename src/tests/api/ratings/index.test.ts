@@ -184,7 +184,7 @@ describe('API /api/ratings', () => {
       expect(prisma.rating.update).toHaveBeenCalledWith({
         where: { id: '1' },
         data: { description: 'Updated desc', rate: 5 },
-        include: { user: true },
+        include: { user: true, votes: true },
       })
 
       expect(status).toHaveBeenCalledWith(200)
@@ -287,7 +287,7 @@ describe('API /api/ratings', () => {
           description: 'Nice book',
           rate: 4,
         },
-        include: { user: true },
+        include: { user: true, votes: true },
       })
 
       expect(prisma.readingStatus.upsert).toHaveBeenCalledWith({
