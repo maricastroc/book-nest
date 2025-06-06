@@ -92,6 +92,11 @@ export function buildNextAuthOptions(
           token.name = user.name
           token.email = user.email
           token.avatarUrl = (user as User & { avatarUrl: string }).avatarUrl
+          const dbUser = await prisma.user.findUnique({
+            where: { email: user.email! },
+          })
+
+          token.role = dbUser?.role
         }
         return token
       },
@@ -102,6 +107,7 @@ export function buildNextAuthOptions(
             name: token.name as string,
             email: token.email as string,
             avatarUrl: token.avatarUrl as string,
+            role: token.role as 'ADMIN' | 'USER',
           }
         }
         return session

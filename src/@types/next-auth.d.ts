@@ -3,6 +3,7 @@ import NextAuth from 'next-auth/next'
 
 declare module 'next-auth' {
   interface UserProps {
+    role: string
     id: string | number
     name: string
     email: string

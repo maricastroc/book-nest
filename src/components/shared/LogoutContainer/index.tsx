@@ -14,6 +14,7 @@ export const LogoutContainer = () => {
 
   const handleLogout = useCallback(() => {
     signOut({ callbackUrl: '/' })
+    localStorage.removeItem('loggedUser')
     toast.success('See you soon!')
   }, [])
 

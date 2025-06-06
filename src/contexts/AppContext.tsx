@@ -136,7 +136,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoggedUser(user)
       localStorage.setItem('loggedUser', JSON.stringify(user))
     }
-  }, [user, loggedUser])
+  }, [user, loggedUser, session])
 
   const contextValue = useMemo(
     () => ({

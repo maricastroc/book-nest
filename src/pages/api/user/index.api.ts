@@ -29,6 +29,7 @@ export default async function handler(
         name: true,
         email: true,
         avatarUrl: true,
+        role: true,
       },
     })
 

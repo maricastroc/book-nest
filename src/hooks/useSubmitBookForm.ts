@@ -149,6 +149,8 @@ export function useSubmitBookForm({
 
       const reader = new FileReader()
       reader.onload = () => setCoverPreview(reader.result as string)
+
+      console.log(reader.result, 'oi')
       reader.readAsDataURL(file)
     }
   }
@@ -222,6 +224,10 @@ export function useSubmitBookForm({
 
     const hasSummaryChange = data?.summary !== book?.summary
 
+    const hasCoverChange = data?.coverUrl !== book?.coverUrl
+
+    const hasTitleChange = data?.name !== book?.name
+
     const hasPagesNumberChange =
       String(data.totalPages) !== String(book?.totalPages)
 
@@ -231,6 +237,8 @@ export function useSubmitBookForm({
     )
     if (
       isEdit &&
+      !hasCoverChange &&
+      !hasTitleChange &&
       !hasPublisherChange &&
       !hasPublishingYearChange &&
       !hasSummaryChange &&
@@ -299,31 +307,38 @@ export function useSubmitBookForm({
   }, [loggedUser])
 
   useEffect(() => {
-    if (isEdit && book) {
-      setValue('author', book.author)
-      setValue('summary', book.summary)
-      setValue('name', book.name)
-      setValue('publisher', book.publisher || '')
-      setValue('language', book.language || '')
-      setValue('isbn', book.isbn || '')
-      setValue('coverUrl', book.coverUrl || '')
-      setCoverPreview(book.coverUrl)
-      setCoverUrl(book.coverUrl)
-      setIsValidBook(true)
+    const fillInputs = async () => {
+      if (isEdit && book) {
+        setValue('author', book.author)
+        setValue('summary', book.summary)
+        setValue('name', book.name)
+        setValue('publisher', book.publisher || '')
+        setValue('language', book.language || '')
+        setValue('isbn', book.isbn || '')
+        setIsValidBook(true)
 
-      if (book.publishingYear)
-        setValue('publishingYear', book.publishingYear.toString())
-      if (book.totalPages) setValue('totalPages', book.totalPages.toString())
+        if (await checkImageExists(book.coverUrl)) {
+          setCoverPreview(book.coverUrl)
+          setValue('coverUrl', book.coverUrl)
+          setValue('coverUrl', book.coverUrl || '')
+        }
 
-      if (book.categories) {
-        const formatted = book.categories.map((category) => ({
-          value: (category as CategoryProps).id,
-          label: (category as CategoryProps).name,
-        }))
+        if (book.publishingYear)
+          setValue('publishingYear', book.publishingYear.toString())
+        if (book.totalPages) setValue('totalPages', book.totalPages.toString())
 
-        setValue('categories', formatted)
+        if (book.categories) {
+          const formatted = book.categories.map((category) => ({
+            value: (category as CategoryProps).id,
+            label: (category as CategoryProps).name,
+          }))
+
+          setValue('categories', formatted)
+        }
       }
     }
+
+    fillInputs()
   }, [isEdit, book])
 
   useEffect(() => {
@@ -340,6 +355,7 @@ export function useSubmitBookForm({
 
   return {
     control,
+    data: watch(),
     handleSubmit,
     handleSubmitBook,
     onInvalid: () => {

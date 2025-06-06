@@ -44,7 +44,7 @@ export function SubmittedBookCard({
           <p>{book.author}</p>
         </BookTitleAndAuthor>
         <FooterWrapper>
-          {isLoggedUser && (
+          {(isLoggedUser || loggedUser?.role === 'ADMIN') && (
             <>
               <Dialog.Root open={isEditBookFormOpen}>
                 {isEditBookFormOpen && (

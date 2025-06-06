@@ -24,6 +24,7 @@ import { customStyles } from '@/utils/getCustomStyles'
 import { Controller } from 'react-hook-form'
 import { BookProps } from '@/@types/book'
 import { useSubmitBookForm } from '@/hooks/useSubmitBookForm'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface SubmitBookFormModalProps {
   isEdit?: boolean
@@ -40,6 +41,7 @@ export function SubmitBookFormModal({
 }: SubmitBookFormModalProps) {
   const {
     control,
+    data,
     handleSubmit,
     handleSubmitBook,
     onInvalid,
@@ -62,6 +64,10 @@ export function SubmitBookFormModal({
     onClose,
     onUpdateBook,
   })
+
+  const { loggedUser } = useAppContext()
+
+  const isDisabled = isEdit && loggedUser?.role !== 'ADMIN'
 
   return (
     <Dialog.Portal>
@@ -124,8 +130,8 @@ export function SubmitBookFormModal({
                     label="Book cover:"
                     buttonText="Choose file"
                     accept="image/*"
-                    isDisabled={isEdit}
-                    disabled={isEdit}
+                    disabled={isDisabled}
+                    isDisabled={isDisabled}
                     onChange={handleCoverChange}
                     content={
                       typeof form.coverUrl === 'string' && !!form.coverUrl
@@ -166,7 +172,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
-                      disabled={isEdit}
+                      disabled={isDisabled}
                       variant="secondary"
                       label="Book name"
                       placeholder="e.g. Harry Potter and the Philosopher's Stone"
@@ -183,7 +189,7 @@ export function SubmitBookFormModal({
                   control={control}
                   render={({ field }) => (
                     <Input
-                      disabled={isEdit}
+                      disabled={isDisabled}
                       variant="secondary"
                       label="Book author"
                       placeholder="e.g. J. K. Rowling"
@@ -307,7 +313,7 @@ export function SubmitBookFormModal({
               )}
 
               <Button
-                type="submit"
+                type="button"
                 content={
                   isSubmitting
                     ? 'Loading... '
@@ -315,6 +321,10 @@ export function SubmitBookFormModal({
                     ? 'Save Changes'
                     : 'Submit New Book'
                 }
+                onClick={async () => {
+                  console.log('oi')
+                  await handleSubmitBook(data)
+                }}
                 disabled={isSubmitting || !isValidBook}
                 style={{ marginTop: '1rem' }}
               />

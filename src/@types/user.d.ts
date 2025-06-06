@@ -15,4 +15,6 @@ export interface UserProps {
   sessions?: SessionProps[] | null | undefined
   ratings?: RatingProps[] | null | undefined
   books?: BookProps[] | null | undefined
+
+  role: 'ADMIN' | 'USER'
 }
