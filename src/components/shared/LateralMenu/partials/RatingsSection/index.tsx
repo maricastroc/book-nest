@@ -40,30 +40,31 @@ export const RatingsSection = ({
   const shouldShowRatings =
     bookData.book && (bookData.ratings?.length || !!userRating.rating)
 
-  const canUserReview =
-    !userRating.rating &&
-    (bookData.book?.readingStatus === READ_STATUS ||
-      bookData.book?.readingStatus === DID_NOT_FINISH_STATUS)
+  const canUserReview = !!loggedUser && !userRating.rating
 
   return (
     <RatingsWrapper>
       <RatingsListHeader>
         <p>Ratings</p>
         {canUserReview ? (
-          <span onClick={() => setIsReviewFormOpen(true)}>Review</span>
+          <span
+            onClick={() => {
+              if (
+                bookData.book?.readingStatus === READ_STATUS ||
+                bookData.book?.readingStatus === DID_NOT_FINISH_STATUS
+              ) {
+                setIsReviewFormOpen(true)
+                return
+              }
+
+              setIsReviewWarningModalOpen(true)
+            }}
+          >
+            Review
+          </span>
         ) : (
           !loggedUser && (
-            <span
-              onClick={() => {
-                if (loggedUser) {
-                  setIsReviewWarningModalOpen(true)
-                } else {
-                  setIsSignInModalOpen(true)
-                }
-              }}
-            >
-              Review
-            </span>
+            <span onClick={() => setIsSignInModalOpen(true)}>Review</span>
           )
         )}
       </RatingsListHeader>

@@ -1,15 +1,18 @@
 import {
   AddToLibraryDropdown,
   ReadingStatusItem,
+  RemoveFromLibraryItem,
   DividerDropdown,
 } from './styles'
 import { BookProps } from '@/@types/book'
 import { useAppContext } from '@/contexts/AppContext'
 import { api } from '@/lib/axios'
-import { toast } from 'react-toastify'
 import { handleApiError } from '@/utils/handleApiError'
 import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
 import { ReadingStatus, statuses } from '@/@types/reading-status'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import toast from 'react-hot-toast'
 
 interface DropdownMenuProps {
   isOpen: boolean
@@ -18,7 +21,7 @@ interface DropdownMenuProps {
   activeStatus: ReadingStatus | null
   dropdownRef: React.RefObject<HTMLDivElement>
   setIsValidatingStatus: (value: boolean) => void
-  onUpdateStatus: (newStatus: ReadingStatus) => void
+  onUpdateStatus: (newStatus: ReadingStatus | null) => void
 }
 
 export const DropdownMenu = ({
@@ -55,6 +58,30 @@ export const DropdownMenu = ({
     }
   }
 
+  const handleRemoveFromLibrary = async () => {
+    if (loggedUser && book) {
+      setIsValidatingStatus(true)
+
+      try {
+        await api.delete('/reading_status', {
+          data: {
+            userId: loggedUser.id,
+            bookId: book.id,
+          },
+        })
+
+        toast.success('Book removed from your library!')
+        onUpdateStatus(null)
+        onClose()
+      } catch (error) {
+        handleApiError(error)
+      } finally {
+        setIsValidatingStatus(false)
+        onClose()
+      }
+    }
+  }
+
   return isOpen ? (
     <AddToLibraryDropdown ref={dropdownRef}>
       {statuses?.map((status) => (
@@ -74,7 +101,6 @@ export const DropdownMenu = ({
 
               await handleSelectReadingStatus(book, status.value)
               onUpdateStatus(status.value)
-
               onClose()
             }}
           >
@@ -88,6 +114,17 @@ export const DropdownMenu = ({
           <DividerDropdown />
         </>
       ))}
+
+      {activeStatus !== null && (
+        <RemoveFromLibraryItem
+          onClick={() => {
+            handleRemoveFromLibrary()
+          }}
+        >
+          <FontAwesomeIcon icon={faTrash} />
+          Remove from library
+        </RemoveFromLibraryItem>
+      )}
     </AddToLibraryDropdown>
   ) : null
 }

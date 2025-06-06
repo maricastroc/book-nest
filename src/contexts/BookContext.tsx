@@ -30,7 +30,7 @@ type UserRatingData = {
 type StatusData = {
   active: string | null | undefined
   isUpdating: boolean
-  update: (newStatus: string) => Promise<void>
+  update: (newStatus: string | null) => Promise<void>
 }
 
 type BookActions = {
@@ -92,7 +92,7 @@ export function BookProvider({
   }, [userRatingData])
 
   const updateStatus = useCallback(
-    async (newStatus: string) => {
+    async (newStatus: string | null) => {
       setIsStatusUpdating(true)
       setOptimisticStatus(newStatus)
 

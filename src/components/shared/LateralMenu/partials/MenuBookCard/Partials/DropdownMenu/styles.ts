@@ -51,3 +51,33 @@ export const DividerDropdown = styled('span', {
   padding: 0,
   opacity: 0.7,
 })
+
+export const RemoveFromLibraryItem = styled('button', {
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  fontSize: '0.9rem',
+  color: '$gray100',
+  width: '100%',
+  border: 'transparent',
+  backgroundColor: 'transparent',
+  height: '2.7rem',
+  justifyContent: 'center',
+  padding: '0 1.5rem',
+
+  svg: {
+    color: '$red300',
+  },
+
+  '&:not(:disabled):hover': {
+    color: '$green100',
+    transition: 'all 200ms',
+  },
+
+  '&:disabled': {
+    color: '$gray400',
+    cursor: 'not-allowed !important',
+    border: 'none',
+  },
+})

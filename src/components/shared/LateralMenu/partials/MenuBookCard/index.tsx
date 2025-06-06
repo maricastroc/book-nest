@@ -30,7 +30,7 @@ interface MenuBookCardProps {
   book: BookProps
   categories: CategoryProps[]
   setIsValidatingStatus: (value: boolean) => void
-  onUpdateStatus: (newStatus: string) => void
+  onUpdateStatus: (newStatus: string | null) => void
 }
 
 export function MenuBookCard({
