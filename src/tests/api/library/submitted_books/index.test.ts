@@ -80,8 +80,6 @@ describe('GET /api/library/submitted_books', () => {
         summary: 'Summary 1',
         totalPages: 100,
         publishingYear: 2020,
-        _count: { ratings: 2 },
-        ratings: [{ rate: 4 }, { rate: 5 }],
         categories: [{ category: { id: 'cat-1', name: 'Fiction' } }],
       },
       {
@@ -95,8 +93,6 @@ describe('GET /api/library/submitted_books', () => {
         summary: 'Summary 2',
         totalPages: 200,
         publishingYear: 2018,
-        _count: { ratings: 0 },
-        ratings: [],
         categories: [{ category: { id: 'cat-2', name: 'Non-Fiction' } }],
       },
     ]
@@ -128,7 +124,7 @@ describe('GET /api/library/submitted_books', () => {
     })
 
     expect(prisma.book.findMany).toHaveBeenCalledWith({
-      where: { userId },
+      where: { "status": "APPROVED", userId },
       skip: 0,
       take: 20,
       select: expect.any(Object),
@@ -141,14 +137,10 @@ describe('GET /api/library/submitted_books', () => {
           {
             ...fakeBooks[0],
             categories: [{ id: 'cat-1', name: 'Fiction' }],
-            ratingCount: 2,
-            rate: 4.5,
           },
           {
             ...fakeBooks[1],
             categories: [{ id: 'cat-2', name: 'Non-Fiction' }],
-            ratingCount: 0,
-            rate: 0,
           },
         ],
         pagination: {

@@ -99,7 +99,7 @@ describe('POST /api/books/create', () => {
 
     expect(status).toHaveBeenCalledWith(201)
     expect(json).toHaveBeenCalledWith({
-      message: 'Book successfully created!',
+      message: 'Book submitted successfully! It will be available once approved by our moderators.',
       book: expect.objectContaining({
         name: 'Test Book',
         coverUrl: expect.stringContaining('data:image/jpeg;base64'),

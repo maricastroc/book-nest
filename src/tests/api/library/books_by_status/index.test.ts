@@ -47,6 +47,7 @@ describe('GET /api/library/books_by_status', () => {
         coverUrl: 'cover1.jpg',
         readingStatus: [{ status: 'reading' }],
         ratings: [{ rate: 4 }],
+        "status": "APPROVED",
       },
       {
         id: 'book-2',
@@ -55,6 +56,7 @@ describe('GET /api/library/books_by_status', () => {
         coverUrl: 'cover2.jpg',
         readingStatus: [{ status: 'completed' }],
         ratings: [],
+        "status": "APPROVED",
       },
       {
         id: 'book-3',
@@ -63,6 +65,7 @@ describe('GET /api/library/books_by_status', () => {
         coverUrl: 'cover3.jpg',
         readingStatus: [],
         ratings: [],
+        "status": "APPROVED",
       },
     ]
 
@@ -83,6 +86,7 @@ describe('GET /api/library/books_by_status', () => {
 
     expect(prisma.book.findMany).toHaveBeenCalledWith({
       where: {
+                "status": "APPROVED",
         OR: [{ readingStatus: { some: { userId } } }, { userId }],
       },
       select: {

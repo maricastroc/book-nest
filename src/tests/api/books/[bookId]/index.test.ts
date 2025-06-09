@@ -23,7 +23,7 @@ describe('GET /api/books', () => {
     jest.clearAllMocks()
   })
 
-  it('returns book details with ratings and categories', async () => {
+  it('returns book details with user, ratings and categories', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
@@ -53,6 +53,11 @@ describe('GET /api/books', () => {
           status: 'READING',
         },
       ],
+      user: {
+          avatarUrl: 'avatar-user',
+          name: 'Jon Doe',
+          id: 'id-1',
+        }
     })
     ;(prisma.rating.groupBy as jest.Mock).mockResolvedValue([
       {
@@ -87,6 +92,11 @@ describe('GET /api/books', () => {
         rate: 4,
         readingStatus: 'READING',
         categories: [{ id: 'cat-1', name: 'Ficção' }],
+        user: {
+          avatarUrl: 'avatar-user',
+          name: 'Jon Doe',
+          id: 'id-1',
+        }
       }),
     })
   })

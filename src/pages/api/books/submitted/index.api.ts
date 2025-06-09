@@ -54,11 +54,6 @@ export default async function handler(
       _count: {
         select: { ratings: true },
       },
-      ratings: {
-        select: {
-          rate: true,
-        },
-      },
       categories: {
         include: {
           category: true,
@@ -75,18 +70,9 @@ export default async function handler(
   })
 
   const booksWithDetails = pendingBooks.map((book) => {
-    const ratingCount = book._count.ratings
-    const avgRate =
-      ratingCount > 0
-        ? book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
-          ratingCount
-        : 0
-
     return {
       ...book,
       categories: book.categories.map((category) => category.category),
-      ratingCount,
-      rate: avgRate,
     }
   })
 
