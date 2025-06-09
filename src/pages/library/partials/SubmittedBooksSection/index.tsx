@@ -34,6 +34,7 @@ import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
 import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookProvider } from '@/contexts/BookContext'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface SubmittedBooksSectionProps {
   userId: string | undefined
@@ -59,6 +60,8 @@ export function SubmittedBooksSection({
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
 
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
+
+  const { loggedUser } = useAppContext()
 
   const [dateInfo, setDateInfo] = useState({
     dateFormatted: '',
@@ -197,13 +200,15 @@ export function SubmittedBooksSection({
 
             <SubmittedBooksHeading>
               <p>Submitted Books</p>
-              <OutlineButton
-                onClick={() => setIsSubmitBookFormOpen(true)}
-                disabled={isValidatingSubmittedBooksData}
-              >
-                Add
-                <Plus />
-              </OutlineButton>
+              {loggedUser?.id === userId && (
+                <OutlineButton
+                  onClick={() => setIsSubmitBookFormOpen(true)}
+                  disabled={isValidatingSubmittedBooksData}
+                >
+                  Add
+                  <Plus />
+                </OutlineButton>
+              )}
             </SubmittedBooksHeading>
 
             <ScrollableSection
