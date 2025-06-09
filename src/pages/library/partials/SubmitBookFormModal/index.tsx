@@ -322,7 +322,6 @@ export function SubmitBookFormModal({
                     : 'Submit New Book'
                 }
                 onClick={async () => {
-                  console.log('oi')
                   await handleSubmitBook(data)
                 }}
                 disabled={isSubmitting || !isValidBook}

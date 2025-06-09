@@ -35,6 +35,13 @@ export default async function handler(
           category: true,
         },
       },
+      user: {
+        select: {
+          avatarUrl: true,
+          id: true,
+          name: true,
+        },
+      },
       ...(session
         ? {
             readingStatus: {
@@ -87,6 +94,7 @@ export default async function handler(
   const bookWithDetails = {
     ...book,
     categories: book.categories.map((category) => category.category),
+    user: book.user,
     ratings: session?.user?.id
       ? ratingsWithGroupedVotes.filter(
           (rating) => rating.userId !== session.user.id,

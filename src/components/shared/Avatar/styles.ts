@@ -9,6 +9,11 @@ export const AvatarContainer = styled('a', {
   borderRadius: '50%',
   backgroundColor: '$gray700',
 
+  '&.small': {
+    width: 30,
+    height: 30,
+  },
+
   '&.medium': {
     width: 36,
     height: 36,
@@ -43,6 +48,11 @@ export const AvatarDefault = styled('img', {
   width: 40,
   aspectRatio: 'auto 40 / 40',
   height: 40,
+
+  '&.small': {
+    width: 28,
+    height: 28,
+  },
 
   '&.medium': {
     width: 34,

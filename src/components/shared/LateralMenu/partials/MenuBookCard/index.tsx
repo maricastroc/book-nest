@@ -11,6 +11,8 @@ import {
   BookRatingAndReviews,
   BookOtherInfo,
   AddToLibrarySection,
+  UserInfo,
+  UserInfoText,
 } from './styles'
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
@@ -25,6 +27,9 @@ import { useAppContext } from '@/contexts/AppContext'
 import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
 import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
 import { ReadingStatus } from '@/@types/reading-status'
+import { Avatar } from '@/components/shared/Avatar'
+import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
+import { useRouter } from 'next/router'
 
 interface MenuBookCardProps {
   book: BookProps
@@ -39,6 +44,9 @@ export function MenuBookCard({
   book,
   categories,
 }: MenuBookCardProps) {
+  const { dateFormatted, dateRelativeToNow, dateString } =
+    getDateFormattedAndRelative(book.createdAt)
+
   const [updatedBook, setUpdatedBook] = useState(book)
 
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
@@ -49,6 +57,8 @@ export function MenuBookCard({
   const [isRatingBookModalOpen, setIsRatingBookModalOpen] = useState(false)
 
   const { loggedUser } = useAppContext()
+
+  const router = useRouter()
 
   const categoryNames = categories.map((category) => category?.name)
 
@@ -137,6 +147,27 @@ export function MenuBookCard({
         language={book.language || ''}
         isbn={book.isbn || ''}
       />
+      <DividerLine />
+      {book.user?.id && (
+        <UserInfo>
+          <Avatar
+            isClickable
+            variant="small"
+            avatarUrl={book.user?.avatarUrl}
+            onClick={() => {
+              router.push(`/profile/${book.user?.id}`)
+            }}
+          />
+          <UserInfoText>
+            <p>
+              {`Submitted by:`} <strong>{book.user?.name}</strong>
+            </p>
+            <time title={dateFormatted} dateTime={dateString}>
+              {dateRelativeToNow}
+            </time>
+          </UserInfoText>
+        </UserInfo>
+      )}
     </BookCardWrapper>
   )
 }

@@ -184,3 +184,29 @@ export const AddToLibraryButton = styled('button', {
     color: '$gray100',
   },
 })
+
+export const UserInfo = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  width: '100%',
+  gap: '0.7rem',
+})
+
+export const UserInfoText = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  fontSize: '0.78rem',
+  color: '$gray400',
+
+  p: {
+    fontSize: '0.85rem',
+    color: '$gray300',
+  },
+
+  strong: {
+    color: '$gray200',
+  },
+})

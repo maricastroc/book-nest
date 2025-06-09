@@ -6,7 +6,7 @@ import AvatarDefaultImage from '../../../../public/assets/avatar_mockup.png'
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
   avatarUrl?: string | null
   isClickable?: boolean
-  variant?: '' | 'medium' | 'regular' | 'bigger' | 'large'
+  variant?: '' | 'small' | 'medium' | 'regular' | 'bigger' | 'large'
   onClick?: () => void
   isLoading?: boolean
 }

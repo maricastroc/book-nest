@@ -150,7 +150,6 @@ export function useSubmitBookForm({
       const reader = new FileReader()
       reader.onload = () => setCoverPreview(reader.result as string)
 
-      console.log(reader.result, 'oi')
       reader.readAsDataURL(file)
     }
   }

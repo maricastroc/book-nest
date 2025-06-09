@@ -18,7 +18,7 @@ export function Sidebar() {
   const router = useRouter()
 
   const { loggedUser } = useAppContext()
-  console.log(loggedUser)
+
   return (
     <Container>
       <BackgroundContainer>
