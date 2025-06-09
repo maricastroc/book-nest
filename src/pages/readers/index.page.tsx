@@ -4,7 +4,6 @@ import { Users as UsersIcon } from 'phosphor-react'
 
 import { CategoryProps } from '@/@types/category'
 import { BookProps } from '@/@types/book'
-import { UserProps } from 'next-auth'
 
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
@@ -31,6 +30,7 @@ import {
   HeadingTitle,
   TitleAndSearch,
 } from './styles'
+import { UserProps } from '@/@types/user'
 
 export interface UsersProps {
   categories: CategoryProps[]
