@@ -8,7 +8,14 @@ import {
 import Image from 'next/image'
 import SidebarBackground from '../../../../public/assets/sidebar.svg'
 import Logo from '../../../../public/assets/logo2.svg'
-import { Binoculars, Books, ChartLineUp, User, Users } from 'phosphor-react'
+import {
+  Binoculars,
+  Books,
+  ChartLineUp,
+  FileText,
+  User,
+  Users,
+} from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '@/contexts/AppContext'
 import { NavigationItem } from '../NavigationItem'
@@ -70,6 +77,14 @@ export function Sidebar() {
                     icon={Books}
                     label="Library"
                   />
+                  {loggedUser?.role === 'ADMIN' && (
+                    <NavigationItem
+                      active={router.pathname === '/submissions'}
+                      onClick={() => router.push('/submissions')}
+                      icon={FileText}
+                      label="Submissions"
+                    />
+                  )}
                 </>
               )}
             </ItemsContainer>

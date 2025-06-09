@@ -40,6 +40,7 @@ export default async function handler(
   const totalBooks = await prisma.book.count({
     where: {
       categories: categoriesQuery,
+      status: 'APPROVED',
       ...(searchQuery && {
         OR: [
           {
@@ -62,6 +63,7 @@ export default async function handler(
   const books = await prisma.book.findMany({
     where: {
       categories: categoriesQuery,
+      status: 'APPROVED',
       ...(searchQuery && {
         OR: [
           {

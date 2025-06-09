@@ -9,6 +9,7 @@ import {
   ImagePreview,
   DividerLine,
   WarningContainer,
+  ButtonsContainer,
 } from './styles'
 import { InputContainer } from '@/components/core/InputContainer'
 import { Input } from '@/components/core/Input'
@@ -31,11 +32,13 @@ interface SubmitBookFormModalProps {
   book?: BookProps | null
   onClose: () => void
   onUpdateBook?: (book: BookProps) => void
+  mutate?: any
 }
 
 export function SubmitBookFormModal({
   onClose,
   onUpdateBook,
+  mutate,
   isEdit = false,
   book = null,
 }: SubmitBookFormModalProps) {
@@ -44,6 +47,7 @@ export function SubmitBookFormModal({
     data,
     handleSubmit,
     handleSubmitBook,
+    handleRejectBook,
     onInvalid,
     coverPreview,
     coverUrl,
@@ -77,7 +81,7 @@ export function SubmitBookFormModal({
           onClose()
           reset()
         }}
-        title={isEdit ? 'Edit your book' : 'Missing a Book?'}
+        title={isEdit ? 'Review Submission' : 'Missing a Book?'}
       >
         <WarningContainer>
           {isEdit ? (
@@ -312,21 +316,36 @@ export function SubmitBookFormModal({
                 </InputContainer>
               )}
 
-              <Button
-                type="button"
-                content={
-                  isSubmitting
-                    ? 'Loading... '
-                    : isEdit
-                    ? 'Save Changes'
-                    : 'Submit New Book'
-                }
-                onClick={async () => {
-                  await handleSubmitBook(data)
-                }}
-                disabled={isSubmitting || !isValidBook}
-                style={{ marginTop: '1rem' }}
-              />
+              <ButtonsContainer>
+                <Button
+                  type="button"
+                  content={
+                    isSubmitting
+                      ? 'Loading... '
+                      : isEdit
+                      ? 'Approve Book'
+                      : 'Submit New Book'
+                  }
+                  onClick={async () => {
+                    await handleSubmitBook(data)
+                    await mutate()
+                  }}
+                  disabled={isSubmitting || !isValidBook}
+                  style={{ marginTop: '1rem' }}
+                />
+                {loggedUser?.role === 'ADMIN' && (
+                  <Button
+                    type="button"
+                    variant="delete"
+                    content={isSubmitting ? 'Loading... ' : 'Reject Book'}
+                    onClick={async () => {
+                      await handleRejectBook()
+                      await mutate()
+                    }}
+                    disabled={isSubmitting || !isValidBook}
+                  />
+                )}
+              </ButtonsContainer>
             </>
           )}
         </FormContainer>

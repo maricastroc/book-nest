@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getServerSession } from 'next-auth'
+import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,31 +11,32 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { userId, page = '1', perPage = '20' } = req.query
+  const session = await getServerSession(
+    req,
+    res,
+    buildNextAuthOptions(req, res),
+  )
 
-  if (!userId) {
-    return res.status(400).json({ message: 'UserId is required' })
+  if (!session) {
+    return res.status(401).json({ message: 'Authentication required' })
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: String(userId) },
-    select: { avatarUrl: true, name: true, id: true, createdAt: true },
-  })
-
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' })
-  }
+  const { page = '1', perPage = '20' } = req.query
 
   const pageNumber = Number(page)
   const itemsPerPage = Number(perPage)
   const skip = (pageNumber - 1) * itemsPerPage
 
+  if (session.user.role !== 'ADMIN') {
+    return res.status(403).json({ message: 'Access denied' })
+  }
+
   const totalBooks = await prisma.book.count({
-    where: { userId: String(userId) },
+    where: { status: 'PENDING' },
   })
 
-  const submittedBooks = await prisma.book.findMany({
-    where: { userId: String(userId), status: 'APPROVED' },
+  const pendingBooks = await prisma.book.findMany({
+    where: { status: 'PENDING' },
     skip,
     take: itemsPerPage,
     select: {
@@ -47,6 +50,7 @@ export default async function handler(
       summary: true,
       totalPages: true,
       publishingYear: true,
+      createdAt: true,
       _count: {
         select: { ratings: true },
       },
@@ -60,10 +64,17 @@ export default async function handler(
           category: true,
         },
       },
+      user: {
+        select: {
+          avatarUrl: true,
+          name: true,
+          id: true,
+        },
+      },
     },
   })
 
-  const submittedBooksWithDetails = submittedBooks.map((book) => {
+  const booksWithDetails = pendingBooks.map((book) => {
     const ratingCount = book._count.ratings
     const avgRate =
       ratingCount > 0
@@ -81,8 +92,7 @@ export default async function handler(
 
   return res.json({
     data: {
-      user,
-      submittedBooks: submittedBooksWithDetails,
+      pendingBooks: booksWithDetails,
       pagination: {
         total: totalBooks,
         page: pageNumber,

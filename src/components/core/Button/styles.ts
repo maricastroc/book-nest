@@ -73,6 +73,17 @@ export const StyledButton = styled('button', {
           },
         },
       },
+
+      delete: {
+        color: '$gray100',
+        backgroundColor: '$red300',
+        transition: 'all 200ms ease',
+
+        '&:not(:disabled):hover': {
+          color: '$gray800',
+          backgroundColor: '$gray100',
+        },
+      },
     },
   },
 

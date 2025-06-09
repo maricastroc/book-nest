@@ -105,6 +105,7 @@ export default async function handler(
         categories,
         language,
         isbn,
+        status: 'PENDING',
       })
 
       let finalCoverUrl: string
@@ -142,6 +143,7 @@ export default async function handler(
           publishingYear: publishingYear.toString(),
           coverUrl: finalCoverUrl,
           userId: String(session.user.id),
+          status: 'PENDING',
           categories: {
             create: categories.map((categoryId: string) => ({
               category: { connect: { id: categoryId } },
@@ -155,7 +157,8 @@ export default async function handler(
 
       return res.status(201).json({
         book: newBook,
-        message: 'Book successfully created!',
+        message:
+          'Book submitted successfully! It will be available once approved by our moderators.',
       })
     } catch (error) {
       if (files.coverUrl?.[0]) {

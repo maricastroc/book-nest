@@ -25,6 +25,7 @@ export default async function handler(
 
   const books = await prisma.book.findMany({
     where: {
+      status: 'APPROVED',
       OR: [
         {
           readingStatus: {

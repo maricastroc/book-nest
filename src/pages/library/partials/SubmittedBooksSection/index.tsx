@@ -111,7 +111,6 @@ export function SubmittedBooksSection({
       return submittedBooks.map((book) => (
         <SubmittedBookCard
           key={book.id}
-          userId={userId}
           book={book}
           onUpdateBook={() => mutate()}
           onSelect={() => {

@@ -167,3 +167,10 @@ export const DividerLine = styled('span', {
   height: 1,
   margin: '0.6rem 0',
 })
+
+export const ButtonsContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1.25rem',
+  width: '100%',
+})

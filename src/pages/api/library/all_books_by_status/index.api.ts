@@ -27,6 +27,7 @@ export default async function handler(
   const skip = (pageNumber - 1) * itemsPerPage
 
   const whereCondition: Prisma.BookWhereInput = {
+    status: 'APPROVED',
     readingStatus: {
       some: {
         userId: String(userId),

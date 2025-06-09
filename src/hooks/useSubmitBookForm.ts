@@ -13,7 +13,6 @@ import { formatDate } from '@/utils/formatDate'
 import toast from 'react-hot-toast'
 import useRequest from '@/hooks/useRequest'
 import { z } from 'zod'
-import { formatCategoryArray } from '@/utils/formatCategoryArray'
 import { handleApiError } from '@/utils/handleApiError'
 
 export const submitBookFormSchema = z.object({
@@ -69,7 +68,6 @@ export function useSubmitBookForm({
   isEdit,
   book,
   onClose,
-  onUpdateBook,
 }: UseSubmitBookFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
@@ -214,40 +212,6 @@ export function useSubmitBookForm({
   }
 
   async function handleSubmitBook(data: SubmitBookFormData) {
-    const hasPublisherChange = data?.publisher !== book?.publisher
-
-    const hasLanguageChange = data?.language !== book?.language
-
-    const hasPublishingYearChange =
-      data?.publishingYear !== book?.publishingYear
-
-    const hasSummaryChange = data?.summary !== book?.summary
-
-    const hasCoverChange = data?.coverUrl !== book?.coverUrl
-
-    const hasTitleChange = data?.name !== book?.name
-
-    const hasPagesNumberChange =
-      String(data.totalPages) !== String(book?.totalPages)
-
-    const hasCategoriesChange = !formatCategoryArray(
-      data?.categories?.map((c) => c.value).sort(),
-      book?.categories?.map((c: any) => c.id || (c as CategoryProps).id).sort(),
-    )
-    if (
-      isEdit &&
-      !hasCoverChange &&
-      !hasTitleChange &&
-      !hasPublisherChange &&
-      !hasPublishingYearChange &&
-      !hasSummaryChange &&
-      !hasPagesNumberChange &&
-      !hasLanguageChange &&
-      !hasCategoriesChange
-    ) {
-      onClose()
-      return
-    }
     setShowErrors(true)
 
     const formData = new FormData()
@@ -286,9 +250,25 @@ export function useSubmitBookForm({
 
       toast.success(response.data.message)
 
-      if (onUpdateBook) {
-        onUpdateBook(response.data.book)
-      }
+      onClose()
+    } catch (error) {
+      handleApiError(error)
+    } finally {
+      setIsSubmitting(false)
+      setShowErrors(false)
+    }
+  }
+
+  async function handleRejectBook() {
+    try {
+      setIsSubmitting(true)
+
+      const response = await api.put(`/books/reject`, {
+        bookId: book?.id,
+        status: 'REJECTED',
+      })
+
+      toast.success(response.data.message)
 
       onClose()
     } catch (error) {
@@ -367,6 +347,7 @@ export function useSubmitBookForm({
     handleCoverChange,
     handleCoverChangeClick,
     getBookInfoWithGoogleBooks,
+    handleRejectBook,
     categoriesOptions:
       categories?.map((category) => ({
         value: category.id,

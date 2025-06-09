@@ -69,6 +69,10 @@ export default async function handler(
     return res.status(401).json({ message: 'Authentication required' })
   }
 
+  if (session.user.role !== 'ADMIN') {
+    return res.status(403).json({ message: 'Access denied' })
+  }
+
   const form = new IncomingForm()
 
   form.parse(req, async (err, fields, files) => {
@@ -114,21 +118,13 @@ export default async function handler(
         return res.status(404).json({ message: 'Book not found.' })
       }
 
-      if (
-        session.user.role !== 'ADMIN' &&
-        existingBook.userId !== session.user.id
-      ) {
-        return res
-          .status(403)
-          .json({ message: 'You can only edit your own books.' })
-      }
-
       const updateData: any = { ...validatedData }
 
-      // Processar a nova capa se fornecida
+      updateData.status = 'APPROVED'
+
       const coverFile = files.coverUrl?.[0]
       if (coverFile) {
-        const MAX_SIZE = 2 * 1024 * 1024 // 2MB
+        const MAX_SIZE = 2 * 1024 * 1024
         const fileBuffer = await fs.readFile(coverFile.filepath)
 
         if (fileBuffer.length > MAX_SIZE) {
@@ -204,7 +200,7 @@ export default async function handler(
 
       return res.status(200).json({
         book: updatedBook,
-        message: 'Book successfully updated!',
+        message: 'Book successfully approved!',
       })
     } catch (error) {
       if (files.coverUrl?.[0]) {

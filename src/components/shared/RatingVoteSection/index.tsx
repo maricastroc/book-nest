@@ -58,7 +58,7 @@ export const RatingVoteSection = ({ rating, style }: Props) => {
 
   return (
     <RatingActions style={style}>
-      <RatingButton>
+      <RatingButton disabled={!!isOwner}>
         <ThumbsUp
           onClick={() => handleVote('UP')}
           weight={userVote === 'UP' ? 'fill' : 'regular'}
@@ -66,7 +66,7 @@ export const RatingVoteSection = ({ rating, style }: Props) => {
         />
         <p>Helpful • {currentRating.votes?.up ?? 0}</p>
       </RatingButton>
-      <RatingButton>
+      <RatingButton disabled={!!isOwner}>
         <ThumbsDown
           onClick={() => handleVote('DOWN')}
           weight={userVote === 'DOWN' ? 'fill' : 'regular'}

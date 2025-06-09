@@ -18,6 +18,7 @@ export const StyledArchivedWarning = styled('div', {
   p: {
     fontSize: '0.85rem',
     lineHeight: 1.6,
+    textAlign: 'left',
   },
 
   '& strong': {

@@ -16,6 +16,9 @@ export default async function handler(
   )
 
   const booksWithRatingsAndStatus = await prisma.book.findMany({
+    where: {
+      status: 'APPROVED',
+    },
     include: {
       ratings: {
         select: {
