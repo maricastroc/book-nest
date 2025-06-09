@@ -7,6 +7,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+    if (req.method !== 'POST') return res.status(405).end()
+
   const session = await getServerSession(
     req,
     res,
@@ -22,6 +24,10 @@ export default async function handler(
   }
 
   const { bookId, status } = req.body
+
+  if (!bookId) {
+    return res.status(400).json({ message: 'Book ID is required' })
+  }
 
   if (!['REJECTED'].includes(status)) {
     return res.status(400).json({ message: 'Invalid status' })
