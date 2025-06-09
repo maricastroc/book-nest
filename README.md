@@ -60,8 +60,7 @@ npm run dev
 > Run all tests:
 
 ```bash
-npm test
-npm run test:coverage
+npm run test
 ```
 
 > ⏩ Access [http://localhost:3000](http://localhost:3000) to view the web application.
