@@ -124,7 +124,7 @@ describe('GET /api/library/submitted_books', () => {
     })
 
     expect(prisma.book.findMany).toHaveBeenCalledWith({
-      where: { "status": "APPROVED", userId },
+      where: { status: 'APPROVED', userId },
       skip: 0,
       take: 20,
       select: expect.any(Object),

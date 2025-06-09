@@ -54,10 +54,10 @@ describe('GET /api/books', () => {
         },
       ],
       user: {
-          avatarUrl: 'avatar-user',
-          name: 'Jon Doe',
-          id: 'id-1',
-        }
+        avatarUrl: 'avatar-user',
+        name: 'Jon Doe',
+        id: 'id-1',
+      },
     })
     ;(prisma.rating.groupBy as jest.Mock).mockResolvedValue([
       {
@@ -96,7 +96,7 @@ describe('GET /api/books', () => {
           avatarUrl: 'avatar-user',
           name: 'Jon Doe',
           id: 'id-1',
-        }
+        },
       }),
     })
   })

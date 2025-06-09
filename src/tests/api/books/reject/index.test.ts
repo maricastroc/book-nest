@@ -22,10 +22,10 @@ describe('POST /api/books/reject', () => {
 
   it('should return 401 if not authenticated', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue(null)
-    
-    const req = { 
+
+    const req = {
       method: 'POST',
-      body: {}
+      body: {},
     } as NextApiRequest
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -35,17 +35,19 @@ describe('POST /api/books/reject', () => {
     await handler(req, res)
 
     expect(res.status).toHaveBeenCalledWith(401)
-    expect(res.json).toHaveBeenCalledWith({ message: 'Authentication required' })
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Authentication required',
+    })
   })
 
   it('should return 403 if user is not ADMIN', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'USER' }
+      user: { role: 'USER' },
     })
-    
-    const req = { 
+
+    const req = {
       method: 'POST',
-      body: {}
+      body: {},
     } as NextApiRequest
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -60,12 +62,12 @@ describe('POST /api/books/reject', () => {
 
   it('should return 400 for invalid status', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'ADMIN' }
+      user: { role: 'ADMIN' },
     })
-    
-    const req = { 
+
+    const req = {
       method: 'POST',
-      body: { bookId: 'book-1', status: 'INVALID_STATUS' }
+      body: { bookId: 'book-1', status: 'INVALID_STATUS' },
     } as NextApiRequest
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -80,25 +82,25 @@ describe('POST /api/books/reject', () => {
 
   it('should successfully reject a book', async () => {
     const mockSession = {
-      user: { 
+      user: {
         id: 'user-123',
-        role: 'ADMIN' 
-      }
+        role: 'ADMIN',
+      },
     }
-    
+
     const mockUpdatedBook = {
       id: 'book-1',
-      status: 'REJECTED'
+      status: 'REJECTED',
     }
-    
+
     ;(getServerSession as jest.Mock).mockResolvedValue(mockSession)
     ;(prisma.book.update as jest.Mock).mockResolvedValue(mockUpdatedBook)
 
-    const req = { 
+    const req = {
       method: 'POST',
-      body: { bookId: 'book-1', status: 'REJECTED' }
+      body: { bookId: 'book-1', status: 'REJECTED' },
     } as NextApiRequest
-    
+
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -108,27 +110,27 @@ describe('POST /api/books/reject', () => {
 
     expect(prisma.book.update).toHaveBeenCalledWith({
       where: { id: 'book-1' },
-      data: { status: 'REJECTED' }
+      data: { status: 'REJECTED' },
     })
 
     expect(res.status).toHaveBeenCalledWith(200)
     expect(res.json).toHaveBeenCalledWith({
       book: mockUpdatedBook,
-      message: 'Book successfully rejected!'
+      message: 'Book successfully rejected!',
     })
   })
 
   it('should handle database errors', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'ADMIN' }
+      user: { role: 'ADMIN' },
     })
     ;(prisma.book.update as jest.Mock).mockRejectedValue(new Error('DB Error'))
 
-    const req = { 
+    const req = {
       method: 'POST',
-      body: { bookId: 'book-1', status: 'REJECTED' }
+      body: { bookId: 'book-1', status: 'REJECTED' },
     } as NextApiRequest
-    
+
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -138,7 +140,7 @@ describe('POST /api/books/reject', () => {
 
     expect(res.status).toHaveBeenCalledWith(500)
     expect(res.json).toHaveBeenCalledWith({
-      message: 'Error updating book status'
+      message: 'Error updating book status',
     })
   })
 
@@ -158,12 +160,12 @@ describe('POST /api/books/reject', () => {
 
   it('should return 400 if bookId is missing', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'ADMIN' }
+      user: { role: 'ADMIN' },
     })
-    
-    const req = { 
+
+    const req = {
       method: 'POST',
-      body: { status: 'REJECTED' }
+      body: { status: 'REJECTED' },
     } as NextApiRequest
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -173,8 +175,10 @@ describe('POST /api/books/reject', () => {
     await handler(req, res)
 
     expect(res.status).toHaveBeenCalledWith(400)
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-      message: expect.any(String)
-    }))
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.any(String),
+      }),
+    )
   })
 })

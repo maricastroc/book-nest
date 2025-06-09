@@ -115,7 +115,7 @@ describe('PUT /api/books/[bookId]', () => {
     expect(prisma.book.update).toHaveBeenCalled()
   })
 
-  it("should return 403 if user tries to edit without being an ADMIN", async () => {
+  it('should return 403 if user tries to edit without being an ADMIN', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123', role: 'USER' },
     })
@@ -193,46 +193,46 @@ describe('PUT /api/books/[bookId]', () => {
   })
 
   it('should return 400 for invalid data', async () => {
-  ;(getServerSession as jest.Mock).mockResolvedValue({
-    user: { id: 'user-123', role: 'ADMIN' },
-  })
-  ;(prisma.book.findUnique as jest.Mock).mockResolvedValue({
-    id: 'book-1',
-    name: 'Old Book Name',
-    author: 'Old Author',
-    userId: 'user-123',
-    categories: [],
-  })
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'user-123', role: 'ADMIN' },
+    })
+    ;(prisma.book.findUnique as jest.Mock).mockResolvedValue({
+      id: 'book-1',
+      name: 'Old Book Name',
+      author: 'Old Author',
+      userId: 'user-123',
+      categories: [],
+    })
 
-  const json = jest.fn()
-  const status = jest.fn(() => ({ json }))
-  const res = { status } as any
-  const req = {
-    method: 'PUT',
-    query: { bookId: 'book-1' },
-  } as any
+    const json = jest.fn()
+    const status = jest.fn(() => ({ json }))
+    const res = { status } as any
+    const req = {
+      method: 'PUT',
+      query: { bookId: 'book-1' },
+    } as any
 
-      let resolveParse: (value?: unknown) => void
+    let resolveParse: (value?: unknown) => void
     const parseCompleted = new Promise((resolve) => {
       resolveParse = resolve
     })
 
-  const mockParse = jest.fn((req, callback) => {
-    process.nextTick(() => {
-      callback(
-        null,
-        {
-          name: [''],
-          author: ['A'],
-          totalPages: ['0'],
-        },
-        {},
-      )
-              resolveParse()
+    const mockParse = jest.fn((req, callback) => {
+      process.nextTick(() => {
+        callback(
+          null,
+          {
+            name: [''],
+            author: ['A'],
+            totalPages: ['0'],
+          },
+          {},
+        )
+        resolveParse()
+      })
     })
-  })
 
-;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
+    ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
       parse: mockParse,
     }))
 
@@ -240,59 +240,59 @@ describe('PUT /api/books/[bookId]', () => {
     await parseCompleted
     await new Promise(process.nextTick)
 
-  expect(status).toHaveBeenCalledWith(400)
-  expect(json).toHaveBeenCalledWith({
-    message: 'Validation error',
-    errors: expect.arrayContaining([
-      expect.stringContaining('Book name is required'),
-      expect.stringContaining('must be greater than zero'),
-    ]),
+    expect(status).toHaveBeenCalledWith(400)
+    expect(json).toHaveBeenCalledWith({
+      message: 'Validation error',
+      errors: expect.arrayContaining([
+        expect.stringContaining('Book name is required'),
+        expect.stringContaining('must be greater than zero'),
+      ]),
+    })
   })
-})
 
-it('should return 400 for invalid categories', async () => {
-  ;(getServerSession as jest.Mock).mockResolvedValue({
-    user: { id: 'user-123', role: 'ADMIN' },
-  })
-  ;(prisma.book.findUnique as jest.Mock).mockResolvedValue({
-    id: 'book-1',
-    name: 'Old Book Name',
-    author: 'Old Author',
-    userId: 'user-123',
-    categories: [],
-  })
-  ;(prisma.category.findMany as jest.Mock).mockResolvedValue([
-    { id: 'valid-cat' },
-  ])
+  it('should return 400 for invalid categories', async () => {
+    ;(getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'user-123', role: 'ADMIN' },
+    })
+    ;(prisma.book.findUnique as jest.Mock).mockResolvedValue({
+      id: 'book-1',
+      name: 'Old Book Name',
+      author: 'Old Author',
+      userId: 'user-123',
+      categories: [],
+    })
+    ;(prisma.category.findMany as jest.Mock).mockResolvedValue([
+      { id: 'valid-cat' },
+    ])
 
-  const json = jest.fn()
-  const status = jest.fn(() => ({ json }))
-  const res = { status } as any
-  const req = {
-    method: 'PUT',
-    query: { bookId: 'book-1' },
-  } as any
+    const json = jest.fn()
+    const status = jest.fn(() => ({ json }))
+    const res = { status } as any
+    const req = {
+      method: 'PUT',
+      query: { bookId: 'book-1' },
+    } as any
 
-        let resolveParse: (value?: unknown) => void
+    let resolveParse: (value?: unknown) => void
     const parseCompleted = new Promise((resolve) => {
       resolveParse = resolve
     })
 
-  const mockParse = jest.fn((req, callback) => {
-    process.nextTick(() => {
-      callback(
-        null,
-        {
-          name: ['Valid Name'],
-          author: ['Valid Author'],
-          categories: [JSON.stringify(['valid-cat', 'invalid-cat'])],
-        },
-        {},
-      )
-      resolveParse()
+    const mockParse = jest.fn((req, callback) => {
+      process.nextTick(() => {
+        callback(
+          null,
+          {
+            name: ['Valid Name'],
+            author: ['Valid Author'],
+            categories: [JSON.stringify(['valid-cat', 'invalid-cat'])],
+          },
+          {},
+        )
+        resolveParse()
+      })
     })
-  })
-;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
+    ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
       parse: mockParse,
     }))
 
@@ -300,9 +300,9 @@ it('should return 400 for invalid categories', async () => {
     await parseCompleted
     await new Promise(process.nextTick)
 
-  expect(status).toHaveBeenCalledWith(400)
-  expect(json).toHaveBeenCalledWith({
-    message: 'Some categories are invalid',
+    expect(status).toHaveBeenCalledWith(400)
+    expect(json).toHaveBeenCalledWith({
+      message: 'Some categories are invalid',
+    })
   })
-})
 })
