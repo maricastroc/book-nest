@@ -6,7 +6,14 @@ import {
   LogoAndLinksWrapper,
   Overlay,
 } from './styles'
-import { Binoculars, Books, ChartLineUp, User, Users } from 'phosphor-react'
+import {
+  Binoculars,
+  Books,
+  ChartLineUp,
+  FileText,
+  User,
+  Users,
+} from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '@/contexts/AppContext'
 import Image from 'next/image'
@@ -76,6 +83,14 @@ export function MobileSidebar({ onClose }: Props) {
                     label="Library"
                   />
                 </>
+              )}
+              {loggedUser?.role === 'ADMIN' && (
+                <NavigationItem
+                  active={router.pathname === '/submissions'}
+                  onClick={() => router.push('/submissions')}
+                  icon={FileText}
+                  label="Submissions"
+                />
               )}
             </ItemsContainer>
           </LogoAndLinksWrapper>
