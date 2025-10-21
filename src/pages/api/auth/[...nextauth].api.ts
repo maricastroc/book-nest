@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import NextAuth, { NextAuthOptions, User } from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import GithubProvider, { GithubProfile } from 'next-auth/providers/github'
 import { NextApiRequest, NextPageContext, NextApiResponse } from 'next'
@@ -47,8 +46,8 @@ export function buildNextAuthOptions(
         profile(profile: GithubProfile) {
           return {
             id: profile.id.toString(),
-            name: profile.name!,
-            email: profile.email!,
+            name: profile.name,
+            email: profile.email,
             avatarUrl: profile.avatar_url,
           }
         },
@@ -81,6 +80,7 @@ export function buildNextAuthOptions(
             id: user.id,
             name: user.name,
             email: user.email,
+            avatarUrl: user.avatarUrl,
           }
         },
       }),
@@ -91,12 +91,6 @@ export function buildNextAuthOptions(
           token.id = user.id
           token.name = user.name
           token.email = user.email
-          token.avatarUrl = (user as User & { avatarUrl: string }).avatarUrl
-          const dbUser = await prisma.user.findUnique({
-            where: { email: user.email! },
-          })
-
-          token.role = dbUser?.role
         }
         return token
       },
@@ -107,7 +101,7 @@ export function buildNextAuthOptions(
             name: token.name as string,
             email: token.email as string,
             avatarUrl: token.avatarUrl as string,
-            role: token.role as 'ADMIN' | 'USER',
+            role: 'USER',
           }
         }
         return session
