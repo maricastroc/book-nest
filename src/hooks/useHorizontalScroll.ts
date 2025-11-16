@@ -7,7 +7,7 @@ export const useHorizontalScroll = (containerRef: RefObject<HTMLElement>) => {
   const checkOverflow = useCallback(() => {
     if (containerRef.current) {
       const { scrollWidth, clientWidth } = containerRef.current
-      console.log('ScrollWidth:', scrollWidth, 'ClientWidth:', clientWidth) // Debug
+
       setIsOverflowing(scrollWidth > clientWidth)
     }
   }, [containerRef])

@@ -13,7 +13,7 @@ const gridBreakpoints: [number, number][] = [
   [640, 5],
   [530, 4],
   [380, 3],
-  [0, 3], // fallback
+  [0, 3],
 ]
 
 function getColumnsForWidth(width: number): number {

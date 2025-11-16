@@ -132,7 +132,7 @@ describe('API /api/ratings', () => {
 
   describe('PUT', () => {
     it('returns 400 if missing required fields', async () => {
-      const req = { method: 'PUT', body: { id: '1' } } as any // no rate
+      const req = { method: 'PUT', body: { id: '1' } } as any
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
       const res = { status } as any

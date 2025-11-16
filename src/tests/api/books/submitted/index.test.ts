@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth'
 import { NextApiRequest, NextApiResponse } from 'next'
 import handler from '@/pages/api/books/submitted/index.api'
 
-// ---- MOCKS ----
 jest.mock('@/lib/prisma', () => ({
   prisma: {
     user: {

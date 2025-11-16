@@ -141,7 +141,7 @@ export function RatingCardForm({
       onClose()
     }
   }
-  console.log(watch().rate)
+
   return (
     loggedUser &&
     (isValidatingReview ? (

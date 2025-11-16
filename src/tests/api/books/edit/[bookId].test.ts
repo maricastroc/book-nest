@@ -133,8 +133,6 @@ describe('PUT /api/books/[bookId]', () => {
     const res = { status } as any
     const req = { method: 'PUT', query: { bookId: 'book-1' } } as any
 
-    // NÃO USA parseCompleted AQUI — o handler retorna antes de chamar parse()
-
     const mockParse = jest.fn()
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
       parse: mockParse,
@@ -142,7 +140,6 @@ describe('PUT /api/books/[bookId]', () => {
 
     await handler(req, res)
 
-    // Como form.parse nunca deveria ser chamado:
     expect(mockParse).not.toHaveBeenCalled()
 
     expect(status).toHaveBeenCalledWith(403)

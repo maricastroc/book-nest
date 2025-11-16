@@ -44,7 +44,7 @@ export default function useRequest<Data = unknown, Error = unknown>(
     isValidating,
     mutate,
   } = useSWR<AxiosResponse<Data>, AxiosError<Error>>(
-    key, // <- chave estável
+    key,
     request ? () => api.request<Data>(request) : null,
     {
       ...config,

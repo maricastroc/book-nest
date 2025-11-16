@@ -95,7 +95,7 @@ describe('GET /api/your-endpoint', () => {
         readingStatus: expect.any(Object),
         OR: expect.any(Array),
       }),
-      skip: 5, // (page 2 - 1) * perPage 5 = 5
+      skip: 5,
       take: 5,
       orderBy: { name: 'asc' },
       select: expect.any(Object),

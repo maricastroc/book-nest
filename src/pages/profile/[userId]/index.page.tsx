@@ -70,11 +70,11 @@ export default function Profile() {
       setIsLateralMenuOpen={(value) => setIsLateralMenuOpen(value)}
       onUpdateBook={async () => {
         await mutateRatings()
-        mutateStatistics() // ← Atualiza estatísticas também
+        mutateStatistics()
       }}
       onUpdateRating={async () => {
         await mutateRatings()
-        mutateStatistics() // ← Atualiza estatísticas também
+        mutateStatistics()
       }}
       selectedBook={selectedBook}
     >

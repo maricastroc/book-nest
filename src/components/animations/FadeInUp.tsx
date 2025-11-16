@@ -1,4 +1,3 @@
-// src/components/animations/FadeInUp.tsx
 import { motion } from 'framer-motion'
 
 const fadeInUp = {
