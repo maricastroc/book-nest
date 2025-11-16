@@ -3,8 +3,12 @@ import handler from '@/pages/api/books/reject/index.api'
 import { getServerSession } from 'next-auth'
 import { NextApiRequest, NextApiResponse } from 'next'
 
+// ---- MOCKS ----
 jest.mock('@/lib/prisma', () => ({
   prisma: {
+    user: {
+      findUnique: jest.fn(),
+    },
     book: {
       update: jest.fn(),
     },
@@ -20,6 +24,7 @@ describe('POST /api/books/reject', () => {
     jest.clearAllMocks()
   })
 
+  // ------------------------------
   it('should return 401 if not authenticated', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue(null)
 
@@ -27,6 +32,7 @@ describe('POST /api/books/reject', () => {
       method: 'POST',
       body: {},
     } as NextApiRequest
+
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -40,15 +46,20 @@ describe('POST /api/books/reject', () => {
     })
   })
 
+  // ------------------------------
   it('should return 403 if user is not ADMIN', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'USER' },
+      user: { id: 'user-123' },
+    })
+    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+      role: 'USER',
     })
 
     const req = {
       method: 'POST',
       body: {},
     } as NextApiRequest
+
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -60,15 +71,20 @@ describe('POST /api/books/reject', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Access denied' })
   })
 
+  // ------------------------------
   it('should return 400 for invalid status', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'ADMIN' },
+      user: { id: 'user-123' },
+    })
+    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+      role: 'ADMIN',
     })
 
     const req = {
       method: 'POST',
-      body: { bookId: 'book-1', status: 'INVALID_STATUS' },
+      body: { bookId: 'book-1', status: 'INVALID' },
     } as NextApiRequest
+
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -80,11 +96,11 @@ describe('POST /api/books/reject', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Invalid status' })
   })
 
+  // ------------------------------
   it('should successfully reject a book', async () => {
     const mockSession = {
       user: {
         id: 'user-123',
-        role: 'ADMIN',
       },
     }
 
@@ -94,6 +110,9 @@ describe('POST /api/books/reject', () => {
     }
 
     ;(getServerSession as jest.Mock).mockResolvedValue(mockSession)
+    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+      role: 'ADMIN',
+    })
     ;(prisma.book.update as jest.Mock).mockResolvedValue(mockUpdatedBook)
 
     const req = {
@@ -120,9 +139,13 @@ describe('POST /api/books/reject', () => {
     })
   })
 
+  // ------------------------------
   it('should handle database errors', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'ADMIN' },
+      user: { id: 'user-123' },
+    })
+    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+      role: 'ADMIN',
     })
     ;(prisma.book.update as jest.Mock).mockRejectedValue(new Error('DB Error'))
 
@@ -144,12 +167,16 @@ describe('POST /api/books/reject', () => {
     })
   })
 
+  // ------------------------------
   it('should return 405 if method is not POST', async () => {
-    const req = { method: 'GET' } as NextApiRequest
+    const req = {
+      method: 'GET',
+    } as NextApiRequest
+
     const res = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
       end: jest.fn(),
+      json: jest.fn(),
     } as unknown as NextApiResponse
 
     await handler(req, res)
@@ -158,15 +185,20 @@ describe('POST /api/books/reject', () => {
     expect(res.end).toHaveBeenCalled()
   })
 
+  // ------------------------------
   it('should return 400 if bookId is missing', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
-      user: { role: 'ADMIN' },
+      user: { id: 'user-123' },
+    })
+    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+      role: 'ADMIN',
     })
 
     const req = {
       method: 'POST',
       body: { status: 'REJECTED' },
     } as NextApiRequest
+
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -177,7 +209,7 @@ describe('POST /api/books/reject', () => {
     expect(res.status).toHaveBeenCalledWith(400)
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: expect.any(String),
+        message: 'Book ID is required',
       }),
     )
   })
