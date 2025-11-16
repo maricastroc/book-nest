@@ -326,9 +326,9 @@ export function SubmitBookFormModal({
                       ? 'Approve Book'
                       : 'Submit New Book'
                   }
-                  onClick={async () => {
+                  onClick={async (e) => {
+                    e.preventDefault()
                     await handleSubmitBook(data)
-                    await mutate()
                   }}
                   disabled={isSubmitting || !isValidBook}
                   style={{ marginTop: '1rem' }}

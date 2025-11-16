@@ -23,13 +23,28 @@ export default async function handler(
 
   const { page = '1', perPage = '20' } = req.query
 
+  const userId = session.user.id
+
+  if (!userId || typeof userId !== 'string') {
+    return res.status(400).json({ message: 'User ID is required' })
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  })
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' })
+  }
+
+  if (user.role !== 'ADMIN') {
+    return res.status(403).json({ message: 'Access denied' })
+  }
+
   const pageNumber = Number(page)
   const itemsPerPage = Number(perPage)
   const skip = (pageNumber - 1) * itemsPerPage
-
-  if (session.user.role !== 'ADMIN') {
-    return res.status(403).json({ message: 'Access denied' })
-  }
 
   const totalBooks = await prisma.book.count({
     where: { status: 'PENDING' },
