@@ -14,7 +14,6 @@ import {
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import 'react-toastify/dist/ReactToastify.css'
 import { REVIEW_MAX_LENGTH, REVIEW_MIN_LENGTH } from '@/utils/constants'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
@@ -111,6 +110,7 @@ export function RatingCardForm({
       }
 
       const newRating = await handleCreateReview(payload)
+
       actions.updateUserRating?.(newRating)
       await actions.updateRating?.()
       onClose()
@@ -141,7 +141,7 @@ export function RatingCardForm({
       onClose()
     }
   }
-
+  console.log(watch().rate)
   return (
     loggedUser &&
     (isValidatingReview ? (
@@ -204,14 +204,6 @@ export function RatingCardForm({
               className="edit_icon"
               type="submit"
               disabled={isSubmitting}
-              onClick={() => {
-                if (isEdit) {
-                  editReview()
-                  return
-                }
-
-                submitReview()
-              }}
             >
               <Check />
             </ActionButton>

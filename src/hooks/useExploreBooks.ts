@@ -46,7 +46,9 @@ export function useExploreBooks() {
     },
     {
       revalidateOnFocus: false,
-      revalidateIfStale: false,
+      revalidateIfStale: true,
+      dedupingInterval: 20000,
+      focusThrottleInterval: 30000,
       keepPreviousData: true,
     },
   )

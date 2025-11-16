@@ -13,6 +13,7 @@ import { ReadingStatus, statuses } from '@/@types/reading-status'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import toast from 'react-hot-toast'
+import { useUserStatistics } from '@/hooks/useUserStatistics'
 
 interface DropdownMenuProps {
   isOpen: boolean
@@ -35,6 +36,8 @@ export const DropdownMenu = ({
 }: DropdownMenuProps) => {
   const { loggedUser } = useAppContext()
 
+  const { mutateStatistics } = useUserStatistics(String(loggedUser?.id))
+
   const handleSelectReadingStatus = async (
     book: BookProps,
     status: ReadingStatus,
@@ -48,6 +51,8 @@ export const DropdownMenu = ({
           bookId: book.id,
           status,
         })
+
+        mutateStatistics()
 
         toast.success('Status successfully updated!')
       } catch (error) {
@@ -69,6 +74,8 @@ export const DropdownMenu = ({
             bookId: book.id,
           },
         })
+
+        mutateStatistics()
 
         toast.success('Book removed from your library!')
         onUpdateStatus(null)
