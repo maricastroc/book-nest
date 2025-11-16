@@ -8,7 +8,7 @@ import { useRatings } from '@/contexts/RatingsContext'
 
 interface Props {
   rating: RatingProps
-  style?: React.CSSProperties // 👈 permite passar estilos inline
+  style?: React.CSSProperties
 }
 
 export const RatingVoteSection = ({ rating, style }: Props) => {

@@ -3,7 +3,6 @@ import handler from '@/pages/api/books/reject/index.api'
 import { getServerSession } from 'next-auth'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-// ---- MOCKS ----
 jest.mock('@/lib/prisma', () => ({
   prisma: {
     user: {
@@ -24,7 +23,6 @@ describe('POST /api/books/reject', () => {
     jest.clearAllMocks()
   })
 
-  // ------------------------------
   it('should return 401 if not authenticated', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue(null)
 
@@ -46,7 +44,6 @@ describe('POST /api/books/reject', () => {
     })
   })
 
-  // ------------------------------
   it('should return 403 if user is not ADMIN', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
@@ -71,7 +68,6 @@ describe('POST /api/books/reject', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Access denied' })
   })
 
-  // ------------------------------
   it('should return 400 for invalid status', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
@@ -96,7 +92,6 @@ describe('POST /api/books/reject', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Invalid status' })
   })
 
-  // ------------------------------
   it('should successfully reject a book', async () => {
     const mockSession = {
       user: {
@@ -139,7 +134,6 @@ describe('POST /api/books/reject', () => {
     })
   })
 
-  // ------------------------------
   it('should handle database errors', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
@@ -167,7 +161,6 @@ describe('POST /api/books/reject', () => {
     })
   })
 
-  // ------------------------------
   it('should return 405 if method is not POST', async () => {
     const req = {
       method: 'GET',
@@ -185,7 +178,6 @@ describe('POST /api/books/reject', () => {
     expect(res.end).toHaveBeenCalled()
   })
 
-  // ------------------------------
   it('should return 400 if bookId is missing', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },

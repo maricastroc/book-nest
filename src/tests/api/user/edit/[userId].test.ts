@@ -173,7 +173,7 @@ describe('PUT /api/users/edit', () => {
       id: 'user-1',
       name: 'Test User',
       email: 'test@example.com',
-      avatarUrl: null, // Avatar removido
+      avatarUrl: null,
     })
 
     let resolveParse: (value?: unknown) => void

@@ -193,7 +193,7 @@ describe('GET /api/profile/summary/[userId]', () => {
     expect(prisma.user.findUnique).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id: userId } }),
     )
-    expect(prisma.book.findMany).toHaveBeenCalledTimes(2) // 2 chamadas
+    expect(prisma.book.findMany).toHaveBeenCalledTimes(2)
 
     expect(getMostFrequentString).toHaveBeenCalledWith(
       expect.arrayContaining(['Fiction', 'Sci-Fi']),

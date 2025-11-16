@@ -15,15 +15,14 @@ export function useUserStatistics(userId: string | undefined) {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      revalidateIfStale: true, // ← IMPORTANTE: true
-      dedupingInterval: 60000, // 1 minuto
-      focusThrottleInterval: 300000, // 5 minutos
+      revalidateIfStale: true,
+      dedupingInterval: 60000,
+      focusThrottleInterval: 300000,
     },
   )
 
   const mutateStatistics = useCallback(() => {
     if (userId) {
-      // Isso SEMPRE vai recarregar com revalidateIfStale: true
       mutate(undefined, { revalidate: true })
     }
   }, [mutate, userId])
