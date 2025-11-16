@@ -50,6 +50,7 @@ export const CategoriesSection = ({
                 setCurrentPage(1)
                 setSelectedCategory(null)
               }}
+              disabled={!!isValidating}
             >
               All
             </SelectCategoryButton>
@@ -61,7 +62,7 @@ export const CategoriesSection = ({
                   setCurrentPage(1)
                   setSelectedCategory(category.id)
                 }}
-                className={isValidating ? 'loading' : ''}
+                disabled={!!isValidating}
               >
                 {category.name}
               </SelectCategoryButton>

@@ -69,6 +69,9 @@ export const useProfileRatings = (userId?: string) => {
     }
   }>(ratingsRequest, {
     revalidateOnFocus: false,
+    revalidateIfStale: true,
+    dedupingInterval: 20000,
+    focusThrottleInterval: 30000,
     keepPreviousData: true,
   })
 
