@@ -162,15 +162,17 @@ export function ProfileCard({
                       <TextBox description={rating.description} />
                     </>
                   ) : (
-                    <>
-                      <DividerLine />
-                      <EmptyCardContent
-                        onClick={() => setIsEditUserReviewCardOpen(true)}
-                      >
-                        Add your Review
-                        <Plus />
-                      </EmptyCardContent>
-                    </>
+                    loggedUser?.id === rating.userId && (
+                      <>
+                        <DividerLine />
+                        <EmptyCardContent
+                          onClick={() => setIsEditUserReviewCardOpen(true)}
+                        >
+                          Add your Review
+                          <Plus />
+                        </EmptyCardContent>
+                      </>
+                    )
                   ))}
                 {isFromLoggedUser && (
                   <ArchivedWarning

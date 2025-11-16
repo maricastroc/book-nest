@@ -76,7 +76,11 @@ export default function Users() {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      revalidateIfStale: false,
+      revalidateOnMount: false,
       keepPreviousData: true,
+      dedupingInterval: 60000,
+      focusThrottleInterval: 60000,
     },
   )
 
