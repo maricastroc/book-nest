@@ -19,7 +19,18 @@ export default async function handler(
     return res.status(401).json({ message: 'Authentication required' })
   }
 
-  if (session.user.role !== 'ADMIN') {
+  const userId = String(session.user.id)
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  })
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' })
+  }
+
+  if (user.role !== 'ADMIN') {
     return res.status(403).json({ message: 'Access denied' })
   }
 

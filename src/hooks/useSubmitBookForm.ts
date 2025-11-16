@@ -62,12 +62,14 @@ interface UseSubmitBookFormProps {
   book?: BookProps | null
   onClose: () => void
   onUpdateBook?: (book: BookProps) => void
+  mutate?: any
 }
 
 export function useSubmitBookForm({
   isEdit,
   book,
   onClose,
+  mutate,
 }: UseSubmitBookFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
@@ -249,7 +251,9 @@ export function useSubmitBookForm({
       })
 
       toast.success(response.data.message)
+      await mutate?.()
 
+      reset()
       onClose()
     } catch (error) {
       handleApiError(error)

@@ -89,9 +89,18 @@ export const SubmittedBooksContent = styled('div', {
   justifyContent: 'flex-start',
   overflowX: 'scroll',
 
+  '& > *:only-child': {
+    width: '100%',
+    flex: '0 0 100%',
+  },
+
   '@media (min-width: 1200px)': {
     display: 'grid',
     gridTemplateColumns: '1fr',
+
+    '& > *:only-child': {
+      gridColumn: '1 / -1',
+    },
   },
 
   '@media (min-width: 1900px)': {
@@ -110,7 +119,7 @@ export const EmptyBooksContainer = styled('div', {
   height: '18rem',
   backgroundColor: 'transparent',
   borderRadius: 8,
-  width: '100%',
+  minWidth: '100%',
   border: 'dashed 1px $gray400',
 
   svg: {

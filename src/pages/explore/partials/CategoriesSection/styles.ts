@@ -41,12 +41,10 @@ export const SelectCategoryButton = styled('button', {
   },
 
   '&:disabled': {
-    cursor: 'not-allowed',
-    pointerEvents: 'none',
-    backgroundColor: '$gray400',
-    border: 'solid 1px $gray400',
-    color: '$white',
-    opacity: 0.7,
+    backgroundColor: '$blue600',
+    border: 'solid 1px $blue600',
+    color: '$gray100',
+    cursor: 'not-allowed !important',
   },
 
   variants: {

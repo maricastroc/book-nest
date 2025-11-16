@@ -14,7 +14,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { REVIEW_MAX_LENGTH, REVIEW_MIN_LENGTH } from '@/utils/constants'
+import { REVIEW_MAX_LENGTH } from '@/utils/constants'
 import { RatingProps } from '@/@types/rating'
 import { Avatar } from '@/components/shared/Avatar'
 import { useAppContext } from '@/contexts/AppContext'
@@ -173,8 +173,6 @@ export function RatingCardForm({
         <ReviewFormWrapper>
           <ReviewForm
             placeholder="Write your review here"
-            maxLength={REVIEW_MAX_LENGTH}
-            minLength={REVIEW_MIN_LENGTH}
             spellCheck={false}
             {...register('description')}
           />
