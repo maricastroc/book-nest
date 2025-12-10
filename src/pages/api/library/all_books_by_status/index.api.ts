@@ -11,7 +11,7 @@ export default async function handler(
   }
 
   const { userId, status, page = '1', perPage = '10' } = req.query
-
+  console.log(status)
   if (!userId || !status) {
     return res.status(400).json({ message: 'userId and status are required' })
   }
@@ -26,30 +26,38 @@ export default async function handler(
   const itemsPerPage = Number(perPage)
   const skip = (pageNumber - 1) * itemsPerPage
 
+  const normalizeStatus = (status: string) =>
+    status.replace(/\s+|_/g, '').toLowerCase()
+
+  const STATUS_MAP: Record<string, string> = {
+    wanttoread: 'wantToRead',
+    reading: 'reading',
+    read: 'read',
+    didnotfinish: 'didNotFinish',
+  }
+
+  const normalizedStatus = normalizeStatus(String(status))
+  const prismaStatus = STATUS_MAP[normalizedStatus]
+
+  if (!prismaStatus) {
+    return res.status(400).json({ message: 'Invalid status' })
+  }
+
   const whereCondition: Prisma.BookWhereInput = {
     status: 'APPROVED',
     readingStatus: {
       some: {
         userId: String(userId),
-        status: {
-          equals: status as string,
-          mode: 'insensitive',
-        },
+        status: prismaStatus,
       },
     },
     ...(searchQuery && {
       OR: [
         {
-          name: {
-            contains: searchQuery,
-            mode: 'insensitive',
-          },
+          name: { contains: searchQuery, mode: 'insensitive' },
         },
         {
-          author: {
-            contains: searchQuery,
-            mode: 'insensitive',
-          },
+          author: { contains: searchQuery, mode: 'insensitive' },
         },
       ],
     }),

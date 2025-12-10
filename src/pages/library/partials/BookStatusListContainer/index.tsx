@@ -58,7 +58,7 @@ export function BookStatusListContainer({
       setBooksByStatus(booksByStatusData.booksByStatus)
     }
   }, [booksByStatusData])
-
+  console.log(booksByStatusData)
   useEffect(() => {
     mutate()
   }, [refreshKey])
