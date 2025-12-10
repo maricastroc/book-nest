@@ -88,8 +88,13 @@ export function MenuBookCard({
                 <p>{updatedBook?.rate?.toFixed(2) ?? '0.00'}</p>
               </BookRatingInfo>
               <p>
-                (<span>{updatedBook?.ratings?.length ?? 0}</span> {''}
-                {updatedBook?.ratings?.length === 1 ? 'rating' : 'ratings'})
+                (
+                <span>
+                  {(updatedBook?.ratings?.length ?? 0) +
+                    (updatedBook?.userRating ? 1 : 0)}
+                </span>
+                {''}
+                {updatedBook?.ratings?.length === 1 ? ' rating' : ' ratings'})
               </p>
             </BookRatingAndReviews>
             <AddToLibrarySection>
