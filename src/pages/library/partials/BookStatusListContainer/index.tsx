@@ -53,7 +53,13 @@ export function BookStatusListContainer({
     data: booksByStatusData,
     mutate,
     isValidating: isValidatingBooksByStatusData,
-  } = useRequest<{ booksByStatus: BooksByStatusProps }>(booksByStatusRequest)
+  } = useRequest<{ booksByStatus: BooksByStatusProps }>(booksByStatusRequest, {
+    revalidateOnFocus: false,
+    revalidateIfStale: true,
+    dedupingInterval: 20000,
+    focusThrottleInterval: 30000,
+    keepPreviousData: true,
+  })
 
   useEffect(() => {
     if (booksByStatusData) {

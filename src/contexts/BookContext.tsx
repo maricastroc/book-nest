@@ -71,13 +71,25 @@ export function BookProvider({
     data: book,
     mutate: mutateBookData,
     isValidating: isValidatingBookData,
-  } = useRequest<BookProps | null>(bookRequest)
+  } = useRequest<BookProps | null>(bookRequest, {
+    revalidateOnFocus: false,
+    revalidateIfStale: true,
+    dedupingInterval: 20000,
+    focusThrottleInterval: 30000,
+    keepPreviousData: true,
+  })
 
   const {
     data: userRatingData,
     mutate: mutateUserRating,
     isValidating: isValidatingUserRating,
-  } = useRequest<RatingProps | undefined>(userRequest)
+  } = useRequest<RatingProps | undefined>(userRequest, {
+    revalidateOnFocus: false,
+    revalidateIfStale: true,
+    dedupingInterval: 20000,
+    focusThrottleInterval: 30000,
+    keepPreviousData: true,
+  })
 
   const [isStatusUpdating, setIsStatusUpdating] = useState(false)
 

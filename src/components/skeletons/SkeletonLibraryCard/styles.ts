@@ -1,7 +1,7 @@
 import { styled } from '@/styles'
 
 export const Container = styled('div', {
-  cursor: 'pointer',
+  cursor: 'not-allowed',
   display: 'flex',
   flexDirection: 'column',
   borderRadius: 8,
