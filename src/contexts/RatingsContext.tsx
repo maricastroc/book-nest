@@ -32,10 +32,13 @@ export function RatingsProvider({ children }: { children: React.ReactNode }) {
     groupKey: string,
     initialRatings: RatingProps[],
   ) => {
-    setRatingGroups((prev) => ({
-      ...prev,
-      [groupKey]: initialRatings,
-    }))
+    setRatingGroups((prev) => {
+      if (prev[groupKey]) return prev // ✅ NÃO sobrescreve
+      return {
+        ...prev,
+        [groupKey]: initialRatings,
+      }
+    })
   }
 
   const updateRating = (ratingId: string, updatedRating: RatingProps) => {

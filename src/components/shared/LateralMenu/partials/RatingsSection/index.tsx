@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RatingsList, RatingsListHeader, RatingsWrapper } from './styles'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 import { RatingCardForm } from '@/components/shared/RatingCardForm'
@@ -11,6 +11,7 @@ import { FadeInItem } from '@/components/animations/FadeInItem'
 import { useAppContext } from '@/contexts/AppContext'
 import { useBookContext } from '@/contexts/BookContext'
 import { BookProps } from '@/@types/book'
+import { useRatings } from '@/contexts/RatingsContext'
 
 interface Props {
   isValidatingStatus: boolean
@@ -27,6 +28,8 @@ export const RatingsSection = ({
 
   const { loggedUser, isValidatingReview } = useAppContext()
 
+  const { registerRatingGroup } = useRatings()
+
   const { userRating, bookData } = useBookContext()
 
   const shouldShowEmpty =
@@ -41,6 +44,12 @@ export const RatingsSection = ({
     bookData.book && (bookData.ratings?.length || !!userRating.rating)
 
   const canUserReview = !!loggedUser && !userRating.rating
+
+  useEffect(() => {
+    if (bookData.ratings?.length) {
+      registerRatingGroup('book', bookData.ratings)
+    }
+  }, [bookData.ratings, registerRatingGroup])
 
   return (
     <RatingsWrapper>
