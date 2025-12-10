@@ -31,6 +31,7 @@ interface Props {
     value: 'read' | 'reading' | 'wantToRead' | 'didNotFinish' | null,
   ) => void
   setSelectedLabel: (value: string | null) => void
+  onTriggerRefresh: () => void
 }
 
 export const BooksGridByStatus = ({
@@ -40,6 +41,7 @@ export const BooksGridByStatus = ({
   refreshKey,
   setSelectedLabel,
   setSelectedStatus,
+  onTriggerRefresh,
 }: Props) => {
   const gridRef = useRef<HTMLDivElement>(null)
 
@@ -116,9 +118,11 @@ export const BooksGridByStatus = ({
           bookId={selectedBook.id}
           onUpdateBook={async () => {
             await mutate()
+            onTriggerRefresh()
           }}
           onUpdateRating={async () => {
             await mutate()
+            onTriggerRefresh()
           }}
         >
           <LateralMenu onClose={() => setOpenLateralMenu(false)} />

@@ -46,7 +46,11 @@ export default function Library() {
       pageTitle={libraryTitle}
     >
       <UserLibraryContent>
-        <BookStatusListContainer refreshKey={refreshKey} userInfo={userInfo} />
+        <BookStatusListContainer
+          onTriggerRefresh={triggerRefresh}
+          refreshKey={refreshKey}
+          userInfo={userInfo}
+        />
         <SubmittedBooksContainer>
           <SubmittedBooksSection
             userInfo={userInfo}
