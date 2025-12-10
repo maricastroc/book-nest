@@ -11,7 +11,7 @@ export default async function handler(
   }
 
   const { userId, status, page = '1', perPage = '10' } = req.query
-  console.log(status)
+
   if (!userId || !status) {
     return res.status(400).json({ message: 'userId and status are required' })
   }

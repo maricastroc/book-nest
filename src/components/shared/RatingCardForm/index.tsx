@@ -89,7 +89,7 @@ export function RatingCardForm({
     isValidatingReview,
   } = useAppContext()
 
-  const { actions } = useBookContext()
+  const { actions, bookData } = useBookContext()
 
   const handleRating = (rate: number) => {
     setValue('rate', rate)
@@ -111,8 +111,14 @@ export function RatingCardForm({
 
       const newRating = await handleCreateReview(payload)
 
-      actions.updateUserRating?.(newRating)
-      await actions.updateRating?.()
+      await Promise.all([
+        actions.updateUserRating?.(newRating),
+        actions.updateRating?.(),
+      ])
+
+      if (rating?.rate !== data.rate) {
+        await bookData.mutate()
+      }
       onClose()
     }
   }
@@ -138,6 +144,7 @@ export function RatingCardForm({
       const updatedRating = await handleEditReview(payload)
       actions.updateUserRating?.(updatedRating)
       await actions.updateRating?.()
+      await bookData.mutate()
       onClose()
     }
   }
