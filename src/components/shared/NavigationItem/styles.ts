@@ -55,11 +55,6 @@ export const NavButton = styled('button', {
     },
   },
 
-  '&:focus': {
-    boxShadow: 'none',
-    outline: 'none',
-  },
-
   variants: {
     active: {
       true: {
