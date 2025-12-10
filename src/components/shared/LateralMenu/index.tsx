@@ -34,7 +34,7 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
     useState(false)
 
   const { bookData, status } = useBookContext()
-
+  console.log(bookData)
   const isLoadingInitial =
     (bookData.book === null || bookData.book === undefined) &&
     bookData.isValidating

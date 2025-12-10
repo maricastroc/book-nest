@@ -111,17 +111,14 @@ export function RatingCardForm({
 
       const newRating = await handleCreateReview(payload)
 
-      await Promise.all([
-        actions.updateUserRating?.(newRating),
-        actions.updateRating?.(),
-      ])
+      actions.updateUserRating?.(newRating)
+      await actions.updateRating?.()
+      await bookData.mutate()
 
-      if (rating?.rate !== data.rate) {
-        await bookData.mutate()
-      }
       onClose()
     }
   }
+  console.log(bookData)
 
   async function editReview() {
     if (
@@ -144,7 +141,10 @@ export function RatingCardForm({
       const updatedRating = await handleEditReview(payload)
       actions.updateUserRating?.(updatedRating)
       await actions.updateRating?.()
-      await bookData.mutate()
+
+      if (rating?.rate !== data.rate) {
+        await bookData.mutate()
+      }
       onClose()
     }
   }
