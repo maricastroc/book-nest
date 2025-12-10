@@ -26,6 +26,7 @@ import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
 import { useBookContext } from '@/contexts/BookContext'
 import { RatingVoteSection } from '@/components/shared/RatingVoteSection'
+import { useRatings } from '@/contexts/RatingsContext'
 
 interface UserRatingBoxProps {
   rating: RatingProps
@@ -34,6 +35,10 @@ interface UserRatingBoxProps {
 
 export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
   const router = useRouter()
+
+  const { getRating } = useRatings()
+
+  const currentRating = getRating(rating.id) || rating
 
   const { dateFormatted, dateRelativeToNow, dateString } =
     getDateFormattedAndRelative(rating.createdAt)
@@ -69,7 +74,7 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
   ) : openEditReviewBox ? (
     <RatingCardForm
       isEdit
-      rating={rating}
+      rating={currentRating}
       book={book}
       onClose={() => setOpenEditReviewBox(false)}
     />
@@ -82,24 +87,24 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
               <Avatar
                 isClickable
                 variant="regular"
-                avatarUrl={rating.user?.avatarUrl}
+                avatarUrl={currentRating.user?.avatarUrl}
                 onClick={() => {
-                  router.push(`/profile/${rating.userId}`)
+                  router.push(`/profile/${currentRating.userId}`)
                 }}
               />
               <UserNameDateWrapper>
-                <p>{rating.user.name}</p>
+                <p>{currentRating.user.name}</p>
                 <time title={dateFormatted} dateTime={dateString}>
                   {dateRelativeToNow}
                 </time>
               </UserNameDateWrapper>
             </UserDetailsWrapper>
             <UserRatingAndActionsWrapper>
-              {!isMobile && <StarsRating rating={rating.rate} />}
+              {!isMobile && <StarsRating rating={currentRating.rate} />}
               {isFromLoggedUser && (
                 <DropdownActions
                   variant="secondary"
-                  ratingId={rating.id}
+                  ratingId={currentRating.id}
                   dropdownRef={dropdownRef}
                   buttonRef={buttonRef}
                   onToggleEditSection={(value) => setOpenEditReviewBox(value)}
@@ -117,7 +122,7 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
           </UserRatingBoxHeader>
           {isMobile && (
             <StarsRatingWrapper>
-              <StarsRating rating={rating.rate} />
+              <StarsRating rating={currentRating.rate} />
             </StarsRatingWrapper>
           )}
           {openEditReviewBox ? (
@@ -126,13 +131,13 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
               onClose={() => setOpenEditReviewBox(false)}
             />
           ) : (
-            <TextBox description={rating.description ?? ''} />
+            <TextBox description={currentRating.description ?? ''} />
           )}
-          {isFromLoggedUser && rating.deletedAt !== null && (
+          {isFromLoggedUser && currentRating.deletedAt !== null && (
             <ArchivedWarning activeStatus={status.active || null} />
           )}
 
-          <RatingVoteSection rating={rating} />
+          <RatingVoteSection rating={currentRating} />
         </UserRatingBoxContent>
       </UserRatingBoxWrapper>
     </>

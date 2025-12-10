@@ -88,6 +88,12 @@ export function BookProvider({
   const { registerRatingGroup } = useRatings()
 
   useEffect(() => {
+    if (book?.ratings?.length && book?.id) {
+      registerRatingGroup(`book-${book.id}`, book.ratings)
+    }
+  }, [book?.ratings, book?.id, registerRatingGroup])
+
+  useEffect(() => {
     setUserRating(userRatingData || null)
   }, [userRatingData])
 

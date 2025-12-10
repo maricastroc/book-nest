@@ -5,6 +5,7 @@ import { api } from '@/lib/axios'
 import { handleApiError } from '@/utils/handleApiError'
 import { useSession } from 'next-auth/react'
 import { useRatings } from '@/contexts/RatingsContext'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface Props {
   rating: RatingProps
@@ -13,6 +14,9 @@ interface Props {
 
 export const RatingVoteSection = ({ rating, style }: Props) => {
   const { updateRating, getRating } = useRatings()
+
+  const { bookData } = useBookContext()
+
   const { data: session } = useSession()
 
   const currentRating = getRating(rating.id) || rating
@@ -50,6 +54,8 @@ export const RatingVoteSection = ({ rating, style }: Props) => {
       })
 
       await api.post('/ratings/vote', { ratingId: rating.id, type })
+
+      await bookData?.mutate()
     } catch (error) {
       updateRating(rating.id, currentRating)
       handleApiError(error)
