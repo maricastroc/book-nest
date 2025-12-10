@@ -31,6 +31,16 @@ export const globalStyles = globalCss({
       },
     },
 
+    button: {
+      colorScheme: 'dark !important',
+
+      '&:focus': {
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+        outlineColor: '$green100',
+      },
+    },
+
     '*::-webkit-scrollbar': {
       width: 2,
       height: 2,

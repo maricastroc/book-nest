@@ -118,7 +118,6 @@ export function RatingCardForm({
       onClose()
     }
   }
-  console.log(bookData)
 
   async function editReview() {
     if (
