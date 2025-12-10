@@ -1,7 +1,8 @@
 import { ImgHTMLAttributes } from 'react'
-import { AvatarContainer, AvatarDefault } from './styles'
+import { AvatarContainer } from './styles'
 import { CircularProgress } from '@mui/material'
 import AvatarDefaultImage from '../../../../public/assets/avatar_mockup.png'
+import Image from 'next/image'
 
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
   avatarUrl?: string | null
@@ -26,9 +27,13 @@ export function Avatar({
       style={{ cursor: isClickable ? 'pointer' : 'default' }}
       onClick={isClickable && onClick ? onClick : undefined}
     >
-      <AvatarDefault
+      <Image
+        priority
+        width={50}
+        height={50}
         className={`${variant} ${isClickable && 'clickable'}`}
         src={avatarUrl || AvatarDefaultImage.src}
+        alt="User Profile Photo"
       />
     </AvatarContainer>
   )
