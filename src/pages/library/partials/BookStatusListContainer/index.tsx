@@ -17,11 +17,13 @@ import { BookProvider } from '@/contexts/BookContext'
 interface BookStatusListContainerProps {
   userInfo: UserProps | null
   refreshKey: number
+  onTriggerRefresh: () => void
 }
 
 export function BookStatusListContainer({
   userInfo,
   refreshKey,
+  onTriggerRefresh,
 }: BookStatusListContainerProps) {
   const { loggedUser } = useAppContext()
 
@@ -58,7 +60,7 @@ export function BookStatusListContainer({
       setBooksByStatus(booksByStatusData.booksByStatus)
     }
   }, [booksByStatusData])
-  console.log(booksByStatusData)
+
   useEffect(() => {
     mutate()
   }, [refreshKey])
@@ -71,6 +73,7 @@ export function BookStatusListContainer({
       selectedStatus={selectedStatus}
       userId={userInfo?.id as string}
       refreshKey={refreshKey}
+      onTriggerRefresh={onTriggerRefresh}
     />
   ) : (
     <Container>
@@ -79,9 +82,11 @@ export function BookStatusListContainer({
           bookId={selectedBook.id}
           onUpdateBook={async () => {
             await mutate()
+            onTriggerRefresh()
           }}
           onUpdateRating={async () => {
             await mutate()
+            onTriggerRefresh()
           }}
         >
           <LateralMenu onClose={() => setIsLateralMenuOpen(false)} />
