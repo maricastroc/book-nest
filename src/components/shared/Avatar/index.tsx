@@ -28,7 +28,6 @@ export function Avatar({
       onClick={isClickable && onClick ? onClick : undefined}
     >
       <Image
-        priority
         width={50}
         height={50}
         className={`${variant} ${isClickable && 'clickable'}`}
