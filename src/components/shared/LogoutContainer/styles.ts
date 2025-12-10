@@ -26,15 +26,22 @@ export const LogoutContent = styled('div', {
     '&.login': {
       color: '$green100',
     },
-
-    '&:hover': {
-      filter: 'brightness(1.4)',
-      transition: '200ms all',
-    },
   },
 
   p: {
     fontSize: '0.95rem',
     color: '$gray100',
+  },
+
+  '&:hover': {
+    svg: {
+      filter: 'brightness(1.4)',
+      transition: '200ms all',
+    },
+
+    p: {
+      filter: 'brightness(1.4)',
+      transition: '200ms all',
+    },
   },
 })

@@ -14,6 +14,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import toast from 'react-hot-toast'
 import { useUserStatistics } from '@/hooks/useUserStatistics'
+import { useBookContext } from '@/contexts/BookContext'
 
 interface DropdownMenuProps {
   isOpen: boolean
@@ -36,6 +37,8 @@ export const DropdownMenu = ({
 }: DropdownMenuProps) => {
   const { loggedUser } = useAppContext()
 
+  const { actions } = useBookContext()
+
   const { mutateStatistics } = useUserStatistics(String(loggedUser?.id))
 
   const handleSelectReadingStatus = async (
@@ -53,6 +56,7 @@ export const DropdownMenu = ({
         })
 
         mutateStatistics()
+        await actions.updateRating?.()
 
         toast.success('Status successfully updated!')
       } catch (error) {
