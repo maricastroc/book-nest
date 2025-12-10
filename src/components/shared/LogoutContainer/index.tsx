@@ -21,20 +21,18 @@ export const LogoutContainer = () => {
   return (
     <LogoutWrapper>
       <Avatar
-        isClickable
         isLoading={isValidatingLoggedUser}
         avatarUrl={loggedUser?.avatarUrl}
-        onClick={() => {
-          const currentPath = router.asPath
-
-          const targetPath = currentPath.includes('/profile/')
-            ? `/profile/${loggedUser?.id}`
-            : `/profile/${loggedUser?.id}`
-
-          router.push(targetPath)
-        }}
       />
-      <LogoutContent>
+      <LogoutContent
+        onClick={() => {
+          if (loggedUser) {
+            handleLogout()
+          } else {
+            router.push('/')
+          }
+        }}
+      >
         <p>
           {isValidatingLoggedUser
             ? 'Loading...'
@@ -44,9 +42,9 @@ export const LogoutContainer = () => {
         </p>
         {!isValidatingLoggedUser &&
           (loggedUser ? (
-            <SignOut className="logout" onClick={handleLogout} />
+            <SignOut className="logout" />
           ) : (
-            <SignIn className="login" onClick={() => router.push('/')} />
+            <SignIn className="login" />
           ))}
       </LogoutContent>
     </LogoutWrapper>
