@@ -53,7 +53,11 @@ export default function Home() {
       }
     : null
 
-  const { data: popularBooks } = useRequest<BookProps[]>({
+  const {
+    data: popularBooks,
+    mutate: mutatePopularBooks,
+    isValidating: isValidatingPopularBooks,
+  } = useRequest<BookProps[]>({
     url: '/books/popular',
     method: 'GET',
   })
@@ -120,7 +124,7 @@ export default function Home() {
   }
 
   const renderPopularBooks = () => {
-    if (!updatedPopularBooks?.length) {
+    if (!updatedPopularBooks?.length || isValidatingPopularBooks) {
       return Array.from({ length: 12 }).map((_, index) => (
         <SkeletonBookCard key={index} />
       ))
@@ -167,6 +171,7 @@ export default function Home() {
       onUpdateBook={handleUpdatePopularBooks}
       onUpdateRating={async () => {
         await mutateUserLatestRating()
+        await mutatePopularBooks()
       }}
     >
       <HomePageContent>

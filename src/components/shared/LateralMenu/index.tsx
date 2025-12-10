@@ -65,7 +65,7 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
               </Dialog.Root>
             )}
 
-            {isValidatingStatus ? (
+            {isValidatingStatus || bookData.isValidating ? (
               <SkeletonMenuBookCard />
             ) : bookData.book ? (
               <MenuBookCard
