@@ -61,6 +61,7 @@ export const StyledButton = styled('button', {
         backgroundColor: '$gray100',
         border: '1px solid $gray100',
         transition: 'all 200ms ease',
+        color: '$gray800',
 
         '&:not(:disabled):hover': {
           color: '$gray100',
