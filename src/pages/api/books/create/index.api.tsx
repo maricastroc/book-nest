@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { IncomingForm } from 'formidable'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
@@ -56,22 +57,6 @@ export default async function handler(
       const coverSource = getSingleString(fields.coverSource)
       const coverFile = files.coverUrl?.[0]
       const coverUrlFromOpenLibrary = fields.coverUrl?.[0]
-
-      const existingBook = await prisma.book.findFirst({
-        where: {
-          OR: [{ isbn }, { name, author }],
-        },
-      })
-
-      if (existingBook) {
-        return res.status(400).json({
-          message: 'This book already exists in our platform',
-          existingBook: {
-            id: existingBook.id,
-            name: existingBook.name,
-          },
-        })
-      }
 
       const createBookSchema = z.object({
         name: z.string().min(1, { message: 'Book name is required.' }),
@@ -167,6 +152,14 @@ export default async function handler(
 
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors[0].message })
+      }
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        return res
+          .status(400)
+          .json({ message: 'This book already exists in our platform' })
       }
       return res.status(500).json({
         message:

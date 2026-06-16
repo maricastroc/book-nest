@@ -103,6 +103,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       return response.data.rating
     } catch (error) {
       handleApiError(error)
+      throw error
     } finally {
       setIsValidatingReview(false)
     }
@@ -119,6 +120,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       return response.data.rating
     } catch (error) {
       handleApiError(error)
+      throw error
     } finally {
       setIsValidatingReview(false)
     }

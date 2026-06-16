@@ -290,6 +290,8 @@ export function useSubmitBookForm({
   }, [loggedUser])
 
   useEffect(() => {
+    let isMounted = true
+
     const fillInputs = async () => {
       if (isEdit && book) {
         setValue('author', book.author)
@@ -298,13 +300,17 @@ export function useSubmitBookForm({
         setValue('publisher', book.publisher || '')
         setValue('language', book.language || '')
         setValue('isbn', book.isbn || '')
+
+        if (!isMounted) return
         setIsValidBook(true)
 
         if (await checkImageExists(book.coverUrl)) {
+          if (!isMounted) return
           setCoverPreview(book.coverUrl)
-          setValue('coverUrl', book.coverUrl)
           setValue('coverUrl', book.coverUrl || '')
         }
+
+        if (!isMounted) return
 
         if (book.publishingYear)
           setValue('publishingYear', book.publishingYear.toString())
@@ -322,6 +328,10 @@ export function useSubmitBookForm({
     }
 
     fillInputs()
+
+    return () => {
+      isMounted = false
+    }
   }, [isEdit, book])
 
   useEffect(() => {
