@@ -77,6 +77,8 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const latestRatings = ratingsRaw.map((r) => ({
     ...r,
     createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt?.toISOString() ?? null,
+    deletedAt: r.deletedAt?.toISOString() ?? null,
     votes: {
       up: r.votes.filter((v) => v.type === 'UP').length,
       down: r.votes.filter((v) => v.type === 'DOWN').length,
@@ -85,6 +87,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
     user: {
       ...r.user,
       createdAt: r.user.createdAt.toISOString(),
+      updatedAt: r.user.updatedAt?.toISOString() ?? null,
     },
   }))
 
