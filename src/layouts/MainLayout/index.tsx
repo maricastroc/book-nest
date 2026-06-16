@@ -1,10 +1,15 @@
 import { ReactNode } from 'react'
+import dynamic from 'next/dynamic'
 import { NextSeo } from 'next-seo'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { Sidebar } from '@/components/shared/Sidebar'
-import { LateralMenu } from '@/components/shared/LateralMenu'
 import { LoadingPage } from '@/components/shared/LoadingPage'
+
+const LateralMenu = dynamic(
+  () => import('@/components/shared/LateralMenu').then((m) => m.LateralMenu),
+  { ssr: false },
+)
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { BookProvider } from '@/contexts/BookContext'
 import { BookProps } from '@/@types/book'

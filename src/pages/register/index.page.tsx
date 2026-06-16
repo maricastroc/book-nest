@@ -46,7 +46,7 @@ export default function Register() {
         ) : (
           <Container>
             <LogoWrapper>
-              <Image alt="BookWise" src={Logo} />
+              <Image alt="BookWise" src={Logo} width={116} height={29} />
             </LogoWrapper>
             <SignUpForm />
           </Container>

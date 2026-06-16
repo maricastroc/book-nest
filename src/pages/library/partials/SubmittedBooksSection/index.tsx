@@ -14,7 +14,13 @@ import {
   UserProfileInfo,
 } from './styles'
 
-import { SubmitBookFormModal } from '../SubmitBookFormModal'
+import dynamic from 'next/dynamic'
+
+const SubmitBookFormModal = dynamic(
+  () =>
+    import('../SubmitBookFormModal').then((m) => m.SubmitBookFormModal),
+  { ssr: false },
+)
 import { Avatar } from '@/components/shared/Avatar'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { ScrollableSection } from '@/components/shared/ScrollableSection'

@@ -8,6 +8,8 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'avatars.githubusercontent.com',
       'github.com',
+      'covers.openlibrary.org',
+      'books.google.com',
     ],
   },
 }

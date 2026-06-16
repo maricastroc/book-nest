@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import dynamic from 'next/dynamic'
 import * as Dialog from '@radix-ui/react-dialog'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
@@ -10,8 +11,15 @@ import {
   UserStatItem,
 } from './styles'
 import { Avatar } from '../../../../components/shared/Avatar'
-import { EditProfileModal } from '../../../../components/modals/EditProfileModal'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
+
+const EditProfileModal = dynamic(
+  () =>
+    import('../../../../components/modals/EditProfileModal').then(
+      (m) => m.EditProfileModal,
+    ),
+  { ssr: false },
+)
 import { BookOpen, BookmarkSimple, Books, UserList } from 'phosphor-react'
 import { useRouter } from 'next/router'
 import { Button } from '@/components/core/Button'
