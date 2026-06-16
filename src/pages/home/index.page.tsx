@@ -49,8 +49,18 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       where: { deletedAt: null, NOT: { description: '' } },
       orderBy: { createdAt: 'desc' },
       include: {
-        book: { select: { id: true, name: true, author: true, coverUrl: true } },
-        user: { select: { id: true, name: true, avatarUrl: true, email: true, createdAt: true } },
+        book: {
+          select: { id: true, name: true, author: true, coverUrl: true },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatarUrl: true,
+            email: true,
+            createdAt: true,
+          },
+        },
         votes: true,
       },
       take: 5,
@@ -63,7 +73,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       ratingCount > 0
         ? book.ratings.reduce((s, r) => s + r.rate, 0) / ratingCount
         : 0
-    const { ratings: _, ...rest } = book
+    const { ratings: _ratings, ...rest } = book
     return {
       ...rest,
       ratingCount,
@@ -141,15 +151,16 @@ function HomeContent() {
       }
     : null
 
-  const {
-    data: popularBooks,
-    mutate: mutatePopularBooks,
-  } = useRequest<BookProps[]>(
+  const { data: popularBooks, mutate: mutatePopularBooks } = useRequest<
+    BookProps[]
+  >(
     { url: '/books/popular', method: 'GET' },
     { keepPreviousData: true, revalidateOnFocus: false },
   )
 
-  const { data: latestRatings, error: latestRatingsError } = useRequest<RatingProps[]>(
+  const { data: latestRatings, error: latestRatingsError } = useRequest<
+    RatingProps[]
+  >(
     {
       url: '/ratings/latest',
       method: 'GET',
