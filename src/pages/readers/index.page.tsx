@@ -55,7 +55,11 @@ export default function Users() {
     perPage,
   } = usePaginationAndSearch({ perPage: READERS_PER_PAGE })
 
-  const { data, isValidating, error: usersError } = useRequest<{
+  const {
+    data,
+    isValidating,
+    error: usersError,
+  } = useRequest<{
     users: UserProps[]
     pagination: {
       page: number

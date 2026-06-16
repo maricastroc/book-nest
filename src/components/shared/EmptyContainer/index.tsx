@@ -13,7 +13,9 @@ export function EmptyContainer({
     return (
       <Container>
         <p>Something went wrong.</p>
-        <span>We couldn&apos;t load the {content}. Please try again later.</span>
+        <span>
+          We couldn&apos;t load the {content}. Please try again later.
+        </span>
       </Container>
     )
   }

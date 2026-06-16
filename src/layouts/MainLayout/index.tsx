@@ -5,11 +5,6 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { Sidebar } from '@/components/shared/Sidebar'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-
-const LateralMenu = dynamic(
-  () => import('@/components/shared/LateralMenu').then((m) => m.LateralMenu),
-  { ssr: false },
-)
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { BookProvider } from '@/contexts/BookContext'
 import { BookProps } from '@/@types/book'
@@ -20,6 +15,11 @@ import {
   TitleWrapper,
 } from './styles'
 import { SearchBar } from '@/components/shared/SearchBar'
+
+const LateralMenu = dynamic(
+  () => import('@/components/shared/LateralMenu').then((m) => m.LateralMenu),
+  { ssr: false },
+)
 
 type MainLayoutProps = {
   title: string

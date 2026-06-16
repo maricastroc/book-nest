@@ -25,7 +25,11 @@ export function useExploreBooks() {
     perPage,
   } = usePaginationAndSearch({ perPage: usePerPage() })
 
-  const { data: booksData, isValidating, error } = useRequest<{
+  const {
+    data: booksData,
+    isValidating,
+    error,
+  } = useRequest<{
     books: BookProps[]
     pagination: {
       page: number

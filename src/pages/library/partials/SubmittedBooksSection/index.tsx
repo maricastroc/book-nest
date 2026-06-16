@@ -15,12 +15,6 @@ import {
 } from './styles'
 
 import dynamic from 'next/dynamic'
-
-const SubmitBookFormModal = dynamic(
-  () =>
-    import('../SubmitBookFormModal').then((m) => m.SubmitBookFormModal),
-  { ssr: false },
-)
 import { Avatar } from '@/components/shared/Avatar'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { ScrollableSection } from '@/components/shared/ScrollableSection'
@@ -41,6 +35,11 @@ import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
 import { LateralMenu } from '@/components/shared/LateralMenu'
 import { BookProvider } from '@/contexts/BookContext'
 import { useAppContext } from '@/contexts/AppContext'
+
+const SubmitBookFormModal = dynamic(
+  () => import('../SubmitBookFormModal').then((m) => m.SubmitBookFormModal),
+  { ssr: false },
+)
 
 interface SubmittedBooksSectionProps {
   userId: string | undefined
