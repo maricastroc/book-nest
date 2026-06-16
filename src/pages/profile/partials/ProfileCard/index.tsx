@@ -130,7 +130,7 @@ export function ProfileCard({
             <>
               <ProfileCardBody>
                 <BookDetailsContainer>
-                  <BookCover src={book.coverUrl} alt="" onClick={onSelect} />
+                  <BookCover src={book.coverUrl} alt={`Cover of ${book.name}`} onClick={onSelect} />
                   <BookSummaryWrapper>
                     <BookTitleAndAuthor>
                       <h2>{book.name}</h2>

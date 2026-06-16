@@ -46,7 +46,7 @@ export default function Login() {
         ) : (
           <Container>
             <LogoWrapper>
-              <Image alt="" src={Logo} />
+              <Image alt="BookWise" src={Logo} />
             </LogoWrapper>
             <SignInForm />
           </Container>

@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, useState } from 'react'
+import { InputHTMLAttributes, useId, useState } from 'react'
 import {
   StyledInput,
   InputContainer,
@@ -19,6 +19,8 @@ export const Input = ({
   ...props
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false)
+  const generatedId = useId()
+  const inputId = props.id ?? generatedId
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
@@ -26,9 +28,10 @@ export const Input = ({
 
   return (
     <div>
-      {label && <StyledLabel>{label}</StyledLabel>}
+      {label && <StyledLabel htmlFor={inputId}>{label}</StyledLabel>}
       <InputContainer>
         <StyledInput
+          id={inputId}
           variant={variant}
           autoComplete={type === 'password' ? 'new-password' : 'nope'}
           name="field"
@@ -36,7 +39,11 @@ export const Input = ({
           {...props}
         />
         {type === 'password' && (
-          <ToggleButton type="button" onClick={togglePasswordVisibility}>
+          <ToggleButton
+            type="button"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            onClick={togglePasswordVisibility}
+          >
             {showPassword ? <Eye size={16} /> : <EyeSlash size={16} />}
           </ToggleButton>
         )}

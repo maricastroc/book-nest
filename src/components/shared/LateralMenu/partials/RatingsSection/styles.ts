@@ -32,11 +32,14 @@ export const RatingsListHeader = styled('div', {
     color: '$gray200',
   },
 
-  span: {
+  button: {
     cursor: 'pointer',
     fontSize: '0.95rem',
     color: '$purple100',
     fontWeight: 'bold',
+    background: 'none',
+    border: 'none',
+    padding: 0,
 
     '&:hover': {
       filter: 'brightness(1.3)',

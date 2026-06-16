@@ -75,7 +75,7 @@ export function MenuBookCard({
   return (
     <BookCardWrapper>
       <BookCardContent>
-        <BookCover alt="" src={updatedBook.coverUrl} />
+        <BookCover alt={`Cover of ${updatedBook.name}`} src={updatedBook.coverUrl} />
         <BookDetailsWrapper>
           <BookTitleAndAuthor>
             <h2>{updatedBook.name}</h2>

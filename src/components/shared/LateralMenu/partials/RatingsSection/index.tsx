@@ -56,7 +56,8 @@ export const RatingsSection = ({
       <RatingsListHeader>
         <p>Ratings</p>
         {canUserReview ? (
-          <span
+          <button
+            type="button"
             onClick={() => {
               if (
                 bookData.book?.readingStatus === READ_STATUS ||
@@ -70,10 +71,12 @@ export const RatingsSection = ({
             }}
           >
             Review
-          </span>
+          </button>
         ) : (
           !loggedUser && (
-            <span onClick={() => setIsSignInModalOpen(true)}>Review</span>
+            <button type="button" onClick={() => setIsSignInModalOpen(true)}>
+              Review
+            </button>
           )
         )}
       </RatingsListHeader>

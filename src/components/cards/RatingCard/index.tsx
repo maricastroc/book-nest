@@ -66,7 +66,7 @@ export function RatingCard({
           <BookDetailsContainer>
             <BookCover
               src={rating.book.coverUrl}
-              alt=""
+              alt={`Cover of ${rating.book.name}`}
               onClick={onOpenDetails}
             />
             <BookSummaryWrapper>
