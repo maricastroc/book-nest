@@ -93,7 +93,7 @@ export function UserRatingBox({ rating, book }: UserRatingBoxProps) {
                 }}
               />
               <UserNameDateWrapper>
-                <p>{currentRating.user.name}</p>
+                <p>{currentRating.user?.name ?? rating.user?.name}</p>
                 <time title={dateFormatted} dateTime={dateString}>
                   {dateRelativeToNow}
                 </time>
