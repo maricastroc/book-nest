@@ -25,7 +25,7 @@ export function useExploreBooks() {
     perPage,
   } = usePaginationAndSearch({ perPage: usePerPage() })
 
-  const { data: booksData, isValidating } = useRequest<{
+  const { data: booksData, isValidating, error } = useRequest<{
     books: BookProps[]
     pagination: {
       page: number
@@ -98,6 +98,7 @@ export function useExploreBooks() {
     onUpdateBook,
     categories,
     isValidating,
+    error,
     containerRef,
     gridRef,
     perPage,

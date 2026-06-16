@@ -62,7 +62,7 @@ export default function Home() {
     method: 'GET',
   })
 
-  const { data: latestRatings } = useRequest<RatingProps[]>(
+  const { data: latestRatings, error: latestRatingsError } = useRequest<RatingProps[]>(
     {
       url: '/ratings/latest',
       method: 'GET',
@@ -77,6 +77,7 @@ export default function Home() {
     data: userLatestRatingData,
     mutate: mutateUserLatestRating,
     isValidating: isValidatingUserLatestReading,
+    error: userLatestRatingError,
   } = useRequest<RatingProps | null>(userLatestRatingRequest, {
     revalidateOnFocus: false,
   })
@@ -84,6 +85,10 @@ export default function Home() {
   const renderUserLatestRating = () => {
     if (isValidatingUserLatestReading || isValidatingReview) {
       return <SkeletonRatingCard withMarginBottom />
+    }
+
+    if (userLatestRatingError) {
+      return <EmptyContainer content="reading history" variant="error" />
     }
 
     if (userLatestRatingData?.book) {
@@ -103,6 +108,10 @@ export default function Home() {
   }
 
   const renderLatestRatings = () => {
+    if (latestRatingsError) {
+      return <EmptyContainer content="recent ratings" variant="error" />
+    }
+
     if (!latestRatings?.length) {
       return Array.from({ length: 9 }).map((_, index) => (
         <SkeletonRatingCard key={index} />

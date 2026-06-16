@@ -39,6 +39,7 @@ export default function Explore() {
     onUpdateBook,
     categories,
     isValidating,
+    error,
     containerRef,
     gridRef,
     perPage,
@@ -51,7 +52,11 @@ export default function Explore() {
       ))
     }
 
-    if (!updatedBooks?.length && !isValidating) {
+    if (error) {
+      return <EmptyContainer content="books" variant="error" />
+    }
+
+    if (!updatedBooks?.length) {
       return <EmptyContainer content="books" />
     }
 

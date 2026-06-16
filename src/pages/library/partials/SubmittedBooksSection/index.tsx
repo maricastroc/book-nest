@@ -85,6 +85,7 @@ export function SubmittedBooksSection({
     data: submittedBooksData,
     mutate,
     isValidating: isValidatingSubmittedBooksData,
+    error: submittedBooksError,
   } = useRequest<{
     submittedBooks: BookProps[]
     user: UserProps
@@ -105,6 +106,10 @@ export function SubmittedBooksSection({
       ) : (
         <SkeletonBookStatusList />
       )
+    }
+
+    if (submittedBooksError) {
+      return <EmptyContainer content="submitted books" variant="error" />
     }
 
     if (submittedBooks && submittedBooks?.length > 0) {

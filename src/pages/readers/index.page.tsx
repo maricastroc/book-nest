@@ -55,7 +55,7 @@ export default function Users() {
     perPage,
   } = usePaginationAndSearch({ perPage: READERS_PER_PAGE })
 
-  const { data, isValidating } = useRequest<{
+  const { data, isValidating, error: usersError } = useRequest<{
     users: UserProps[]
     pagination: {
       page: number
@@ -92,6 +92,10 @@ export default function Users() {
       return Array.from({ length: 12 }).map((_, index) => (
         <SkeletonUserCard key={index} />
       ))
+    }
+
+    if (usersError) {
+      return <EmptyContainer content="users" variant="error" />
     }
 
     if (!users.length) {
