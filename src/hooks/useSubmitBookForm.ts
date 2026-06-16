@@ -161,17 +161,25 @@ export function useSubmitBookForm({
       setIsLoading(true)
 
       const cleanedIsbn = isbn.replace(/[-\s]/g, '')
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY
+      const keyParam = apiKey ? `&key=${apiKey}` : ''
       const response = await api.get(
         `https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(
           cleanedIsbn,
-        )}&langRestrict=en`,
+        )}${keyParam}`,
       )
 
       const books = response.data.items?.filter(
         (book: any) => book.volumeInfo.language === 'en',
       )
 
-      if (!books?.length) throw new Error('Book not found')
+      if (!books?.length) {
+        const allBooks = response.data.items
+        if (!allBooks?.length) throw new Error('Book not found')
+        toast.error('No English edition found for this ISBN.')
+        setIsValidBook(false)
+        return
+      }
 
       const googleBook = books[0].volumeInfo
 
@@ -205,8 +213,13 @@ export function useSubmitBookForm({
         setCoverUrl(coverUrl)
         setValue('coverUrl', coverUrl)
       }
-    } catch {
-      toast.error('No book found with this ISBN.')
+    } catch (err: any) {
+      const status = err?.response?.status
+      if (status === 429) {
+        toast.error('Google Books API quota exceeded. Please try again later.')
+      } else {
+        toast.error('No book found with this ISBN.')
+      }
       setIsValidBook(false)
     } finally {
       setIsLoading(false)
