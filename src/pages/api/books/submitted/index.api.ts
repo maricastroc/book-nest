@@ -42,8 +42,8 @@ export default async function handler(
     return res.status(403).json({ message: 'Access denied' })
   }
 
-  const pageNumber = Number(page)
-  const itemsPerPage = Number(perPage)
+  const pageNumber = !isNaN(Number(page)) && Number(page) > 0 ? Number(page) : 1
+  const itemsPerPage = !isNaN(Number(perPage)) && Number(perPage) > 0 ? Number(perPage) : 20
   const skip = (pageNumber - 1) * itemsPerPage
 
   const totalBooks = await prisma.book.count({

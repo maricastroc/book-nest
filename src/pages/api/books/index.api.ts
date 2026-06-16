@@ -33,9 +33,11 @@ export default async function handler(
     searchQuery = String(req.query.search).toLowerCase()
   }
 
-  const page = req.query.page ? Number(req.query.page) : 1
-  const perPage = req.query.perPage ? Number(req.query.perPage) : 12
-  const skip = (page - 1) * perPage
+  const page = Number(req.query.page)
+  const perPage = Number(req.query.perPage)
+  const validPage = !isNaN(page) && page > 0 ? page : 1
+  const validPerPage = !isNaN(perPage) && perPage > 0 ? perPage : 12
+  const skip = (validPage - 1) * validPerPage
 
   const totalBooks = await prisma.book.count({
     where: {
@@ -82,7 +84,7 @@ export default async function handler(
       }),
     },
     skip,
-    take: perPage,
+    take: validPerPage,
     select: {
       id: true,
       name: true,
@@ -148,10 +150,10 @@ export default async function handler(
     data: {
       books: booksWithDetails,
       pagination: {
-        page,
-        perPage,
+        page: validPage,
+        perPage: validPerPage,
         total: totalBooks,
-        totalPages: Math.ceil(totalBooks / perPage),
+        totalPages: Math.ceil(totalBooks / validPerPage),
       },
     },
   })
