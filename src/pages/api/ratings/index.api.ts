@@ -83,7 +83,9 @@ export default async function handler(
     }
 
     if (rating.userId !== session.user.id) {
-      return res.status(403).json({ message: 'You can only delete your own ratings.' })
+      return res
+        .status(403)
+        .json({ message: 'You can only delete your own ratings.' })
     }
 
     await prisma.rating.delete({
@@ -120,7 +122,9 @@ export default async function handler(
       }
 
       if (ratingExists.userId !== session.user.id) {
-        return res.status(403).json({ message: 'You can only edit your own ratings.' })
+        return res
+          .status(403)
+          .json({ message: 'You can only edit your own ratings.' })
       }
 
       const updatedPost = await prisma.rating.update({

@@ -16,7 +16,9 @@ export default async function handler(
   )
 
   if (!session) {
-    return res.status(401).json({ message: 'Please login to access this API route.' })
+    return res
+      .status(401)
+      .json({ message: 'Please login to access this API route.' })
   }
 
   try {

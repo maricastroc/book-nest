@@ -43,7 +43,8 @@ export default async function handler(
   }
 
   const pageNumber = !isNaN(Number(page)) && Number(page) > 0 ? Number(page) : 1
-  const itemsPerPage = !isNaN(Number(perPage)) && Number(perPage) > 0 ? Number(perPage) : 20
+  const itemsPerPage =
+    !isNaN(Number(perPage)) && Number(perPage) > 0 ? Number(perPage) : 20
   const skip = (pageNumber - 1) * itemsPerPage
 
   const totalBooks = await prisma.book.count({

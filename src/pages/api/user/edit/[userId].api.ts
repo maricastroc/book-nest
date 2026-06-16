@@ -63,7 +63,9 @@ export default async function handler(
       const userId = String(req.query.userId)
 
       if (userId !== session.user.id) {
-        return res.status(403).json({ message: 'You can only edit your own profile.' })
+        return res
+          .status(403)
+          .json({ message: 'You can only edit your own profile.' })
       }
       const removeAvatar = getSingleString(fields.removeAvatar) === 'true'
 
