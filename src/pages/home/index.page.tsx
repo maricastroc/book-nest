@@ -2,8 +2,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { CaretRight, ChartLineUp } from 'phosphor-react'
-import { SWRConfig } from 'swr'
-import type { GetStaticProps } from 'next'
 
 import {
   HomePageContent,
@@ -31,104 +29,8 @@ import useRequest from '@/hooks/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
 import { MainLayout } from '@/layouts/MainLayout'
-import { prisma } from '@/lib/prisma'
 
-interface HomeProps {
-  fallback: Record<string, unknown>
-}
-
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const [booksRaw, ratingsRaw] = await Promise.all([
-    prisma.book.findMany({
-      where: { status: 'APPROVED' },
-      include: { ratings: { select: { rate: true } } },
-      orderBy: { ratings: { _count: 'desc' } },
-      take: 6,
-    }),
-    prisma.rating.findMany({
-      where: { deletedAt: null, NOT: { description: '' } },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        book: {
-          select: { id: true, name: true, author: true, coverUrl: true },
-        },
-        user: {
-          select: {
-            id: true,
-            name: true,
-            avatarUrl: true,
-            email: true,
-            createdAt: true,
-          },
-        },
-        votes: true,
-      },
-      take: 5,
-    }),
-  ])
-
-  const popularBooks = booksRaw.map((book) => {
-    const ratingCount = book.ratings.length
-    const rate =
-      ratingCount > 0
-        ? book.ratings.reduce((s, r) => s + r.rate, 0) / ratingCount
-        : 0
-    const { ratings: _ratings, ...rest } = book
-    return {
-      ...rest,
-      ratingCount,
-      rate,
-      readingStatus: null,
-      createdAt: book.createdAt.toISOString(),
-      updatedAt: book.updatedAt?.toISOString() ?? null,
-    }
-  })
-
-  const latestRatings = ratingsRaw.map((r) => ({
-    ...r,
-    createdAt: r.createdAt.toISOString(),
-    updatedAt: r.updatedAt?.toISOString() ?? null,
-    deletedAt: r.deletedAt?.toISOString() ?? null,
-    votes: {
-      up: r.votes.filter((v) => v.type === 'UP').length,
-      down: r.votes.filter((v) => v.type === 'DOWN').length,
-      userVote: null,
-    },
-    user: {
-      ...r.user,
-      createdAt: r.user.createdAt.toISOString(),
-      updatedAt: r.user.updatedAt?.toISOString() ?? null,
-    },
-  }))
-
-  const makeResponse = (data: unknown) => ({
-    data,
-    status: 200,
-    statusText: 'OK',
-    headers: {},
-    config: {},
-  })
-
-  return {
-    props: {
-      fallback: {
-        'GET /books/popular': makeResponse({ books: popularBooks }),
-        'GET /ratings/latest': makeResponse({ ratings: latestRatings }),
-      },
-    },
-    revalidate: 60,
-  }
-}
-
-export default function Home({ fallback }: HomeProps) {
-  return (
-    <SWRConfig value={{ fallback }}>
-      <HomeContent />
-    </SWRConfig>
-  )
-}
-
-function HomeContent() {
+export default function Home() {
   const router = useRouter()
 
   const session = useSession()
