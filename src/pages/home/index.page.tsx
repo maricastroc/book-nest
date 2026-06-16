@@ -144,11 +144,10 @@ function HomeContent() {
   const {
     data: popularBooks,
     mutate: mutatePopularBooks,
-    isValidating: isValidatingPopularBooks,
-  } = useRequest<BookProps[]>({
-    url: '/books/popular',
-    method: 'GET',
-  })
+  } = useRequest<BookProps[]>(
+    { url: '/books/popular', method: 'GET' },
+    { keepPreviousData: true, revalidateOnFocus: false },
+  )
 
   const { data: latestRatings, error: latestRatingsError } = useRequest<RatingProps[]>(
     {
@@ -168,6 +167,7 @@ function HomeContent() {
     error: userLatestRatingError,
   } = useRequest<RatingProps | null>(userLatestRatingRequest, {
     revalidateOnFocus: false,
+    keepPreviousData: true,
   })
 
   const renderUserLatestRating = () => {
@@ -221,7 +221,7 @@ function HomeContent() {
   }
 
   const renderPopularBooks = () => {
-    if (!updatedPopularBooks?.length || isValidatingPopularBooks) {
+    if (!updatedPopularBooks?.length) {
       return Array.from({ length: 12 }).map((_, index) => (
         <SkeletonBookCard key={index} />
       ))
