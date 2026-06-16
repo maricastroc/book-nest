@@ -60,10 +60,6 @@ export const ToggleButton = styled('button', {
   cursor: 'pointer',
   color: '$gray100',
   padding: '0.25rem',
-
-  '&:focus': {
-    outline: 'none',
-  },
 })
 
 export const StyledLabel = styled('label', {

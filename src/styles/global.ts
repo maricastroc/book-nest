@@ -35,7 +35,6 @@ export const globalStyles = globalCss({
       colorScheme: 'dark !important',
 
       '&:focus': {
-        backgroundColor: 'transparent',
         boxShadow: 'none',
         outlineColor: '$green100',
       },

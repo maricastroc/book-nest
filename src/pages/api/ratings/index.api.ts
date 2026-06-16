@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getServerSession } from 'next-auth'
+import { buildNextAuthOptions } from '../auth/[...nextauth].api'
 import { prisma } from '@/lib/prisma'
 
 export default async function handler(
@@ -15,6 +17,7 @@ export default async function handler(
     const ratings = await prisma.rating.findMany({
       where: searchQuery
         ? {
+            deletedAt: null,
             book: {
               name: {
                 contains: searchQuery,
@@ -22,7 +25,7 @@ export default async function handler(
               },
             },
           }
-        : {},
+        : { deletedAt: null },
       include: {
         book: {
           select: {
@@ -61,7 +64,27 @@ export default async function handler(
 
     return res.status(200).json(ratingsOutput)
   } else if (req.method === 'DELETE') {
+    const session = await getServerSession(
+      req,
+      res,
+      buildNextAuthOptions(req, res),
+    )
+
+    if (!session) {
+      return res.status(401).json({ message: 'You must be logged in.' })
+    }
+
     const { id } = req.body
+
+    const rating = await prisma.rating.findUnique({ where: { id } })
+
+    if (!rating) {
+      return res.status(404).json({ message: 'Rating not found.' })
+    }
+
+    if (rating.userId !== session.user.id) {
+      return res.status(403).json({ message: 'You can only delete your own ratings.' })
+    }
 
     await prisma.rating.delete({
       where: {
@@ -71,6 +94,16 @@ export default async function handler(
 
     return res.status(200).json({ message: 'Review successfully deleted!' })
   } else if (req.method === 'PUT') {
+    const session = await getServerSession(
+      req,
+      res,
+      buildNextAuthOptions(req, res),
+    )
+
+    if (!session) {
+      return res.status(401).json({ message: 'You must be logged in.' })
+    }
+
     const { id, description, rate } = req.body
 
     if (!id || rate === undefined) {
@@ -84,6 +117,10 @@ export default async function handler(
 
       if (!ratingExists) {
         return res.status(404).json({ message: 'Rating not found' })
+      }
+
+      if (ratingExists.userId !== session.user.id) {
+        return res.status(403).json({ message: 'You can only edit your own ratings.' })
       }
 
       const updatedPost = await prisma.rating.update({
