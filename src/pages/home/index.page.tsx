@@ -16,12 +16,12 @@ import {
   PopularBooksTitle,
 } from './styles'
 
-import { RatingCard } from '@/components/cards/RatingCard'
-import { BookCard } from '@/components/cards/BookCard'
+import { RatingCard } from '@/components/features/books/RatingCard'
+import { BookCard } from '@/components/features/books/BookCard'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { OutlineButton } from '@/components/core/OutlineButton'
+import { OutlineButton } from '@/components/ui/OutlineButton'
 
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'

@@ -1,22 +1,14 @@
 import { Container } from './styles'
-
-import { Skeleton } from '@mui/material'
+import { SkeletonBox } from '@/components/ui/Skeleton'
 
 export function SkeletonUserSidebar() {
   return (
     <Container>
-      <Skeleton
-        width={'3rem'}
-        height={'2.5rem'}
+      <SkeletonBox
         variant="circular"
-        style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
+        style={{ width: '3rem', height: '2.5rem' }}
       />
-      <Skeleton
-        width={'70%'}
-        height={'1.5rem'}
-        variant="rounded"
-        style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-      />
+      <SkeletonBox style={{ width: '70%', height: '1.5rem' }} />
     </Container>
   )
 }

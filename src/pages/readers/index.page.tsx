@@ -12,7 +12,7 @@ import { READERS_PER_PAGE } from '@/utils/constants'
 import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
 
 import { Sidebar } from '@/components/shared/Sidebar'
-import { LoadingPage } from '@/components/shared/LoadingPage'
+import { LoadingPage } from '@/components/ui/LoadingPage'
 import { MobileHeader } from '@/components/shared/MobileHeader'
 import { Pagination } from '@/components/shared/Pagination'
 import { EmptyContainer } from '@/components/shared/EmptyContainer'

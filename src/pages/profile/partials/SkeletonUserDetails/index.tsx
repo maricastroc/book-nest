@@ -1,80 +1,23 @@
 import { Container, Header, Main, MainItem } from './styles'
-import { Skeleton } from '@mui/material'
+import { SkeletonBox } from '@/components/ui/Skeleton'
 
 export function SkeletonUserDetails() {
   return (
     <Container>
       <Header>
-        <Skeleton
-          width={'100%'}
-          height={'5rem'}
+        <SkeletonBox
           variant="circular"
-          style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
+          style={{ width: '100%', height: '5rem' }}
         />
-        <Skeleton
-          width={'100%'}
-          height={'1rem'}
-          variant="rounded"
-          style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-        />
+        <SkeletonBox style={{ width: '100%', height: '1rem' }} />
       </Header>
       <Main>
-        <MainItem>
-          <Skeleton
-            width={'30%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-          <Skeleton
-            width={'70%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-        </MainItem>
-        <MainItem>
-          <Skeleton
-            width={'30%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-          <Skeleton
-            width={'70%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-        </MainItem>
-        <MainItem>
-          <Skeleton
-            width={'30%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-          <Skeleton
-            width={'70%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-        </MainItem>
-        <MainItem>
-          <Skeleton
-            width={'30%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-          <Skeleton
-            width={'70%'}
-            height={'2rem'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-        </MainItem>
+        {[...Array(4)].map((_, i) => (
+          <MainItem key={i}>
+            <SkeletonBox style={{ width: '30%', height: '2rem' }} />
+            <SkeletonBox style={{ width: '70%', height: '2rem' }} />
+          </MainItem>
+        ))}
       </Main>
     </Container>
   )

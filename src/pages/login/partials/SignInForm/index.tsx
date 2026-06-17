@@ -7,12 +7,12 @@ import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { InputContainer } from '@/components/core/InputContainer'
-import { FormErrors } from '@/components/core/FormErrors'
-import { Button } from '@/components/core/Button'
-import { Input } from '@/components/core/Input'
-import { Form } from '@/components/core/Form'
-import { LinkButton } from '@/components/core/LinkButton'
+import { InputContainer } from '@/components/ui/InputContainer'
+import { FormErrors } from '@/components/ui/FormErrors'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { Form } from '@/components/ui/Form'
+import { LinkButton } from '@/components/ui/LinkButton'
 
 import {
   AuthContainer,

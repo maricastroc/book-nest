@@ -22,13 +22,13 @@ import {
   RatingVoteWrapper,
 } from './styles'
 
-import { StarsRating } from '@/components/shared/StarsRating'
-import { TextBox } from '@/components/shared/TextBox'
-import { RatingCardForm } from '@/components/shared/RatingCardForm'
-import { DropdownActions } from '@/components/shared/DropdownActions.tsx'
-import { ArchivedWarning } from '@/components/shared/ArchivedWarning'
+import { StarsRating } from '@/components/features/books/StarsRating'
+import { TextBox } from '@/components/features/books/TextBox'
+import { RatingCardForm } from '@/components/features/books/RatingCardForm'
+import { DropdownActions } from '@/components/features/books/DropdownActions'
+import { ArchivedWarning } from '@/components/features/books/ArchivedWarning'
 import { useBookContext } from '@/contexts/BookContext'
-import { RatingVoteSection } from '@/components/shared/RatingVoteSection'
+import { RatingVoteSection } from '@/components/features/books/RatingVoteSection'
 
 interface ProfileCardProps {
   book: BookProps

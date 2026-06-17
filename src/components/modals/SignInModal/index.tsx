@@ -1,5 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { Button } from '@/components/core/Button'
+import { Button } from '@/components/ui/Button'
 import { useRouter } from 'next/router'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 import { BaseModal } from '../BaseModal'

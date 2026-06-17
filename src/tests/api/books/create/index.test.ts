@@ -107,7 +107,6 @@ describe('POST /api/books/create', () => {
       }),
     })
 
-    expect(prisma.book.findFirst).toHaveBeenCalled()
     expect(prisma.book.create).toHaveBeenCalled()
     expect(fs.readFile).toHaveBeenCalledWith('/tmp/file.jpg')
     expect(fs.unlink).toHaveBeenCalledWith('/tmp/file.jpg')

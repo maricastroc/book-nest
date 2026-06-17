@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { Container, LogoWrapper } from './styles'
 import SignInForm from '@/pages/login/partials/SignInForm'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { LoadingComponent } from '@/components/core/LoadingComponent'
+import { LoadingComponent } from '@/components/ui/LoadingComponent'
 import Logo from '../../../public/assets/logo2.svg'
 
 export default function Login() {
@@ -22,7 +22,8 @@ export default function Login() {
     if (status === 'authenticated') {
       router.push('/home')
     }
-  }, [status, router])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status])
 
   useEffect(() => {
     setIsClient(true)

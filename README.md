@@ -10,6 +10,16 @@ Users can track their reading progress by marking books with different statuses:
 
 Users can also submit new books to the platform by providing the ISBN. Upon submission, the app fetches detailed technical data from external sources using the Google Books API and the Open Library API, enriching the platform’s book database.
 
+**Additional features:**
+
+- **Rating votes:** Users can upvote or downvote other readers’ reviews, helping surface the most helpful ratings.
+- **Edit profile:** Users can update their name and avatar directly from their profile page, including an image cropper for precise photo editing.
+- **Book submission moderation:** Submitted books go through a review flow before being published. Moderators can approve or reject submissions from a dedicated submissions page.
+- **Readers directory:** A dedicated page lists all registered users, making it easy to discover other readers and visit their profiles.
+- **Pagination and debounced search:** Book and reader listings are paginated and support real-time search with debounce to avoid unnecessary requests.
+- **Responsive layout:** The app is fully responsive, with a mobile sidebar and adaptive navigation for smaller screens.
+- **Animated transitions:** Page and component transitions use Framer Motion for a polished feel.
+
 ## 📌 What did I learn?
 
 The most challenging part of this project was creating routes and endpoints for interacting with the database. Since the registered data had many relationships among themselves, and there were some data that needed to be calculated in the request body, it required a well-thought-out logic to obtain them at times. The application is also covered by automated tests implemented with Jest, ensuring reliability and maintainability of the codebase.

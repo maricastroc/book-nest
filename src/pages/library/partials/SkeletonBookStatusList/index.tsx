@@ -1,23 +1,17 @@
-import { Skeleton } from '@mui/material'
+import { SkeletonBox } from '@/components/ui/Skeleton'
 import { Container } from './styles'
 
 export function SkeletonBookStatusList() {
   return (
     <Container>
-      <Skeleton
-        style={{
-          width: '100%',
-          height: '2rem',
-          borderRadius: '8px',
-          backgroundColor: 'rgba(79, 97, 158, 0.3)',
-        }}
+      <SkeletonBox
+        style={{ width: '100%', height: '2rem', borderRadius: '8px' }}
       />
-      <Skeleton
+      <SkeletonBox
         style={{
           width: '100%',
           height: '11rem',
           borderRadius: '8px',
-          backgroundColor: 'rgba(79, 97, 158, 0.3)',
           marginTop: '-1.8rem',
         }}
       />

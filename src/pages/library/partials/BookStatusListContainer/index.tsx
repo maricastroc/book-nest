@@ -10,7 +10,7 @@ import { UserProps } from '@/@types/user'
 import { getBookStatusList } from '@/utils/getBookStatusList'
 import useRequest from '@/hooks/useRequest'
 import { SkeletonBookStatusList } from '../SkeletonBookStatusList'
-import { LateralMenu } from '@/components/shared/LateralMenu'
+import { LateralMenu } from '@/components/features/books/LateralMenu'
 import { getEmptyBoxMessage } from '@/utils/getEmptyBoxMessage'
 import { BookProvider } from '@/contexts/BookContext'
 

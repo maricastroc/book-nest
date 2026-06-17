@@ -11,14 +11,14 @@ import {
   WarningContainer,
   ButtonsContainer,
 } from './styles'
-import { InputContainer } from '@/components/core/InputContainer'
-import { Input } from '@/components/core/Input'
-import { Button } from '@/components/core/Button'
-import { BaseModal } from '@/components/modals/BaseModal'
-import { FileInput } from '@/components/core/FileInput'
-import { FormErrors } from '@/components/core/FormErrors'
-import { Textarea } from '@/components/core/Textarea'
-import { Label } from '@/components/core/Label'
+import { InputContainer } from '@/components/ui/InputContainer'
+import { Input } from '@/components/ui/Input'
+import { Button } from '@/components/ui/Button'
+import { BaseModal } from '@/components/ui/BaseModal'
+import { FileInput } from '@/components/ui/FileInput'
+import { FormErrors } from '@/components/ui/FormErrors'
+import { Textarea } from '@/components/ui/Textarea'
+import { Label } from '@/components/ui/Label'
 
 import { disabledCustomStyles } from '@/utils/getDisabledCustomStyles'
 import { customStyles } from '@/utils/getCustomStyles'

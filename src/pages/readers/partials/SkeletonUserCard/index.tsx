@@ -1,29 +1,17 @@
 import { Container, Content, Main } from './styles'
-import { Skeleton } from '@mui/material'
+import { SkeletonBox } from '@/components/ui/Skeleton'
 
 export function SkeletonUserCard() {
   return (
     <Container>
       <Main>
-        <Skeleton
-          width={'5.5rem'}
-          height={'4rem'}
+        <SkeletonBox
           variant="circular"
-          style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
+          style={{ width: '5.5rem', height: '4rem' }}
         />
         <Content>
-          <Skeleton
-            width={'100%'}
-            height={'100%'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
-          <Skeleton
-            width={'100%'}
-            height={'100%'}
-            variant="rounded"
-            style={{ backgroundColor: 'rgba(79, 97, 158, 0.3)' }}
-          />
+          <SkeletonBox style={{ width: '100%', height: '100%' }} />
+          <SkeletonBox style={{ width: '100%', height: '100%' }} />
         </Content>
       </Main>
     </Container>

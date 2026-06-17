@@ -6,7 +6,7 @@ import {
   BookContentWrapper,
   BookCardBox,
 } from './styles'
-import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
+import { ReadingStatusTag } from '@/components/features/books/ReadingStatusTag'
 
 interface BookCardProps {
   book: BookProps

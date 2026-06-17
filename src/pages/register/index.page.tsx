@@ -6,7 +6,7 @@ import { NextSeo } from 'next-seo'
 import { Container, LogoWrapper } from './styles'
 import SignUpForm from '@/pages/register/partials/SignUpForm'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
-import { LoadingComponent } from '@/components/core/LoadingComponent'
+import { LoadingComponent } from '@/components/ui/LoadingComponent'
 import Logo from '../../../public/assets/logo2.svg'
 
 export default function Register() {

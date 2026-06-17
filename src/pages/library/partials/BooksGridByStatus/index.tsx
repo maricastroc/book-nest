@@ -7,7 +7,7 @@ import {
   BooksGridHeader,
   TagContainer,
 } from './styles'
-import { OutlineButton } from '@/components/core/OutlineButton'
+import { OutlineButton } from '@/components/ui/OutlineButton'
 import { CaretLeft } from 'phosphor-react'
 import { Pagination } from '@/components/shared/Pagination'
 import { useEffect, useRef, useState } from 'react'
@@ -17,9 +17,9 @@ import { SkeletonLibraryCard } from '@/components/skeletons/SkeletonLibraryCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { usePerPage } from '@/hooks/useLibraryBooksPerPage'
 import useRequest from '@/hooks/useRequest'
-import { LateralMenu } from '@/components/shared/LateralMenu'
+import { LateralMenu } from '@/components/features/books/LateralMenu'
 import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
-import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
+import { ReadingStatusTag } from '@/components/features/books/ReadingStatusTag'
 import { BookProvider } from '@/contexts/BookContext'
 
 interface Props {

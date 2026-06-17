@@ -14,9 +14,9 @@ import { Avatar } from '../../../../components/shared/Avatar'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { BookOpen, BookmarkSimple, Books, UserList } from 'phosphor-react'
 import { useRouter } from 'next/router'
-import { Button } from '@/components/core/Button'
+import { Button } from '@/components/ui/Button'
 import { UserStatistics } from '@/@types/user_statistics'
-import { DividerLine } from '@/components/shared/DividerLine'
+import { DividerLine } from '@/components/ui/DividerLine'
 
 const EditProfileModal = dynamic(
   () =>

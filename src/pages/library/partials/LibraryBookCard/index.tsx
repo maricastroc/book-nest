@@ -5,7 +5,7 @@ import {
   BookContentWrapper,
   BookCardBox,
 } from './styles'
-import { StarsRating } from '@/components/shared/StarsRating'
+import { StarsRating } from '@/components/features/books/StarsRating'
 
 interface BookCardProps {
   book: BookProps

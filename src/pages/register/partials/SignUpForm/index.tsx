@@ -8,11 +8,11 @@ import { handleApiError } from '@/utils/handleApiError'
 import { api } from '@/lib/axios'
 import { z } from 'zod'
 
-import { InputContainer } from '@/components/core/InputContainer'
-import { FormErrors } from '@/components/core/FormErrors'
-import { Button } from '@/components/core/Button'
-import { Input } from '@/components/core/Input'
-import { LinkButton } from '@/components/core/LinkButton'
+import { InputContainer } from '@/components/ui/InputContainer'
+import { FormErrors } from '@/components/ui/FormErrors'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { LinkButton } from '@/components/ui/LinkButton'
 import AvatarDefaultImage from '../../../../../public/assets/avatar_mockup.png'
 
 import {
@@ -21,11 +21,11 @@ import {
   Wrapper,
   AvatarUploadWrapper,
 } from './styles'
-import { Form } from '@/components/core/Form'
-import { AvatarUploadPreview } from '@/components/core/AvatarUploadPreview'
+import { Form } from '@/components/ui/Form'
+import { AvatarUploadPreview } from '@/components/ui/AvatarUploadPreview'
 import { TrashSimple } from 'phosphor-react'
-import { ImageCropper } from '@/components/shared/ImageCropper'
-import { FileInput } from '@/components/core/FileInput'
+import { ImageCropper } from '@/components/ui/ImageCropper'
+import { FileInput } from '@/components/ui/FileInput'
 
 const signUpFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),

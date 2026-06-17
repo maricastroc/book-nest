@@ -12,25 +12,25 @@ import {
   ChangePasswordInputContainer,
 } from './styles'
 import { handleApiError } from '@/utils/handleApiError'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSession } from 'next-auth/react'
 import { api } from '@/lib/axios'
 import { useAppContext } from '@/contexts/AppContext'
-import { Input } from '@/components/core/Input'
-import { InputContainer } from '@/components/core/InputContainer'
-import { FormErrors } from '@/components/core/FormErrors'
+import { Input } from '@/components/ui/Input'
+import { InputContainer } from '@/components/ui/InputContainer'
+import { FormErrors } from '@/components/ui/FormErrors'
 import {
   AvatarSection,
   AvatarUploadWrapper,
   DeleteAvatarButton,
 } from '@/pages/register/partials/SignUpForm/styles'
-import { AvatarUploadPreview } from '@/components/core/AvatarUploadPreview'
-import { Form } from '@/components/core/Form'
-import { Button } from '@/components/core/Button'
+import { AvatarUploadPreview } from '@/components/ui/AvatarUploadPreview'
+import { Form } from '@/components/ui/Form'
+import { Button } from '@/components/ui/Button'
 import { truncateMiddle } from '@/utils/truncateMiddle'
-import { ImageCropper } from '@/components/shared/ImageCropper'
+import { ImageCropper } from '@/components/ui/ImageCropper'
 import { BaseModal } from '../BaseModal'
-import { FileInput } from '@/components/core/FileInput'
+import { FileInput } from '@/components/ui/FileInput'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { TrashSimple } from 'phosphor-react'
 
 interface EditProfileModalProps {

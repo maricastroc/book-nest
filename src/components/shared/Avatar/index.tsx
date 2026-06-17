@@ -1,6 +1,6 @@
 import { ImgHTMLAttributes } from 'react'
 import { AvatarContainer } from './styles'
-import { CircularProgress } from '@mui/material'
+import { Spinner } from '@/components/ui/Spinner'
 import AvatarDefaultImage from '../../../../public/assets/avatar_mockup.png'
 import Image from 'next/image'
 
@@ -20,7 +20,7 @@ export function Avatar({
   isLoading = false,
 }: AvatarProps) {
   return isLoading ? (
-    <CircularProgress size="1.5rem" />
+    <Spinner size="sm" />
   ) : (
     <AvatarContainer
       className={variant}

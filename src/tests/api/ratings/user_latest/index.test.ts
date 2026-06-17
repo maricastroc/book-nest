@@ -38,7 +38,7 @@ describe('GET /api/ratings/user_latest', () => {
     ;(getServerSession as jest.Mock).mockResolvedValue(null)
 
     const req = { method: 'GET' } as any
-    const status = jest.fn(() => ({ end: jest.fn() }))
+    const status = jest.fn(() => ({ json: jest.fn() }))
     const res = { status } as any
 
     await handler(req, res)

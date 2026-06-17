@@ -13,12 +13,12 @@ import {
   TagContainer,
 } from './styles'
 import { CaretRight, Plus } from 'phosphor-react'
-import { StarsRating } from '@/components/shared/StarsRating'
+import { StarsRating } from '@/components/features/books/StarsRating'
 import { useRouter } from 'next/router'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 import { ScrollableSection } from '@/components/shared/ScrollableSection'
 import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
-import { ReadingStatusTag } from '@/components/shared/ReadingStatusTag'
+import { ReadingStatusTag } from '@/components/features/books/ReadingStatusTag'
 
 interface BookStatusListProps {
   isLoggedUser: boolean
