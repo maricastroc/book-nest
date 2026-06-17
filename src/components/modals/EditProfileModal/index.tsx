@@ -3,7 +3,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import { useEffect, useRef, useState } from 'react'
 import AvatarDefaultImage from '../../../../public/assets/avatar_mockup.png'
 import {
