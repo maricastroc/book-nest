@@ -3,75 +3,92 @@ import { styled } from '@/styles'
 export const Wrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: '$gray700',
-  padding: '2rem',
-  borderRadius: 20,
-  width: '85vw',
-  maxWidth: '27rem',
-  gap: '1.5rem',
+  gap: '0.75rem',
+  width: '100%',
+  maxWidth: '26rem',
+  margin: '0 auto',
+})
+
+export const FormHeader = styled('div', {
+  marginBottom: '0.75rem',
 
   h2: {
-    alignSelf: 'flex-start',
-    fontSize: '$3xl',
-    fontWeight: 300,
+    color: '$gray200',
+    fontSize: '1.375rem',
+    fontWeight: 400,
+    marginBottom: '0.25rem',
   },
-})
-
-export const AuthContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  gap: '1rem',
-  color: '$white',
-  fontSize: '0.9375rem',
-  marginTop: '1.5rem',
-})
-
-export const AuthOptions = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 'auto',
-})
-
-export const AuthItem = styled('button', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '0.5rem',
-  color: '$gray300',
-  fontSize: '0.9rem',
-  borderRadius: 8,
-  padding: '0.8rem 1rem',
-  border: 'none',
-  width: 'auto',
-  backgroundColor: 'transparent',
-  cursor: 'pointer',
 
   p: {
-    borderBottom: '1px solid transparent',
+    color: '$blue600',
+    fontSize: '0.8125rem',
+  },
+})
+
+export const FieldGroup = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.75rem',
+})
+
+export const Divider = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.75rem',
+  margin: '0.25rem 0',
+
+  '&::before, &::after': {
+    content: '',
+    flex: 1,
+    height: '1px',
+    backgroundColor: '$gray500',
   },
 
-  svg: {
+  span: {
+    color: '$blue600',
+    fontSize: '0.6875rem',
+    whiteSpace: 'nowrap',
+  },
+})
+
+export const SignupLink = styled('p', {
+  textAlign: 'center',
+  fontSize: '0.75rem',
+  color: '$blue600',
+
+  a: {
     color: '$purple100',
-  },
+    textDecoration: 'none',
 
-  '&:hover': {
-    p: {
-      borderBottom: '1px solid $gray300',
-      transition: '200ms',
+    '&:hover': {
+      textDecoration: 'underline',
     },
   },
 })
 
-export const VerticalDivider = styled('span', {
-  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  height: '2rem',
-  color: '$gray300',
-  width: 1,
-  marginTop: 1,
+export const SocialButton = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.5rem',
+  height: 40,
+  width: '100%',
+  backgroundColor: 'transparent',
+  border: '0.5px solid $gray500',
+  borderRadius: 8,
+  color: '$gray400',
+  fontSize: '0.8125rem',
+  cursor: 'pointer',
+  transition: 'border-color 150ms, color 150ms',
+
+  '&:hover': {
+    borderColor: '$blue600',
+    color: '$gray300',
+  },
+})
+
+export const SocialButtons = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
 })

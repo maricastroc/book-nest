@@ -12,14 +12,14 @@ import { FormErrors } from '@/components/ui/FormErrors'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Form } from '@/components/ui/Form'
-import { LinkButton } from '@/components/ui/LinkButton'
-
 import {
-  AuthContainer,
-  AuthOptions,
-  AuthItem,
-  VerticalDivider,
   Wrapper,
+  FormHeader,
+  FieldGroup,
+  Divider,
+  SignupLink,
+  SocialButton,
+  SocialButtons,
 } from './styles'
 
 const signInFormSchema = z.object({
@@ -44,23 +44,19 @@ export default function SignInForm({ onClose }: SignInFormProps) {
   })
 
   const router = useRouter()
-
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleSignIn(provider: string) {
     setIsLoading(true)
-
     if (provider === 'google') {
       await signIn('google', { callbackUrl: '/home' })
     } else if (provider === 'github') {
       await signIn('github', { callbackUrl: '/home' })
-    } else router.push('/home')
-
-    setIsLoading(false)
-
-    if (onClose) {
-      onClose()
+    } else {
+      router.push('/home')
     }
+    setIsLoading(false)
+    if (onClose) onClose()
   }
 
   async function onSubmit(data: SignInFormData) {
@@ -84,16 +80,25 @@ export default function SignInForm({ onClose }: SignInFormProps) {
   }
 
   return (
-    <>
-      <Wrapper>
-        <h2>Login</h2>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+    <Wrapper>
+      <FormHeader>
+        <h2>Welcome back</h2>
+        <p>Pick up where you left off.</p>
+      </FormHeader>
+
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FieldGroup>
           <InputContainer>
             <Controller
               name="email"
               control={control}
               render={({ field }) => (
-                <Input placeholder="Email Address" {...field} />
+                <Input
+                  variant="secondary"
+                  label="Email Address"
+                  placeholder="you@example.com"
+                  {...field}
+                />
               )}
             />
             {errors.email && <FormErrors error={errors.email.message} />}
@@ -104,57 +109,54 @@ export default function SignInForm({ onClose }: SignInFormProps) {
               name="password"
               control={control}
               render={({ field }) => (
-                <Input type="password" placeholder="Password" {...field} />
+                <Input
+                  variant="secondary"
+                  label="Password"
+                  type="password"
+                  placeholder="Enter your password"
+                  {...field}
+                />
               )}
             />
             {errors.password && <FormErrors error={errors.password.message} />}
           </InputContainer>
+        </FieldGroup>
 
-          <Button
-            type="submit"
-            content="Login to your account"
-            isSubmitting={isSubmitting || isLoading}
-            style={{
-              marginTop: '1rem',
-            }}
-          />
-        </Form>
+        <Button
+          type="submit"
+          content="Login to your account"
+          isSubmitting={isSubmitting || isLoading}
+          style={{ marginTop: '0.75rem' }}
+        />
+      </Form>
 
-        <LinkButton
-          type="button"
-          onClick={() => {
-            router.push('/register')
-          }}
-        >
-          Don&apos;t have an account? <span>Sign up</span>
-        </LinkButton>
-      </Wrapper>
+      <SignupLink>
+        Don&apos;t have an account?{' '}
+        <a onClick={() => router.push('/register')} href="#">
+          Sign up
+        </a>
+      </SignupLink>
 
-      <AuthContainer>
-        <p>Or login with:</p>
-        <AuthOptions>
-          <AuthItem type="button" onClick={() => handleSignIn('google')}>
-            <Icon icon="flat-color-icons:google" fontSize={24} />
-            <p>Google</p>
-          </AuthItem>
+      <Divider>
+        <span>Or login with</span>
+      </Divider>
 
-          <VerticalDivider />
-          <AuthItem type="button" onClick={() => handleSignIn('github')}>
-            <Icon
-              icon="ant-design:github-outlined"
-              color="white"
-              fontSize={24}
-            />
-            <p>Github</p>
-          </AuthItem>
+      <SocialButtons>
+        <SocialButton type="button" onClick={() => handleSignIn('google')}>
+          <Icon icon="flat-color-icons:google" fontSize={16} />
+          Continue with Google
+        </SocialButton>
 
-          <VerticalDivider />
-          <AuthItem type="button" onClick={() => router.push('/home')}>
-            {<RocketLaunch size={24} />}
-            <p>Guest</p>
-          </AuthItem>
-        </AuthOptions>
-      </AuthContainer>
-    </>
+        <SocialButton type="button" onClick={() => handleSignIn('github')}>
+          <Icon icon="ant-design:github-outlined" color="white" fontSize={16} />
+          Continue with GitHub
+        </SocialButton>
+
+        <SocialButton type="button" onClick={() => router.push('/home')}>
+          <RocketLaunch size={16} />
+          Continue as Guest
+        </SocialButton>
+      </SocialButtons>
+    </Wrapper>
   )
 }

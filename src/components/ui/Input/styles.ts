@@ -18,7 +18,7 @@ export const StyledInput = styled('input', {
         borderRadius: 0,
       },
       secondary: {
-        padding: '0.7rem 0.75rem',
+        padding: '0.85rem 0.75rem',
         border: 'solid 1px $gray600',
         borderRadius: 8,
         backgroundColor: '$gray800',
