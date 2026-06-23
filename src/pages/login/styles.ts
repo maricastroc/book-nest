@@ -129,7 +129,7 @@ export const MobileFormCard = styled('div', {
     width: '100%',
     flex: 1,
     backgroundColor: '$gray700',
-    borderRadius: '0',
-    padding: '0.5rem 1.5rem 3rem',
+    borderTop: '1px solid $gray600',
+    padding: '2rem 1.5rem 3rem',
   },
 })

@@ -74,7 +74,7 @@ export const SocialButton = styled('button', {
   height: 40,
   width: '100%',
   backgroundColor: 'transparent',
-  border: '0.5px solid $gray500',
+  border: '1px solid $gray500',
   borderRadius: 8,
   color: '$gray400',
   fontSize: '0.8125rem',
@@ -82,7 +82,7 @@ export const SocialButton = styled('button', {
   transition: 'border-color 150ms, color 150ms',
 
   '&:hover': {
-    borderColor: '$blue600',
+    borderColor: '$gray500',
     color: '$gray300',
   },
 })
