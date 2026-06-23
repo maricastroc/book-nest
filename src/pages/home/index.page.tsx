@@ -14,6 +14,9 @@ import {
   PopularBooksWrapper,
   PopularBooksContent,
   PopularBooksTitle,
+  RecommendedBooksWrapper,
+  RecommendedBooksTitle,
+  RecommendedEmptyHint,
 } from './styles'
 
 import { RatingCard } from '@/components/features/books/RatingCard'
@@ -29,6 +32,7 @@ import useRequest from '@/hooks/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
 import { MainLayout } from '@/layouts/MainLayout'
+import { HorizontalScroll } from '@/components/shared/HorizontalScroll'
 
 export default function Home() {
   const router = useRouter()
@@ -42,7 +46,6 @@ export default function Home() {
   >([])
 
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
-
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
 
   const userLatestRatingRequest = session?.data?.user
@@ -72,6 +75,16 @@ export default function Home() {
       keepPreviousData: true,
     },
   )
+
+  const recommendedRequest = session?.data?.user
+    ? { url: '/books/recommended', method: 'GET' }
+    : null
+
+  const { data: recommendedData, isValidating: isValidatingRecommended } =
+    useRequest<{ books: BookProps[]; hasEnoughData: boolean }>(
+      recommendedRequest,
+      { revalidateOnFocus: false, keepPreviousData: true },
+    )
 
   const {
     data: userLatestRatingData,
@@ -128,6 +141,33 @@ export default function Home() {
             setSelectedBook(rating.book as BookProps)
             setIsLateralMenuOpen(true)
           }
+        }}
+      />
+    ))
+  }
+
+  const renderRecommendedBooks = () => {
+    if (isValidatingRecommended || !recommendedData) {
+      return Array.from({ length: 2 }).map((_, i) => (
+        <SkeletonBookCard key={i} />
+      ))
+    }
+
+    if (!recommendedData.hasEnoughData) {
+      return (
+        <RecommendedEmptyHint>
+          Rate books with 4+ stars to get personalized recommendations.
+        </RecommendedEmptyHint>
+      )
+    }
+
+    return recommendedData.books.map((book) => (
+      <BookCard
+        key={book.id}
+        book={book}
+        onOpenDetails={() => {
+          setSelectedBook(book)
+          setIsLateralMenuOpen(true)
         }}
       />
     ))
@@ -194,6 +234,15 @@ export default function Home() {
               </UserLatestReadingContainer>
             </>
           )}
+          {session?.data?.user && (
+            <RecommendedBooksWrapper>
+              <RecommendedBooksTitle>Recommended for You</RecommendedBooksTitle>
+              <HorizontalScroll itemWidth="19rem">
+                {renderRecommendedBooks()}
+              </HorizontalScroll>
+            </RecommendedBooksWrapper>
+          )}
+
           <LastRatingsContainer>
             <LastRatingsTitle>Last Ratings</LastRatingsTitle>
             <LastRatingsContent>{renderLatestRatings()}</LastRatingsContent>

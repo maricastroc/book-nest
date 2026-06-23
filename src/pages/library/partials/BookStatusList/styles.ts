@@ -89,9 +89,6 @@ export const ScrollContainer = styled('div', {
 })
 
 export const ContainerWrapper = styled('div', {
-  display: 'flex',
-  gap: '1.2rem',
-  overflowX: 'auto',
   padding: '1.5rem 1.5rem 1.2rem 1.5rem',
   background: '$gray700',
   borderRadius: 8,

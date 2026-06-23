@@ -1,18 +1,10 @@
-import { CaretLeft, CaretRight } from 'phosphor-react'
 import { SkeletonCategories } from '../SkeletonCategories'
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  Categories,
-  ScrollContainer,
-  SelectCategoryButton,
-} from './styles'
-import { RefObject } from 'react'
+import { SelectCategoryButton, CategoriesWrapper } from './styles'
 import { CategoryProps } from '@/@types/category'
+import { HorizontalScroll } from '@/components/shared/HorizontalScroll'
 
 interface Props {
   categories: CategoryProps[] | null | undefined
-  containerRef: RefObject<HTMLDivElement>
   selectedCategory: string | null
   isValidating: boolean
   setCurrentPage: (value: number) => void
@@ -20,26 +12,15 @@ interface Props {
 }
 
 export const CategoriesSection = ({
-  containerRef,
   selectedCategory,
   categories,
   isValidating,
   setCurrentPage,
   setSelectedCategory,
 }: Props) => {
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (containerRef.current) {
-      const scrollAmount = direction === 'right' ? 300 : -300
-      containerRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth',
-      })
-    }
-  }
-
   return (
-    <ScrollContainer>
-      <Categories ref={containerRef}>
+    <CategoriesWrapper>
+      <HorizontalScroll scrollAmount={300}>
         {!categories?.length ? (
           <SkeletonCategories />
         ) : (
@@ -54,7 +35,7 @@ export const CategoriesSection = ({
             >
               All
             </SelectCategoryButton>
-            {categories?.map((category) => (
+            {categories.map((category) => (
               <SelectCategoryButton
                 selected={selectedCategory === category.id}
                 key={category.id}
@@ -69,14 +50,7 @@ export const CategoriesSection = ({
             ))}
           </>
         )}
-
-        <CaretLeftIcon onClick={() => handleScroll('left')}>
-          <CaretLeft size={28} weight="bold" />
-        </CaretLeftIcon>
-        <CaretRightIcon onClick={() => handleScroll('right')}>
-          <CaretRight size={28} weight="bold" />
-        </CaretRightIcon>
-      </Categories>
-    </ScrollContainer>
+      </HorizontalScroll>
+    </CategoriesWrapper>
   )
 }

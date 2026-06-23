@@ -12,6 +12,7 @@ Users can also submit new books to the platform by providing the ISBN. Upon subm
 
 **Additional features:**
 
+- **Personalized recommendations:** The home page surfaces up to 4 books tailored to each user based on the categories of books they rated 4 stars or higher. Candidates are ranked by a weighted score that combines community average rating and category relevance, so recommendations improve the more the user engages with the platform.
 - **Rating votes:** Users can upvote or downvote other readers’ reviews, helping surface the most helpful ratings.
 - **Edit profile:** Users can update their name and avatar directly from their profile page, including an image cropper for precise photo editing.
 - **Book submission moderation:** Submitted books go through a review flow before being published. Moderators can approve or reject submissions from a dedicated submissions page.

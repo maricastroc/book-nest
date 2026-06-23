@@ -40,7 +40,6 @@ export default function Explore() {
     categories,
     isValidating,
     error,
-    containerRef,
     gridRef,
     perPage,
   } = useExploreBooks()
@@ -89,7 +88,6 @@ export default function Explore() {
     >
       <CategoriesSection
         categories={categories}
-        containerRef={containerRef}
         isValidating={isValidating}
         setCurrentPage={(value) => setCurrentPage(value)}
         setSelectedCategory={(value) => setSelectedCategory(value)}

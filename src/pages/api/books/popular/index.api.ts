@@ -15,52 +15,51 @@ export default async function handler(
     buildNextAuthOptions(req, res),
   )
 
-  const booksWithRatingsAndStatus = await prisma.book.findMany({
-    where: {
-      status: 'APPROVED',
-    },
-    include: {
-      ratings: {
-        select: {
-          rate: true,
-        },
-      },
-      readingStatus: {
-        where: {
-          userId: String(session?.user?.id),
-        },
-        select: {
-          status: true,
-        },
-      },
-    },
-    orderBy: {
-      ratings: {
-        _count: 'desc',
-      },
+  const userId = session?.user?.id ? String(session.user.id) : null
+
+  const top6Books = await prisma.book.findMany({
+    where: { status: 'APPROVED' },
+    take: 6,
+    orderBy: { ratings: { _count: 'desc' } },
+    select: {
+      id: true,
+      name: true,
+      author: true,
+      coverUrl: true,
+      categories: { select: { category: true } },
+      ...(userId
+        ? {
+            readingStatus: {
+              where: { userId },
+              select: { status: true },
+            },
+          }
+        : {}),
     },
   })
 
-  const booksWithDetails = booksWithRatingsAndStatus.map((book) => {
-    const ratingCount = book.ratings.length
+  const bookIds = top6Books.map((b) => b.id)
 
-    const avgRating =
-      ratingCount > 0
-        ? book.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
-          ratingCount
-        : 0
+  const ratingStats = await prisma.rating.groupBy({
+    by: ['bookId'],
+    where: { bookId: { in: bookIds }, deletedAt: null },
+    _avg: { rate: true },
+    _count: { rate: true },
+  })
 
-    const readingStatus = book.readingStatus?.[0]?.status || null
-
+  const books = top6Books.map((book) => {
+    const stats = ratingStats.find((s) => s.bookId === book.id)
     return {
       ...book,
-      ratingCount,
-      rate: avgRating,
-      readingStatus,
+      categories: book.categories.map((c) => c.category),
+      rate: stats?._avg.rate ?? NaN,
+      ratingCount: stats?._count.rate ?? 0,
+      readingStatus:
+        'readingStatus' in book
+          ? (book.readingStatus as { status: string }[])[0]?.status ?? null
+          : null,
     }
   })
 
-  const top6Books = booksWithDetails.slice(0, 6)
-
-  return res.json({ books: top6Books })
+  return res.json({ books })
 }

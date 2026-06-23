@@ -16,71 +16,71 @@ export default async function handler(
     : undefined
 
   const page = Number(req.query.page) || 1
-
   const perPage = Number(req.query.perPage) || DEFAULT_PAGE_SIZE
 
-  const totalRatings = await prisma.rating.count({
-    where: {
-      userId,
-      ...(searchQuery && {
+  const searchWhere = searchQuery
+    ? {
         OR: [
-          { book: { name: { contains: searchQuery, mode: 'insensitive' } } },
-          { book: { author: { contains: searchQuery, mode: 'insensitive' } } },
+          {
+            book: {
+              name: { contains: searchQuery, mode: 'insensitive' as const },
+            },
+          },
+          {
+            book: {
+              author: { contains: searchQuery, mode: 'insensitive' as const },
+            },
+          },
         ],
-      }),
-    },
+      }
+    : undefined
+
+  const [totalRatings, userRatings] = await Promise.all([
+    prisma.rating.count({ where: { userId, ...searchWhere } }),
+
+    prisma.rating.findMany({
+      where: { userId, ...searchWhere },
+      include: {
+        book: {
+          include: {
+            categories: { include: { category: true } },
+            readingStatus: { where: { userId } },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    }),
+  ])
+
+  const bookIds = userRatings.map((r) => r.bookId)
+
+  const bookRatingStats = await prisma.rating.groupBy({
+    by: ['bookId'],
+    where: { bookId: { in: bookIds }, deletedAt: null },
+    _avg: { rate: true },
+    _count: { rate: true },
   })
 
   const totalPages = Math.ceil(totalRatings / perPage)
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      ratings: {
-        where: searchQuery
-          ? {
-              OR: [
-                {
-                  book: {
-                    name: { contains: searchQuery, mode: 'insensitive' },
-                  },
-                },
-                {
-                  book: {
-                    author: { contains: searchQuery, mode: 'insensitive' },
-                  },
-                },
-              ],
-            }
-          : undefined,
-        include: {
-          book: {
-            include: {
-              categories: { include: { category: true } },
-              readingStatus: { where: { userId } },
-              ratings: true,
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * perPage,
-        take: perPage,
+  const ratings = userRatings.map((rating) => {
+    const stats = bookRatingStats.find((s) => s.bookId === rating.bookId)
+    return {
+      ...rating,
+      book: {
+        ...rating.book,
+        readingStatus: rating.book.readingStatus[0]?.status ?? null,
+        rate: stats?._avg.rate ?? NaN,
+        ratingCount: stats?._count.rate ?? 0,
       },
-    },
+    }
   })
-
-  if (!user) return res.status(404).json({ message: 'User not found.' })
 
   return res.json({
     data: {
-      ratings: user.ratings.map((rating) => ({
-        ...rating,
-        book: {
-          ...rating.book,
-          readingStatus: rating.book.readingStatus[0]?.status || null,
-          ratings: rating.book.ratings,
-        },
-      })),
+      ratings,
       pagination: {
         currentPage: page,
         perPage,

@@ -1,20 +1,22 @@
 import { SkeletonBox } from '@/components/ui/Skeleton'
-import { Container } from './styles'
+import { Container, Header, BooksRow, BookCoverSkeleton } from './styles'
 
 export function SkeletonBookStatusList() {
   return (
     <Container>
-      <SkeletonBox
-        style={{ width: '100%', height: '2rem', borderRadius: '8px' }}
-      />
-      <SkeletonBox
-        style={{
-          width: '100%',
-          height: '11rem',
-          borderRadius: '8px',
-          marginTop: '-1.8rem',
-        }}
-      />
+      <Header>
+        <SkeletonBox
+          style={{ width: '8rem', height: '1.1rem', borderRadius: '6px' }}
+        />
+        <SkeletonBox
+          style={{ width: '4.5rem', height: '1rem', borderRadius: '6px' }}
+        />
+      </Header>
+      <BooksRow>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <BookCoverSkeleton key={i} />
+        ))}
+      </BooksRow>
     </Container>
   )
 }

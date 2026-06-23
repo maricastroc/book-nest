@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { BookProps } from '@/@types/book'
 import {
   BookCover,
@@ -16,8 +15,7 @@ import { CaretRight, Plus } from 'phosphor-react'
 import { StarsRating } from '@/components/features/books/StarsRating'
 import { useRouter } from 'next/router'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
-import { ScrollableSection } from '@/components/shared/ScrollableSection'
-import { useHorizontalScroll } from '@/hooks/useHorizontalScroll'
+import { HorizontalScroll } from '@/components/shared/HorizontalScroll'
 import { ReadingStatusTag } from '@/components/features/books/ReadingStatusTag'
 
 interface BookStatusListProps {
@@ -39,10 +37,6 @@ export function BookStatusList({
   onStatusClick,
   onSelect,
 }: BookStatusListProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const { handleScroll, isOverflowing } = useHorizontalScroll(containerRef)
-
   const router = useRouter()
 
   return (
@@ -58,54 +52,43 @@ export function BookStatusList({
         </ViewAllButton>
       </Header>
 
-      <ScrollableSection
-        handleScroll={handleScroll}
-        showIcons={isOverflowing && books && books.length > 0}
-      >
-        <ContainerWrapper
-          ref={containerRef}
-          className={books?.length ? '' : 'smaller'}
-        >
-          {books && books.length > 0 ? (
-            <>
-              {books.map((book) => (
-                <BookContainer key={book.id}>
-                  <BookCover
-                    src={book.coverUrl}
-                    onClick={() => onSelect(book)}
-                  />
-                  <BookDetailsWrapper>
-                    <p>{book.name}</p>
-                    <h2>{book.author}</h2>
-                    {(status === READ_STATUS ||
-                      status === DID_NOT_FINISH_STATUS) && (
-                      <StarsRating
-                        size={'smaller'}
-                        rating={book?.userRating ?? 0}
-                      />
-                    )}
-                  </BookDetailsWrapper>
-                </BookContainer>
-              ))}
+      <ContainerWrapper className={books?.length ? '' : 'smaller'}>
+        {books && books.length > 0 ? (
+          <HorizontalScroll scrollAmount={300}>
+            {books.map((book) => (
+              <BookContainer key={book.id}>
+                <BookCover src={book.coverUrl} onClick={() => onSelect(book)} />
+                <BookDetailsWrapper>
+                  <p>{book.name}</p>
+                  <h2>{book.author}</h2>
+                  {(status === READ_STATUS ||
+                    status === DID_NOT_FINISH_STATUS) && (
+                    <StarsRating
+                      size={'smaller'}
+                      rating={book?.userRating ?? 0}
+                    />
+                  )}
+                </BookDetailsWrapper>
+              </BookContainer>
+            ))}
 
-              {isLoggedUser && (
-                <BookContainer>
-                  <EmptyBookCover onClick={() => router.push('/explore')}>
-                    <Plus />
-                  </EmptyBookCover>
-                </BookContainer>
-              )}
-            </>
-          ) : (
-            <EmptyBooksContainer>
-              <EmptyBookCover onClick={() => router.push('/explore')}>
-                <Plus />
-              </EmptyBookCover>
-              <p>{emptyBoxMessage ?? ''}</p>
-            </EmptyBooksContainer>
-          )}
-        </ContainerWrapper>
-      </ScrollableSection>
+            {isLoggedUser && (
+              <BookContainer>
+                <EmptyBookCover onClick={() => router.push('/explore')}>
+                  <Plus />
+                </EmptyBookCover>
+              </BookContainer>
+            )}
+          </HorizontalScroll>
+        ) : (
+          <EmptyBooksContainer>
+            <EmptyBookCover onClick={() => router.push('/explore')}>
+              <Plus />
+            </EmptyBookCover>
+            <p>{emptyBoxMessage ?? ''}</p>
+          </EmptyBooksContainer>
+        )}
+      </ContainerWrapper>
     </LibraryContainerBox>
   )
 }

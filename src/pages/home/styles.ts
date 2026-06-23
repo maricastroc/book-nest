@@ -133,6 +133,24 @@ export const PopularBooksTitle = styled('div', {
   },
 })
 
+export const RecommendedBooksWrapper = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.75rem',
+  marginBottom: '2rem',
+  width: '100%',
+})
+
+export const RecommendedBooksTitle = styled('p', {
+  fontSize: '$sm',
+})
+
+export const RecommendedEmptyHint = styled('p', {
+  fontSize: '$xs',
+  color: '$gray400',
+  fontStyle: 'italic',
+})
+
 export const PopularBooksContent = styled('div', {
   display: 'flex',
   flexDirection: 'column',

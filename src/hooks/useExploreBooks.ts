@@ -12,8 +12,6 @@ export function useExploreBooks() {
 
   const [updatedBooks, setUpdatedBooks] = useState<BookProps[]>([])
 
-  const containerRef = useRef<HTMLDivElement>(null)
-
   const gridRef = useRef<HTMLDivElement>(null)
 
   const {
@@ -103,7 +101,6 @@ export function useExploreBooks() {
     categories,
     isValidating,
     error,
-    containerRef,
     gridRef,
     perPage,
   }
