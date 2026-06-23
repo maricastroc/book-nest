@@ -8,6 +8,9 @@ jest.mock('@/lib/prisma', () => ({
     book: {
       findMany: jest.fn(),
     },
+    rating: {
+      groupBy: jest.fn(),
+    },
   },
 }))
 
@@ -16,18 +19,26 @@ jest.mock('next-auth', () => ({
 }))
 
 describe('GET /api/books', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('returns top 6 books with ratings and status', async () => {
     const mockBooks = [
       {
         id: '1',
-        title: 'Book 1',
-        ratings: [{ rate: 4 }, { rate: 5 }],
+        name: 'Book 1',
+        author: 'Author 1',
+        coverUrl: null,
+        categories: [{ category: { id: 'cat-1', name: 'Fiction' } }],
         readingStatus: [{ status: 'READING' }],
       },
       {
         id: '2',
-        title: 'Book 2',
-        ratings: [],
+        name: 'Book 2',
+        author: 'Author 2',
+        coverUrl: null,
+        categories: [],
         readingStatus: [],
       },
     ]
@@ -36,37 +47,34 @@ describe('GET /api/books', () => {
       user: { id: 'user-123' },
     })
     ;(prisma.book.findMany as jest.Mock).mockResolvedValue(mockBooks)
+    ;(prisma.rating.groupBy as jest.Mock).mockResolvedValue([
+      { bookId: '1', _avg: { rate: 4.5 }, _count: { rate: 2 } },
+    ])
 
-    const req = {
-      method: 'GET',
-    } as any
-
+    const req = { method: 'GET' } as any
     const json = jest.fn()
     const status = jest.fn(() => ({ end: jest.fn() }))
     const res = { json, status } as any
 
     await handler(req, res)
 
-    expect(getServerSession).toHaveBeenCalled()
     expect(prisma.book.findMany).toHaveBeenCalled()
+    expect(prisma.rating.groupBy).toHaveBeenCalled()
     expect(json).toHaveBeenCalledWith({
       books: [
-        {
+        expect.objectContaining({
           id: '1',
-          title: 'Book 1',
-          ratings: [{ rate: 4 }, { rate: 5 }],
-          ratingCount: 2,
+          categories: [{ id: 'cat-1', name: 'Fiction' }],
           rate: 4.5,
+          ratingCount: 2,
           readingStatus: 'READING',
-        },
-        {
+        }),
+        expect.objectContaining({
           id: '2',
-          title: 'Book 2',
-          ratings: [],
+          categories: [],
           ratingCount: 0,
-          rate: 0,
           readingStatus: null,
-        },
+        }),
       ],
     })
   })

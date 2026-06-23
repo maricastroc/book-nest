@@ -25,10 +25,10 @@ export const TextareaContainer = styled('div', {
 })
 
 export const StyledTextarea = styled('textarea', {
-  backgroundColor: 'transparent',
-  border: 'solid 1px $blue600',
+  backgroundColor: '$gray800',
+  border: 'solid 1px $gray600',
   color: '$gray300',
-  padding: '0.75rem 0.6rem',
+  padding: '0.75rem 0.75rem',
   fontSize: '0.85rem',
   borderRadius: 8,
   width: '100%',
@@ -42,10 +42,10 @@ export const StyledTextarea = styled('textarea', {
   },
 
   '&:focus': {
-    backgroundColor: 'transparent',
+    backgroundColor: '$gray700',
     outline: 'none',
     boxShadow: 'none',
-    borderBottom: 'solid 1px $blue500',
+    borderColor: '$blue500',
   },
 
   variants: {

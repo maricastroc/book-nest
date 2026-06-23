@@ -16,6 +16,11 @@ export const customStyles = {
     ...provided,
     backgroundColor: '#20263f',
   }),
+  menuList: (provided: any) => ({
+    ...provided,
+    maxHeight: '180px',
+    overflowY: 'auto',
+  }),
   option: (provided: any, state: any) => ({
     ...provided,
     backgroundColor: '#20263f',

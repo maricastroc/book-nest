@@ -10,6 +10,8 @@ jest.mock('@/lib/prisma', () => ({
     },
     rating: {
       groupBy: jest.fn(),
+      findMany: jest.fn(),
+      findFirst: jest.fn(),
     },
   },
 }))
@@ -60,11 +62,19 @@ describe('GET /api/books', () => {
       },
     })
     ;(prisma.rating.groupBy as jest.Mock).mockResolvedValue([
+      { bookId: 'book-1', _avg: { rate: 4 } },
+    ])
+    ;(prisma.rating.findMany as jest.Mock).mockResolvedValue([
       {
-        bookId: 'book-1',
-        _avg: { rate: 4 },
+        id: 'rating-1',
+        rate: 4,
+        userId: 'other-user',
+        deletedAt: null,
+        user: { id: 'other-user', name: 'Other User' },
+        votes: [],
       },
     ])
+    ;(prisma.rating.findFirst as jest.Mock).mockResolvedValue(null)
 
     const req = {
       method: 'GET',

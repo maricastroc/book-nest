@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import * as Dialog from '@radix-ui/react-dialog'
 import { Plus } from 'phosphor-react'
 
 import {
@@ -14,7 +13,6 @@ import {
   UserProfileInfo,
 } from './styles'
 
-import dynamic from 'next/dynamic'
 import { Avatar } from '@/components/shared/Avatar'
 import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
 import { ScrollableSection } from '@/components/shared/ScrollableSection'
@@ -36,11 +34,6 @@ import { LateralMenu } from '@/components/features/books/LateralMenu'
 import { BookProvider } from '@/contexts/BookContext'
 import { useAppContext } from '@/contexts/AppContext'
 
-const SubmitBookFormModal = dynamic(
-  () => import('../SubmitBookFormModal').then((m) => m.SubmitBookFormModal),
-  { ssr: false },
-)
-
 interface SubmittedBooksSectionProps {
   userId: string | undefined
   userInfo: UserProps | null
@@ -57,8 +50,6 @@ export function SubmittedBooksSection({
   const containerRef = useRef<HTMLDivElement>(null)
 
   const router = useRouter()
-
-  const [isSubmitBookFormOpen, setIsSubmitBookFormOpen] = useState(false)
 
   const [submittedBooks, setSubmittedBooks] = useState<BookProps[] | null>([])
 
@@ -127,7 +118,6 @@ export function SubmittedBooksSection({
             setSelectedBook(book)
             setIsLateralMenuOpen(true)
           }}
-          onClose={() => setIsSubmitBookFormOpen(false)}
         />
       ))
     }
@@ -200,18 +190,11 @@ export function SubmittedBooksSection({
           </UserProfileInfo>
 
           <SubmittedBooksWrapper>
-            <Dialog.Root open={isSubmitBookFormOpen}>
-              <SubmitBookFormModal
-                onUpdateBook={async () => await mutate()}
-                onClose={() => setIsSubmitBookFormOpen(false)}
-              />
-            </Dialog.Root>
-
             <SubmittedBooksHeading>
               <p>Submitted Books</p>
               {loggedUser?.id === userId && (
                 <OutlineButton
-                  onClick={() => setIsSubmitBookFormOpen(true)}
+                  onClick={() => router.push('/submissions/new')}
                   disabled={isValidatingSubmittedBooksData}
                 >
                   Add
