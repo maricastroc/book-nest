@@ -45,13 +45,13 @@ export const StyledButton = styled('button', {
       },
 
       'outline-white': {
-        color: '$gray100',
+        color: '$gray200',
         backgroundColor: 'transparent',
-        border: '1px solid $gray100',
+        border: '1px solid $gray200',
         transition: 'all 200ms ease',
 
         '&:not(:disabled):hover': {
-          color: '$gray100',
+          color: '$gray200',
           backgroundColor: '$purple200',
           borderColor: '$purple200',
         },

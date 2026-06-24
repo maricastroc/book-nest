@@ -30,6 +30,43 @@ export const UserProfileInfo = styled('div', {
   },
 })
 
+export const UserActionsWrapper = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '0.5rem',
+  marginTop: '1rem',
+  width: '100%',
+
+  '@media (min-width: 1400px)': {
+    padding: '0 2rem',
+  },
+})
+
+export const FollowCountsRow = styled('div', {
+  display: 'flex',
+  gap: '1.5rem',
+  fontSize: '0.85rem',
+  color: '$gray300',
+  marginBottom: '0.7rem',
+
+  strong: {
+    color: '$white',
+  },
+
+  span: {
+    transition: 'color 150ms',
+
+    '&:hover': {
+      color: '$purple100',
+
+      strong: {
+        color: '$purple100',
+      },
+    },
+  },
+})
+
 export const UserStatsWrapper = styled('div', {
   display: 'grid',
   width: '100%',

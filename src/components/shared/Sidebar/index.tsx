@@ -13,6 +13,7 @@ import {
   Books,
   ChartLineUp,
   FileText,
+  Rss,
   User,
   Users,
 } from 'phosphor-react'
@@ -59,6 +60,12 @@ export function Sidebar() {
               />
               {loggedUser && (
                 <>
+                  <NavigationItem
+                    active={router.pathname === '/feed'}
+                    onClick={() => router.push('/feed')}
+                    icon={Rss}
+                    label="Feed"
+                  />
                   <NavigationItem
                     active={router.pathname.includes('profile')}
                     onClick={() => {

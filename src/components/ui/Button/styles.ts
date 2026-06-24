@@ -74,6 +74,19 @@ export const StyledButton = styled('button', {
         },
       },
 
+      secondary: {
+        color: '$gray300',
+        backgroundColor: '$gray600',
+        border: '1px solid $gray500',
+        transition: 'all 200ms ease',
+
+        '&:not(:disabled):hover': {
+          color: '$gray100',
+          backgroundColor: '$gray500',
+          borderColor: '$gray400',
+        },
+      },
+
       delete: {
         color: '$gray100',
         backgroundColor: '$red300',

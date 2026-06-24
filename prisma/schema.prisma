@@ -40,9 +40,28 @@ model User {
   books         Book[]
   readingStatus ReadingStatus[]
 
-  votes         Vote[]  
+  votes         Vote[]
+
+  following     Follow[] @relation("Follower")
+  followers     Follow[] @relation("Following")
 
   @@map("users")
+}
+
+model Follow {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+
+  followerId  String
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+
+  followingId String
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
 }
 
 model Book {

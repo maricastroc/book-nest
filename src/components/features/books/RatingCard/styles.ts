@@ -124,6 +124,7 @@ export const BookSummaryWrapper = styled('div', {
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   gap: '1rem',
+  width: '100%',
 
   '@media (min-width: 480px)': {
     gap: '0.5rem',

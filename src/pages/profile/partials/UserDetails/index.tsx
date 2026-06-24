@@ -9,6 +9,8 @@ import {
   UserProfileInfo,
   UserStatsWrapper,
   UserStatItem,
+  UserActionsWrapper,
+  FollowCountsRow,
 } from './styles'
 import { Avatar } from '../../../../components/shared/Avatar'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
@@ -17,6 +19,8 @@ import { useRouter } from 'next/router'
 import { Button } from '@/components/ui/Button'
 import { UserStatistics } from '@/@types/user_statistics'
 import { DividerLine } from '@/components/ui/DividerLine'
+import { useFollowStatus } from '@/hooks/useFollowStatus'
+import { FollowListModal } from '@/components/modals/FollowListModal'
 
 const EditProfileModal = dynamic(
   () =>
@@ -54,8 +58,19 @@ export function UserDetails({
   isLoading,
 }: UserDetailsProps) {
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
+  const [followListModal, setFollowListModal] = useState<
+    'followers' | 'following' | null
+  >(null)
 
   const router = useRouter()
+
+  const {
+    followersCount,
+    followingCount,
+    isFollowing,
+    isTogglingFollow,
+    toggleFollow,
+  } = useFollowStatus(userId)
 
   const [dateInfo, setDateInfo] = useState({
     dateFormatted: '',
@@ -109,54 +124,115 @@ export function UserDetails({
   }, [userId, userStatistics])
 
   return (
-    <UserProfileContainer>
-      {isLoading ? (
-        <SkeletonUserDetails />
-      ) : (
-        <>
-          <UserProfileInfo>
-            <Avatar avatarUrl={userAvatarUrl} variant="large" />
-            <h2>{userName}</h2>
-            <time title={dateInfo.dateFormatted} dateTime={dateInfo.dateString}>
-              joined {dateInfo.dateRelativeToNow}
-            </time>
-          </UserProfileInfo>
+    <>
+      <UserProfileContainer>
+        {isLoading ? (
+          <SkeletonUserDetails />
+        ) : (
+          <>
+            <UserProfileInfo>
+              <Avatar avatarUrl={userAvatarUrl} variant="large" />
+              <h2>{userName}</h2>
+              <time
+                title={dateInfo.dateFormatted}
+                dateTime={dateInfo.dateString}
+              >
+                joined {dateInfo.dateRelativeToNow}
+              </time>
+            </UserProfileInfo>
 
-          {isCurrentUser ? (
-            <Dialog.Root open={isEditProfileModalOpen}>
-              <Dialog.Trigger asChild>
+            {isCurrentUser ? (
+              <UserActionsWrapper>
+                <FollowCountsRow>
+                  <span
+                    onClick={() => setFollowListModal('followers')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <strong>{followersCount}</strong> followers
+                  </span>
+                  <span
+                    onClick={() => setFollowListModal('following')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <strong>{followingCount}</strong> following
+                  </span>
+                </FollowCountsRow>
+                <Dialog.Root open={isEditProfileModalOpen}>
+                  <Dialog.Trigger asChild>
+                    <Button
+                      isSmaller
+                      type="button"
+                      content="Edit Info"
+                      onClick={() => setIsEditProfileModalOpen(true)}
+                      style={{ width: '100%' }}
+                    />
+                  </Dialog.Trigger>
+                  {isEditProfileModalOpen && (
+                    <EditProfileModal
+                      onClose={() => setIsEditProfileModalOpen(false)}
+                    />
+                  )}
+                </Dialog.Root>
+              </UserActionsWrapper>
+            ) : (
+              <UserActionsWrapper>
+                <FollowCountsRow>
+                  <span
+                    onClick={() => setFollowListModal('followers')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <strong>{followersCount}</strong> followers
+                  </span>
+                  <span
+                    onClick={() => setFollowListModal('following')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <strong>{followingCount}</strong> following
+                  </span>
+                </FollowCountsRow>
                 <Button
                   isSmaller
-                  type="button"
-                  content="Edit Info"
-                  onClick={() => setIsEditProfileModalOpen(true)}
-                  style={{ marginTop: '1rem' }}
+                  content={
+                    isTogglingFollow
+                      ? 'Loading...'
+                      : isFollowing
+                      ? 'Unfollow'
+                      : 'Follow'
+                  }
+                  onClick={toggleFollow}
+                  variant={'default'}
+                  style={{ width: '100%' }}
                 />
-              </Dialog.Trigger>
-              {isEditProfileModalOpen && (
-                <EditProfileModal
-                  onClose={() => setIsEditProfileModalOpen(false)}
+                <Button
+                  isSmaller
+                  content="View Library"
+                  variant="outline-white"
+                  onClick={() => router.push(`/library/${userId}`)}
+                  style={{ width: '100%' }}
                 />
-              )}
-            </Dialog.Root>
-          ) : (
-            <Button
-              isSmaller
-              style={{ marginTop: '1rem' }}
-              content="View Library"
-              onClick={() => router.push(`/library/${userId}`)}
-            />
-          )}
+              </UserActionsWrapper>
+            )}
 
-          <DividerLine />
+            <DividerLine style={{ margin: '1.2rem 0' }} />
 
-          <UserStatsWrapper>
-            {userStats.map((stat, index) => (
-              <UserStatItemComponent key={index} {...stat} />
-            ))}
-          </UserStatsWrapper>
-        </>
+            <UserStatsWrapper>
+              {userStats.map((stat, index) => (
+                <UserStatItemComponent key={index} {...stat} />
+              ))}
+            </UserStatsWrapper>
+          </>
+        )}
+      </UserProfileContainer>
+
+      {followListModal && userId && (
+        <Dialog.Root open>
+          <FollowListModal
+            userId={userId}
+            type={followListModal}
+            onClose={() => setFollowListModal(null)}
+          />
+        </Dialog.Root>
       )}
-    </UserProfileContainer>
+    </>
   )
 }

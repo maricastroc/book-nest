@@ -50,7 +50,7 @@ export const EmptyRating = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  minWidth: '100%',
+  width: '100%',
   color: '$gray400',
   border: '1px dashed $gray400',
   borderRadius: 8,

@@ -5,7 +5,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string | undefined
   isSmaller?: boolean
   isSubmitting?: boolean
-  variant?: 'default' | 'outline-white' | 'solid-white' | 'delete'
+  variant?: 'default' | 'outline-white' | 'solid-white' | 'delete' | 'secondary'
 }
 
 export const Button = ({
