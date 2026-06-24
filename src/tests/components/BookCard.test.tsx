@@ -45,7 +45,8 @@ const mockBook: BookProps = {
   summary: 'A classic novel.',
   totalPages: 180,
   categories: [],
-  publishingYear: 1925,
+  publishingYear: '1925',
+  createdAt: new Date('2024-01-01'),
 }
 
 describe('BookCard', () => {
