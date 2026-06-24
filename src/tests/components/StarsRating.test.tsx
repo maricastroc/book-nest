@@ -1,11 +1,15 @@
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { StarsRating } from '@/components/features/books/StarsRating'
 
 jest.mock('@/styles', () => ({
   styled: () => {
-    const Component = ({ children, className }: any) => (
-      <div className={className}>{children}</div>
-    )
+    const Component = ({
+      children,
+      className,
+    }: {
+      children?: React.ReactNode
+      className?: string
+    }) => <div className={className}>{children}</div>
     Component.displayName = 'styled'
     return Component
   },

@@ -2,10 +2,14 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { SearchBar } from '@/components/shared/SearchBar'
 
 jest.mock('@/styles', () => ({
-  styled: (_tag: any, _styles: any) => {
-    const Component = ({ children, className }: any) => (
-      <div className={className}>{children}</div>
-    )
+  styled: () => {
+    const Component = ({
+      children,
+      className,
+    }: {
+      children?: React.ReactNode
+      className?: string
+    }) => <div className={className}>{children}</div>
     Component.displayName = 'styled'
     return Component
   },
@@ -25,9 +29,7 @@ describe('SearchBar', () => {
 
   it('renders the input with the correct placeholder', () => {
     render(<SearchBar {...defaultProps} />)
-    expect(
-      screen.getByPlaceholderText('Search books...'),
-    ).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Search books...')).toBeInTheDocument()
   })
 
   it('displays the current search value', () => {
@@ -51,9 +53,7 @@ describe('SearchBar', () => {
   })
 
   it('shows an X icon when search has a value', () => {
-    const { container } = render(
-      <SearchBar {...defaultProps} search="Dune" />,
-    )
+    const { container } = render(<SearchBar {...defaultProps} search="Dune" />)
     const svgs = container.querySelectorAll('svg')
     expect(svgs.length).toBe(1)
   })
@@ -63,8 +63,8 @@ describe('SearchBar', () => {
     const { container } = render(
       <SearchBar {...defaultProps} search="Dune" onClick={onClick} />,
     )
-    const xIcon = container.querySelector('svg')!
-    fireEvent.click(xIcon)
+    const xIcon = container.querySelector('svg')
+    if (xIcon) fireEvent.click(xIcon)
     expect(onClick).toHaveBeenCalledTimes(1)
   })
 })

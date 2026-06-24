@@ -3,8 +3,16 @@ import { BookCard } from '@/components/features/books/BookCard'
 import { BookProps } from '@/@types/book'
 
 jest.mock('@/styles', () => ({
-  styled: (_tag: any, _styles: any) => {
-    const Component = ({ children, className, onClick }: any) => (
+  styled: () => {
+    const Component = ({
+      children,
+      className,
+      onClick,
+    }: {
+      children?: React.ReactNode
+      className?: string
+      onClick?: () => void
+    }) => (
       <div className={className} onClick={onClick}>
         {children}
       </div>
@@ -73,7 +81,8 @@ describe('BookCard', () => {
     const { container } = render(
       <BookCard book={mockBook} onOpenDetails={onOpenDetails} />,
     )
-    fireEvent.click(container.firstChild as HTMLElement)
+    const card = container.firstChild as HTMLElement
+    if (card) fireEvent.click(card)
     expect(onOpenDetails).toHaveBeenCalledTimes(1)
   })
 

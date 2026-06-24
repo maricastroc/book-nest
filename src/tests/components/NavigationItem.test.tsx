@@ -3,8 +3,16 @@ import { NavigationItem } from '@/components/shared/NavigationItem'
 import { House } from 'phosphor-react'
 
 jest.mock('@/styles', () => ({
-  styled: (_tag: any, _styles: any) => {
-    const Component = ({ children, className, onClick }: any) => (
+  styled: () => {
+    const Component = ({
+      children,
+      className,
+      onClick,
+    }: {
+      children?: React.ReactNode
+      className?: string
+      onClick?: () => void
+    }) => (
       <div className={className} onClick={onClick}>
         {children}
       </div>
@@ -38,14 +46,14 @@ describe('NavigationItem', () => {
 
   it('applies the active class when active is true', () => {
     render(<NavigationItem {...defaultProps} active={true} />)
-    const button = screen.getByText('Home').closest('div')!
-    expect(button.className).toContain('active')
+    const button = screen.getByText('Home').closest('div')
+    expect(button?.className).toContain('active')
   })
 
   it('does not apply the active class when active is false', () => {
     render(<NavigationItem {...defaultProps} active={false} />)
-    const button = screen.getByText('Home').closest('div')!
-    expect(button.className).not.toContain('active')
+    const button = screen.getByText('Home').closest('div')
+    expect(button?.className).not.toContain('active')
   })
 
   it('calls onClick when clicked', () => {

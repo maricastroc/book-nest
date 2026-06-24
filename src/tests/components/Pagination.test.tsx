@@ -2,13 +2,31 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { Pagination } from '@/components/shared/Pagination'
 
 jest.mock('@/components/shared/Pagination/styles', () => ({
-  PaginationContainer: ({ children }: any) => <div>{children}</div>,
-  PaginationButton: ({ children, disabled, onClick }: any) => (
+  PaginationContainer: ({ children }: { children?: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  PaginationButton: ({
+    children,
+    disabled,
+    onClick,
+  }: {
+    children?: React.ReactNode
+    disabled?: boolean
+    onClick?: () => void
+  }) => (
     <button disabled={disabled} onClick={onClick}>
       {children}
     </button>
   ),
-  PaginationPage: ({ children, active, onClick }: any) => (
+  PaginationPage: ({
+    children,
+    active,
+    onClick,
+  }: {
+    children?: React.ReactNode
+    active?: boolean
+    onClick?: () => void
+  }) => (
     <button data-active={active} onClick={onClick}>
       {children}
     </button>
@@ -55,8 +73,7 @@ describe('Pagination', () => {
       />,
     )
     const buttons = screen.getAllByRole('button')
-    const nextButton = buttons[buttons.length - 1]
-    fireEvent.click(nextButton)
+    fireEvent.click(buttons[buttons.length - 1])
     expect(onPageChange).toHaveBeenCalledWith(3)
   })
 
