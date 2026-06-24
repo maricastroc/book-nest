@@ -1,16 +1,29 @@
 module.exports = {
-  testEnvironment: 'node',
-  preset: 'ts-jest',
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
-  testMatch: ['<rootDir>/src/**/*.test.(ts|tsx)'],
-
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
-
-  transformIgnorePatterns: ['/node_modules/(?!(bcrypt)/)'],
-
-  clearMocks: true,
+  projects: [
+    {
+      displayName: 'api',
+      testEnvironment: 'node',
+      preset: 'ts-jest',
+      moduleNameMapper: {
+        '^@/(.*)$': '<rootDir>/src/$1',
+      },
+      testMatch: ['<rootDir>/src/tests/api/**/*.test.ts'],
+      transformIgnorePatterns: ['/node_modules/(?!(bcrypt)/)'],
+    },
+    {
+      displayName: 'components',
+      testEnvironment: 'jsdom',
+      preset: 'ts-jest',
+      moduleNameMapper: {
+        '^@/(.*)$': '<rootDir>/src/$1',
+      },
+      testMatch: ['<rootDir>/src/tests/components/**/*.test.tsx'],
+      setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
+      transform: {
+        '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: { jsx: 'react-jsx' } }],
+      },
+    },
+  ],
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['/node_modules/', '/tests/'],
