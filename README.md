@@ -26,7 +26,7 @@ Users can also submit new books to the platform by providing the ISBN. Upon subm
 The most challenging part of this project was creating routes and endpoints for interacting with the database. Since the registered data had many relationships among themselves, and there were some data that needed to be calculated in the request body, it required a well-thought-out logic to obtain them at times. The application is also covered by automated tests implemented with Jest, ensuring reliability and maintainability of the codebase.
 
 ## 🔍 Links
-[Preview Site](https://book-wise-puce.vercel.app/)
+[Preview Site](https://book-nest.marianacastro.dev)
 
 ## 🛠️ Tech Stack
 
