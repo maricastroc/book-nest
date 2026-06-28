@@ -3,6 +3,17 @@ import { UserProps } from './user'
 import { CategoryProps } from './category'
 import { CategoriesOnBooks } from '@prisma/client'
 
+export interface RecommendationReason {
+  kind: 'affinity' | 'quality'
+  label: string
+}
+
+export interface RecommendationMeta {
+  score: number
+  bayesianRate: number
+  reasons: RecommendationReason[]
+}
+
 export interface BookProps {
   id: string
   name: string
@@ -28,15 +39,4 @@ export interface BookProps {
   ratings?: RatingProps[]
 
   recommendation?: RecommendationMeta | null
-}
-
-export interface RecommendationReason {
-  kind: 'affinity' | 'quality'
-  label: string
-}
-
-export interface RecommendationMeta {
-  score: number
-  bayesianRate: number
-  reasons: RecommendationReason[]
 }
