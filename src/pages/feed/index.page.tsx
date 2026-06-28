@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react'
 
 import { MainLayout } from '@/layouts/MainLayout'
 import { RatingCard } from '@/components/features/books/RatingCard'
-import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
-import { Pagination } from '@/components/shared/Pagination'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { SkeletonRatingCard } from '@/components/features/books/SkeletonRatingCard'
+import { Pagination } from '@/components/ui/Pagination'
+import { SearchBar } from '@/components/ui/SearchBar'
 
 import { FindReaders } from './partials/FindReaders'
 

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { SearchBar } from '@/components/ui/SearchBar'
 
 jest.mock('@/styles', () => ({
   styled: () => {

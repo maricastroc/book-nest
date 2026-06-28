@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Dialog from '@radix-ui/react-dialog'
-import { DeleteModal } from '@/components/ui/DeleteModal'
+import { DeleteModal } from '@/components/features/books/DeleteModal'
 import { useAppContext } from '@/contexts/AppContext'
 import { useBookContext } from '@/contexts/BookContext'
 

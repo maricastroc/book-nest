@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { EmptyContainer } from '@/components/ui/EmptyContainer'
 
 jest.mock('@/styles', () => ({
   styled: () => {

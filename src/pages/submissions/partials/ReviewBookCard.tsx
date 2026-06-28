@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router'
 
 import { BookProps } from '@/@types/book'
-import { Avatar } from '@/components/shared/Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 
 interface Props {

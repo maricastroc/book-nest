@@ -1,4 +1,4 @@
-import { Avatar } from '@/components/shared/Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 import { StarsRating } from '@/components/features/books/StarsRating'
 import { TextBox } from '@/components/features/books/TextBox'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'

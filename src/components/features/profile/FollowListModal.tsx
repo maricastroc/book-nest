@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import { Avatar } from '@/components/shared/Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 import useRequest from '@/hooks/useRequest'
 import { styled } from '@/styles'
 import { BaseModal } from '../ui/BaseModal'

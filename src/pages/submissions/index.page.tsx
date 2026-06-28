@@ -4,9 +4,9 @@ import { MainLayout } from '@/layouts/MainLayout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileLines } from '@fortawesome/free-solid-svg-icons'
 import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { Pagination } from '@/components/shared/Pagination'
-import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
+import { EmptyContainer } from '@/components/ui/EmptyContainer'
+import { Pagination } from '@/components/ui/Pagination'
+import { SkeletonBookCard } from '@/components/features/books/SkeletonBookCard'
 import { ReviewBookCard } from './partials/ReviewBookCard'
 
 export default function Submissions() {

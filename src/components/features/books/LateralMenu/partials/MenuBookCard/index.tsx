@@ -13,7 +13,7 @@ import { SignInModal } from '@/components/features/auth/SignInModal'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useAppContext } from '@/contexts/AppContext'
 import { getReadingStatusLabel } from '@/utils/getReadingStatusLabel'
-import { Avatar } from '@/components/shared/Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useRouter } from 'next/router'
 

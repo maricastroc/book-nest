@@ -7,9 +7,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { BookProps } from '@/@types/book'
 
-import { Pagination } from '@/components/shared/Pagination'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { SkeletonExploreCard } from '@/components/skeletons/SkeletonExploreCard'
+import { Pagination } from '@/components/ui/Pagination'
+import { EmptyContainer } from '@/components/ui/EmptyContainer'
+import { SkeletonExploreCard } from '@/components/features/books/SkeletonExploreCard'
 
 import { ExploreCard } from './partials/ExploreCard'
 import { CategoriesSection } from './partials/CategoriesSection'

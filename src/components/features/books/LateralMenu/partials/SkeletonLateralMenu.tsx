@@ -1,4 +1,4 @@
-import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
+import { SkeletonRatingCard } from '@/components/features/books/SkeletonRatingCard'
 import { SkeletonBox } from '@/components/ui/Skeleton'
 
 export function SkeletonLateralMenu() {

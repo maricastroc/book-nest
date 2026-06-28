@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartLine, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { RatingCard } from '@/components/features/books/RatingCard'
 import { BookCard } from '@/components/features/books/BookCard'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
-import { SkeletonBookCard } from '@/components/skeletons/SkeletonBookCard'
-import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
+import { EmptyContainer } from '@/components/ui/EmptyContainer'
+import { SkeletonBookCard } from '@/components/features/books/SkeletonBookCard'
+import { SkeletonRatingCard } from '@/components/features/books/SkeletonRatingCard'
 
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
@@ -15,7 +15,7 @@ import useRequest from '@/hooks/useRequest'
 import { useAppContext } from '@/contexts/AppContext'
 import { useSession } from 'next-auth/react'
 import { MainLayout } from '@/layouts/MainLayout'
-import { HorizontalScroll } from '@/components/shared/HorizontalScroll'
+import { HorizontalScroll } from '@/components/ui/HorizontalScroll'
 
 function SectionLabel({
   children,

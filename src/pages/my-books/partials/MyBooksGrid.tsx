@@ -5,7 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { BookProps } from '@/@types/book'
-import { EmptyContainer } from '@/components/shared/EmptyContainer'
+import { EmptyContainer } from '@/components/ui/EmptyContainer'
 import { ExploreCard } from '@/pages/explore/partials/ExploreCard'
 
 interface Props {

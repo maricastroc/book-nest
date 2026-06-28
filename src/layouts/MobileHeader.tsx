@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faBookOpen } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { MobileSidebar } from '@/components/shared/MobileSidebar'
+import { MobileSidebar } from '@/layouts/MobileSidebar'
 
 export function MobileHeader({ ...rest }) {
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)

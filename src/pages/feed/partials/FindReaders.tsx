@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-import { Avatar } from '@/components/shared/Avatar'
-import { SearchBar } from '@/components/shared/SearchBar'
+import { Avatar } from '@/components/ui/Avatar'
+import { SearchBar } from '@/components/ui/SearchBar'
 import { Spinner } from '@/components/ui/Spinner'
 
 import useRequest from '@/hooks/useRequest'

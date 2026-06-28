@@ -5,11 +5,11 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { useLoadingOnRouteChange } from '@/hooks/useLoadingOnRouteChange'
 
 import { LoadingPage } from '@/components/ui/LoadingPage'
-import { MobileHeader } from '@/components/shared/MobileHeader'
+import { MobileHeader } from '@/layouts/MobileHeader'
 import { BookProvider } from '@/contexts/BookContext'
 import { BookProps } from '@/@types/book'
-import { SearchBar } from '@/components/shared/SearchBar'
-import { Sidebar } from '@/components/shared/Sidebar'
+import { SearchBar } from '@/components/ui/SearchBar'
+import { Sidebar } from '@/layouts/Sidebar'
 
 const LateralMenu = dynamic(
   () =>

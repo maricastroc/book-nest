@@ -1,5 +1,5 @@
 import { CategoryProps } from '@/@types/category'
-import { HorizontalScroll } from '@/components/shared/HorizontalScroll'
+import { HorizontalScroll } from '@/components/ui/HorizontalScroll'
 
 interface Props {
   categories: CategoryProps[] | null | undefined

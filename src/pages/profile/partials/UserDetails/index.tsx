@@ -3,17 +3,17 @@ import dynamic from 'next/dynamic'
 import * as Dialog from '@radix-ui/react-dialog'
 import { getDateFormattedAndRelative } from '@/utils/timeFormatter'
 import { useAppContext } from '@/contexts/AppContext'
-import { Avatar } from '../../../../components/shared/Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 import { SkeletonUserDetails } from '../SkeletonUserDetails'
 import { Button } from '@/components/ui/Button'
 import { UserStatistics } from '@/@types/user_statistics'
 import { useFollowStatus } from '@/hooks/useFollowStatus'
-import { FollowListModal } from '@/components/modals/FollowListModal'
+import { FollowListModal } from '@/components/features/profile/FollowListModal'
 import { StatusDonut } from '../StatusDonut'
 
 const EditProfileModal = dynamic(
   () =>
-    import('../../../../components/modals/EditProfileModal').then(
+    import('@/components/features/profile/EditProfileModal').then(
       (m) => m.EditProfileModal,
     ),
   { ssr: false },

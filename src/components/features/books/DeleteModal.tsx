@@ -1,5 +1,5 @@
 import { useAppContext } from '@/contexts/AppContext'
-import { BaseModal } from './BaseModal'
+import { BaseModal } from '@/components/ui/BaseModal'
 
 interface DeleteModalProps {
   onConfirm: () => void
