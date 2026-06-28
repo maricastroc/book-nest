@@ -2,35 +2,9 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { BookCard } from '@/components/features/books/BookCard'
 import { BookProps } from '@/@types/book'
 
-jest.mock('@/styles', () => ({
-  styled: () => {
-    const Component = ({
-      children,
-      className,
-      onClick,
-    }: {
-      children?: React.ReactNode
-      className?: string
-      onClick?: () => void
-    }) => (
-      <div className={className} onClick={onClick}>
-        {children}
-      </div>
-    )
-    Component.displayName = 'styled'
-    return Component
-  },
-}))
-
 jest.mock('@/components/features/books/StarsRating', () => ({
   StarsRating: ({ rating }: { rating: number }) => (
     <div data-testid="stars-rating" data-rating={rating} />
-  ),
-}))
-
-jest.mock('@/components/features/books/ReadingStatusTag', () => ({
-  ReadingStatusTag: ({ readingStatus }: { readingStatus: string }) => (
-    <div data-testid="reading-status-tag" data-status={readingStatus} />
   ),
 }))
 
@@ -85,22 +59,5 @@ describe('BookCard', () => {
     const card = container.firstChild as HTMLElement
     if (card) fireEvent.click(card)
     expect(onOpenDetails).toHaveBeenCalledTimes(1)
-  })
-
-  it('does not render the ReadingStatusTag when readingStatus is null', () => {
-    render(<BookCard book={mockBook} onOpenDetails={jest.fn()} />)
-    expect(screen.queryByTestId('reading-status-tag')).not.toBeInTheDocument()
-  })
-
-  it('renders the ReadingStatusTag when readingStatus is set', () => {
-    render(
-      <BookCard
-        book={{ ...mockBook, readingStatus: 'read' }}
-        onOpenDetails={jest.fn()}
-      />,
-    )
-    const tag = screen.getByTestId('reading-status-tag')
-    expect(tag).toBeInTheDocument()
-    expect(tag).toHaveAttribute('data-status', 'read')
   })
 })

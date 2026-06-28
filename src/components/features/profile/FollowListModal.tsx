@@ -2,8 +2,7 @@ import { useRouter } from 'next/router'
 
 import { Avatar } from '@/components/ui/Avatar'
 import useRequest from '@/hooks/useRequest'
-import { styled } from '@/styles'
-import { BaseModal } from '../ui/BaseModal'
+import { BaseModal } from '@/components/ui/BaseModal'
 
 interface UserItem {
   id: string
@@ -16,47 +15,6 @@ interface FollowListModalProps {
   type: 'followers' | 'following'
   onClose: () => void
 }
-
-const UserRow = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.75rem',
-  padding: '0.6rem 0',
-  borderBottom: '1px solid $gray600',
-  cursor: 'pointer',
-  borderRadius: 4,
-  transition: 'background 150ms',
-
-  '&:last-child': {
-    borderBottom: 'none',
-  },
-
-  '&:hover p': {
-    color: '$purple100',
-  },
-
-  p: {
-    fontSize: '0.9rem',
-    color: '$gray100',
-    fontWeight: 500,
-    transition: 'color 150ms',
-  },
-})
-
-const EmptyMessage = styled('p', {
-  fontSize: '0.875rem',
-  color: '$gray400',
-  textAlign: 'center',
-  padding: '1rem 0',
-})
-
-const ListContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  maxHeight: '20rem',
-  overflowY: 'auto',
-})
 
 export function FollowListModal({
   userId,
@@ -84,20 +42,27 @@ export function FollowListModal({
 
   return (
     <BaseModal onClose={onClose} title={title}>
-      <ListContainer>
+      <div className="flex max-h-80 w-full flex-col overflow-y-auto">
         {isValidating ? (
-          <EmptyMessage>Loading...</EmptyMessage>
+          <p className="py-4 text-center text-sm text-fg3">Loading...</p>
         ) : users.length === 0 ? (
-          <EmptyMessage>No {type} yet.</EmptyMessage>
+          <p className="py-4 text-center text-sm text-fg3">No {type} yet.</p>
         ) : (
           users.map((user) => (
-            <UserRow key={user.id} onClick={() => handleUserClick(user.id)}>
+            <button
+              key={user.id}
+              type="button"
+              onClick={() => handleUserClick(user.id)}
+              className="group flex items-center gap-3 rounded border-b border-line py-[0.6rem] transition-colors last:border-none"
+            >
               <Avatar avatarUrl={user.avatarUrl} variant="small" />
-              <p>{user.name}</p>
-            </UserRow>
+              <p className="text-[0.9rem] font-medium text-fg transition-colors group-hover:text-ac">
+                {user.name}
+              </p>
+            </button>
           ))
         )}
-      </ListContainer>
+      </div>
     </BaseModal>
   )
 }

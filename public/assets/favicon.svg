@@ -1,6 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="7" fill="#e8b14c" />
-  <g transform="translate(6 7.1) scale(0.0347)" fill="#2a1e05">
-    <path d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5l0-377.4c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8L0 454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5l0-370.3c0-12.1-6.8-23.3-18.1-27.7C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11L304 456c0 11.4 11.6 19.3 22.4 15.5z" />
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <!-- Generator: Adobe Illustrator 30.5.1, SVG Export Plug-In . SVG Version: 2.1.4 Build 3)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #2a220b;
+      }
+
+      .st0, .st1 {
+        stroke: #2a220b;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 5px;
+      }
+
+      .st2 {
+        fill: #f2b63f;
+      }
+
+      .st1 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <rect class="st2" width="64" height="64" rx="18" ry="18"/>
+  <path class="st1" d="M32,22.5c-4.5-1.7-9.2-1.7-13.5-.1v22.2c4.3-1.6,9.3-1.4,13.5.6M32,22.5c4.5-1.7,9.2-1.7,13.5-.1v22.2c-4.3-1.6-9.3-1.4-13.5.6M32,22.5v22.7"/>
+  <rect class="st0" x="21.04" y="22.07" width="12.23" height="20.75"/>
 </svg>

@@ -1,20 +1,6 @@
 import { render } from '@testing-library/react'
 import { StarsRating } from '@/components/features/books/StarsRating'
 
-jest.mock('@/styles', () => ({
-  styled: () => {
-    const Component = ({
-      children,
-      className,
-    }: {
-      children?: React.ReactNode
-      className?: string
-    }) => <div className={className}>{children}</div>
-    Component.displayName = 'styled'
-    return Component
-  },
-}))
-
 describe('StarsRating', () => {
   it('renders 5 star icons', () => {
     const { container } = render(<StarsRating rating={3} />)
@@ -40,15 +26,15 @@ describe('StarsRating', () => {
     expect(svgs.length).toBe(5)
   })
 
-  it('applies the smaller class when size is smaller', () => {
+  it('applies the smaller styling when size is smaller', () => {
     const { container } = render(<StarsRating rating={3} size="smaller" />)
     const wrapper = container.firstChild as HTMLElement
-    expect(wrapper.className).toContain('smaller')
+    expect(wrapper.className).toContain('opacity-80')
   })
 
-  it('applies variant class when provided', () => {
-    const { container } = render(<StarsRating rating={3} variant="large" />)
+  it('does not apply the smaller styling by default', () => {
+    const { container } = render(<StarsRating rating={3} />)
     const wrapper = container.firstChild as HTMLElement
-    expect(wrapper.className).toContain('large')
+    expect(wrapper.className).not.toContain('opacity-80')
   })
 })

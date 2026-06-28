@@ -16,7 +16,7 @@ import {
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { useAppContext } from '@/contexts/AppContext'
-import { Avatar } from './Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 
 type NavEntry = {
   label: string

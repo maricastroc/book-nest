@@ -6,7 +6,7 @@ import { SearchBar } from '@/components/ui/SearchBar'
 import { Spinner } from '@/components/ui/Spinner'
 
 import useRequest from '@/hooks/useRequest'
-import { useFollowStatus } from '@/hooks/useFollowStatus'
+import { useFollowToggle } from '@/hooks/useFollowToggle'
 import { usePaginationAndSearch } from '@/hooks/usePaginationAndSearchParams'
 import { UserProps } from '@/@types/user'
 
@@ -18,8 +18,9 @@ function ReaderRow({
   onAfterToggle?: () => void
 }) {
   const router = useRouter()
-  const { isFollowing, isTogglingFollow, toggleFollow } = useFollowStatus(
+  const { isFollowing, isTogglingFollow, toggleFollow } = useFollowToggle(
     String(user.id),
+    user.isFollowing ?? false,
   )
 
   const handleToggle = async () => {

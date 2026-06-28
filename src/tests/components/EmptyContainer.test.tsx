@@ -1,16 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { EmptyContainer } from '@/components/ui/EmptyContainer'
 
-jest.mock('@/styles', () => ({
-  styled: () => {
-    const Component = ({ children }: { children?: React.ReactNode }) => (
-      <div>{children}</div>
-    )
-    Component.displayName = 'styled'
-    return Component
-  },
-}))
-
 describe('EmptyContainer', () => {
   it('renders the empty state by default', () => {
     render(<EmptyContainer />)

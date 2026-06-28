@@ -14,6 +14,9 @@ jest.mock('@/lib/prisma', () => ({
     rating: {
       count: jest.fn(),
     },
+    readingStatus: {
+      groupBy: jest.fn(),
+    },
   },
 }))
 
@@ -24,6 +27,7 @@ jest.mock('next-auth', () => ({
 describe('GET /api/profile/statistics/[userId]', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(prisma.readingStatus.groupBy as jest.Mock).mockResolvedValue([])
   })
 
   it('returns list of users with pagination', async () => {

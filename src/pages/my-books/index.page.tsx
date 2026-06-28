@@ -2,13 +2,12 @@
 import { useEffect, useState } from 'react'
 import {
   faBookOpen,
-  faMagnifyingGlass,
-  faXmark,
   faArrowLeft,
   faBookMedical,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { OutlineButton } from '@/components/ui/OutlineButton'
+import { SearchBar } from '@/components/ui/SearchBar'
 
 import { MainLayout } from '@/layouts/MainLayout'
 import { LateralMenu } from '@/components/features/books/LateralMenu'
@@ -139,29 +138,14 @@ export default function MyBooks() {
           </div>
 
           {view === 'list' && (
-            <div className="relative mt-5 rounded-xl border border-line bg-s1 transition-colors hover:border-line-strong focus-within:border-ac/50">
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-fg3"
-                style={{ fontSize: 17 }}
-              />
-              <input
-                type="text"
-                placeholder="Search by title or author…"
-                value={search}
-                spellCheck={false}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-xl border-0 bg-transparent py-3 pl-11 pr-10 text-[14px] text-fg outline-none placeholder:text-fg3"
-              />
-              {search && (
-                <button
-                  onClick={() => setSearch('')}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-fg3 transition-colors hover:text-fg"
-                >
-                  <FontAwesomeIcon icon={faXmark} style={{ fontSize: 15 }} />
-                </button>
-              )}
-            </div>
+            <SearchBar
+              search={search}
+              placeholder="Search by title or author…"
+              fullWidth
+              className="mt-5"
+              onChange={(e) => setSearch(e.target.value)}
+              onClick={() => setSearch('')}
+            />
           )}
         </header>
 

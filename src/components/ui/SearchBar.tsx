@@ -5,6 +5,7 @@ interface Props {
   search: string
   placeholder: string
   fullWidth?: boolean
+  className?: string
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
   onClick: () => void
 }
@@ -15,12 +16,13 @@ export const SearchBar = ({
   onChange,
   onClick,
   fullWidth = false,
+  className = '',
 }: Props) => {
   return (
     <div
       className={`relative rounded-xl border border-line bg-s1 transition-colors hover:border-line-strong focus-within:border-ac/50 ${
         fullWidth ? 'w-full' : 'w-full lg:w-[60%] lg:max-w-100'
-      }`}
+      } ${className}`}
     >
       <FontAwesomeIcon
         icon={faMagnifyingGlass}

@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getServerSession } from 'next-auth'
+import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,6 +12,11 @@ export default async function handler(
   }
 
   try {
+    const session = await getServerSession(
+      req,
+      res,
+      buildNextAuthOptions(req, res),
+    )
     const searchQuery = req.query.search
       ? String(req.query.search).trim().toLowerCase()
       : ''
@@ -58,9 +65,30 @@ export default async function handler(
       },
     })
 
+    const loggedUserId = session?.user?.id ? String(session.user.id) : null
+
+    const followedIds = loggedUserId
+      ? new Set(
+          (
+            await prisma.follow.findMany({
+              where: {
+                followerId: loggedUserId,
+                followingId: { in: users.map((user) => user.id) },
+              },
+              select: { followingId: true },
+            })
+          ).map((follow) => follow.followingId),
+        )
+      : new Set<string>()
+
+    const usersWithFollowStatus = users.map((user) => ({
+      ...user,
+      isFollowing: followedIds.has(user.id),
+    }))
+
     return res.status(200).json({
       data: {
-        users,
+        users: usersWithFollowStatus,
         pagination: {
           page: validPage,
           perPage: validPerPage,

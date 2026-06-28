@@ -17,7 +17,7 @@ import { handleApiError } from '@/utils/handleApiError'
 import { api } from '@/lib/axios'
 import { ImageCropper } from '@/components/ui/ImageCropper'
 import { Button } from '@/components/ui/Button'
-import { FormField, formInputClass } from '@/components/ui/FormField'
+import { Input } from '@/components/ui/Input'
 
 const signUpFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -126,66 +126,51 @@ export default function SignUpForm() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <FormField
-            id="name"
-            label="Name"
-            icon={faUser}
-            error={errors.name?.message}
-          >
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <input
-                  id="name"
-                  placeholder="Your full name"
-                  className={formInputClass}
-                  {...field}
-                />
-              )}
-            />
-          </FormField>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input
+                id="name"
+                label="Name"
+                icon={faUser}
+                placeholder="Your full name"
+                error={errors.name?.message}
+                {...field}
+              />
+            )}
+          />
 
-          <FormField
-            id="email"
-            label="Email"
-            icon={faEnvelope}
-            error={errors.email?.message}
-          >
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <input
-                  id="email"
-                  placeholder="you@example.com"
-                  className={formInputClass}
-                  {...field}
-                />
-              )}
-            />
-          </FormField>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input
+                id="email"
+                label="Email"
+                icon={faEnvelope}
+                placeholder="you@example.com"
+                error={errors.email?.message}
+                {...field}
+              />
+            )}
+          />
 
-          <FormField
-            id="password"
-            label="Password"
-            icon={faLock}
-            error={errors.password?.message}
-          >
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="At least 8 characters"
-                  className={formInputClass}
-                  {...field}
-                />
-              )}
-            />
-          </FormField>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input
+                id="password"
+                type="password"
+                label="Password"
+                icon={faLock}
+                placeholder="At least 8 characters"
+                error={errors.password?.message}
+                {...field}
+              />
+            )}
+          />
 
           <div className="flex items-center gap-3 rounded-lg border border-line bg-bg/40 p-2.5">
             <button

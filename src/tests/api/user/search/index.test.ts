@@ -9,6 +9,9 @@ jest.mock('@/lib/prisma', () => ({
       findMany: jest.fn(),
       count: jest.fn(),
     },
+    follow: {
+      findMany: jest.fn(),
+    },
   },
 }))
 
@@ -19,6 +22,7 @@ jest.mock('next-auth', () => ({
 describe('GET /api/users/search', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(prisma.follow.findMany as jest.Mock).mockResolvedValue([])
   })
 
   it('returns list of users with pagination', async () => {
@@ -62,6 +66,7 @@ describe('GET /api/users/search', () => {
             email: 'jondoe@email.com',
             avatarUrl: 'url',
             createdAt: '11/22/33',
+            isFollowing: false,
           },
         ],
         pagination: {

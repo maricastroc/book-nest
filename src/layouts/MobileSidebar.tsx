@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
 import toast from 'react-hot-toast'
 import { useAppContext } from '@/contexts/AppContext'
-import { Avatar } from './Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 
 type NavEntry = {
   label: string

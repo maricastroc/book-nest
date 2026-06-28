@@ -1,20 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { SearchBar } from '@/components/ui/SearchBar'
 
-jest.mock('@/styles', () => ({
-  styled: () => {
-    const Component = ({
-      children,
-      className,
-    }: {
-      children?: React.ReactNode
-      className?: string
-    }) => <div className={className}>{children}</div>
-    Component.displayName = 'styled'
-    return Component
-  },
-}))
-
 describe('SearchBar', () => {
   const defaultProps = {
     search: '',
@@ -46,25 +32,24 @@ describe('SearchBar', () => {
     expect(onChange).toHaveBeenCalledTimes(1)
   })
 
-  it('shows a magnifying glass icon when search is empty', () => {
+  it('shows only the magnifying glass icon when search is empty', () => {
     const { container } = render(<SearchBar {...defaultProps} search="" />)
     const svgs = container.querySelectorAll('svg')
     expect(svgs.length).toBe(1)
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
-  it('shows an X icon when search has a value', () => {
+  it('shows the clear button when search has a value', () => {
     const { container } = render(<SearchBar {...defaultProps} search="Dune" />)
     const svgs = container.querySelectorAll('svg')
-    expect(svgs.length).toBe(1)
+    expect(svgs.length).toBe(2)
+    expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  it('calls onClick when the X icon is clicked', () => {
+  it('calls onClick when the clear button is clicked', () => {
     const onClick = jest.fn()
-    const { container } = render(
-      <SearchBar {...defaultProps} search="Dune" onClick={onClick} />,
-    )
-    const xIcon = container.querySelector('svg')
-    if (xIcon) fireEvent.click(xIcon)
+    render(<SearchBar {...defaultProps} search="Dune" onClick={onClick} />)
+    fireEvent.click(screen.getByRole('button'))
     expect(onClick).toHaveBeenCalledTimes(1)
   })
 })

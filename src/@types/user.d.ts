@@ -11,6 +11,7 @@ export interface UserProps {
   updatedAt?: Date
   password?: string | null
   email?: string
+  isFollowing?: boolean
 
   accounts?: AccountProps[] | null | undefined
   sessions?: SessionProps[] | null | undefined

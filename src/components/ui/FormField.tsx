@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { type IconDefinition } from '@fortawesome/free-solid-svg-icons'
 
 export const formInputClass =
-  'w-full rounded-lg border border-line bg-bg py-3 pl-10 pr-3.5 text-[15px] text-fg outline-none transition-colors placeholder:text-fg3 hover:border-line-strong focus:border-ac/50 focus:bg-s2'
+  'w-full rounded-lg border border-line-strong bg-s1 py-3 pl-10 pr-3.5 text-[15px] text-fg outline-none transition-colors placeholder:text-fg3 hover:border-line-strong focus:border-ac/50 focus:bg-s2'
 
 interface FormFieldProps {
   id: string

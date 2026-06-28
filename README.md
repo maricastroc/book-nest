@@ -30,14 +30,16 @@ The most challenging part of this project was creating routes and endpoints for 
 
 ## 🛠️ Tech Stack
 
-| Category        | Technologies                          |
-|----------------|----------------------------------------|
-| **Framework**   | Next.js 13 (App Router)               |
-| **Styling**     | Stitches, CSS Modules                 |
-| **Database**    | PostgreSQL + Prisma ORM               |
-| **Authentication** | NextAuth.js                      |
-| **Testing**     | Jest, React Testing Library           |
-| **Tooling**     | ESLint, Prettier                      |
+| Category        | Technologies                                        |
+|----------------|------------------------------------------------------|
+| **Framework**   | Next.js 15 (Pages Router), React 18                 |
+| **Language**    | TypeScript 5                                        |
+| **Styling**     | Tailwind CSS v4, Radix UI, Framer Motion            |
+| **Database**    | PostgreSQL + Prisma 6                               |
+| **Authentication** | NextAuth.js v4 (Google, GitHub, Credentials)     |
+| **Data & Forms** | SWR, React Hook Form, Zod                          |
+| **Testing**     | Jest, React Testing Library                         |
+| **Tooling**     | ESLint, Prettier                                    |
 
 ## ℹ️ How to run the application?
 

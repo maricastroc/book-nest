@@ -1,12 +1,9 @@
 import type { AppProps } from 'next/app'
 import '../styles/tailwind.css'
-import { globalStyles } from '../styles/global'
 import { SessionProvider } from 'next-auth/react'
 import { AppProvider } from '@/contexts/AppContext'
 import { Toaster } from 'react-hot-toast'
 import { RatingsProvider } from '@/contexts/RatingsContext'
-
-globalStyles()
 
 export default function App({
   Component,

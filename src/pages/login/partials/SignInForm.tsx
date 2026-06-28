@@ -28,7 +28,7 @@ interface SignInFormProps {
 }
 
 const socialButtonClass =
-  'flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-line bg-transparent text-[13px] text-fg2 transition-colors hover:border-ac/40 hover:text-fg'
+  'flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-line-strong bg-s1 text-[13px] text-fg2 transition-colors hover:border-ac/40 hover:text-fg'
 
 export default function SignInForm({ onClose }: SignInFormProps) {
   const router = useRouter()

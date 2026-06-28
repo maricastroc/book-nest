@@ -126,6 +126,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  // Hydrate from localStorage for instant first paint while `/user` revalidates.
   useEffect(() => {
     const storedUser = localStorage.getItem('loggedUser')
     if (storedUser) {
@@ -133,12 +134,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [])
 
+  // Fresh server data always wins, keeping localStorage as a paint cache only.
   useEffect(() => {
-    if (user && !loggedUser) {
+    if (user) {
       setLoggedUser(user)
       localStorage.setItem('loggedUser', JSON.stringify(user))
     }
-  }, [user, loggedUser, session])
+  }, [user])
 
   const contextValue = useMemo(
     () => ({

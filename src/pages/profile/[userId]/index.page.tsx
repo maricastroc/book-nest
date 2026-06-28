@@ -15,7 +15,6 @@ import { useProfileRatings } from '@/hooks/useProfileRatings'
 
 import { RatingProps } from '@/@types/rating'
 import { BookProps } from '@/@types/book'
-import { BookProvider } from '@/contexts/BookContext'
 import { MainLayout } from '@/layouts/MainLayout'
 
 import { useUserStatistics } from '@/hooks/useUserStatistics'
@@ -136,35 +135,23 @@ export default function Profile() {
                     <SkeletonRatingCard key={index} />
                   ))
                 ) : userRatings?.length > 0 ? (
-                  <BookProvider
-                    bookId={selectedBook?.id}
-                    onUpdateBook={async () => {
-                      await mutateRatings()
-                      mutateStatistics()
-                    }}
-                    onUpdateRating={async () => {
-                      await mutateRatings()
-                      mutateStatistics()
-                    }}
-                  >
-                    {userRatings.map((rating: RatingProps) => {
-                      if (rating?.book) {
-                        return (
-                          <ProfileCard
-                            key={rating.id}
-                            book={rating.book}
-                            rating={rating}
-                            userId={userId}
-                            onSelect={() => {
-                              setSelectedBook(rating.book as BookProps)
-                              setIsLateralMenuOpen(true)
-                            }}
-                          />
-                        )
-                      }
-                      return null
-                    })}
-                  </BookProvider>
+                  userRatings.map((rating: RatingProps) => {
+                    if (rating?.book) {
+                      return (
+                        <ProfileCard
+                          key={rating.id}
+                          book={rating.book}
+                          rating={rating}
+                          userId={userId}
+                          onSelect={() => {
+                            setSelectedBook(rating.book as BookProps)
+                            setIsLateralMenuOpen(true)
+                          }}
+                        />
+                      )
+                    }
+                    return null
+                  })
                 ) : (
                   <EmptyContainer content="ratings" />
                 )}

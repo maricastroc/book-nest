@@ -35,6 +35,30 @@ function SectionLabel({
   )
 }
 
+function PopularThisWeek({
+  onViewAll,
+  children,
+}: {
+  onViewAll: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <>
+      <div className="mb-3 flex items-center justify-between">
+        <SectionLabel noMargin>Popular this week</SectionLabel>
+        <button
+          onClick={onViewAll}
+          className="flex items-center gap-1 text-[11px] font-medium text-ac transition-colors hover:text-fg"
+        >
+          View all{' '}
+          <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 11 }} />
+        </button>
+      </div>
+      <div className="flex flex-col gap-3">{children}</div>
+    </>
+  )
+}
+
 function getIssueNumber() {
   const start = new Date(2024, 0, 1)
   const now = new Date()
@@ -267,40 +291,18 @@ export default function Home() {
             </section>
 
             <section className="xl:hidden">
-              <div className="mb-3 flex items-center justify-between">
-                <SectionLabel noMargin>Popular this week</SectionLabel>
-                <button
-                  onClick={() => router.push('/explore')}
-                  className="flex items-center gap-1 text-[11px] font-medium text-ac transition-colors hover:text-fg"
-                >
-                  View all{' '}
-                  <FontAwesomeIcon
-                    icon={faChevronRight}
-                    style={{ fontSize: 11 }}
-                  />
-                </button>
-              </div>
-              <div className="flex flex-col gap-3">{renderPopularBooks()}</div>
+              <PopularThisWeek onViewAll={() => router.push('/explore')}>
+                {renderPopularBooks()}
+              </PopularThisWeek>
             </section>
 
             <div className="h-8 shrink-0" />
           </div>
 
           <div className="lateral-menu-scroll hidden w-76 shrink-0 flex-col overflow-y-auto pb-7 pr-2 xl:flex">
-            <div className="mb-3 flex items-center justify-between">
-              <SectionLabel noMargin>Popular this week</SectionLabel>
-              <button
-                onClick={() => router.push('/explore')}
-                className="flex items-center gap-1 text-[11px] font-medium text-ac transition-colors hover:text-fg"
-              >
-                View all{' '}
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  style={{ fontSize: 11 }}
-                />
-              </button>
-            </div>
-            <div className="flex flex-col gap-3">{renderPopularBooks()}</div>
+            <PopularThisWeek onViewAll={() => router.push('/explore')}>
+              {renderPopularBooks()}
+            </PopularThisWeek>
 
             <div className="h-8 shrink-0" />
           </div>

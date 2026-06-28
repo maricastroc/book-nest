@@ -48,8 +48,8 @@ export default function useRequest<Data = unknown, Error = unknown>(
     request ? () => api.request<Data>(request) : null,
     {
       dedupingInterval: 60000,
-      ...config,
       revalidateOnFocus: false,
+      ...config,
       fallbackData:
         fallbackData &&
         ({

@@ -1,13 +1,10 @@
-import { useState, ChangeEvent } from 'react'
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faBinoculars,
-  faMagnifyingGlass,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons'
+import { faBinoculars } from '@fortawesome/free-solid-svg-icons'
 import { BookProps } from '@/@types/book'
 
 import { Pagination } from '@/components/ui/Pagination'
+import { SearchBar } from '@/components/ui/SearchBar'
 import { EmptyContainer } from '@/components/ui/EmptyContainer'
 import { SkeletonExploreCard } from '@/components/features/books/SkeletonExploreCard'
 
@@ -86,35 +83,20 @@ export default function Explore() {
             or search by title, author, or ISBN.
           </p>
 
-          <div className="relative mt-5 rounded-xl border border-line bg-s1 transition-colors hover:border-line-strong focus-within:border-ac/50">
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-fg3 pointer-events-none"
-              style={{ fontSize: 17 }}
-            />
-            <input
-              type="text"
-              placeholder="Search books, authors or ISBN..."
-              value={search}
-              spellCheck={false}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setCurrentPage(1)
-                setSearch(e.target.value)
-              }}
-              className="w-full rounded-xl border-0 bg-transparent py-3 pl-11 pr-10 text-[14px] text-fg placeholder:text-fg3 outline-none"
-            />
-            {search && (
-              <button
-                onClick={() => {
-                  setCurrentPage(1)
-                  setSearch('')
-                }}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-fg3 hover:text-fg transition-colors"
-              >
-                <FontAwesomeIcon icon={faXmark} style={{ fontSize: 15 }} />
-              </button>
-            )}
-          </div>
+          <SearchBar
+            search={search}
+            placeholder="Search books, authors or ISBN..."
+            fullWidth
+            className="mt-5"
+            onChange={(e) => {
+              setCurrentPage(1)
+              setSearch(e.target.value)
+            }}
+            onClick={() => {
+              setCurrentPage(1)
+              setSearch('')
+            }}
+          />
         </header>
 
         <CategoriesSection
