@@ -15,10 +15,6 @@ Discover, track and share your reading journey.
 [![Features](https://img.shields.io/badge/★_Features-1a1a1a?style=for-the-badge)](#-features)
 [![Docs](https://img.shields.io/badge/▣_Docs-1a1a1a?style=for-the-badge)](#ℹ%EF%B8%8F-how-to-run-the-application)
 
-<br/>
-
-<img src="docs/screenshots/home-desktop.png" alt="Book Nest — Home" width="860" />
-
 </div>
 
 <br/>
