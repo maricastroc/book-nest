@@ -43,7 +43,10 @@ Discover, track and share your reading journey.
   </tr>
   <tr>
     <td valign="top"><img src="docs/screenshots/home-desktop.png" alt="Home — Desktop" /></td>
-    <td valign="top"><img src="docs/screenshots/library-mobile.png" alt="Library — Mobile" /></td>
+    <td rowspan="2" valign="top"><img src="docs/screenshots/library-mobile.png" alt="Library — Mobile" /></td>
+  </tr>
+  <tr>
+    <td valign="top"><img src="docs/screenshots/explore-desktop.png" alt="Explore — Desktop" /></td>
   </tr>
 </table>
 
