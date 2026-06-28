@@ -11,6 +11,15 @@ module.exports = {
       transformIgnorePatterns: ['/node_modules/(?!(bcrypt)/)'],
     },
     {
+      displayName: 'lib',
+      testEnvironment: 'node',
+      preset: 'ts-jest',
+      moduleNameMapper: {
+        '^@/(.*)$': '<rootDir>/src/$1',
+      },
+      testMatch: ['<rootDir>/src/tests/lib/**/*.test.ts'],
+    },
+    {
       displayName: 'components',
       testEnvironment: 'jsdom',
       preset: 'ts-jest',

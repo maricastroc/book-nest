@@ -60,4 +60,50 @@ describe('BookCard', () => {
     if (card) fireEvent.click(card)
     expect(onOpenDetails).toHaveBeenCalledTimes(1)
   })
+
+  it('does not render a recommendation chip without recommendation meta', () => {
+    render(<BookCard book={mockBook} onOpenDetails={jest.fn()} />)
+    expect(screen.queryByText(/Because you like/)).not.toBeInTheDocument()
+  })
+
+  it('shows the taste-based reason when recommendation meta is present', () => {
+    render(
+      <BookCard
+        book={{
+          ...mockBook,
+          recommendation: {
+            score: 0.9,
+            bayesianRate: 4.3,
+            reasons: [
+              { kind: 'affinity', label: 'Because you like Fiction' },
+              { kind: 'quality', label: 'Highly rated by readers (4.3★)' },
+            ],
+          },
+        }}
+        onOpenDetails={jest.fn()}
+      />,
+    )
+    expect(screen.getByText('Because you like Fiction')).toBeInTheDocument()
+  })
+
+  it('falls back to a quality reason when no affinity reason exists', () => {
+    render(
+      <BookCard
+        book={{
+          ...mockBook,
+          recommendation: {
+            score: 0.7,
+            bayesianRate: 4.6,
+            reasons: [
+              { kind: 'quality', label: 'Highly rated by readers (4.6★)' },
+            ],
+          },
+        }}
+        onOpenDetails={jest.fn()}
+      />,
+    )
+    expect(
+      screen.getByText('Highly rated by readers (4.6★)'),
+    ).toBeInTheDocument()
+  })
 })

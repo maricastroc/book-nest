@@ -26,4 +26,17 @@ export interface BookProps {
   rate?: number
   alreadyRead?: boolean
   ratings?: RatingProps[]
+
+  recommendation?: RecommendationMeta | null
+}
+
+export interface RecommendationReason {
+  kind: 'affinity' | 'quality'
+  label: string
+}
+
+export interface RecommendationMeta {
+  score: number
+  bayesianRate: number
+  reasons: RecommendationReason[]
 }
