@@ -5,9 +5,10 @@ import toast from 'react-hot-toast'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBookOpen,
+  faBookMedical,
   faBinoculars,
   faBookBookmark,
-  faChartLine,
+  faHouse,
   faFileLines,
   faRss,
   faRightToBracket,
@@ -34,7 +35,7 @@ export function Sidebar() {
   const items: NavEntry[] = [
     {
       label: 'Home',
-      icon: faChartLine,
+      icon: faHouse,
       active: router.pathname === '/home',
       onClick: go('/home'),
     },
@@ -68,7 +69,7 @@ export function Sidebar() {
       },
       {
         label: 'Contributions',
-        icon: faBookOpen,
+        icon: faBookMedical,
         active: router.pathname === '/my-books',
         onClick: go('/my-books'),
       },

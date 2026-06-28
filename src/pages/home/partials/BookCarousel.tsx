@@ -29,7 +29,9 @@ export function BookCarousel({
       return (
         <HorizontalScroll>
           {Array.from({ length: skeletonCount }).map((_, i) => (
-            <SkeletonBookCard key={i} />
+            <div key={i} className="w-76 shrink-0">
+              <SkeletonBookCard />
+            </div>
           ))}
         </HorizontalScroll>
       )

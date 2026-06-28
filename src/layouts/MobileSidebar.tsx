@@ -3,8 +3,9 @@ import * as Dialog from '@radix-ui/react-dialog'
 import {
   faBinoculars,
   faBookOpen,
+  faBookMedical,
   faBookBookmark,
-  faChartLine,
+  faHouse,
   faFileLines,
   faRss,
   faUser,
@@ -42,7 +43,7 @@ export function MobileSidebar({ onClose }: Props) {
   const items: NavEntry[] = [
     {
       label: 'Home',
-      icon: faChartLine,
+      icon: faHouse,
       active: router.pathname === '/home',
       onClick: go('/home'),
     },
@@ -76,7 +77,7 @@ export function MobileSidebar({ onClose }: Props) {
       },
       {
         label: 'Contributions',
-        icon: faBookOpen,
+        icon: faBookMedical,
         active: router.pathname === '/my-books',
         onClick: go('/my-books'),
       },

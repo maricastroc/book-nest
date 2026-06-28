@@ -9,7 +9,7 @@ export function SkeletonRatingCard({
 }: SkeletonRatingCardProps) {
   return (
     <div
-      className={`flex min-w-full cursor-not-allowed flex-col items-center justify-center rounded-[--radius-card] bg-[--color-s2] p-8${
+      className={`flex min-w-full cursor-not-allowed flex-col items-center justify-center rounded-xl bg-s2 p-8${
         withMarginBottom ? ' mb-6' : ''
       }`}
     >

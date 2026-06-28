@@ -11,7 +11,7 @@ export function SkeletonBookStatusList() {
           style={{ width: '4.5rem', height: '1rem', borderRadius: '6px' }}
         />
       </div>
-      <div className="flex w-full gap-5 overflow-x-hidden rounded-[--radius-card] bg-[--color-s2] p-6">
+      <div className="flex w-full gap-5 overflow-x-hidden rounded-xl bg-s2 p-6">
         {Array.from({ length: 6 }).map((_, i) => (
           <SkeletonBox
             key={i}

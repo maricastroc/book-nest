@@ -34,11 +34,13 @@ export function PopularRail({
       <div className="flex flex-col gap-3">
         {!hasBooks
           ? Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="w-5 shrink-0 select-none font-serif text-[15px] font-semibold leading-tight text-fg3/40">
+              <div key={i} className="flex items-start gap-1">
+                <span className="w-5 shrink-0 select-none pt-1 font-serif text-[15px] font-semibold leading-tight text-fg3/40">
                   {i + 1}
                 </span>
-                <SkeletonBookCard />
+                <div className="min-w-0 flex-1">
+                  <SkeletonBookCard />
+                </div>
               </div>
             ))
           : books.map((book, i) => (

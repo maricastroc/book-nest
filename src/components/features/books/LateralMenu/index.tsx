@@ -29,65 +29,78 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
     bookData.isValidating
 
   return (
-    <section className="fixed right-0 top-0 z-9996 flex h-full w-full max-w-full justify-end overflow-scroll sm:max-w-140 md:max-w-166">
-      <div
-        className="fixed inset-0 h-full w-screen bg-black/70"
-        onClick={onClose}
-      />
+    <Dialog.Root
+      open
+      onOpenChange={(isOpen) => {
+        if (!isOpen) onClose()
+      }}
+    >
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-9996 bg-black/70" />
 
-      <button
-        onClick={onClose}
-        className="bn-scope absolute left-[92%] top-[6%] z-10 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg border border-line bg-s2 p-1.5 transition-colors hover:border-line-strong"
-      >
-        <FontAwesomeIcon
-          icon={faXmark}
-          className="text-fg3"
-          style={{ fontSize: 16 }}
-        />
-      </button>
+        <Dialog.Content
+          aria-describedby={undefined}
+          className="bn-scope animate-slide-in-right lateral-menu-scroll fixed right-0 top-0 z-9996 flex h-full w-full max-w-full flex-col items-start justify-start overflow-y-auto border-l border-line bg-s1 px-6 pb-10 pt-8 focus:outline-none sm:max-w-140 sm:px-12 sm:pt-18 md:max-w-166"
+        >
+          <Dialog.Title className="sr-only">
+            {bookData.book?.name ?? 'Book details'}
+          </Dialog.Title>
 
-      <div className="bn-scope animate-slide-in-right lateral-menu-scroll relative flex h-full w-full flex-col items-start justify-start overflow-scroll border-l border-line bg-s1 px-6 pb-10 pt-8 sm:px-12 sm:pt-18">
-        {isLoadingInitial ? (
-          <SkeletonLateralMenu />
-        ) : (
-          <>
-            {isSignInModalOpen && (
-              <Dialog.Root open={isSignInModalOpen}>
-                <SignInModal
-                  context="review"
-                  onClose={() => setIsSignInModalOpen(false)}
-                />
-              </Dialog.Root>
-            )}
-
-            {isReviewWarningModalOpen && (
-              <Dialog.Root open={isReviewWarningModalOpen}>
-                <ReviewWarningModal
-                  onClose={() => setIsReviewWarningModalOpen(false)}
-                />
-              </Dialog.Root>
-            )}
-
-            {isValidatingStatus || bookData.isValidating ? (
-              <SkeletonMenuBookCard />
-            ) : bookData.book ? (
-              <MenuBookCard
-                key={bookData.book.id}
-                book={bookData.book}
-                setIsValidatingStatus={setIsValidatingStatus}
-                categories={bookData.book.categories as CategoryProps[]}
-                onUpdateStatus={status.update}
+          <Dialog.Close asChild>
+            <button
+              aria-label="Close"
+              className="bn-scope fixed right-4 top-4 z-10 flex cursor-pointer items-center justify-center rounded-lg border border-line bg-s2 p-1.5 transition-colors hover:border-line-strong sm:right-6 sm:top-6"
+            >
+              <FontAwesomeIcon
+                icon={faXmark}
+                className="text-fg3"
+                style={{ fontSize: 16 }}
               />
-            ) : null}
+            </button>
+          </Dialog.Close>
 
-            <RatingsSection
-              isValidatingStatus={isValidatingStatus}
-              setIsSignInModalOpen={setIsSignInModalOpen}
-              setIsReviewWarningModalOpen={setIsReviewWarningModalOpen}
-            />
-          </>
-        )}
-      </div>
-    </section>
+          {isLoadingInitial ? (
+            <SkeletonLateralMenu />
+          ) : (
+            <>
+              {isSignInModalOpen && (
+                <Dialog.Root open={isSignInModalOpen}>
+                  <SignInModal
+                    context="review"
+                    onClose={() => setIsSignInModalOpen(false)}
+                  />
+                </Dialog.Root>
+              )}
+
+              {isReviewWarningModalOpen && (
+                <Dialog.Root open={isReviewWarningModalOpen}>
+                  <ReviewWarningModal
+                    onClose={() => setIsReviewWarningModalOpen(false)}
+                  />
+                </Dialog.Root>
+              )}
+
+              {isValidatingStatus || bookData.isValidating ? (
+                <SkeletonMenuBookCard />
+              ) : bookData.book ? (
+                <MenuBookCard
+                  key={bookData.book.id}
+                  book={bookData.book}
+                  setIsValidatingStatus={setIsValidatingStatus}
+                  categories={bookData.book.categories as CategoryProps[]}
+                  onUpdateStatus={status.update}
+                />
+              ) : null}
+
+              <RatingsSection
+                isValidatingStatus={isValidatingStatus}
+                setIsSignInModalOpen={setIsSignInModalOpen}
+                setIsReviewWarningModalOpen={setIsReviewWarningModalOpen}
+              />
+            </>
+          )}
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }

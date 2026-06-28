@@ -12,7 +12,7 @@ const variantClasses: Record<string, string> = {
   secondary:
     'bg-s2 text-fg2 border border-line hover:text-fg hover:border-line-strong disabled:opacity-40 disabled:cursor-not-allowed',
   delete:
-    'bg-[--color-st-reading] text-white border border-transparent hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed',
+    'bg-st-reading text-white border border-transparent hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed',
 }
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
