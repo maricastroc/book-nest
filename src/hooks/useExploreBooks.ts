@@ -5,10 +5,21 @@ import useRequest from '@/hooks/useRequest'
 import { usePerPage } from '@/hooks/useExploreBooksPerPage'
 import { usePaginationAndSearch } from './usePaginationAndSearchParams'
 
+export type ExploreSort =
+  | 'title-asc'
+  | 'title-desc'
+  | 'newest'
+  | 'rating'
+  | 'most-rated'
+
 export function useExploreBooks() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
+  const [sort, setSort] = useState<ExploreSort>('title-asc')
+
   const [totalPages, setTotalPages] = useState(1)
+
+  const [totalBooks, setTotalBooks] = useState(0)
 
   const [updatedBooks, setUpdatedBooks] = useState<BookProps[]>([])
 
@@ -42,6 +53,7 @@ export function useExploreBooks() {
       params: {
         category: selectedCategory,
         ...(searchTerm ? { search: searchTerm } : {}),
+        sort,
         page: currentPage,
         perPage,
       },
@@ -75,6 +87,7 @@ export function useExploreBooks() {
   useEffect(() => {
     if (booksData?.pagination) {
       setTotalPages(booksData.pagination.totalPages)
+      setTotalBooks(booksData.pagination.total)
     }
     if (booksData?.books) {
       setUpdatedBooks(booksData.books)
@@ -93,9 +106,12 @@ export function useExploreBooks() {
     searchTerm,
     selectedCategory,
     setSelectedCategory,
+    sort,
+    setSort,
     currentPage,
     setCurrentPage,
     totalPages,
+    totalBooks,
     updatedBooks,
     onUpdateBook,
     categories,

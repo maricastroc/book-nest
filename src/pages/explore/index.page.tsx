@@ -10,6 +10,7 @@ import { SkeletonExploreCard } from '@/components/features/books/SkeletonExplore
 
 import { ExploreCard } from './partials/ExploreCard'
 import { CategoriesSection } from './partials/CategoriesSection'
+import { ResultsBar } from './partials/ResultsBar'
 import { useExploreBooks } from '@/hooks/useExploreBooks'
 import { MainLayout } from '@/layouts/MainLayout'
 
@@ -22,9 +23,12 @@ export default function Explore() {
     setSearch,
     selectedCategory,
     setSelectedCategory,
+    sort,
+    setSort,
     currentPage,
     setCurrentPage,
     totalPages,
+    totalBooks,
     updatedBooks,
     onUpdateBook,
     categories,
@@ -33,6 +37,10 @@ export default function Explore() {
     gridRef,
     perPage,
   } = useExploreBooks()
+
+  const categoryName =
+    categories?.find((category) => category.id === selectedCategory)?.name ??
+    null
 
   const renderBookCards = () => {
     if (isValidating) {
@@ -69,7 +77,7 @@ export default function Explore() {
         className="bn-scope flex flex-col px-8 pb-12 pt-8 md:px-10"
         ref={gridRef}
       >
-        <header className="mb-7 border-b border-line pb-7">
+        <header className="mb-4 border-b border-line pb-7">
           <div className="mb-1.5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-fg3">
             <FontAwesomeIcon icon={faBinoculars} style={{ fontSize: 12 }} />
             <span>The BookNest Collection</span>
@@ -106,6 +114,20 @@ export default function Explore() {
           setSelectedCategory={(v) => setSelectedCategory(v)}
           selectedCategory={selectedCategory}
         />
+
+        {!error && (
+          <ResultsBar
+            total={totalBooks}
+            isValidating={isValidating}
+            search={search}
+            categoryName={categoryName}
+            sort={sort}
+            onSortChange={(value) => {
+              setCurrentPage(1)
+              setSort(value)
+            }}
+          />
+        )}
 
         <div
           className={`grid gap-3 ${

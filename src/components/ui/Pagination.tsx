@@ -64,17 +64,17 @@ export function Pagination({
   const pages = getPaginationRange(currentPage, totalPages)
 
   const arrowClass =
-    'flex h-9 w-9 items-center justify-center rounded-[10px] border border-line bg-s1 text-fg2 transition-all hover:border-line-strong hover:text-fg disabled:pointer-events-none disabled:opacity-35'
+    'flex h-8 w-8 items-center justify-center rounded-full text-fg2 transition-colors hover:bg-s1 hover:text-fg disabled:pointer-events-none disabled:text-fg3 disabled:opacity-60'
 
   return (
-    <div className="bn-scope flex select-none items-center gap-1.5">
+    <div className="bn-scope flex select-none items-center gap-1">
       <button
         aria-label="Previous page"
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
         className={arrowClass}
       >
-        <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 14 }} />
+        <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 13 }} />
       </button>
 
       {pages.map((page) => {
@@ -83,7 +83,7 @@ export function Pagination({
             <span
               key={page}
               aria-hidden
-              className="flex h-9 w-9 items-end justify-center pb-1.5 text-fg3"
+              className="flex h-8 w-8 items-end justify-center pb-2 text-fg3"
             >
               …
             </span>
@@ -98,10 +98,10 @@ export function Pagination({
             data-active={isActive}
             aria-current={isActive ? 'page' : undefined}
             onClick={() => onPageChange(page)}
-            className={`flex h-9 w-9 items-center justify-center rounded-[10px] border text-[13.5px] transition-all ${
+            className={`flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-[13px] transition-colors ${
               isActive
-                ? 'border-ac-border bg-ac-soft font-semibold text-ac shadow-[0_0_0_1px_var(--color-ac-border)]'
-                : 'border-line bg-s1 font-medium text-fg2 hover:border-line-strong hover:text-fg'
+                ? 'bg-ac font-semibold text-ac-ink'
+                : 'font-medium text-fg3 hover:bg-s1 hover:text-fg'
             }`}
           >
             {page}
@@ -115,7 +115,7 @@ export function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         className={arrowClass}
       >
-        <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 14 }} />
+        <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 13 }} />
       </button>
     </div>
   )

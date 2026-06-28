@@ -39,57 +39,37 @@ export default async function handler(
   const validPerPage = !isNaN(perPage) && perPage > 0 ? perPage : 12
   const skip = (validPage - 1) * validPerPage
 
-  const totalBooks = await prisma.book.count({
-    where: {
-      categories: categoriesQuery,
-      status: 'APPROVED',
-      ...(searchQuery && {
-        OR: [
-          {
-            name: {
-              contains: searchQuery,
-              mode: 'insensitive',
-            },
-          },
-          {
-            author: {
-              contains: searchQuery,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      }),
-    },
-  })
+  const SORTS = [
+    'title-asc',
+    'title-desc',
+    'newest',
+    'rating',
+    'most-rated',
+  ] as const
+  type Sort = (typeof SORTS)[number]
+  const sort: Sort = SORTS.includes(req.query.sort as Sort)
+    ? (req.query.sort as Sort)
+    : 'title-asc'
+
+  const where = {
+    categories: categoriesQuery,
+    status: 'APPROVED' as const,
+    ...(searchQuery && {
+      OR: [
+        { name: { contains: searchQuery, mode: 'insensitive' as const } },
+        { author: { contains: searchQuery, mode: 'insensitive' as const } },
+      ],
+    }),
+  }
 
   const books = await prisma.book.findMany({
-    where: {
-      categories: categoriesQuery,
-      status: 'APPROVED',
-      ...(searchQuery && {
-        OR: [
-          {
-            name: {
-              contains: searchQuery,
-              mode: 'insensitive',
-            },
-          },
-          {
-            author: {
-              contains: searchQuery,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      }),
-    },
-    skip,
-    take: validPerPage,
+    where,
     select: {
       id: true,
       name: true,
       author: true,
       coverUrl: true,
+      createdAt: true,
       categories: {
         select: {
           category: true,
@@ -105,9 +85,6 @@ export default async function handler(
           },
         },
       }),
-    },
-    orderBy: {
-      name: 'asc',
     },
   })
 
@@ -146,14 +123,42 @@ export default async function handler(
     }
   })
 
+  const rateValue = (book: (typeof booksWithDetails)[number]) =>
+    Number.isNaN(book.rate) ? -1 : book.rate
+
+  const sorters: Record<
+    Sort,
+    (
+      a: (typeof booksWithDetails)[number],
+      b: (typeof booksWithDetails)[number],
+    ) => number
+  > = {
+    'title-asc': (a, b) => a.name.localeCompare(b.name),
+    'title-desc': (a, b) => b.name.localeCompare(a.name),
+    newest: (a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    rating: (a, b) =>
+      rateValue(b) - rateValue(a) ||
+      b.ratingCount - a.ratingCount ||
+      a.name.localeCompare(b.name),
+    'most-rated': (a, b) =>
+      b.ratingCount - a.ratingCount ||
+      rateValue(b) - rateValue(a) ||
+      a.name.localeCompare(b.name),
+  }
+
+  const sortedBooks = booksWithDetails.sort(sorters[sort])
+  const total = sortedBooks.length
+  const paginatedBooks = sortedBooks.slice(skip, skip + validPerPage)
+
   return res.json({
     data: {
-      books: booksWithDetails,
+      books: paginatedBooks,
       pagination: {
         page: validPage,
         perPage: validPerPage,
-        total: totalBooks,
-        totalPages: Math.ceil(totalBooks / validPerPage),
+        total,
+        totalPages: Math.ceil(total / validPerPage),
       },
     },
   })

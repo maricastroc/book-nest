@@ -3,9 +3,10 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 
 interface TextBoxProps {
   description: string | undefined
+  variant?: 'default' | 'quote'
 }
 
-export function TextBox({ description }: TextBoxProps) {
+export function TextBox({ description, variant = 'default' }: TextBoxProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const isSmallSize = useScreenSize(580)
   const MAX_CHARS = isSmallSize ? 150 : 250
@@ -23,7 +24,13 @@ export function TextBox({ description }: TextBoxProps) {
   const lines = isExpanded ? description.split('\n') : truncatedText.split('\n')
 
   return (
-    <p className="w-full text-left text-[13px] leading-[1.55] text-fg2 [word-break:break-word]">
+    <p
+      className={`w-full text-left [word-break:break-word] ${
+        variant === 'quote'
+          ? 'font-serif text-[15px] italic leading-[1.55] text-fg2'
+          : 'text-[13px] leading-[1.55] text-fg2'
+      }`}
+    >
       {lines.map((line, i) => {
         const isLast = i === lines.length - 1
         return (

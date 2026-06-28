@@ -20,7 +20,7 @@ export const SearchBar = ({
 }: Props) => {
   return (
     <div
-      className={`relative rounded-xl border border-line bg-s1 transition-colors hover:border-line-strong focus-within:border-ac/50 ${
+      className={`relative rounded-xl border border-line bg-s1 transition-colors focus-within:border-ac/50 [&:hover:not(:focus-within)]:border-line-strong ${
         fullWidth ? 'w-full' : 'w-full lg:w-[60%] lg:max-w-100'
       } ${className}`}
     >

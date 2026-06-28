@@ -10,12 +10,14 @@ interface HorizontalScrollProps {
   scrollAmount?: number
   itemWidth?: string
   fadeColor?: string
+  gapClassName?: string
 }
 
 export function HorizontalScroll({
   children,
   scrollAmount = 340,
   fadeColor = 'var(--color-bg)',
+  gapClassName = 'gap-4',
 }: HorizontalScrollProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -62,7 +64,7 @@ export function HorizontalScroll({
       <div
         ref={scrollRef}
         onScroll={updateButtons}
-        className="flex w-full flex-row items-start gap-4 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden"
+        className={`flex w-full flex-row items-start overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden ${gapClassName}`}
       >
         {children}
       </div>

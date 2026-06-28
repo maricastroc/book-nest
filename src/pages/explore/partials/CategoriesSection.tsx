@@ -22,7 +22,7 @@ export const CategoriesSection = ({
 
   return (
     <div className="mb-6">
-      <HorizontalScroll scrollAmount={300}>
+      <HorizontalScroll scrollAmount={300} gapClassName="gap-2">
         {!pills
           ? Array.from({ length: 10 }).map((_, i) => (
               <div
@@ -43,7 +43,7 @@ export const CategoriesSection = ({
                     setCurrentPage(1)
                     setSelectedCategory(cat.id)
                   }}
-                  className={`shrink-0 rounded-full border px-3 py-1.25 text-[11.5px] font-medium tracking-wide whitespace-nowrap transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
+                  className={`shrink-0 rounded-full border px-3.5 py-1.5 text-[13px] font-medium tracking-wide whitespace-nowrap transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
                     isActive
                       ? 'border-ac bg-ac-soft text-ac'
                       : 'border-line text-fg3 hover:border-ac/40 hover:text-fg'
