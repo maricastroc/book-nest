@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/books/check/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -32,16 +32,16 @@ describe('GET /api/books', () => {
       isbn: '12345678',
     })
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: {
         isbn: '12345678',
       },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ end: jest.fn(), json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -77,16 +77,16 @@ describe('GET /api/books', () => {
       isbn: '12345678',
     })
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: {
         title: 'book two',
       },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ end: jest.fn(), json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -114,11 +114,11 @@ describe('GET /api/books', () => {
   })
 
   it('returns error if both isbn and title are missing', async () => {
-    const req = { method: 'GET', query: {} } as any
+    const req = mockReq({ method: 'GET', query: {} })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ end: jest.fn(), json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -126,14 +126,14 @@ describe('GET /api/books', () => {
   })
 
   it('returns 405 if not GET', async () => {
-    const req = {
+    const req = mockReq({
       method: 'POST',
       query: {
         title: 'book two',
       },
-    } as any
+    })
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 

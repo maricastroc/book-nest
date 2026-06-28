@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/ratings/[bookId]/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -31,9 +31,9 @@ describe('POST /api/ratings', () => {
   })
 
   it('returns 405 if method is not POST', async () => {
-    const req = { method: 'GET' } as any
+    const req = mockReq({ method: 'GET' })
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -43,17 +43,17 @@ describe('POST /api/ratings', () => {
   it('returns 401 if no session', async () => {
     ;(getServerSession as jest.Mock).mockResolvedValue(null)
 
-    const req = {
+    const req = mockReq({
       method: 'POST',
       query: { bookId: 'book123' },
       body: {
         description: 'Good book',
         rate: 4,
       },
-    } as any
+    })
 
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -66,17 +66,17 @@ describe('POST /api/ratings', () => {
     })
     ;(prisma.book.findUnique as jest.Mock).mockResolvedValue(null)
 
-    const req = {
+    const req = mockReq({
       method: 'POST',
       query: { bookId: 'book123' },
       body: {
         description: 'Good book',
         rate: 4,
       },
-    } as any
+    })
 
     const status = jest.fn(() => ({ json: jest.fn() }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -105,17 +105,17 @@ describe('POST /api/ratings', () => {
       status: 'READ',
     })
 
-    const req = {
+    const req = mockReq({
       method: 'POST',
       query: { bookId: 'book123' },
       body: {
         description: 'Good book',
         rate: 4,
       },
-    } as any
+    })
 
     const json = jest.fn()
-    const res = { status: jest.fn(() => ({ json })), json } as any
+    const res = mockRes({ status: jest.fn(() => ({ json })), json })
 
     await handler(req, res)
 

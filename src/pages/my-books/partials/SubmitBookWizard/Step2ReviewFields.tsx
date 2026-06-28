@@ -4,10 +4,10 @@ import { InputContainer } from '@/components/ui/InputContainer'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { FormErrors } from '@/components/ui/FormErrors'
+import { SubmitBookFormData } from '@/hooks/useSubmitBookForm'
 
 interface Props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>
+  control: Control<SubmitBookFormData>
   errors: FieldErrors
 }
 

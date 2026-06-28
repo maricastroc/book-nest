@@ -1,6 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const customStyles = {
-  control: (provided: any, state: any) => ({
+import { StylesConfig } from 'react-select'
+
+type CategoryOption = { value: string; label: string }
+
+export const customStyles: StylesConfig<CategoryOption, true> = {
+  control: (provided, state) => ({
     ...provided,
     backgroundColor: 'var(--color-s1)',
     borderColor: state.isFocused
@@ -15,20 +18,20 @@ export const customStyles = {
       borderColor: 'var(--color-line-strong)',
     },
   }),
-  menu: (provided: any) => ({
+  menu: (provided) => ({
     ...provided,
     backgroundColor: 'var(--color-s2)',
     border: '1px solid var(--color-line-strong)',
     borderRadius: 8,
     boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
   }),
-  menuList: (provided: any) => ({
+  menuList: (provided) => ({
     ...provided,
     maxHeight: '180px',
     overflowY: 'auto',
     padding: '4px',
   }),
-  option: (provided: any, state: any) => ({
+  option: (provided, state) => ({
     ...provided,
     backgroundColor: state.isSelected
       ? 'rgba(232,177,76,0.15)'
@@ -43,19 +46,19 @@ export const customStyles = {
       backgroundColor: 'rgba(232,177,76,0.2)',
     },
   }),
-  multiValue: (provided: any) => ({
+  multiValue: (provided) => ({
     ...provided,
     backgroundColor: 'rgba(232,177,76,0.12)',
     border: '1px solid rgba(232,177,76,0.25)',
     borderRadius: 6,
   }),
-  multiValueLabel: (provided: any) => ({
+  multiValueLabel: (provided) => ({
     ...provided,
     color: 'var(--color-ac)',
     fontSize: '0.78rem',
     fontWeight: 600,
   }),
-  multiValueRemove: (provided: any) => ({
+  multiValueRemove: (provided) => ({
     ...provided,
     color: 'var(--color-ac)',
     borderRadius: '0 6px 6px 0',
@@ -64,25 +67,25 @@ export const customStyles = {
       color: 'var(--color-st-reading)',
     },
   }),
-  placeholder: (provided: any) => ({
+  placeholder: (provided) => ({
     ...provided,
     color: 'var(--color-fg3)',
     fontSize: '0.875rem',
   }),
-  input: (provided: any) => ({
+  input: (provided) => ({
     ...provided,
     color: 'var(--color-fg)',
   }),
-  dropdownIndicator: (provided: any) => ({
+  dropdownIndicator: (provided) => ({
     ...provided,
     color: 'var(--color-fg3)',
     '&:hover': { color: 'var(--color-fg2)' },
   }),
-  indicatorSeparator: (provided: any) => ({
+  indicatorSeparator: (provided) => ({
     ...provided,
     backgroundColor: 'var(--color-line-strong)',
   }),
-  clearIndicator: (provided: any) => ({
+  clearIndicator: (provided) => ({
     ...provided,
     color: 'var(--color-fg3)',
     '&:hover': { color: 'var(--color-fg2)' },

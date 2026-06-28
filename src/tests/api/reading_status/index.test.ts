@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/reading_status/index.api'
 import { prisma } from '@/lib/prisma'
 
@@ -22,10 +22,10 @@ describe('API readingStatus handler', () => {
 
   describe('GET method', () => {
     it('returns 400 if userId or bookId is missing', async () => {
-      const req = { method: 'GET', query: {} } as any
+      const req = mockReq({ method: 'GET', query: {} })
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
-      const res = { status } as any
+      const res = mockRes({ status })
 
       await handler(req, res)
 
@@ -37,13 +37,13 @@ describe('API readingStatus handler', () => {
 
     it('returns 404 if readingStatus not found', async () => {
       ;(prisma.readingStatus.findUnique as jest.Mock).mockResolvedValue(null)
-      const req = {
+      const req = mockReq({
         method: 'GET',
         query: { userId: 'u1', bookId: 'b1' },
-      } as any
+      })
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
-      const res = { status } as any
+      const res = mockRes({ status })
 
       await handler(req, res)
 
@@ -72,13 +72,13 @@ describe('API readingStatus handler', () => {
       ;(prisma.readingStatus.findUnique as jest.Mock).mockResolvedValue(
         fakeReadingStatus,
       )
-      const req = {
+      const req = mockReq({
         method: 'GET',
         query: { userId: 'u1', bookId: 'b1' },
-      } as any
+      })
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
-      const res = { status } as any
+      const res = mockRes({ status })
 
       await handler(req, res)
 
@@ -95,10 +95,10 @@ describe('API readingStatus handler', () => {
 
   describe('POST/PUT method', () => {
     it('returns 400 if required body fields missing', async () => {
-      const req = { method: 'POST', body: {} } as any
+      const req = mockReq({ method: 'POST', body: {} })
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
-      const res = { status } as any
+      const res = mockRes({ status })
 
       await handler(req, res)
 
@@ -109,13 +109,13 @@ describe('API readingStatus handler', () => {
     })
 
     it('updates rating and upserts readingStatus', async () => {
-      const req = {
+      const req = mockReq({
         method: 'POST',
         body: { userId: 'u1', bookId: 'b1', status: 'read' },
-      } as any
+      })
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
-      const res = { status } as any
+      const res = mockRes({ status })
       const updatedStatus = { userId: 'u1', bookId: 'b1', status: 'read' }
       ;(prisma.rating.updateMany as jest.Mock).mockResolvedValue({})
       ;(prisma.readingStatus.upsert as jest.Mock).mockResolvedValue(
@@ -140,10 +140,10 @@ describe('API readingStatus handler', () => {
 
   describe('DELETE method', () => {
     it('returns 400 if userId or bookId missing', async () => {
-      const req = { method: 'DELETE', body: {} } as any
+      const req = mockReq({ method: 'DELETE', body: {} })
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
-      const res = { status } as any
+      const res = mockRes({ status })
 
       await handler(req, res)
 
@@ -154,13 +154,13 @@ describe('API readingStatus handler', () => {
     })
 
     it('deletes readingStatus and returns success message', async () => {
-      const req = {
+      const req = mockReq({
         method: 'DELETE',
         body: { userId: 'u1', bookId: 'b1' },
-      } as any
+      })
       const json = jest.fn()
       const status = jest.fn(() => ({ json }))
-      const res = { status } as any
+      const res = mockRes({ status })
       ;(prisma.readingStatus.delete as jest.Mock).mockResolvedValue({})
 
       await handler(req, res)
@@ -176,10 +176,10 @@ describe('API readingStatus handler', () => {
   })
 
   it('returns 405 if method not allowed', async () => {
-    const req = { method: 'PATCH' } as any
+    const req = mockReq({ method: 'PATCH' })
     const end = jest.fn()
     const status = jest.fn(() => ({ end }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 

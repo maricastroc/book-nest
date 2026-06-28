@@ -10,6 +10,7 @@ interface BaseModalProps {
   description?: string
   footer?: ReactNode
   isLarger?: boolean
+  isCompact?: boolean
   hasAlignMiddleContent?: boolean
   children: ReactNode
   showCloseButton?: boolean
@@ -22,9 +23,16 @@ export function BaseModal({
   footer,
   children,
   isLarger = false,
+  isCompact = false,
   hasAlignMiddleContent = false,
   showCloseButton = true,
 }: BaseModalProps) {
+  const widthClass = isLarger
+    ? 'sm:max-w-160'
+    : isCompact
+    ? 'sm:max-w-96'
+    : 'sm:max-w-120'
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay
@@ -36,9 +44,7 @@ export function BaseModal({
         <Dialog.Content
           onEscapeKeyDown={onClose}
           aria-describedby={undefined}
-          className={`bn-scope fixed left-1/2 top-1/2 z-9998 flex max-h-[88vh] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-feature border border-line bg-s2 shadow-[0_24px_60px_rgba(0,0,0,0.6)] outline-none ${
-            isLarger ? 'sm:max-w-160' : 'sm:max-w-120'
-          }`}
+          className={`bn-scope fixed left-1/2 top-1/2 z-9998 flex max-h-[88vh] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-feature border border-line bg-s2 shadow-[0_24px_60px_rgba(0,0,0,0.6)] outline-none ${widthClass}`}
         >
           {title && (
             <div className="flex shrink-0 items-start justify-between gap-4 px-7 pt-7 md:px-9 md:pt-8">

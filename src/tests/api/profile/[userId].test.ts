@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/profile/[userId].api'
 import { prisma } from '@/lib/prisma'
 import { getMostFrequentString } from '@/utils/getMostFrequentString'
@@ -24,11 +24,11 @@ describe('GET /api/profile/summary/[userId]', () => {
   })
 
   it('returns 405 if method is not GET', async () => {
-    const req = { method: 'POST' } as any
+    const req = mockReq({ method: 'POST' })
     const json = jest.fn()
     const end = jest.fn()
     const status = jest.fn(() => ({ json, end }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -39,14 +39,14 @@ describe('GET /api/profile/summary/[userId]', () => {
   it('returns 404 if user not found', async () => {
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: { userId: 'non-existent' },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -105,14 +105,14 @@ describe('GET /api/profile/summary/[userId]', () => {
     ;(prisma.book.findMany as jest.Mock).mockResolvedValue(allReadBooks)
     ;(getMostFrequentString as jest.Mock).mockReturnValue('Fiction')
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: { userId },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -179,14 +179,14 @@ describe('GET /api/profile/summary/[userId]', () => {
       .mockResolvedValueOnce(allReadBooks)
     ;(getMostFrequentString as jest.Mock).mockReturnValue('Fiction')
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: { userId, search: 'some search' },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 

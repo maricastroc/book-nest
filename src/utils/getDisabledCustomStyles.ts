@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { CSSObjectWithLabel } from 'react-select'
+
 export const disabledCustomStyles = {
-  control: (provided: any) => ({
+  control: (provided: CSSObjectWithLabel) => ({
     ...provided,
     backgroundColor: '#5A698F',
     borderColor: '#5A698F',
@@ -11,11 +12,11 @@ export const disabledCustomStyles = {
       borderColor: '#5A698F',
     },
   }),
-  menu: (provided: any) => ({
+  menu: (provided: CSSObjectWithLabel) => ({
     ...provided,
     backgroundColor: '#5A698F',
   }),
-  option: (provided: any, state: any) => ({
+  option: (provided: CSSObjectWithLabel, state: { isSelected: boolean }) => ({
     ...provided,
     backgroundColor: '#5A698F',
     cursor: 'not-allowed',
@@ -25,16 +26,16 @@ export const disabledCustomStyles = {
       color: '#5A698F',
     },
   }),
-  multiValue: (provided: any) => ({
+  multiValue: (provided: CSSObjectWithLabel) => ({
     ...provided,
     backgroundColor: '#5A698F',
     color: '#5A698F',
   }),
-  multiValueLabel: (provided: any) => ({
+  multiValueLabel: (provided: CSSObjectWithLabel) => ({
     ...provided,
     color: '#5A698F',
   }),
-  multiValueRemove: (provided: any) => ({
+  multiValueRemove: (provided: CSSObjectWithLabel) => ({
     ...provided,
     color: '#5A698F',
     '&:hover': {

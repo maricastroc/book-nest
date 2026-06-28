@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRouter } from 'next/router'
 
 import { BookProps } from '@/@types/book'
@@ -9,7 +8,7 @@ interface Props {
   book: BookProps
   onClose?: () => void
   onUpdateBook: (book: BookProps) => void
-  mutate: any
+  mutate: () => Promise<unknown>
 }
 
 export function ReviewBookCard({ book }: Props) {

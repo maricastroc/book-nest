@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/books/create/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -51,8 +51,8 @@ describe('POST /api/books/create', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     let resolveParse: (value?: unknown) => void
     const parseCompleted = new Promise((resolve) => {
@@ -84,7 +84,7 @@ describe('POST /api/books/create', () => {
             ],
           },
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
 
@@ -116,8 +116,8 @@ describe('POST /api/books/create', () => {
     ;(getServerSession as jest.Mock).mockResolvedValue(null)
 
     const status = jest.fn(() => ({ json: jest.fn() }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     await handler(req, res)
 
@@ -126,8 +126,8 @@ describe('POST /api/books/create', () => {
 
   it('should return 405 if request method is not POST', async () => {
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { status } as any
-    const req = { method: 'GET' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'GET' })
 
     await handler(req, res)
 
@@ -140,8 +140,8 @@ describe('POST /api/books/create', () => {
     })
 
     const status = jest.fn(() => ({ json: jest.fn() }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     let resolveParse: (value?: unknown) => void
     const parseCompleted = new Promise((resolve) => {
@@ -172,7 +172,7 @@ describe('POST /api/books/create', () => {
             ],
           },
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
 

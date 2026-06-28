@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/categories/index.api'
 import { prisma } from '@/lib/prisma'
 
@@ -16,9 +16,9 @@ describe('GET /api/categories', () => {
   })
 
   it('returns 405 if method is not GET', async () => {
-    const req = { method: 'POST' } as any
+    const req = mockReq({ method: 'POST' })
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -32,9 +32,9 @@ describe('GET /api/categories', () => {
     ]
     ;(prisma.category.findMany as jest.Mock).mockResolvedValue(fakeCategories)
 
-    const req = { method: 'GET' } as any
+    const req = mockReq({ method: 'GET' })
     const json = jest.fn()
-    const res = { json } as any
+    const res = mockRes({ json })
 
     await handler(req, res)
 

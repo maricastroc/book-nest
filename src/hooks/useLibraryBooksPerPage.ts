@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react'
 
 const gridBreakpoints: [number, number][] = [
@@ -51,10 +50,13 @@ export function usePerPage(): number {
   return perPage
 }
 
-function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+function debounce<Args extends unknown[]>(
+  fn: (...args: Args) => void,
+  delay: number,
+) {
   let timeoutId: NodeJS.Timeout
 
-  const debounced = (...args: Parameters<T>) => {
+  const debounced = (...args: Args) => {
     clearTimeout(timeoutId)
     timeoutId = setTimeout(() => fn(...args), delay)
   }

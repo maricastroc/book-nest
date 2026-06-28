@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/user/search/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -40,18 +40,18 @@ describe('GET /api/users/search', () => {
     ])
     ;(prisma.user.count as jest.Mock).mockResolvedValue(1)
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: {
         page: '1',
         perPage: '10',
       },
-    } as any
+    })
 
     const json = jest.fn()
     const end = jest.fn()
     const status = jest.fn(() => ({ json, end }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -82,11 +82,11 @@ describe('GET /api/users/search', () => {
   })
 
   it('returns 405 if not GET', async () => {
-    const req = { method: 'POST' } as any
+    const req = mockReq({ method: 'POST' })
     const json = jest.fn()
     const end = jest.fn()
     const status = jest.fn(() => ({ json, end }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -108,18 +108,18 @@ describe('GET /api/users/search', () => {
     ])
     ;(prisma.user.count as jest.Mock).mockResolvedValue(1)
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: {
         page: '1',
         perPage: '10',
         search: 'Jane',
       },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -151,17 +151,17 @@ describe('GET /api/users/search', () => {
     ;(prisma.user.findMany as jest.Mock).mockResolvedValue([])
     ;(prisma.user.count as jest.Mock).mockResolvedValue(0)
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: {
         page: '0',
         perPage: '-5',
       },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 

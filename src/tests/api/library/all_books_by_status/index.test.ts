@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/library/all_books_by_status/index.api'
 import { prisma } from '@/lib/prisma'
 
@@ -17,9 +17,9 @@ describe('GET /api/your-endpoint', () => {
   })
 
   it('returns 405 if method is not GET', async () => {
-    const req = { method: 'POST' } as any
+    const req = mockReq({ method: 'POST' })
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -27,10 +27,10 @@ describe('GET /api/your-endpoint', () => {
   })
 
   it('returns 400 if userId or status are missing', async () => {
-    const req = { method: 'GET', query: { userId: '123' } } as any
+    const req = mockReq({ method: 'GET', query: { userId: '123' } })
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status, json } as any
+    const res = mockRes({ status, json })
 
     await handler(req, res)
 
@@ -70,16 +70,16 @@ describe('GET /api/your-endpoint', () => {
     ;(prisma.book.count as jest.Mock).mockResolvedValue(fakeCount)
     ;(prisma.book.findMany as jest.Mock).mockResolvedValue(fakeBooks)
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: { userId, status, page, perPage, search },
-    } as any
+    })
 
     const json = jest.fn()
-    const res = {
+    const res = mockRes({
       status: jest.fn(() => ({ json })),
       json,
-    } as any
+    })
 
     await handler(req, res)
 

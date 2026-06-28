@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/books/[bookId]/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -76,16 +76,16 @@ describe('GET /api/books', () => {
     ])
     ;(prisma.rating.findFirst as jest.Mock).mockResolvedValue(null)
 
-    const req = {
+    const req = mockReq({
       method: 'GET',
       query: {
         bookId: 'book-1',
       },
-    } as any
+    })
 
     const json = jest.fn()
     const status = jest.fn(() => ({ end: jest.fn(), json }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -112,9 +112,9 @@ describe('GET /api/books', () => {
   })
 
   it('returns 405 if not GET', async () => {
-    const req = { method: 'POST', query: { bookId: 'book-1' } } as any
+    const req = mockReq({ method: 'POST', query: { bookId: 'book-1' } })
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 

@@ -45,15 +45,18 @@ export default async function handler(
 
   const statusCounts = { read: 0, reading: 0, wantToRead: 0, didNotFinish: 0 }
 
+  const normalizeStatus = (status: string) =>
+    status.replace(/\s+|_/g, '').toLowerCase()
+
   const STATUS_KEY_MAP: Record<string, keyof typeof statusCounts> = {
     read: 'read',
     reading: 'reading',
-    'want to read': 'wantToRead',
-    'did not finish': 'didNotFinish',
+    wanttoread: 'wantToRead',
+    didnotfinish: 'didNotFinish',
   }
 
   for (const group of statusGroups) {
-    const key = STATUS_KEY_MAP[group.status.toLowerCase()]
+    const key = STATUS_KEY_MAP[normalizeStatus(group.status)]
     if (key) {
       statusCounts[key] = group._count.status
     }

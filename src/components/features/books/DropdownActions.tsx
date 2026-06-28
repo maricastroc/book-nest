@@ -98,11 +98,11 @@ export const DropdownActions = ({
             <Dialog.Trigger asChild>
               <button
                 onClick={handleDeleteClick}
-                className="flex w-full cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-lg border-0 bg-transparent px-3 py-2 text-left text-[0.85rem] font-medium text-st-reading transition-colors hover:bg-st-reading/10"
+                className="flex w-full cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-lg border-0 bg-transparent px-3 py-2 text-left text-[0.85rem] font-medium transition-colors hover:bg-white/6"
               >
                 <FontAwesomeIcon
                   icon={faTrashCan}
-                  className="w-[0.95rem] text-[0.85rem]"
+                  className="w-[0.95rem] text-[0.85rem] text-danger"
                 />
                 <span>
                   {isSubmission ? 'Delete Submission' : 'Delete Review'}

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Dialog from '@radix-ui/react-dialog'
 import React, { useRef } from 'react'
-import Cropper from 'react-cropper'
+import Cropper, { ReactCropperElement } from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import { Button } from '@/components/ui/Button'
 import { BaseModal } from '@/components/ui/BaseModal'
@@ -19,11 +18,11 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
   onCrop,
   aspectRatio = 1,
 }) => {
-  const cropperRef = useRef<HTMLImageElement>(null)
+  const cropperRef = useRef<ReactCropperElement>(null)
 
   const handleCrop = () => {
     if (cropperRef.current) {
-      const cropper = (cropperRef.current as any).cropper
+      const cropper = cropperRef.current.cropper
       const croppedCanvas = cropper.getCroppedCanvas({
         width: 500,
         height: 500,

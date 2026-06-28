@@ -1,6 +1,11 @@
-import { useRef, useState } from 'react'
+import { ReactNode, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRss } from '@fortawesome/free-solid-svg-icons'
+import {
+  faRss,
+  faUserPlus,
+  faRightToBracket,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons'
 import { useSession } from 'next-auth/react'
 
 import { MainLayout } from '@/layouts/MainLayout'
@@ -27,6 +32,33 @@ type RatingActivity = {
 }
 
 type AnyActivity = RatingActivity | { type: 'reading_status'; id: string }
+
+function FeedEmptyState({
+  icon,
+  title,
+  description,
+  action,
+}: {
+  icon: IconDefinition
+  title: string
+  description: string
+  action?: ReactNode
+}) {
+  return (
+    <div className="flex flex-col items-center gap-4 px-4 py-16 text-center lg:my-auto">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-ac-border bg-ac-soft text-ac">
+        <FontAwesomeIcon icon={icon} style={{ fontSize: 20 }} />
+      </div>
+      <div className="flex max-w-xs flex-col gap-1.5">
+        <p className="font-serif text-[1.1rem] font-semibold leading-tight text-fg">
+          {title}
+        </p>
+        <p className="text-[13.5px] leading-relaxed text-fg2">{description}</p>
+      </div>
+      {action}
+    </div>
+  )
+}
 
 export default function Feed() {
   const { data: session } = useSession()
@@ -56,6 +88,11 @@ export default function Feed() {
     setCurrentPage(1)
   }
 
+  // Only surface the feed search once there's actually a feed to search —
+  // otherwise it competes with the "Find Readers" search in the empty state.
+  const showFeedSearch =
+    !!session?.user && (!!search || (data?.followingIds?.length ?? 0) > 0)
+
   const scrollToFindReaders = () => {
     findReadersRef.current?.scrollIntoView({
       behavior: 'smooth',
@@ -66,11 +103,11 @@ export default function Feed() {
   const renderFeed = () => {
     if (!session?.user) {
       return (
-        <div className="flex flex-col items-center gap-4 px-4 py-16 text-center text-fg3">
-          <p className="max-w-sm text-[15px] leading-relaxed">
-            Sign in to see what people you follow are reading.
-          </p>
-        </div>
+        <FeedEmptyState
+          icon={faRightToBracket}
+          title="See your community feed"
+          description="Sign in to see what the readers you follow are reading and reviewing."
+        />
       )
     }
 
@@ -82,17 +119,19 @@ export default function Feed() {
 
     if (!data?.followingIds?.length) {
       return (
-        <div className="flex flex-col items-center gap-4 px-4 py-16 text-center text-fg3">
-          <p className="max-w-sm text-[15px] leading-relaxed">
-            Your feed is empty. Follow other readers to see their activity here.
-          </p>
-          <button
-            onClick={scrollToFindReaders}
-            className="rounded-lg bg-ac px-4 py-2 text-[13px] font-semibold text-ac-ink transition-[filter] hover:brightness-110"
-          >
-            Find Readers
-          </button>
-        </div>
+        <FeedEmptyState
+          icon={faUserPlus}
+          title="Your feed is empty"
+          description="Follow other readers to see their reviews and reading activity here."
+          action={
+            <button
+              onClick={scrollToFindReaders}
+              className="rounded-lg bg-ac px-4 py-2 text-[13px] font-semibold text-ac-ink transition-[filter] hover:brightness-110"
+            >
+              Find Readers
+            </button>
+          }
+        />
       )
     }
 
@@ -102,11 +141,15 @@ export default function Feed() {
 
     if (!ratingActivities.length) {
       return (
-        <div className="flex flex-col items-center gap-4 px-4 py-16 text-center text-fg3">
-          <p className="max-w-sm text-[15px] leading-relaxed">
-            No activity yet from readers you follow.
-          </p>
-        </div>
+        <FeedEmptyState
+          icon={faRss}
+          title={search ? 'No matches found' : 'Nothing here yet'}
+          description={
+            search
+              ? 'No activity matches your search. Try a different book, author or reader.'
+              : "The readers you follow haven't posted any activity yet."
+          }
+        />
       )
     }
 
@@ -168,16 +211,18 @@ export default function Feed() {
         <div className="flex flex-col gap-8 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-stretch">
           {/* Main feed */}
           <main className="lateral-menu-scroll flex min-w-0 flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pb-12 lg:pr-2">
-            <SearchBar
-              fullWidth
-              search={search}
-              placeholder="Search by book, author or reader..."
-              onChange={handleSearchChange}
-              onClick={() => {
-                setSearch('')
-                setCurrentPage(1)
-              }}
-            />
+            {showFeedSearch && (
+              <SearchBar
+                fullWidth
+                search={search}
+                placeholder="Search by book, author or reader..."
+                onChange={handleSearchChange}
+                onClick={() => {
+                  setSearch('')
+                  setCurrentPage(1)
+                }}
+              />
+            )}
             {renderFeed()}
           </main>
 

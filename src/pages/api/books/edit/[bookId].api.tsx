@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { IncomingForm } from 'formidable'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
@@ -92,7 +92,7 @@ export default async function handler(
     }
 
     try {
-      const rawData: any = {}
+      const rawData: Record<string, string> = {}
       const getSingleString = (
         value: string | string[] | undefined,
       ): string => {
@@ -129,7 +129,7 @@ export default async function handler(
         return res.status(404).json({ message: 'Book not found.' })
       }
 
-      const updateData: any = { ...validatedData }
+      const updateData: Record<string, unknown> = { ...validatedData }
 
       updateData.status = 'APPROVED'
 
@@ -205,7 +205,7 @@ export default async function handler(
 
       const updatedBook = await prisma.book.update({
         where: { id: bookId },
-        data: updateData,
+        data: updateData as Prisma.BookUpdateInput,
         include: { categories: true },
       })
 

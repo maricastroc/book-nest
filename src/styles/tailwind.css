@@ -18,9 +18,14 @@
   --color-ac-border: rgba(232, 177, 76, 0.3);
 
   --color-st-read: #4a9e6e;
-  --color-st-reading: #ca4036;
+  --color-st-reading: #5189d1;
   --color-st-want: #c64a96;
-  --color-st-dnf: #cc803d;
+  --color-st-dnf: #82828c;
+
+  --color-danger: #d94b4b;
+  --color-danger-ink: #2a0909;
+  --color-danger-soft: rgba(217, 75, 75, 0.13);
+  --color-danger-border: rgba(217, 75, 75, 0.3);
 
   --color-line: rgba(255, 255, 255, 0.07);
   --color-line-strong: rgba(255, 255, 255, 0.12);

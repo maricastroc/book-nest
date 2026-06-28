@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
@@ -13,18 +12,19 @@ import {
 } from 'react'
 import { useRatings } from './RatingsContext'
 import { KeyedMutator } from 'swr'
+import { AxiosResponse } from 'axios'
 
 type BookData = {
   book: BookProps | null | undefined
   ratings: RatingProps[]
   isValidating: boolean
-  mutate: KeyedMutator<any>
+  mutate: KeyedMutator<AxiosResponse<BookProps | null>>
 }
 
 type UserRatingData = {
   rating: RatingProps | null
   isValidating: boolean
-  mutate: KeyedMutator<any>
+  mutate: KeyedMutator<AxiosResponse<RatingProps | undefined>>
 }
 
 type StatusData = {

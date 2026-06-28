@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faUpload } from '@fortawesome/free-solid-svg-icons'
@@ -9,13 +8,16 @@ import { InputContainer } from '@/components/ui/InputContainer'
 import { Label } from '@/components/ui/Label'
 import { FormErrors } from '@/components/ui/FormErrors'
 import { customStyles } from '@/utils/getCustomStyles'
+import { SubmitBookFormData } from '@/hooks/useSubmitBookForm'
+
+type CategoryOption = { value: string; label: string }
 
 interface Props {
-  control: Control<any>
+  control: Control<SubmitBookFormData>
   errors: FieldErrors
   coverPreview?: string | null
   onCoverChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  categoriesOptions: any[]
+  categoriesOptions: CategoryOption[]
 }
 
 export function Step3Extras({
@@ -87,11 +89,11 @@ export function Step3Extras({
               control={control}
               defaultValue={[]}
               render={({ field }) => (
-                <Select
+                <Select<CategoryOption, true>
                   {...field}
                   isMulti
                   menuPlacement="auto"
-                  options={categoriesOptions as any}
+                  options={categoriesOptions}
                   styles={customStyles}
                   onChange={(selected) => field.onChange(selected)}
                 />

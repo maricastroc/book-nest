@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/books/popular/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -51,10 +51,10 @@ describe('GET /api/books', () => {
       { bookId: '1', _avg: { rate: 4.5 }, _count: { rate: 2 } },
     ])
 
-    const req = { method: 'GET' } as any
+    const req = mockReq({ method: 'GET' })
     const json = jest.fn()
     const status = jest.fn(() => ({ end: jest.fn() }))
-    const res = { json, status } as any
+    const res = mockRes({ json, status })
 
     await handler(req, res)
 
@@ -80,9 +80,9 @@ describe('GET /api/books', () => {
   })
 
   it('returns 405 if not GET', async () => {
-    const req = { method: 'POST' } as any
+    const req = mockReq({ method: 'POST' })
     const end = jest.fn()
-    const res = { status: jest.fn(() => ({ end })) } as any
+    const res = mockRes({ status: jest.fn(() => ({ end })) })
 
     await handler(req, res)
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/user/create/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -67,7 +67,7 @@ describe('POST /api/users/create', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -76,8 +76,8 @@ describe('POST /api/users/create', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     await handler(req, res)
     await parseCompleted
@@ -131,7 +131,7 @@ describe('POST /api/users/create', () => {
             ],
           },
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -140,8 +140,8 @@ describe('POST /api/users/create', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     await handler(req, res)
     await parseCompleted
@@ -165,8 +165,8 @@ describe('POST /api/users/create', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     await handler(req, res)
 
@@ -197,7 +197,7 @@ describe('POST /api/users/create', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -206,8 +206,8 @@ describe('POST /api/users/create', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     await handler(req, res)
     await parseCompleted
@@ -257,7 +257,7 @@ describe('POST /api/users/create', () => {
             ],
           },
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -266,8 +266,8 @@ describe('POST /api/users/create', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'POST' } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'POST' })
 
     await handler(req, res)
     await parseCompleted

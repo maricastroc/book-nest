@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/user/edit/[userId].api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -67,7 +67,7 @@ describe('PUT /api/users/edit', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -76,11 +76,11 @@ describe('PUT /api/users/edit', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = {
+    const res = mockRes({ status })
+    const req = mockReq({
       method: 'PUT',
       query: { userId: 'user-123' },
-    } as any
+    })
 
     await handler(req, res)
     await parseCompleted
@@ -134,7 +134,7 @@ describe('PUT /api/users/edit', () => {
             ],
           },
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -143,11 +143,11 @@ describe('PUT /api/users/edit', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = {
+    const res = mockRes({ status })
+    const req = mockReq({
       method: 'PUT',
       query: { userId: 'user-123' },
-    } as any
+    })
 
     await handler(req, res)
     await parseCompleted
@@ -192,7 +192,7 @@ describe('PUT /api/users/edit', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -201,11 +201,11 @@ describe('PUT /api/users/edit', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = {
+    const res = mockRes({ status })
+    const req = mockReq({
       method: 'PUT',
       query: { userId: 'user-123' },
-    } as any
+    })
 
     await handler(req, res)
     await parseCompleted
@@ -256,7 +256,7 @@ describe('PUT /api/users/edit', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -265,11 +265,11 @@ describe('PUT /api/users/edit', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = {
+    const res = mockRes({ status })
+    const req = mockReq({
       method: 'PUT',
       query: { userId: 'user-123' },
-    } as any
+    })
 
     await handler(req, res)
     await parseCompleted
@@ -293,11 +293,11 @@ describe('PUT /api/users/edit', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = {
+    const res = mockRes({ status })
+    const req = mockReq({
       method: 'PUT',
       query: { userId: 'user-123' },
-    } as any
+    })
 
     await handler(req, res)
 
@@ -338,7 +338,7 @@ describe('PUT /api/users/edit', () => {
             ],
           },
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -347,11 +347,11 @@ describe('PUT /api/users/edit', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = {
+    const res = mockRes({ status })
+    const req = mockReq({
       method: 'PUT',
       query: { userId: 'user-123' },
-    } as any
+    })
 
     await handler(req, res)
     await parseCompleted

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { isAxiosError } from 'axios'
 
 import { BookProps } from '@/@types/book'
 import { useAppContext } from '@/contexts/AppContext'
@@ -57,12 +57,24 @@ export const submitBookFormSchema = z.object({
 
 export type SubmitBookFormData = z.infer<typeof submitBookFormSchema>
 
+interface GoogleBookVolume {
+  volumeInfo: {
+    language?: string
+    title?: string
+    authors?: string[]
+    description?: string
+    pageCount?: number
+    publisher?: string
+    publishedDate?: string
+  }
+}
+
 interface UseSubmitBookFormProps {
   isEdit: boolean
   book?: BookProps | null
   onClose: () => void
   onUpdateBook?: (book: BookProps) => void
-  mutate?: any
+  mutate?: () => Promise<unknown>
 }
 
 export function useSubmitBookForm({
@@ -170,7 +182,7 @@ export function useSubmitBookForm({
       )
 
       const books = response.data.items?.filter(
-        (book: any) => book.volumeInfo.language === 'en',
+        (book: GoogleBookVolume) => book.volumeInfo.language === 'en',
       )
 
       if (!books?.length) {
@@ -213,8 +225,8 @@ export function useSubmitBookForm({
         setCoverUrl(coverUrl)
         setValue('coverUrl', coverUrl)
       }
-    } catch (err: any) {
-      const status = err?.response?.status
+    } catch (err) {
+      const status = isAxiosError(err) ? err.response?.status : undefined
       if (status === 429) {
         toast.error('Google Books API quota exceeded. Please try again later.')
       } else {
@@ -231,9 +243,7 @@ export function useSubmitBookForm({
 
     const formData = new FormData()
 
-    const categoryValues = data?.categories?.map(
-      (category: any) => category.value,
-    )
+    const categoryValues = data?.categories?.map((category) => category.value)
 
     formData.append('author', data.author)
     formData.append('name', data.name)

@@ -1,4 +1,6 @@
 import { useRouter } from 'next/router'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronRight, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import { Avatar } from '@/components/ui/Avatar'
 import useRequest from '@/hooks/useRequest'
@@ -32,8 +34,9 @@ export function FollowListModal({
     { revalidateOnFocus: false },
   )
 
-  const title = type === 'followers' ? 'Followers' : 'Following'
+  const label = type === 'followers' ? 'Followers' : 'Following'
   const users = data ?? []
+  const title = data ? `${label} · ${users.length}` : label
 
   const handleUserClick = (id: string) => {
     onClose()
@@ -41,24 +44,45 @@ export function FollowListModal({
   }
 
   return (
-    <BaseModal onClose={onClose} title={title}>
-      <div className="flex max-h-80 w-full flex-col overflow-y-auto">
+    <BaseModal onClose={onClose} title={title} isCompact>
+      <div className="-mx-2 flex max-h-80 w-[calc(100%+1rem)] flex-col gap-0.5 overflow-y-auto">
         {isValidating ? (
-          <p className="py-4 text-center text-sm text-fg3">Loading...</p>
+          <p className="py-6 text-center text-sm text-fg3">Loading...</p>
         ) : users.length === 0 ? (
-          <p className="py-4 text-center text-sm text-fg3">No {type} yet.</p>
+          <div className="flex flex-col items-center gap-3 px-4 py-8 text-center">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-el text-fg3">
+              <FontAwesomeIcon icon={faUsers} style={{ fontSize: 18 }} />
+            </span>
+            <div className="flex flex-col gap-1">
+              <p className="text-[0.95rem] font-medium text-fg">
+                {type === 'followers'
+                  ? 'No followers yet'
+                  : 'Not following anyone yet'}
+              </p>
+              <p className="max-w-[15rem] text-[0.8rem] leading-relaxed text-fg3">
+                {type === 'followers'
+                  ? 'When other readers follow this profile, they’ll show up here.'
+                  : 'Follow other readers to keep up with their reviews and shelves.'}
+              </p>
+            </div>
+          </div>
         ) : (
           users.map((user) => (
             <button
               key={user.id}
               type="button"
               onClick={() => handleUserClick(user.id)}
-              className="group flex items-center gap-3 rounded border-b border-line py-[0.6rem] transition-colors last:border-none"
+              className="group flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors hover:bg-el"
             >
               <Avatar avatarUrl={user.avatarUrl} variant="small" />
               <p className="text-[0.9rem] font-medium text-fg transition-colors group-hover:text-ac">
                 {user.name}
               </p>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                className="ml-auto text-fg3 opacity-0 transition-opacity group-hover:opacity-100"
+                style={{ fontSize: 12 }}
+              />
             </button>
           ))
         )}

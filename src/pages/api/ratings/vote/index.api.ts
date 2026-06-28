@@ -71,7 +71,9 @@ export default async function handler(
     return res
       .status(201)
       .json({ message: 'Vote successfully registered!', vote: newVote })
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message })
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Internal server error'
+    return res.status(500).json({ error: message })
   }
 }

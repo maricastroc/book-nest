@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function formatCategoryArray(
-  a: any[] | undefined,
-  b: any[] | undefined,
+export function formatCategoryArray<T>(
+  a: T[] | undefined,
+  b: T[] | undefined,
 ): boolean {
   if (!a || !b) return false
   if (a.length !== b.length) return false

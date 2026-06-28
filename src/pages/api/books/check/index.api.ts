@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextApiRequest, NextApiResponse } from 'next'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
@@ -35,19 +35,21 @@ export default async function handler(
       isbn = String(isbn).replace(/[-\s]/g, '')
     }
 
+    const orConditions: Prisma.BookWhereInput[] = [
+      { isbn: isbn ? String(isbn) : undefined },
+      {
+        name: title
+          ? {
+              equals: String(title),
+              mode: 'insensitive',
+            }
+          : undefined,
+      },
+    ]
+
     const existingBook = await prisma.book.findFirst({
       where: {
-        OR: [
-          { isbn: isbn ? String(isbn) : undefined },
-          {
-            name: title
-              ? {
-                  equals: String(title),
-                  mode: 'insensitive',
-                }
-              : undefined,
-          },
-        ].filter((condition) => condition !== undefined) as any,
+        OR: orConditions,
       },
       select: {
         id: true,

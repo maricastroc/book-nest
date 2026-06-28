@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/ratings/latest/index.api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -25,10 +25,10 @@ describe('GET /api/ratings', () => {
   })
 
   it('returns 405 if method is not GET', async () => {
-    const req = { method: 'POST' } as any
+    const req = mockReq({ method: 'POST' })
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -64,10 +64,10 @@ describe('GET /api/ratings', () => {
 
     ;(prisma.rating.findMany as jest.Mock).mockResolvedValue(fakeRatings)
 
-    const req = { method: 'GET' } as any
+    const req = mockReq({ method: 'GET' })
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -123,10 +123,10 @@ describe('GET /api/ratings', () => {
 
     ;(prisma.rating.findMany as jest.Mock).mockResolvedValue(fakeRatings)
 
-    const req = { method: 'GET' } as any
+    const req = mockReq({ method: 'GET' })
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 
@@ -161,10 +161,10 @@ describe('GET /api/ratings', () => {
       new Error('DB error'),
     )
 
-    const req = { method: 'GET' } as any
+    const req = mockReq({ method: 'GET' })
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
+    const res = mockRes({ status })
 
     await handler(req, res)
 

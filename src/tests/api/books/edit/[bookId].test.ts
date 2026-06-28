@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockReq, mockRes } from '@/tests/utils/http-mocks'
 import handler from '@/pages/api/books/edit/[bookId].api'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -68,13 +68,13 @@ describe('PUT /api/books/[bookId]', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = {
+    const res = mockRes({ status })
+    const req = mockReq({
       method: 'PUT',
       query: { bookId: 'book-1' },
-    } as any
+    })
 
-    let resolveParse: any
+    let resolveParse: (value: unknown) => void = () => undefined
     const parseCompleted = new Promise((resolve) => (resolveParse = resolve))
 
     const mockParse = jest.fn((req, callback) => {
@@ -93,7 +93,7 @@ describe('PUT /api/books/[bookId]', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
 
@@ -130,8 +130,8 @@ describe('PUT /api/books/[bookId]', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'PUT', query: { bookId: 'book-1' } } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'PUT', query: { bookId: 'book-1' } })
 
     const mockParse = jest.fn()
     ;(IncomingForm as unknown as jest.Mock).mockImplementation(() => ({
@@ -159,16 +159,16 @@ describe('PUT /api/books/[bookId]', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'PUT', query: { bookId: 'book-1' } } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'PUT', query: { bookId: 'book-1' } })
 
-    let resolveParse: any
+    let resolveParse: (value: unknown) => void = () => undefined
     const parseCompleted = new Promise((resolve) => (resolveParse = resolve))
 
     const mockParse = jest.fn((req, callback) => {
       process.nextTick(() => {
         callback(null, {}, {})
-        resolveParse()
+        resolveParse(undefined)
       })
     })
 
@@ -201,10 +201,10 @@ describe('PUT /api/books/[bookId]', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'PUT', query: { bookId: 'book-1' } } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'PUT', query: { bookId: 'book-1' } })
 
-    let resolveParse: any
+    let resolveParse: (value: unknown) => void = () => undefined
     const parseCompleted = new Promise((resolve) => (resolveParse = resolve))
 
     const mockParse = jest.fn((req, callback) => {
@@ -218,7 +218,7 @@ describe('PUT /api/books/[bookId]', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
 
@@ -256,10 +256,10 @@ describe('PUT /api/books/[bookId]', () => {
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
-    const res = { status } as any
-    const req = { method: 'PUT', query: { bookId: 'book-1' } } as any
+    const res = mockRes({ status })
+    const req = mockReq({ method: 'PUT', query: { bookId: 'book-1' } })
 
-    let resolveParse: any
+    let resolveParse: (value: unknown) => void = () => undefined
     const parseCompleted = new Promise((resolve) => (resolveParse = resolve))
 
     const mockParse = jest.fn((req, callback) => {
@@ -273,7 +273,7 @@ describe('PUT /api/books/[bookId]', () => {
           },
           {},
         )
-        resolveParse()
+        resolveParse(undefined)
       })
     })
 
