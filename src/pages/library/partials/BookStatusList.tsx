@@ -31,12 +31,15 @@ export function BookStatusList({
   const showRating = status === READ_STATUS || status === DID_NOT_FINISH_STATUS
 
   return (
-    <div className="flex w-full flex-col gap-3 border-b border-line py-6 last:border-b-0">
+    <div className="flex w-full flex-col gap-3 border-b border-line/50 py-5 last:border-b-0">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <ReadingStatusTag readingStatus={status} type="relative" />
           <span className="text-[1.05rem] font-semibold text-fg">
             {statusLabel}
+          </span>
+          <span className="text-[0.8rem] text-fg3">
+            {count} {count === 1 ? 'book' : 'books'}
           </span>
         </div>
         <div className="flex items-center gap-3">
@@ -51,30 +54,30 @@ export function BookStatusList({
           )}
           <button
             onClick={onStatusClick}
-            className="flex items-center gap-1 text-[0.8rem] font-semibold text-ac transition-opacity hover:opacity-70"
+            className="flex items-center gap-1 text-[0.8rem] font-medium text-fg2 transition-colors hover:text-ac"
           >
-            View All ({count})
-            <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 13 }} />
+            View All
+            <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 12 }} />
           </button>
         </div>
       </div>
 
-      <div className="rounded-card border border-line px-5 py-4">
+      <div className="pt-1">
         {books && books.length > 0 ? (
           <HorizontalScroll scrollAmount={320} fadeColor="var(--color-bg)">
             {books.map((book) => (
               <div
                 key={book.id}
-                className="flex flex-col items-center gap-1.5 text-center"
+                onClick={() => onSelect(book)}
+                className="group flex cursor-pointer flex-col items-center gap-1.5 pt-1 text-center"
               >
                 <img
                   src={book.coverUrl}
                   alt={`Cover of ${book.name}`}
-                  onClick={() => onSelect(book)}
-                  className="h-[7.8rem] w-20 cursor-pointer rounded-lg object-cover shadow-[0_6px_18px_rgba(0,0,0,0.45)] transition-[filter] hover:brightness-110"
+                  className="h-[7.8rem] w-20 rounded-lg object-cover shadow-[0_6px_18px_rgba(0,0,0,0.45)] ring-1 ring-inset ring-line transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_14px_30px_rgba(0,0,0,0.6)] group-hover:brightness-110"
                 />
                 <div className="flex w-20 flex-col items-center gap-0.5 pb-1">
-                  <p className="line-clamp-1 w-full text-[0.72rem] font-semibold text-fg">
+                  <p className="line-clamp-1 w-full text-[0.72rem] font-semibold text-fg2 transition-colors group-hover:text-fg">
                     {book.name}
                   </p>
                   <p className="line-clamp-1 w-full text-[0.67rem] uppercase tracking-wide text-fg3">

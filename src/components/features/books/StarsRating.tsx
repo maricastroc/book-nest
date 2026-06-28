@@ -9,6 +9,8 @@ interface StarsRatingProps {
 export function StarsRating({ rating, size = null }: StarsRatingProps) {
   const isSmall = size === 'smaller'
 
+  const starSize = isSmall ? 'text-[0.8rem]' : 'text-[1rem]'
+
   return (
     <div className={`flex items-center gap-px ${isSmall ? 'opacity-80' : ''}`}>
       {Array.from({ length: 5 }).map((_, i) => {
@@ -18,15 +20,13 @@ export function StarsRating({ rating, size = null }: StarsRatingProps) {
           <FontAwesomeIcon
             icon={faStarHalfStroke}
             key={i}
-            className={`text-ac ${isSmall ? 'text-[0.8rem]' : 'text-[1rem]'}`}
+            className={`text-ac ${starSize}`}
           />
         ) : (
           <FontAwesomeIcon
             icon={faStar}
             key={i}
-            className={`text-ac ${isSmall ? 'text-[0.8rem]' : 'text-[1rem]'} ${
-              !isFull ? 'opacity-25' : ''
-            }`}
+            className={`text-ac ${starSize} ${!isFull ? 'opacity-25' : ''}`}
           />
         )
       })}

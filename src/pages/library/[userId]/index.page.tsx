@@ -11,10 +11,10 @@ import { MainLayout } from '@/layouts/MainLayout'
 import useRequest from '@/hooks/useRequest'
 
 const STATUS_META = [
-  { key: 'read', label: 'Read', color: 'var(--color-st-read)' },
-  { key: 'reading', label: 'Reading', color: 'var(--color-st-reading)' },
-  { key: 'wantToRead', label: 'Wishlist', color: 'var(--color-st-want)' },
-  { key: 'didNotFinish', label: 'DNF', color: 'var(--color-st-dnf)' },
+  { key: 'read', label: 'Finished', color: 'var(--color-st-read)' },
+  { key: 'reading', label: 'In Progress', color: 'var(--color-st-reading)' },
+  { key: 'wantToRead', label: 'To Read', color: 'var(--color-st-want)' },
+  { key: 'didNotFinish', label: 'Abandoned', color: 'var(--color-st-dnf)' },
 ] as const
 
 export default function Library() {
@@ -51,7 +51,7 @@ export default function Library() {
   return (
     <MainLayout title="Library | Book Nest" pageTitle="">
       <div className="bn-scope flex flex-col px-8 pb-12 pt-8 md:px-10">
-        <header className="mb-5 border-b border-line pb-5">
+        <header className="mb-3 border-b border-line pb-5">
           <div className="mb-1 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-fg3">
             <FontAwesomeIcon icon={faBookBookmark} style={{ fontSize: 12 }} />
             <span>Reading Journal</span>

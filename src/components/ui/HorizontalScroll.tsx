@@ -3,7 +3,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
-import { useRef, useState, ReactNode } from 'react'
+import { useRef, useState, useEffect, useCallback, ReactNode } from 'react'
 
 interface HorizontalScrollProps {
   children: ReactNode
@@ -21,14 +21,23 @@ export function HorizontalScroll({
 }: HorizontalScrollProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
+  const [canScrollRight, setCanScrollRight] = useState(false)
 
-  const updateButtons = () => {
+  const updateButtons = useCallback(() => {
     const el = scrollRef.current
     if (!el) return
     setCanScrollLeft(el.scrollLeft > 0)
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1)
-  }
+  }, [])
+
+  useEffect(() => {
+    updateButtons()
+    const el = scrollRef.current
+    if (!el) return
+    const observer = new ResizeObserver(updateButtons)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [updateButtons, children])
 
   const scroll = (dir: 'left' | 'right') => {
     scrollRef.current?.scrollBy({
