@@ -2,7 +2,11 @@ import { LogoutWrapper, LogoutContent } from './styles'
 import toast from 'react-hot-toast'
 import { useCallback } from 'react'
 import { signOut } from 'next-auth/react'
-import { SignIn, SignOut } from 'phosphor-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faRightFromBracket,
+  faRightToBracket,
+} from '@fortawesome/free-solid-svg-icons'
 import { useAppContext } from '@/contexts/AppContext'
 import { Avatar } from '../Avatar'
 import { useRouter } from 'next/router'
@@ -42,9 +46,9 @@ export const LogoutContainer = () => {
         </p>
         {!isValidatingLoggedUser &&
           (loggedUser ? (
-            <SignOut className="logout" />
+            <FontAwesomeIcon icon={faRightFromBracket} className="logout" />
           ) : (
-            <SignIn className="login" />
+            <FontAwesomeIcon icon={faRightToBracket} className="login" />
           ))}
       </LogoutContent>
     </LogoutWrapper>

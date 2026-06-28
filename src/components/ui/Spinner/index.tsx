@@ -1,22 +1,12 @@
-import { styled, keyframes } from '@/styles'
+interface SpinnerProps {
+  size?: 'sm' | 'md'
+}
 
-const spin = keyframes({
-  from: { transform: 'rotate(0deg)' },
-  to: { transform: 'rotate(360deg)' },
-})
-
-export const Spinner = styled('div', {
-  border: '3px solid rgba(131, 129, 217, 0.2)',
-  borderTop: '3px solid #8381D9',
-  borderRadius: '50%',
-  animation: `${spin} 0.8s linear infinite`,
-  variants: {
-    size: {
-      sm: { width: '1.5rem', height: '1.5rem' },
-      md: { width: '3rem', height: '3rem' },
-    },
-  },
-  defaultVariants: {
-    size: 'md',
-  },
-})
+export const Spinner = ({ size = 'md' }: SpinnerProps) => {
+  const dim = size === 'sm' ? 'h-6 w-6' : 'h-12 w-12'
+  return (
+    <div
+      className={`${dim} animate-spin rounded-full border-[3px] border-line-strong border-t-ac`}
+    />
+  )
+}

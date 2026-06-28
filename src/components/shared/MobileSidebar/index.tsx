@@ -1,20 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import {
-  Content,
-  LateralMenuWrapper,
-  ItemsContainer,
-  LogoAndLinksWrapper,
-  Overlay,
-} from './styles'
-import {
-  Binoculars,
-  Books,
-  ChartLineUp,
-  FileText,
-  Rss,
-  User,
-  Users,
-} from 'phosphor-react'
+  faBinoculars,
+  faBookOpen,
+  faBookBookmark,
+  faChartLine,
+  faFileLines,
+  faRss,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 import { useAppContext } from '@/contexts/AppContext'
 import Image from 'next/image'
@@ -28,66 +21,63 @@ interface Props {
 
 export function MobileSidebar({ onClose }: Props) {
   const router = useRouter()
-
   const { loggedUser } = useAppContext()
 
   return (
     <Dialog.Portal>
-      <Overlay className="DialogOverlay" onClick={onClose} />
-      <Content className="DialogContent">
-        <LateralMenuWrapper>
-          <LogoAndLinksWrapper>
+      <Dialog.Overlay
+        className="fixed inset-0 z-9997 bg-black/70"
+        onClick={onClose}
+      />
+      <Dialog.Content className="fixed left-0 top-0 z-9998 flex h-full w-[min(100vw,460px)] flex-col overflow-y-auto bg-s1 px-10 py-10 pb-8">
+        <div className="flex h-full flex-col items-start justify-between">
+          <div className="flex flex-col items-start gap-12">
             <Image
               src={Logo}
               width={200}
               alt="Logo Application."
               fetchPriority="high"
               quality={100}
+              className="w-[8.2rem]"
             />
-            <ItemsContainer>
+            <div className="flex flex-col items-start gap-8">
               <NavigationItem
                 active={router.pathname === '/home'}
                 onClick={() => router.push('/home')}
-                icon={ChartLineUp}
+                icon={faChartLine}
                 label="Home"
               />
               <NavigationItem
                 active={router.pathname === '/explore'}
                 onClick={() => router.push('/explore')}
-                icon={Binoculars}
+                icon={faBinoculars}
                 label="Explore"
-              />
-              <NavigationItem
-                active={router.pathname === '/readers'}
-                onClick={() => router.push('/readers')}
-                icon={Users}
-                label="Readers"
               />
               {loggedUser && (
                 <>
                   <NavigationItem
                     active={router.pathname === '/feed'}
                     onClick={() => router.push('/feed')}
-                    icon={Rss}
+                    icon={faRss}
                     label="Feed"
                   />
                   <NavigationItem
                     active={router.pathname.includes('profile')}
-                    onClick={() => {
-                      const targetPath = `/profile/${loggedUser?.id}`
-                      router.push(targetPath)
-                    }}
-                    icon={User}
+                    onClick={() => router.push(`/profile/${loggedUser.id}`)}
+                    icon={faUser}
                     label="Profile"
                   />
                   <NavigationItem
                     active={router.pathname.includes('library')}
-                    onClick={() => {
-                      const targetPath = `/library/${loggedUser?.id}`
-                      router.push(targetPath)
-                    }}
-                    icon={Books}
+                    onClick={() => router.push(`/library/${loggedUser.id}`)}
+                    icon={faBookBookmark}
                     label="Library"
+                  />
+                  <NavigationItem
+                    active={router.pathname === '/my-books'}
+                    onClick={() => router.push('/my-books')}
+                    icon={faBookOpen}
+                    label="My Books"
                   />
                 </>
               )}
@@ -95,15 +85,15 @@ export function MobileSidebar({ onClose }: Props) {
                 <NavigationItem
                   active={router.pathname === '/submissions'}
                   onClick={() => router.push('/submissions')}
-                  icon={FileText}
+                  icon={faFileLines}
                   label="Submissions"
                 />
               )}
-            </ItemsContainer>
-          </LogoAndLinksWrapper>
+            </div>
+          </div>
           <LogoutContainer />
-        </LateralMenuWrapper>
-      </Content>
+        </div>
+      </Dialog.Content>
     </Dialog.Portal>
   )
 }

@@ -4,7 +4,6 @@ import React, { useRef } from 'react'
 import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import { Button } from '@/components/ui/Button'
-import { ButtonGroup, CropperWrapper } from './styles'
 import { BaseModal } from '@/components/ui/BaseModal'
 
 interface ImageCropperProps {
@@ -36,7 +35,6 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         imageSmoothingEnabled: true,
         imageSmoothingQuality: 'high',
       })
-
       onCrop(croppedCanvas.toDataURL())
     }
   }
@@ -44,7 +42,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
   return (
     <Dialog.Portal>
       <BaseModal onClose={onClose}>
-        <CropperWrapper>
+        <div className="h-100 w-full overflow-hidden rounded-xl bg-s2">
           <Cropper
             src={src}
             style={{ height: '100%', width: '100%' }}
@@ -53,21 +51,15 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
             guides={true}
             ref={cropperRef}
           />
-        </CropperWrapper>
-        <ButtonGroup>
-          <Button
-            content="Cancel"
-            variant="outline-white"
-            onClick={() => {
-              onClose()
-            }}
-          />
+        </div>
+        <div className="mt-6 flex w-full justify-end gap-2">
+          <Button content="Cancel" variant="outline-white" onClick={onClose} />
           <Button
             variant="solid-white"
             content="Crop Image"
             onClick={handleCrop}
           />
-        </ButtonGroup>
+        </div>
       </BaseModal>
     </Dialog.Portal>
   )

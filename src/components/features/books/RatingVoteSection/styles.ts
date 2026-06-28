@@ -3,11 +3,11 @@ import { styled } from '@/styles'
 export const RatingActions = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  paddingRight: '1rem',
   width: '100%',
-  gap: '0.6rem',
+  gap: '0.75rem',
   marginTop: '0.75rem',
-  borderRadius: 8,
+  paddingTop: '0.75rem',
+  borderTop: '1px solid rgba(255,255,255,0.06)',
 })
 
 export const RatingButton = styled('button', {
@@ -15,38 +15,32 @@ export const RatingButton = styled('button', {
   backgroundColor: 'transparent',
   border: 'none',
   alignItems: 'center',
-  gap: '0.3rem',
-  color: '$gray100',
+  gap: '0.35rem',
+  color: '#65656e',
+  cursor: 'pointer',
+  transition: 'color 150ms',
+
+  '&:hover:not(:disabled)': {
+    color: '#9c9ca4',
+  },
 
   svg: {
-    cursor: 'pointer',
-    fontSize: '1rem',
-    color: '$gray400',
-
-    '&:hover': {
-      filter: 'brightness(1.8)',
-      transition: '200ms ease-in-out',
-    },
+    fontSize: '0.95rem',
+    color: 'inherit',
   },
 
   variants: {
     disabled: {
       true: {
         cursor: 'not-allowed',
-
-        svg: {
-          cursor: 'not-allowed',
-
-          '&:hover': {
-            filter: 'none',
-            transition: 'none',
-          },
-        },
+        opacity: 0.5,
       },
     },
   },
 
   p: {
-    fontSize: '0.85rem',
+    fontSize: '0.78rem',
+    fontWeight: 500,
+    color: 'inherit',
   },
 })

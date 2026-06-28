@@ -1,39 +1,19 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { Rss } from 'phosphor-react'
+import { useRef, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRss } from '@fortawesome/free-solid-svg-icons'
 import { useSession } from 'next-auth/react'
 
 import { MainLayout } from '@/layouts/MainLayout'
 import { RatingCard } from '@/components/features/books/RatingCard'
 import { SkeletonRatingCard } from '@/components/skeletons/SkeletonRatingCard'
 import { Pagination } from '@/components/shared/Pagination'
-import { Button } from '@/components/ui/Button'
-import { Avatar } from '@/components/shared/Avatar'
 import { SearchBar } from '@/components/shared/SearchBar'
 
+import { FindReaders } from './partials/FindReaders'
+
 import useRequest from '@/hooks/useRequest'
-import { useFollowStatus } from '@/hooks/useFollowStatus'
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
-import { UserProps } from '@/@types/user'
-
-import {
-  FeedLayout,
-  FeedMain,
-  FeedSidebar,
-  PageSubtitle,
-  SidebarWidget,
-  WidgetHeader,
-  WidgetTitle,
-  WidgetSeeAll,
-  SuggestedUserRow,
-  SuggestedUserInfo,
-  SuggestedUserName,
-  FollowBtn,
-  InviteCard,
-  CopyLinkBtn,
-  EmptyFeedContainer,
-} from './styles'
 
 type RatingActivity = {
   type: 'rating'
@@ -48,103 +28,13 @@ type RatingActivity = {
 
 type AnyActivity = RatingActivity | { type: 'reading_status'; id: string }
 
-function SuggestedUser({
-  user,
-  onAfterToggle,
-}: {
-  user: UserProps
-  onAfterToggle?: () => void
-}) {
-  const router = useRouter()
-  const { isFollowing, isTogglingFollow, toggleFollow } = useFollowStatus(
-    String(user.id),
-  )
-
-  const handleToggle = async () => {
-    await toggleFollow()
-    onAfterToggle?.()
-  }
-
-  return (
-    <SuggestedUserRow>
-      <Avatar
-        isClickable
-        avatarUrl={user.avatarUrl}
-        variant="small"
-        onClick={() => router.push(`/profile/${user.id}`)}
-      />
-      <SuggestedUserInfo
-        style={{ cursor: 'pointer' }}
-        onClick={() => router.push(`/profile/${user.id}`)}
-      >
-        <SuggestedUserName>{user.name}</SuggestedUserName>
-      </SuggestedUserInfo>
-      <FollowBtn
-        following={isFollowing}
-        onClick={handleToggle}
-        disabled={isTogglingFollow}
-      >
-        {isFollowing ? 'Following' : 'Follow'}
-      </FollowBtn>
-    </SuggestedUserRow>
-  )
-}
-
-function RightSidebar({ onAfterToggle }: { onAfterToggle?: () => void }) {
-  const router = useRouter()
-  const [copied, setCopied] = useState(false)
-
-  const { data: suggestedUsersData } = useRequest<{ users: UserProps[] }>(
-    { url: '/user/search', method: 'GET', params: { perPage: 6, page: 1 } },
-    { revalidateOnFocus: false },
-  )
-
-  const suggestions = (suggestedUsersData?.users ?? []).slice(0, 6)
-
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.origin)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  return (
-    <FeedSidebar>
-      {suggestions.length > 0 && (
-        <SidebarWidget>
-          <WidgetHeader>
-            <WidgetTitle>Who to follow</WidgetTitle>
-            <WidgetSeeAll onClick={() => router.push('/readers')}>
-              See all
-            </WidgetSeeAll>
-          </WidgetHeader>
-          {suggestions.map((user) => (
-            <SuggestedUser
-              key={user.id}
-              user={user}
-              onAfterToggle={onAfterToggle}
-            />
-          ))}
-        </SidebarWidget>
-      )}
-
-      <InviteCard>
-        <h4>Invite a friend 📚</h4>
-        <p>Grow your shelf circle — share BookNest and read together.</p>
-        <CopyLinkBtn onClick={handleCopyLink}>
-          {copied ? 'Copied!' : 'Copy invite link'}
-        </CopyLinkBtn>
-      </InviteCard>
-    </FeedSidebar>
-  )
-}
-
 export default function Feed() {
-  const router = useRouter()
   const { data: session } = useSession()
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = useState('')
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
+  const findReadersRef = useRef<HTMLDivElement>(null)
 
   const { data, isValidating, mutate } = useRequest<{
     activities: AnyActivity[]
@@ -166,12 +56,21 @@ export default function Feed() {
     setCurrentPage(1)
   }
 
+  const scrollToFindReaders = () => {
+    findReadersRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
+
   const renderFeed = () => {
     if (!session?.user) {
       return (
-        <EmptyFeedContainer>
-          <p>Sign in to see what people you follow are reading.</p>
-        </EmptyFeedContainer>
+        <div className="flex flex-col items-center gap-4 px-4 py-16 text-center text-fg3">
+          <p className="max-w-sm text-[15px] leading-relaxed">
+            Sign in to see what people you follow are reading.
+          </p>
+        </div>
       )
     }
 
@@ -183,16 +82,17 @@ export default function Feed() {
 
     if (!data?.followingIds?.length) {
       return (
-        <EmptyFeedContainer>
-          <p>
+        <div className="flex flex-col items-center gap-4 px-4 py-16 text-center text-fg3">
+          <p className="max-w-sm text-[15px] leading-relaxed">
             Your feed is empty. Follow other readers to see their activity here.
           </p>
-          <Button
-            isSmaller
-            content="Browse Readers"
-            onClick={() => router.push('/readers')}
-          />
-        </EmptyFeedContainer>
+          <button
+            onClick={scrollToFindReaders}
+            className="rounded-lg bg-ac px-4 py-2 text-[13px] font-semibold text-ac-ink transition-[filter] hover:brightness-110"
+          >
+            Find Readers
+          </button>
+        </div>
       )
     }
 
@@ -202,9 +102,11 @@ export default function Feed() {
 
     if (!ratingActivities.length) {
       return (
-        <EmptyFeedContainer>
-          <p>No activity yet from readers you follow.</p>
-        </EmptyFeedContainer>
+        <div className="flex flex-col items-center gap-4 px-4 py-16 text-center text-fg3">
+          <p className="max-w-sm text-[15px] leading-relaxed">
+            No activity yet from readers you follow.
+          </p>
+        </div>
       )
     }
 
@@ -244,30 +146,49 @@ export default function Feed() {
   return (
     <MainLayout
       title="Following | BookNest"
-      icon={<Rss />}
-      pageTitle="Following"
+      pageTitle=""
       selectedBook={selectedBook}
       isLateralMenuOpen={isLateralMenuOpen}
       setIsLateralMenuOpen={setIsLateralMenuOpen}
     >
-      <FeedLayout>
-        <FeedMain>
-          <PageSubtitle>Latest activity from readers you follow</PageSubtitle>
-          <SearchBar
-            fullWidth
-            search={search}
-            placeholder="Search by book, author or reader..."
-            onChange={handleSearchChange}
-            onClick={() => {
-              setSearch('')
-              setCurrentPage(1)
-            }}
-          />
-          {renderFeed()}
-        </FeedMain>
+      <div className="bn-scope flex flex-col px-8 pb-12 pt-8 md:px-10 lg:h-full lg:pb-0">
+        <header className="mb-6 shrink-0 border-b border-line pb-6">
+          <div className="mb-1 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-fg3">
+            <FontAwesomeIcon icon={faRss} style={{ fontSize: 12 }} />
+            <span>The Community</span>
+          </div>
+          <h1 className="font-serif text-[2rem] font-semibold leading-tight tracking-tight text-fg">
+            Following
+          </h1>
+          <p className="mt-0.5 text-[13px] text-fg2">
+            Latest activity from readers you follow.
+          </p>
+        </header>
 
-        <RightSidebar onAfterToggle={() => mutate()} />
-      </FeedLayout>
+        <div className="flex flex-col gap-8 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-stretch">
+          {/* Main feed */}
+          <main className="lateral-menu-scroll flex min-w-0 flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pb-12 lg:pr-2">
+            <SearchBar
+              fullWidth
+              search={search}
+              placeholder="Search by book, author or reader..."
+              onChange={handleSearchChange}
+              onClick={() => {
+                setSearch('')
+                setCurrentPage(1)
+              }}
+            />
+            {renderFeed()}
+          </main>
+
+          <aside
+            ref={findReadersRef}
+            className="lateral-menu-scroll w-full shrink-0 lg:min-h-0 lg:w-76 lg:overflow-y-auto lg:pb-12 lg:pr-2"
+          >
+            <FindReaders onAfterToggle={() => mutate()} />
+          </aside>
+        </div>
+      </div>
     </MainLayout>
   )
 }

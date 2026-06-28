@@ -14,13 +14,9 @@ export function getBookStatusList(
   data: BookStatusData | null | undefined,
 ): BookStatusListItem[] {
   return [
-    { key: 'read', label: "I've already read", books: data?.read },
-    { key: 'reading', label: 'I am reading', books: data?.reading },
-    { key: 'wantToRead', label: 'I want to read', books: data?.wantToRead },
-    {
-      key: 'didNotFinish',
-      label: "I didn't finish",
-      books: data?.didNotFinish,
-    },
+    { key: 'read', label: 'Finished', books: data?.read },
+    { key: 'reading', label: 'In Progress', books: data?.reading },
+    { key: 'wantToRead', label: 'To Read', books: data?.wantToRead },
+    { key: 'didNotFinish', label: 'Abandoned', books: data?.didNotFinish },
   ]
 }

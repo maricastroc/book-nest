@@ -37,11 +37,37 @@ export default async function handler(
 
   const ratingsCount = await prisma.rating.count({ where: { userId } })
 
+  const statusGroups = await prisma.readingStatus.groupBy({
+    by: ['status'],
+    where: { userId },
+    _count: { status: true },
+  })
+
+  const statusCounts = { read: 0, reading: 0, wantToRead: 0, didNotFinish: 0 }
+
+  const STATUS_KEY_MAP: Record<string, keyof typeof statusCounts> = {
+    read: 'read',
+    reading: 'reading',
+    'want to read': 'wantToRead',
+    'did not finish': 'didNotFinish',
+  }
+
+  for (const group of statusGroups) {
+    const key = STATUS_KEY_MAP[group.status.toLowerCase()]
+    if (key) {
+      statusCounts[key] = group._count.status
+    }
+  }
+
+  const booksCount = Object.values(statusCounts).reduce((a, b) => a + b, 0)
+
   return res.json({
     readPages,
     authorsCount,
     bestGenre,
     ratedBooks: ratingsCount,
+    booksCount,
+    statusCounts,
     user: {
       avatarUrl: user?.avatarUrl,
       name: user?.name,

@@ -1,10 +1,4 @@
 import { useState } from 'react'
-import {
-  ViewMoreButton,
-  TextBoxContent,
-  TextBoxWrapper,
-  EmptyRating,
-} from './styles'
 import { useScreenSize } from '@/hooks/useScreenSize'
 
 interface TextBoxProps {
@@ -12,57 +6,43 @@ interface TextBoxProps {
   variant?: 'primary' | 'secondary'
 }
 
-export function TextBox({ description, variant = 'primary' }: TextBoxProps) {
+export function TextBox({ description }: TextBoxProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-
   const isSmallSize = useScreenSize(580)
-
   const MAX_CHARS = isSmallSize ? 150 : 250
 
   if (!description || description.length === 0) {
     return (
-      <TextBoxWrapper>
-        <EmptyRating>No description available</EmptyRating>
-      </TextBoxWrapper>
+      <p className="w-full rounded-lg border border-dashed border-line px-3 py-2.5 text-center text-[12.5px] text-fg3">
+        No description available
+      </p>
     )
   }
 
   const isTruncated = description.length > MAX_CHARS
   const truncatedText = description.slice(0, MAX_CHARS).trimEnd()
-  const descriptionLines = isExpanded
-    ? description.split('\n')
-    : truncatedText.split('\n')
+  const lines = isExpanded ? description.split('\n') : truncatedText.split('\n')
 
   return (
-    <TextBoxWrapper>
-      <TextBoxContent>
-        <p>
-          {descriptionLines.map((line, index) => {
-            const isLastLine = index === descriptionLines.length - 1
-            return (
-              <span key={index}>
-                {line}
-                {isLastLine && !isExpanded && isTruncated && '... '}
-                {isLastLine && (isTruncated || isExpanded) && (
-                  <ViewMoreButton
-                    className={variant}
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    style={{
-                      display: 'inline',
-                      padding: 0,
-                      marginLeft: `${isExpanded ? '4px' : ''}`,
-                    }}
-                  >
-                    {isExpanded ? 'view less' : 'view more'}
-                  </ViewMoreButton>
-                )}
-
-                <br />
-              </span>
-            )
-          })}
-        </p>
-      </TextBoxContent>
-    </TextBoxWrapper>
+    <p className="w-full text-left text-[13px] leading-[1.55] text-fg2 [word-break:break-word]">
+      {lines.map((line, i) => {
+        const isLast = i === lines.length - 1
+        return (
+          <span key={i}>
+            {line}
+            {isLast && !isExpanded && isTruncated && '... '}
+            {isLast && (isTruncated || isExpanded) && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="bg-transparent border-none ml-0.5 inline font-medium text-ac transition-colors hover:text-fg"
+              >
+                {isExpanded ? 'view less' : 'view more'}
+              </button>
+            )}
+            <br />
+          </span>
+        )
+      })}
+    </p>
   )
 }

@@ -30,19 +30,22 @@ export const TextBoxContent = styled('div', {
 export const ViewMoreButton = styled('button', {
   display: 'inline',
   backgroundColor: 'transparent',
-  color: '$green100',
+  color: '#e8b14c',
   border: 'none',
+  padding: 0,
   cursor: 'pointer',
-  fontSize: '0.92rem',
-  fontWeight: 700,
+  fontSize: '0.82rem',
+  fontWeight: 500,
+  outline: 'none',
 
-  '&.secondary': {
-    color: '$purple100',
+  '&:hover': {
+    opacity: 0.75,
   },
 
-  '&:focus': {
-    outline: 'hidden',
-    border: 'transparent',
+  '&:focus, &:focus-visible': {
+    outline: 'none !important',
+    border: 'none !important',
+    boxShadow: 'none !important',
   },
 })
 
@@ -50,7 +53,7 @@ export const EmptyRating = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  minWidth: '100%',
+  width: '100%',
   color: '$gray400',
   border: '1px dashed $gray400',
   borderRadius: 8,

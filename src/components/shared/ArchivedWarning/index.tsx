@@ -1,5 +1,4 @@
 import { READING_STATUS, WANT_TO_READ_STATUS } from '@/utils/constants'
-import { StyledArchivedWarning } from './styles'
 
 interface ArchivedWarningProps {
   style?: React.CSSProperties
@@ -12,16 +11,21 @@ export const ArchivedWarning = ({
   className,
   activeStatus,
 }: ArchivedWarningProps) => {
+  if (activeStatus !== READING_STATUS && activeStatus !== WANT_TO_READ_STATUS) {
+    return null
+  }
+
   return (
-    (activeStatus === READING_STATUS ||
-      activeStatus === WANT_TO_READ_STATUS) && (
-      <StyledArchivedWarning style={style} className={className}>
-        <p>
-          <strong>Note:</strong>{' '}
-          {`Hidden while book status is "Reading" or "Want to Read". 
-        Will reappear if set to "Read" or "Did Not Finish".`}
-        </p>
-      </StyledArchivedWarning>
-    )
+    <div
+      style={style}
+      className={`mt-4 w-full rounded-r-xl border-l-4 border-[#4a9e6e] bg-el px-3 py-3 ${
+        className ?? ''
+      }`}
+    >
+      <p className="text-[0.85rem] leading-relaxed text-fg2">
+        <strong className="font-bold text-[#4a9e6e]">Note:</strong>{' '}
+        {`Hidden while book status is "Reading" or "Want to Read". Will reappear if set to "Read" or "Did Not Finish".`}
+      </p>
+    </div>
   )
 }

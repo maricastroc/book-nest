@@ -75,6 +75,17 @@ export const UserNameDateWrapper = styled('div', {
   },
 })
 
+export const ActivityLabel = styled('span', {
+  fontSize: '$sm',
+  color: '$gray400',
+
+  em: {
+    color: '$purple100',
+    fontStyle: 'normal',
+    fontWeight: 500,
+  },
+})
+
 export const BookContentWrapper = styled('div', {
   display: 'flex',
   padding: '1.5rem',

@@ -83,7 +83,7 @@ export const AvatarContainer = styled('a', {
       height: 66,
     },
 
-    outline: '1.5px solid $green100',
+    outline: '1.5px solid rgba(232,177,76,0.5)',
     outlineOffset: 2,
 
     '&.clickable': {

@@ -1,17 +1,22 @@
-import { CaretLeft, CaretRight } from 'phosphor-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons'
 import { useRef, useState, ReactNode } from 'react'
-import { ArrowButton, ScrollTrack, Wrapper } from './styles'
 
 interface HorizontalScrollProps {
   children: ReactNode
   scrollAmount?: number
   itemWidth?: string
+  /** CSS color value for the edge fade gradient. Defaults to page background. */
+  fadeColor?: string
 }
 
 export function HorizontalScroll({
   children,
   scrollAmount = 340,
-  itemWidth,
+  fadeColor = 'var(--color-bg)',
 }: HorizontalScrollProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -24,40 +29,59 @@ export function HorizontalScroll({
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1)
   }
 
-  const scroll = (direction: 'left' | 'right') => {
-    const el = scrollRef.current
-    if (!el) return
-    el.scrollBy({
-      left: direction === 'right' ? scrollAmount : -scrollAmount,
+  const scroll = (dir: 'left' | 'right') => {
+    scrollRef.current?.scrollBy({
+      left: dir === 'right' ? scrollAmount : -scrollAmount,
       behavior: 'smooth',
     })
   }
 
-  return (
-    <Wrapper>
-      <ArrowButton
-        side="left"
-        onClick={() => scroll('left')}
-        disabled={!canScrollLeft}
-      >
-        <CaretLeft />
-      </ArrowButton>
+  const fadeBase: React.CSSProperties = {
+    background: `linear-gradient(to right, ${fadeColor}, transparent)`,
+  }
+  const fadeRight: React.CSSProperties = {
+    background: `linear-gradient(to left, ${fadeColor}, transparent)`,
+  }
 
-      <ScrollTrack
+  return (
+    <div className="bn-scope relative w-full">
+      {canScrollLeft && (
+        <>
+          <div
+            className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-16"
+            style={fadeBase}
+          />
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-1 top-1/2 z-20 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-el/90 text-fg2 shadow-lg backdrop-blur-sm transition-colors hover:bg-el hover:text-fg"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: 12 }} />
+          </button>
+        </>
+      )}
+
+      <div
         ref={scrollRef}
         onScroll={updateButtons}
-        css={itemWidth ? { '& > *': { flexShrink: 0, width: itemWidth } } : {}}
+        className="flex w-full flex-row items-start gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {children}
-      </ScrollTrack>
+      </div>
 
-      <ArrowButton
-        side="right"
-        onClick={() => scroll('right')}
-        disabled={!canScrollRight}
-      >
-        <CaretRight />
-      </ArrowButton>
-    </Wrapper>
+      {canScrollRight && (
+        <>
+          <div
+            className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-20"
+            style={fadeRight}
+          />
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-1 top-1/2 z-20 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-el/90 text-fg2 shadow-lg backdrop-blur-sm transition-colors hover:bg-el hover:text-fg"
+          >
+            <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: 12 }} />
+          </button>
+        </>
+      )}
+    </div>
   )
 }

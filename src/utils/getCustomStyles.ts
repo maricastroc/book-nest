@@ -1,51 +1,90 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const customStyles = {
-  control: (provided: any) => ({
+  control: (provided: any, state: any) => ({
     ...provided,
-    backgroundColor: '#161D2F',
-    borderColor: '#5A698F',
-    padding: '0.2rem 0.2rem',
-    borderRadius: 6,
+    backgroundColor: 'var(--color-s1)',
+    borderColor: state.isFocused
+      ? 'rgba(232,177,76,0.5)'
+      : 'var(--color-line-strong)',
+    borderRadius: 8,
+    padding: '0.15rem 0.2rem',
     cursor: 'pointer',
     boxShadow: 'none',
+    transition: 'border-color 150ms',
     '&:hover': {
-      borderColor: '#5A698F',
+      borderColor: 'var(--color-line-strong)',
     },
   }),
   menu: (provided: any) => ({
     ...provided,
-    backgroundColor: '#20263f',
+    backgroundColor: 'var(--color-s2)',
+    border: '1px solid var(--color-line-strong)',
+    borderRadius: 8,
+    boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
   }),
   menuList: (provided: any) => ({
     ...provided,
     maxHeight: '180px',
     overflowY: 'auto',
+    padding: '4px',
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    backgroundColor: '#20263f',
+    backgroundColor: state.isSelected
+      ? 'rgba(232,177,76,0.15)'
+      : state.isFocused
+      ? 'var(--color-el)'
+      : 'transparent',
+    color: state.isSelected ? 'var(--color-ac)' : 'var(--color-fg2)',
+    borderRadius: 6,
     cursor: 'pointer',
-    color: state.isSelected ? '#8381D9' : '#D1D6E4',
-    '&:hover': {
-      backgroundColor: '#20263f',
-      color: '#8381D9',
+    fontSize: '0.875rem',
+    '&:active': {
+      backgroundColor: 'rgba(232,177,76,0.2)',
     },
   }),
   multiValue: (provided: any) => ({
     ...provided,
-    backgroundColor: '#252D4A',
-    color: '#E6E8F2',
+    backgroundColor: 'rgba(232,177,76,0.12)',
+    border: '1px solid rgba(232,177,76,0.25)',
+    borderRadius: 6,
   }),
   multiValueLabel: (provided: any) => ({
     ...provided,
-    color: '#E6E8F2',
+    color: 'var(--color-ac)',
+    fontSize: '0.78rem',
+    fontWeight: 600,
   }),
   multiValueRemove: (provided: any) => ({
     ...provided,
-    color: '#E6E8F2',
+    color: 'var(--color-ac)',
+    borderRadius: '0 6px 6px 0',
     '&:hover': {
-      backgroundColor: '#843d3d',
-      color: '#E6E8F2',
+      backgroundColor: 'rgba(202,64,54,0.2)',
+      color: 'var(--color-st-reading)',
     },
+  }),
+  placeholder: (provided: any) => ({
+    ...provided,
+    color: 'var(--color-fg3)',
+    fontSize: '0.875rem',
+  }),
+  input: (provided: any) => ({
+    ...provided,
+    color: 'var(--color-fg)',
+  }),
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    color: 'var(--color-fg3)',
+    '&:hover': { color: 'var(--color-fg2)' },
+  }),
+  indicatorSeparator: (provided: any) => ({
+    ...provided,
+    backgroundColor: 'var(--color-line-strong)',
+  }),
+  clearIndicator: (provided: any) => ({
+    ...provided,
+    color: 'var(--color-fg3)',
+    '&:hover': { color: 'var(--color-fg2)' },
   }),
 }

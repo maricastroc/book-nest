@@ -1,20 +1,23 @@
-import { styled, keyframes } from '@/styles'
+import { HTMLAttributes } from 'react'
 
-const pulse = keyframes({
-  '0%, 100%': { opacity: 1 },
-  '50%': { opacity: 0.4 },
-})
+interface SkeletonBoxProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: 'rounded' | 'circular'
+}
 
-export const SkeletonBox = styled('div', {
-  backgroundColor: 'rgba(79, 97, 158, 0.3)',
-  animation: `${pulse} 1.5s ease-in-out infinite`,
-  variants: {
-    variant: {
-      rounded: { borderRadius: '4px' },
-      circular: { borderRadius: '50%' },
-    },
-  },
-  defaultVariants: {
-    variant: 'rounded',
-  },
-})
+export function SkeletonBox({
+  variant = 'rounded',
+  className,
+  style,
+  ...props
+}: SkeletonBoxProps) {
+  const shape = variant === 'circular' ? 'rounded-full' : 'rounded'
+  return (
+    <div
+      className={`animate-pulse bg-[rgba(255,255,255,0.13)] ${shape}${
+        className ? ` ${className}` : ''
+      }`}
+      style={style}
+      {...props}
+    />
+  )
+}

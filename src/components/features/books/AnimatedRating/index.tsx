@@ -1,27 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { Rating } from 'react-simple-star-rating'
-import { Star } from 'phosphor-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Rating, type RatingProps } from 'react-simple-star-rating'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
 
-interface AnimatedRatingProps {
-  initialValue: number | undefined
+interface AnimatedRatingProps extends RatingProps {
+  initialValue?: number
   onClick: (rate: number) => void
-  [key: string]: any
 }
 
-export const AnimatedRating = ({
+export function AnimatedRating({
   onClick,
   initialValue,
   ...props
-}: AnimatedRatingProps) => {
+}: AnimatedRatingProps) {
   const [clickedStar, setClickedStar] = useState<number | null>(null)
 
-  const handleClick = (rate: number) => {
+  function handleClick(rate: number) {
     setClickedStar(Math.ceil(rate / 20))
     onClick(rate)
 
-    setTimeout(() => setClickedStar(null), 1000)
+    setTimeout(() => {
+      setClickedStar(null)
+    }, 1000)
   }
 
   return (
@@ -29,10 +30,10 @@ export const AnimatedRating = ({
       <Rating
         onClick={handleClick}
         initialValue={initialValue}
-        emptyIcon={<Star size={20} />}
-        fillIcon={<Star weight="fill" size={20} />}
-        emptyColor="#8381D9"
-        fillColor="#8381D9"
+        emptyIcon={<FontAwesomeIcon icon={faStar} style={{ fontSize: 20 }} />}
+        fillIcon={<FontAwesomeIcon icon={faStar} style={{ fontSize: 20 }} />}
+        emptyColor="#3a352a"
+        fillColor="#e8b14c"
         {...props}
       />
 
@@ -62,11 +63,9 @@ export const AnimatedRating = ({
                   ease: 'easeOut',
                   delay: sparkleIndex * 0.1,
                 }}
-                style={{
-                  color: '#8381D9',
-                }}
+                style={{ color: '#e8b14c' }}
               >
-                <Star weight="fill" size={12} />
+                <FontAwesomeIcon icon={faStar} style={{ fontSize: 12 }} />
               </motion.div>
             ))}
           </>

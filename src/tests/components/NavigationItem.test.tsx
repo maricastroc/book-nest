@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { NavigationItem } from '@/components/shared/NavigationItem'
-import { House } from 'phosphor-react'
+import { faHouse } from '@fortawesome/free-solid-svg-icons'
 
 jest.mock('@/styles', () => ({
   styled: () => {
@@ -26,7 +26,7 @@ describe('NavigationItem', () => {
   const defaultProps = {
     active: false,
     onClick: jest.fn(),
-    icon: House,
+    icon: faHouse,
     label: 'Home',
   }
 

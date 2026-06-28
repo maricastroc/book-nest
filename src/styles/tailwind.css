@@ -1,0 +1,110 @@
+@import 'tailwindcss/theme.css';
+@import 'tailwindcss/utilities.css';
+
+@theme {
+  --color-bg: #0c0c0e;
+  --color-s1: #141417;
+  --color-s2: #1a1a1e;
+  --color-el: #212126;
+  --color-warm: #17140d;
+
+  --color-fg: #f3f3f4;
+  --color-fg2: #9c9ca4;
+  --color-fg3: #65656e;
+
+  --color-ac: #e8b14c;
+  --color-ac-ink: #2a1e05;
+  --color-ac-soft: rgba(232, 177, 76, 0.13);
+  --color-ac-border: rgba(232, 177, 76, 0.3);
+
+  --color-st-read: #4a9e6e;
+  --color-st-reading: #ca4036;
+  --color-st-want: #c64a96;
+  --color-st-dnf: #cc803d;
+
+  --color-line: rgba(255, 255, 255, 0.07);
+  --color-line-strong: rgba(255, 255, 255, 0.12);
+
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --radius-card: 14px;
+  --radius-feature: 16px;
+}
+
+@layer bn-base {
+  .bn-scope {
+    font-family: var(--font-sans);
+    color: var(--color-fg);
+    background: var(--color-bg);
+  }
+  .bn-scope *,
+  .bn-scope *::before,
+  .bn-scope *::after {
+    box-sizing: border-box;
+  }
+  .bn-scope h1,
+  .bn-scope h2,
+  .bn-scope h3,
+  .bn-scope h4,
+  .bn-scope p {
+    margin: 0;
+  }
+  .bn-scope button {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+  .bn-scope a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@keyframes slide-in-right {
+  from { translate: 100% 0; }
+  to   { translate: 0% 0; }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Invisible vertical scroll — keeps scrolling, hides the track */
+.scroll-col {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.scroll-col::-webkit-scrollbar {
+  display: none;
+}
+
+.lateral-menu-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+.lateral-menu-scroll::-webkit-scrollbar { width: 4px; }
+.lateral-menu-scroll::-webkit-scrollbar-track { background: transparent; }
+.lateral-menu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  border: none;
+  box-shadow: none;
+}
+
+.bn-scope button:focus,
+.bn-scope a:focus,
+.bn-scope input:focus {
+  outline: none;
+  border-color: transparent;
+}
+.bn-scope button:focus-visible,
+.bn-scope a:focus-visible {
+  outline: 2px solid var(--color-ac);
+  outline-offset: 2px;
+}

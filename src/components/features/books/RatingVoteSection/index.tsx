@@ -1,4 +1,5 @@
-import { ThumbsDown, ThumbsUp } from 'phosphor-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { RatingActions, RatingButton } from './styles'
 import { RatingProps } from '@/@types/rating'
 import { api } from '@/lib/axios'
@@ -65,18 +66,18 @@ export const RatingVoteSection = ({ rating, style }: Props) => {
   return (
     <RatingActions style={style}>
       <RatingButton disabled={!!isOwner}>
-        <ThumbsUp
+        <FontAwesomeIcon
+          icon={faThumbsUp}
           onClick={() => handleVote('UP')}
-          weight={userVote === 'UP' ? 'fill' : 'regular'}
-          color={userVote === 'UP' ? '#50B2C0' : undefined}
+          className={userVote === 'UP' ? 'text-ac' : ''}
         />
         <p>Helpful • {currentRating.votes?.up ?? 0}</p>
       </RatingButton>
       <RatingButton disabled={!!isOwner}>
-        <ThumbsDown
+        <FontAwesomeIcon
+          icon={faThumbsDown}
           onClick={() => handleVote('DOWN')}
-          weight={userVote === 'DOWN' ? 'fill' : 'regular'}
-          color={userVote === 'DOWN' ? '#50B2C0' : undefined}
+          className={userVote === 'DOWN' ? 'text-ac' : ''}
         />
         <p>{currentRating.votes?.down ?? 0}</p>
       </RatingButton>

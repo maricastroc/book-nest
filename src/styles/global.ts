@@ -5,98 +5,86 @@ export const globalStyles = globalCss({
     margin: 0,
     padding: 0,
     boxSizing: 'border-box',
-
-    '&:focus': {
-      border: '1px solid $purple100',
-      outlineColor: '$purple100',
-    },
   },
 
   body: {
-    backgroundColor: '$gray800',
-    color: '$gray100',
+    backgroundColor: '#0c0c0e',
+    color: '#f3f3f4',
+    fontFamily: 'Inter, system-ui, sans-serif',
     '-webkit-font-smoothing': 'antialiased',
     minHeight: '100vh',
     maxWidth: '100vw',
     overflowX: 'hidden',
-
-    input: {
-      colorScheme: 'dark !important',
-
-      '&:focus': {
-        backgroundColor: 'transparent',
-        outline: 'none',
-        boxShadow: 'none',
-        outlineColor: '$purple100',
-      },
-    },
-
-    button: {
-      colorScheme: 'dark !important',
-
-      '&:focus': {
-        boxShadow: 'none',
-        outlineColor: '$green100',
-      },
-    },
-
-    '*::-webkit-scrollbar': {
-      width: 2,
-      height: 2,
-      borderRadius: 9999,
-    },
-
-    '*::-webkit-scrollbar-corner': {
-      backgroundColor: 'transparent',
-    },
-
-    '*::-webkit-scrollbar-thumb': {
-      width: 6,
-      backgroundColor: '$gray500',
-      borderRadius: 80,
-      boxShadow: 'inset 0 0 0px 6px $gray500',
-      border: '10px solid transparent',
-    },
-
-    'input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button':
-      {
-        WebkitAppearance: 'none',
-        margin: 0,
-      },
-    'input[type=number]': {
-      MozAppearance: 'textfield',
-    },
   },
 
   'body, input, textarea, button': {
-    fontFamily: 'Nunito sans, sans-serif',
+    fontFamily: 'Inter, system-ui, sans-serif',
     fontWeight: 400,
   },
 
-  'input:-webkit-autofill': {
-    backgroundColor: '$gray700 !important',
-    '-webkit-text-fill-color': 'white !important',
-    '-webkit-box-shadow': '0 0 0px 1000px $gray700 inset !important',
-    transition: 'background-color 5000s ease-in-out 0s !important',
+  button: {
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    background: 'transparent',
+    border: 0,
+    font: 'inherit',
+    color: 'inherit',
+    cursor: 'pointer',
   },
-  'input:-webkit-autofill:hover': {
-    backgroundColor: '$gray700 !important',
-    '-webkit-text-fill-color': 'white !important',
-    '-webkit-box-shadow': '0 0 0px 1000px $gray700 inset !important',
+
+  a: {
+    color: 'inherit',
+    textDecoration: 'none',
   },
-  'input:-webkit-autofill:focus': {
-    backgroundColor: '$gray700 !important',
-    '-webkit-text-fill-color': 'white !important',
-    '-webkit-box-shadow': '0 0 0px 1000px $gray700 inset !important',
+
+  input: {
+    colorScheme: 'dark',
   },
-  '& textarea:-webkit-autofill': {
-    '-webkit-box-shadow': '0 0 0px 1000px transparent inset !important',
-    '-webkit-text-fill-color': 'white !important',
+
+  'input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button':
+    {
+      WebkitAppearance: 'none',
+      margin: 0,
+    },
+
+  'input[type=number]': {
+    MozAppearance: 'textfield',
+  },
+
+  '*::-webkit-scrollbar': {
+    width: 4,
+    height: 4,
+  },
+
+  '*::-webkit-scrollbar-corner': {
+    backgroundColor: 'transparent',
+  },
+
+  '*::-webkit-scrollbar-thumb': {
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 999,
+  },
+
+  'input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus':
+    {
+      backgroundColor: '#1a1a1e !important',
+      WebkitTextFillColor: '#f3f3f4 !important',
+
+      transition: 'background-color 5000s ease-in-out 0s !important',
+    },
+
+  'textarea:-webkit-autofill, select:-webkit-autofill': {
+    WebkitBoxShadow: '0 0 0px 1000px transparent inset !important',
+    WebkitTextFillColor: '#f3f3f4 !important',
     transition: 'background-color 5000s ease-in-out 0s',
   },
-  '& select:-webkit-autofill': {
-    '-webkit-box-shadow': '0 0 0px 1000px transparent inset !important',
-    '-webkit-text-fill-color': 'white !important',
-    transition: 'background-color 5000s ease-in-out 0s',
+
+  ':focus': {
+    outline: 'none',
+  },
+
+  ':focus-visible': {
+    outline: '2px solid #e8b14c',
+    outlineOffset: 2,
   },
 })

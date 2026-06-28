@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { RatingsList, RatingsListHeader, RatingsWrapper } from './styles'
 import { DID_NOT_FINISH_STATUS, READ_STATUS } from '@/utils/constants'
 import { RatingCardForm } from '@/components/features/books/RatingCardForm'
 import { AnimatePresence } from 'framer-motion'
@@ -27,9 +26,7 @@ export const RatingsSection = ({
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false)
 
   const { loggedUser, isValidatingReview } = useAppContext()
-
   const { registerRatingGroup } = useRatings()
-
   const { userRating, bookData } = useBookContext()
 
   const shouldShowEmpty =
@@ -52,12 +49,14 @@ export const RatingsSection = ({
   }, [bookData.ratings, registerRatingGroup])
 
   return (
-    <RatingsWrapper>
-      <RatingsListHeader>
-        <p>Ratings</p>
+    <div className="mt-10 flex w-full flex-col gap-3 pb-8">
+      {/* Header */}
+      <div className="mb-1 flex w-full items-center justify-between">
+        <p className="text-[0.875rem] font-semibold text-fg">Ratings</p>
         {canUserReview ? (
           <button
             type="button"
+            className="text-[0.82rem] font-medium text-ac transition-opacity hover:opacity-70"
             onClick={() => {
               if (
                 bookData.book?.readingStatus === READ_STATUS ||
@@ -66,7 +65,6 @@ export const RatingsSection = ({
                 setIsReviewFormOpen(true)
                 return
               }
-
               setIsReviewWarningModalOpen(true)
             }}
           >
@@ -74,14 +72,19 @@ export const RatingsSection = ({
           </button>
         ) : (
           !loggedUser && (
-            <button type="button" onClick={() => setIsSignInModalOpen(true)}>
+            <button
+              type="button"
+              className="text-[0.82rem] font-medium text-ac transition-opacity hover:opacity-70"
+              onClick={() => setIsSignInModalOpen(true)}
+            >
               Review
             </button>
           )
         )}
-      </RatingsListHeader>
+      </div>
 
-      <RatingsList className={isReviewFormOpen ? 'reverse' : ''}>
+      {/* List */}
+      <div className="flex w-full flex-col gap-3">
         <AnimatePresence>
           {bookData.book && isReviewFormOpen && (
             <FadeInUp>
@@ -98,8 +101,8 @@ export const RatingsSection = ({
         {shouldShowEmpty ? (
           <EmptyContainer content="reviews" />
         ) : shouldShowSkeletons ? (
-          Array.from({ length: 3 }).map((_, index) => (
-            <SkeletonRatingCard key={index} />
+          Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonRatingCard key={i} />
           ))
         ) : shouldShowRatings ? (
           <>
@@ -119,7 +122,7 @@ export const RatingsSection = ({
             ))}
           </>
         ) : null}
-      </RatingsList>
-    </RatingsWrapper>
+      </div>
+    </div>
   )
 }

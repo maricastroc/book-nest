@@ -5,7 +5,8 @@ import {
   MobileHeaderContent,
 } from './styles'
 import Logo from '../../../../public/assets/logo2.svg'
-import { List } from 'phosphor-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { MobileSidebar } from '@/components/shared/MobileSidebar'
@@ -28,7 +29,7 @@ export function MobileHeader({ ...rest }) {
             <LinksContainer
               onClick={() => setIsLateralMenuOpen(!isLateralMenuOpen)}
             >
-              <List />
+              <FontAwesomeIcon icon={faBars} />
             </LinksContainer>
           </Dialog.Trigger>
           <MobileSidebar onClose={() => setIsLateralMenuOpen(false)} />

@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app'
+import '../styles/tailwind.css'
 import { globalStyles } from '../styles/global'
 import { SessionProvider } from 'next-auth/react'
 import { AppProvider } from '@/contexts/AppContext'
@@ -14,22 +15,23 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <Toaster
+        position="bottom-right"
         toastOptions={{
+          duration: 4000,
           style: {
-            backgroundColor: '#161D2F',
-            color: '#fff',
+            backgroundColor: '#212126',
+            color: '#f3f3f4',
+            border: '1px solid rgba(255,255,255,0.12)',
+            borderRadius: '12px',
+            fontSize: '0.85rem',
+            padding: '12px 16px',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
           },
           success: {
-            style: {
-              backgroundColor: '#161D2F',
-              color: '#fff',
-            },
+            iconTheme: { primary: '#e8b14c', secondary: '#2a1e05' },
           },
           error: {
-            style: {
-              backgroundColor: '#161D2F',
-              color: '#fff',
-            },
+            iconTheme: { primary: '#e05c5c', secondary: '#fff' },
           },
         }}
       />

@@ -1,4 +1,3 @@
-import { StyledInputContainer } from './styles'
 import { ReactNode } from 'react'
 
 interface InputContainerProps {
@@ -6,5 +5,5 @@ interface InputContainerProps {
 }
 
 export const InputContainer = ({ children }: InputContainerProps) => {
-  return <StyledInputContainer>{children}</StyledInputContainer>
+  return <div className="flex w-full flex-col gap-1.5">{children}</div>
 }
