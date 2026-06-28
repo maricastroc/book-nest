@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Icon } from '@iconify/react'
@@ -14,6 +13,8 @@ import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@/components/ui/Button'
+import { FormField, formInputClass } from '@/components/ui/FormField'
 
 const signInFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -26,11 +27,12 @@ interface SignInFormProps {
   onClose?: () => void
 }
 
-const inputClass =
-  'w-full rounded-lg border border-line bg-bg py-3 pl-10 pr-3.5 text-[15px] text-fg outline-none transition-colors placeholder:text-fg3 hover:border-line-strong focus:border-ac/50 focus:bg-s2'
-const labelClass = 'mb-1.5 block text-[13px] font-medium text-fg'
+const socialButtonClass =
+  'flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-line bg-transparent text-[13px] text-fg2 transition-colors hover:border-ac/40 hover:text-fg'
 
 export default function SignInForm({ onClose }: SignInFormProps) {
+  const router = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -40,20 +42,13 @@ export default function SignInForm({ onClose }: SignInFormProps) {
     defaultValues: { email: '', password: '' },
   })
 
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  async function handleSocialSignIn(provider: 'google' | 'github') {
+    await signIn(provider, { callbackUrl: '/home' })
+  }
 
-  async function handleSignIn(provider: string) {
-    setIsLoading(true)
-    if (provider === 'google') {
-      await signIn('google', { callbackUrl: '/home' })
-    } else if (provider === 'github') {
-      await signIn('github', { callbackUrl: '/home' })
-    } else {
-      router.push('/home')
-    }
-    setIsLoading(false)
-    if (onClose) onClose()
+  function handleGuestAccess() {
+    router.push('/home')
+    onClose?.()
   }
 
   async function onSubmit(data: SignInFormData) {
@@ -65,7 +60,7 @@ export default function SignInForm({ onClose }: SignInFormProps) {
       })
 
       if (result?.error) {
-        toast.error(result?.error)
+        toast.error(result.error)
       } else {
         toast.success('Welcome to the Book Nest!')
         router.push('/home')
@@ -75,9 +70,6 @@ export default function SignInForm({ onClose }: SignInFormProps) {
       console.error(error)
     }
   }
-
-  const socialButtonClass =
-    'flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-line bg-transparent text-[13px] text-fg2 transition-colors hover:border-ac/40 hover:text-fg'
 
   return (
     <div className="mx-auto w-full max-w-md">
@@ -92,80 +84,55 @@ export default function SignInForm({ onClose }: SignInFormProps) {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div>
-            <label htmlFor="email" className={labelClass}>
-              Email
-            </label>
-            <div className="relative">
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg3"
-                style={{ fontSize: 16 }}
-              />
-              <Controller
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    id="email"
-                    placeholder="you@example.com"
-                    className={inputClass}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-            {errors.email && (
-              <p className="mt-1 text-[12px] text-st-reading">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <div className="mb-1.5 flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="text-[13px] font-medium text-fg"
-              >
-                Password
-              </label>
-            </div>
-            <div className="relative">
-              <FontAwesomeIcon
-                icon={faLock}
-                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg3"
-                style={{ fontSize: 16 }}
-              />
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    className={inputClass}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-            {errors.password && (
-              <p className="mt-1 text-[12px] text-st-reading">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting || isLoading}
-            className="mt-1 flex items-center justify-center gap-2 rounded-lg border border-ac/60 bg-ac py-3 text-[14px] font-bold text-ac-ink shadow-[0_6px_20px_rgba(232,177,76,0.18)] transition-all hover:shadow-[0_8px_28px_rgba(232,177,76,0.30)] hover:brightness-110 disabled:opacity-60"
+          <FormField
+            id="email"
+            label="Email"
+            icon={faEnvelope}
+            error={errors.email?.message}
           >
-            <FontAwesomeIcon icon={faRightToBracket} style={{ fontSize: 16 }} />
-            {isSubmitting || isLoading ? 'Signing in…' : 'Sign in'}
-          </button>
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <input
+                  id="email"
+                  placeholder="you@example.com"
+                  className={formInputClass}
+                  {...field}
+                />
+              )}
+            />
+          </FormField>
+
+          <FormField
+            id="password"
+            label="Password"
+            icon={faLock}
+            error={errors.password?.message}
+          >
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  className={formInputClass}
+                  {...field}
+                />
+              )}
+            />
+          </FormField>
+
+          <Button
+            type="submit"
+            content="Sign in"
+            loadingText="Signing in…"
+            icon={faRightToBracket}
+            isSubmitting={isSubmitting}
+            className="mt-1 border-ac/60 py-3 text-[14px] font-bold shadow-[0_6px_20px_rgba(232,177,76,0.18)] hover:brightness-110 hover:shadow-[0_8px_28px_rgba(232,177,76,0.30)] disabled:opacity-60"
+          />
         </form>
 
         <div className="flex items-center gap-3">
@@ -179,7 +146,7 @@ export default function SignInForm({ onClose }: SignInFormProps) {
         <div className="flex flex-col gap-2.5">
           <button
             type="button"
-            onClick={() => handleSignIn('google')}
+            onClick={() => handleSocialSignIn('google')}
             className={socialButtonClass}
           >
             <Icon icon="flat-color-icons:google" fontSize={16} />
@@ -188,7 +155,7 @@ export default function SignInForm({ onClose }: SignInFormProps) {
 
           <button
             type="button"
-            onClick={() => handleSignIn('github')}
+            onClick={() => handleSocialSignIn('github')}
             className={socialButtonClass}
           >
             <Icon icon="ant-design:github-outlined" fontSize={16} />
@@ -199,7 +166,7 @@ export default function SignInForm({ onClose }: SignInFormProps) {
         <div className="flex flex-col items-center gap-3 border-t border-line pt-4">
           <button
             type="button"
-            onClick={() => router.push('/home')}
+            onClick={handleGuestAccess}
             className="group flex items-center gap-1.5 text-[13px] font-medium text-fg2 transition-colors hover:text-ac"
           >
             <FontAwesomeIcon icon={faRocket} style={{ fontSize: 14 }} />

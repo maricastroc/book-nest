@@ -44,7 +44,7 @@ export function WizardStepper({ wizardStep }: Props) {
           {i < 2 && (
             <div
               className={`mb-5 h-px w-16 rounded transition-colors duration-300 sm:w-24 ${
-                wizardStep > n ? 'bg-[#4a9e6e]' : 'bg-line-strong'
+                wizardStep > n ? 'bg-st-read' : 'bg-line-strong'
               }`}
             />
           )}

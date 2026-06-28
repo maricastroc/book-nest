@@ -1,38 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Pagination } from '@/components/shared/Pagination'
 
-jest.mock('@/components/shared/Pagination/styles', () => ({
-  PaginationContainer: ({ children }: { children?: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  PaginationButton: ({
-    children,
-    disabled,
-    onClick,
-  }: {
-    children?: React.ReactNode
-    disabled?: boolean
-    onClick?: () => void
-  }) => (
-    <button disabled={disabled} onClick={onClick}>
-      {children}
-    </button>
-  ),
-  PaginationPage: ({
-    children,
-    active,
-    onClick,
-  }: {
-    children?: React.ReactNode
-    active?: boolean
-    onClick?: () => void
-  }) => (
-    <button data-active={active} onClick={onClick}>
-      {children}
-    </button>
-  ),
-}))
-
 describe('Pagination', () => {
   const defaultProps = {
     currentPage: 1,
@@ -107,5 +75,32 @@ describe('Pagination', () => {
       (btn) => btn.getAttribute('data-active') === 'true',
     )
     expect(activePage).toHaveTextContent('2')
+  })
+
+  it('renders nothing when there is a single page', () => {
+    const { container } = render(
+      <Pagination {...defaultProps} totalPages={1} />,
+    )
+    expect(container).toBeEmptyDOMElement()
+  })
+
+  it('truncates with ellipsis when there are many pages', () => {
+    render(
+      <Pagination currentPage={10} totalPages={20} onPageChange={jest.fn()} />,
+    )
+
+    // first and last are always visible
+    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByText('20')).toBeInTheDocument()
+
+    // current page and its neighbors are visible
+    expect(screen.getByText('9')).toBeInTheDocument()
+    expect(screen.getByText('10')).toBeInTheDocument()
+    expect(screen.getByText('11')).toBeInTheDocument()
+
+    // far-away pages are collapsed behind the ellipsis
+    expect(screen.queryByText('5')).not.toBeInTheDocument()
+    expect(screen.queryByText('15')).not.toBeInTheDocument()
+    expect(screen.getAllByText('…')).toHaveLength(2)
   })
 })

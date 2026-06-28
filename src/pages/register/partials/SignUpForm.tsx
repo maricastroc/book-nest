@@ -16,6 +16,8 @@ import {
 import { handleApiError } from '@/utils/handleApiError'
 import { api } from '@/lib/axios'
 import { ImageCropper } from '@/components/ui/ImageCropper'
+import { Button } from '@/components/ui/Button'
+import { FormField, formInputClass } from '@/components/ui/FormField'
 
 const signUpFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -33,14 +35,18 @@ const signUpFormSchema = z.object({
 
 type SignUpFormData = z.infer<typeof signUpFormSchema>
 
-const inputClass =
-  'w-full rounded-lg border border-line bg-bg py-3 pl-10 pr-3.5 text-[15px] text-fg outline-none transition-colors placeholder:text-fg3 hover:border-line-strong focus:border-ac/50 focus:bg-s2'
-const labelClass = 'mb-1.5 block text-[13px] font-medium text-fg'
+function dataURLtoFile(dataUrl: string, filename: string): File {
+  const [header, data] = dataUrl.split(',')
+  const mime = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg'
+  const bytes = atob(data)
+  const buffer = new Uint8Array(bytes.length)
+  for (let i = 0; i < bytes.length; i++) buffer[i] = bytes.charCodeAt(i)
+  return new File([buffer], filename, { type: mime })
+}
 
 export default function SignUpForm() {
   const inputFileRef = useRef<HTMLInputElement>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const [showCropper, setShowCropper] = useState(false)
   const [originalImage, setOriginalImage] = useState<string | null>(null)
   const router = useRouter()
@@ -60,47 +66,39 @@ export default function SignUpForm() {
     formData.append('email', data.email)
     formData.append('password', data.password)
     formData.append('name', data.name)
-    if (data?.avatarUrl) formData.append('avatarUrl', data.avatarUrl)
+    if (data.avatarUrl) formData.append('avatarUrl', data.avatarUrl)
 
     try {
-      setIsLoading(true)
-      await api.post(`/user/create`, formData, {
+      await api.post('/user/create', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       toast.success('User successfully registered!')
       router.push('/')
     } catch (error) {
       handleApiError(error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleAvatarChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
-    if (file) {
-      setValue('avatarUrl', file)
-      const reader = new FileReader()
-      reader.onload = () => {
-        setOriginalImage(reader.result as string)
-        setShowCropper(true)
-      }
-      reader.readAsDataURL(file)
+    if (!file) return
+    setValue('avatarUrl', file)
+    const reader = new FileReader()
+    reader.onload = () => {
+      setOriginalImage(reader.result as string)
+      setShowCropper(true)
     }
+    reader.readAsDataURL(file)
   }
 
-  const handleCroppedImage = (croppedImage: string) => {
-    fetch(croppedImage)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' })
-        setValue('avatarUrl', file)
-        setAvatarPreview(croppedImage)
-        setShowCropper(false)
-      })
+  function handleCroppedImage(croppedImage: string) {
+    const file = dataURLtoFile(croppedImage, 'avatar.jpg')
+    setValue('avatarUrl', file)
+    setAvatarPreview(croppedImage)
+    setShowCropper(false)
   }
 
-  const handleDeleteAvatar = () => {
+  function handleDeleteAvatar() {
     setAvatarPreview(null)
     setValue('avatarUrl', undefined)
     if (inputFileRef.current) inputFileRef.current.value = ''
@@ -128,98 +126,67 @@ export default function SignUpForm() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div>
-            <label htmlFor="name" className={labelClass}>
-              Name
-            </label>
-            <div className="relative">
-              <FontAwesomeIcon
-                icon={faUser}
-                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg3"
-                style={{ fontSize: 16 }}
-              />
-              <Controller
-                name="name"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    id="name"
-                    placeholder="Your full name"
-                    className={inputClass}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-            {errors.name && (
-              <p className="mt-1 text-[12px] text-st-reading">
-                {errors.name.message}
-              </p>
-            )}
-          </div>
+          <FormField
+            id="name"
+            label="Name"
+            icon={faUser}
+            error={errors.name?.message}
+          >
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <input
+                  id="name"
+                  placeholder="Your full name"
+                  className={formInputClass}
+                  {...field}
+                />
+              )}
+            />
+          </FormField>
 
-          <div>
-            <label htmlFor="email" className={labelClass}>
-              Email
-            </label>
-            <div className="relative">
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg3"
-                style={{ fontSize: 16 }}
-              />
-              <Controller
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    id="email"
-                    placeholder="you@example.com"
-                    className={inputClass}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-            {errors.email && (
-              <p className="mt-1 text-[12px] text-st-reading">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+          <FormField
+            id="email"
+            label="Email"
+            icon={faEnvelope}
+            error={errors.email?.message}
+          >
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <input
+                  id="email"
+                  placeholder="you@example.com"
+                  className={formInputClass}
+                  {...field}
+                />
+              )}
+            />
+          </FormField>
 
-          <div>
-            <label htmlFor="password" className={labelClass}>
-              Password
-            </label>
-            <div className="relative">
-              <FontAwesomeIcon
-                icon={faLock}
-                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg3"
-                style={{ fontSize: 16 }}
-              />
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    id="password"
-                    type="password"
-                    placeholder="At least 8 characters"
-                    className={inputClass}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-            {errors.password && (
-              <p className="mt-1 text-[12px] text-st-reading">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+          <FormField
+            id="password"
+            label="Password"
+            icon={faLock}
+            error={errors.password?.message}
+          >
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="At least 8 characters"
+                  className={formInputClass}
+                  {...field}
+                />
+              )}
+            />
+          </FormField>
 
-          {/* Optional avatar — placed last so the essentials come first */}
           <div className="flex items-center gap-3 rounded-lg border border-line bg-bg/40 p-2.5">
             <button
               type="button"
@@ -275,14 +242,14 @@ export default function SignUpForm() {
             </p>
           )}
 
-          <button
+          <Button
             type="submit"
-            disabled={isSubmitting || isLoading}
-            className="mt-1 flex items-center justify-center gap-2 rounded-lg border border-ac/60 bg-ac py-3 text-[14px] font-bold text-ac-ink shadow-[0_6px_20px_rgba(232,177,76,0.18)] transition-all hover:shadow-[0_8px_28px_rgba(232,177,76,0.30)] hover:brightness-110 disabled:opacity-60"
-          >
-            <FontAwesomeIcon icon={faUserPlus} style={{ fontSize: 16 }} />
-            {isSubmitting || isLoading ? 'Creating account…' : 'Create account'}
-          </button>
+            content="Create account"
+            loadingText="Creating account…"
+            icon={faUserPlus}
+            isSubmitting={isSubmitting}
+            className="mt-1 border-ac/60 py-3 text-[14px] font-bold shadow-[0_6px_20px_rgba(232,177,76,0.18)] hover:brightness-110 hover:shadow-[0_8px_28px_rgba(232,177,76,0.30)] disabled:opacity-60"
+          />
         </form>
 
         <p className="text-center text-[12.5px] text-fg3">

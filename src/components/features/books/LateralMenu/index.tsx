@@ -53,7 +53,10 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
           <>
             {isSignInModalOpen && (
               <Dialog.Root open={isSignInModalOpen}>
-                <SignInModal onClose={() => setIsSignInModalOpen(false)} />
+                <SignInModal
+                  context="review"
+                  onClose={() => setIsSignInModalOpen(false)}
+                />
               </Dialog.Root>
             )}
 

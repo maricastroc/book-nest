@@ -14,7 +14,7 @@ interface Props {
 export function Step2ReviewFields({ control, errors }: Props) {
   return (
     <div className="w-full rounded-2xl border border-line bg-s1 px-10 py-10">
-      <p className="mb-6 text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-fg3">
+      <p className="mb-6 text-[0.72rem] font-semibold uppercase tracking-widest text-fg3">
         Review &amp; edit if needed
       </p>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
