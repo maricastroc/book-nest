@@ -95,7 +95,7 @@ export default function Profile() {
         }}
         selectedBook={selectedBook}
       >
-        <div className="bn-scope flex h-full flex-col overflow-hidden">
+        <div className="bn-scope flex flex-col lg:h-full lg:overflow-hidden">
           <header className="shrink-0 border-line px-6 pb-6 pt-8 md:px-10 md:pt-10">
             <div className="mb-1 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-fg3">
               <FontAwesomeIcon icon={faUser} style={{ fontSize: 12 }} />
@@ -106,7 +106,7 @@ export default function Profile() {
             </h1>
           </header>
 
-          <div className="flex min-h-0 flex-1 flex-col-reverse items-start justify-start lg:grid lg:h-full lg:grid-cols-[2fr_1fr] lg:pr-5">
+          <div className="flex min-h-0 flex-1 flex-col-reverse items-start justify-start px-6 md:px-10 lg:grid lg:h-full lg:grid-cols-[2fr_1fr] lg:px-0 lg:pr-5">
             <div className="lg:pl-12 flex w-full flex-col mx-auto pt-8 lg:pt-0 lg:overflow-y-scroll lg:min-w-104">
               <p className="text-sm text-fg2 mb-2">User&apos;s Reviews</p>
               <SearchBar
@@ -156,16 +156,18 @@ export default function Profile() {
                   <EmptyContainer content="ratings" />
                 )}
                 {totalPages > 1 && (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
+                  <div className="flex w-full justify-center">
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
                 )}
               </div>
             </div>
 
-            <div className="flex w-full flex-col items-start overflow-scroll lg:items-center lg:max-h-[80vh] lg:p-4 xl:h-screen">
+            <div className="flex w-full flex-col items-start lg:items-center lg:max-h-[80vh] lg:overflow-scroll lg:p-4 xl:h-screen">
               <UserDetails
                 userStatistics={userStatistics}
                 userId={userId}

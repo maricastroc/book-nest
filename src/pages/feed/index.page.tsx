@@ -17,6 +17,7 @@ import { SearchBar } from '@/components/ui/SearchBar'
 import { FindReaders } from './partials/FindReaders'
 
 import useRequest from '@/hooks/useRequest'
+import { useScreenSize } from '@/hooks/useScreenSize'
 import { BookProps } from '@/@types/book'
 import { RatingProps } from '@/@types/rating'
 
@@ -67,6 +68,7 @@ export default function Feed() {
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null)
   const [isLateralMenuOpen, setIsLateralMenuOpen] = useState(false)
   const findReadersRef = useRef<HTMLDivElement>(null)
+  const isBelowLg = useScreenSize(1023)
 
   const { data, isValidating, mutate } = useRequest<{
     activities: AnyActivity[]
@@ -92,6 +94,11 @@ export default function Feed() {
   // otherwise it competes with the "Find Readers" search in the empty state.
   const showFeedSearch =
     !!session?.user && (!!search || (data?.followingIds?.length ?? 0) > 0)
+
+  // On mobile the "Find Readers" sidebar drops below a paginated feed, so a
+  // reader might never reach it. Surface a compact teaser up top instead.
+  const showReadersTeaser =
+    isBelowLg && !!session?.user && (data?.followingIds?.length ?? 0) > 0
 
   const scrollToFindReaders = () => {
     findReadersRef.current?.scrollIntoView({
@@ -207,6 +214,16 @@ export default function Feed() {
             Latest activity from readers you follow.
           </p>
         </header>
+
+        {showReadersTeaser && (
+          <div className="mb-8">
+            <FindReaders
+              compact
+              onSeeAll={scrollToFindReaders}
+              onAfterToggle={() => mutate()}
+            />
+          </div>
+        )}
 
         <div className="flex flex-col gap-8 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-stretch">
           {/* Main feed */}

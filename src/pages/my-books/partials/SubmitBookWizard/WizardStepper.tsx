@@ -39,7 +39,9 @@ export function WizardStepper({ wizardStep }: Props) {
                 n
               )}
             </div>
-            <span className={labelClass(n)}>{STEP_DISPLAY[i]}</span>
+            <span className={`w-16 text-center sm:w-24 ${labelClass(n)}`}>
+              {STEP_DISPLAY[i]}
+            </span>
           </div>
           {i < 2 && (
             <div

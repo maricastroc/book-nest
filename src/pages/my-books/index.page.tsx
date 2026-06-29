@@ -95,8 +95,8 @@ export default function MyBooks() {
             <span>My Contributions</span>
           </div>
 
-          <div className="flex items-end justify-between gap-4">
-            <div>
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0">
               <h1 className="font-serif text-[2rem] font-semibold leading-tight tracking-tight text-fg">
                 {view === 'form' ? 'Submit a Book' : "Books you've contributed"}
               </h1>
@@ -107,7 +107,7 @@ export default function MyBooks() {
               </p>
             </div>
 
-            <div className="flex shrink-0 items-center gap-3">
+            <div className="flex w-full shrink-0 items-center gap-3 sm:w-auto">
               {view === 'form' && (
                 <OutlineButton
                   onClick={() => {
@@ -125,7 +125,7 @@ export default function MyBooks() {
               {view === 'list' && (
                 <button
                   onClick={() => setView('form')}
-                  className="flex items-center gap-2 rounded-[10px] bg-ac px-5 py-2.5 text-[13.5px] font-bold text-ac-ink shadow-[0_4px_14px_rgba(0,0,0,0.25)] transition-all hover:opacity-90"
+                  className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-ac px-5 py-2.5 text-[13.5px] font-bold text-ac-ink shadow-[0_4px_14px_rgba(0,0,0,0.25)] transition-all hover:opacity-90 sm:w-auto sm:justify-start"
                 >
                   <FontAwesomeIcon
                     icon={faBookMedical}

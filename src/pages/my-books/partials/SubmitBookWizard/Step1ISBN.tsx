@@ -1,4 +1,6 @@
 import { Controller, Control, FieldErrors } from 'react-hook-form'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 import { InputContainer } from '@/components/ui/InputContainer'
 import { Input } from '@/components/ui/Input'
@@ -44,16 +46,15 @@ export function Step1ISBN({
           {errors.isbn && <FormErrors error={errors.isbn.message as string} />}
         </InputContainer>
 
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={onFind}
-            disabled={!isbnValue || isLoading}
-            className="flex shrink-0 items-center rounded-lg bg-ac px-4 py-2 text-[13px] font-bold text-ac-ink transition-opacity hover:opacity-90 disabled:opacity-40"
-          >
-            {isLoading ? 'Searching…' : 'Find Book'}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={onFind}
+          disabled={!isbnValue || isLoading}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-ac px-4 py-2.5 text-[13px] font-bold text-ac-ink transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto sm:self-end sm:px-5"
+        >
+          <FontAwesomeIcon icon={faMagnifyingGlass} style={{ fontSize: 13 }} />
+          {isLoading ? 'Searching…' : 'Find Book'}
+        </button>
       </div>
     </div>
   )
