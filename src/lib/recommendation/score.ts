@@ -1,41 +1,12 @@
-/**
- * Recommendation scoring core.
- *
- * Pure, dependency-free functions so the ranking logic can be unit-tested and
- * evaluated offline (see `src/tests/lib/recommendation/score.test.ts`) without a
- * database. The API route (`/api/books/recommended`) fetches data with Prisma and
- * feeds plain objects into `rankRecommendations`.
- *
- * A recommendation score combines two signals, each normalized to [0, 1]:
- *
- *   - quality:  community rating, damped by a Bayesian prior so a book with one
- *               5★ rating does not outrank a book with 200 ratings at 4.6.
- *   - affinity: how much the book overlaps the categories the user has
- *               demonstrably enjoyed (rated 4★+), expressed as a share of taste.
- *
- *   score = W_quality * quality + W_affinity * affinity
- */
-
 export const MAX_RATING = 5
 
-/**
- * Weights for the final blend. Because both signals are genuinely normalized to
- * [0, 1], these weights mean what they say: 60% "is this book good?", 40% "is
- * this book my taste?".
- */
 export const RECOMMENDATION_WEIGHTS = {
   quality: 0.6,
   affinity: 0.4,
 } as const
 
-/**
- * Prior strength `C` for the Bayesian average: equivalent to this many
- * "imaginary" ratings sitting at the global mean. Higher = more damping, so
- * books with few ratings are pulled harder toward the global mean (cold-start).
- */
 export const BAYESIAN_PRIOR_STRENGTH = 8
 
-/** Minimum ratings + Bayesian rating for a book to earn a "highly rated" reason. */
 const QUALITY_REASON_MIN_RATINGS = 5
 const QUALITY_REASON_MIN_RATING = 4
 
@@ -60,26 +31,14 @@ export interface ScoredBook {
 
 export interface RankInput {
   candidates: CandidateBook[]
-  /** Category affinity distribution, from `buildCategoryAffinity`. */
   affinity: Map<string, number>
-  /** Mean rating across all live ratings — the Bayesian prior's target. */
   globalMean: number
-  /** Optional id → display name map, used to build human-readable reasons. */
   categoryNames?: Map<string, string>
   priorStrength?: number
   weights?: { quality: number; affinity: number }
   limit?: number
 }
 
-/**
- * Bayesian estimate of a book's "true" rating (a.k.a. the IMDB weighted rating).
- *
- *   (C * m + Σ rates) / (C + n)
- *
- * Pulls the raw average toward the global mean `m` with prior strength `C`. With
- * few ratings the estimate sits near `m`; as `n` grows it converges to the raw
- * average. This is what stops a single 5★ from beating a well-reviewed book.
- */
 export function bayesianRating(
   rates: number[],
   globalMean: number,
@@ -90,11 +49,6 @@ export function bayesianRating(
   return (priorStrength * globalMean + sum) / (priorStrength + n)
 }
 
-/**
- * Build a probability distribution over categories from the user's high-rated
- * books. Each book contributes its categories; the result sums to 1, so a
- * category the user has rated highly many times weighs more than a one-off.
- */
 export function buildCategoryAffinity(
   highRatedBookCategories: string[][],
 ): Map<string, number> {
@@ -115,11 +69,6 @@ export function buildCategoryAffinity(
   return affinity
 }
 
-/**
- * How well a single book matches the user's taste: the summed affinity of its
- * categories that the user cares about, clamped to [0, 1]. Returns the matched
- * categories (strongest first) so the caller can explain the recommendation.
- */
 export function bookAffinity(
   categoryIds: string[],
   affinity: Map<string, number>,
@@ -139,10 +88,6 @@ export function bookAffinity(
   return { score, matched }
 }
 
-/**
- * Score and rank candidate books for a user. Pure: same inputs → same output,
- * which is what lets the offline evaluation hold-out test assert quality.
- */
 export function rankRecommendations(input: RankInput): ScoredBook[] {
   const {
     candidates,
