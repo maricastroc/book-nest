@@ -34,7 +34,10 @@ export function WizardStepper({ wizardStep }: Props) {
           <div className="flex flex-1 flex-col items-center gap-1.5">
             <div className={dotClass(n)}>
               {wizardStep > n ? (
-                <FontAwesomeIcon icon={faCircleCheck} style={{ fontSize: 16 }} />
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  style={{ fontSize: 16 }}
+                />
               ) : (
                 n
               )}
