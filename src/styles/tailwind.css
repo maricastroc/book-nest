@@ -204,3 +204,102 @@ select:-webkit-autofill {
   outline: 2px solid var(--color-ac);
   outline-offset: 2px;
 }
+
+/* ------------------------------------------------------------------ */
+/* Mobile: bottom-sheet entrance + safe-area (notch / home indicator) */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Full viewport height that tracks the *visible* area on mobile (excludes
+ * the browser URL bar), avoiding the classic 100vh overflow-behind-chrome.
+ * First declaration is the fallback for browsers without dvh support.
+ */
+.h-app {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Bottom-sheet slide-up (mobile modals only).
+ * Scoped below the Tailwind `sm` breakpoint (640px) so the centered
+ * desktop dialog keeps its own transform (this rule is unlayered and would
+ * otherwise win over a `sm:animate-none` utility). */
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (max-width: 639.98px) {
+  .animate-sheet-up {
+    animation: sheet-up 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/*
+ * Safe-area padding helpers. `env(safe-area-inset-*)` resolves to 0 on
+ * devices/browsers without insets, so each helper simply equals its base
+ * gap on desktop — no separate desktop override needed.
+ * Naming mirrors the Tailwind spacing scale (4 = 1rem, 5 = 1.25rem, …).
+ */
+.pt-safe-5 {
+  padding-top: calc(1.25rem + env(safe-area-inset-top));
+}
+.pb-safe-4 {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+.pb-safe-5 {
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+}
+.pb-safe-6 {
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+}
+.pb-safe-10 {
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
+}
+
+/* Fixed mobile top bar: base gap + top inset (breakpoint-aware base). */
+.pt-header-bar {
+  padding-top: calc(1rem + env(safe-area-inset-top));
+}
+@media (min-width: 640px) {
+  .pt-header-bar {
+    padding-top: calc(1.25rem + env(safe-area-inset-top));
+  }
+}
+
+/* Content offset that clears the fixed mobile header (matches its height). */
+.pt-header-offset {
+  padding-top: calc(4rem + env(safe-area-inset-top));
+}
+@media (min-width: 640px) {
+  .pt-header-offset {
+    padding-top: calc(4.5rem + env(safe-area-inset-top));
+  }
+}
+@media (min-width: 768px) {
+  .pt-header-offset {
+    padding-top: 0;
+  }
+}
+
+/* Book-details panel top padding (base gap + inset, wider gap on ≥sm). */
+.pt-lateral {
+  padding-top: calc(2rem + env(safe-area-inset-top));
+}
+@media (min-width: 640px) {
+  .pt-lateral {
+    padding-top: 4.5rem;
+  }
+}
+
+/* Fixed close button inside the book-details panel (clears the top inset). */
+.top-safe-panel {
+  top: calc(1rem + env(safe-area-inset-top));
+}
+@media (min-width: 640px) {
+  .top-safe-panel {
+    top: 1.5rem;
+  }
+}

@@ -71,10 +71,10 @@ export function MainLayout({
           <LateralMenu onClose={() => setIsLateralMenuOpen?.(false)} />
         )}
 
-        <div className="bn-scope flex h-screen w-full overflow-hidden bg-bg">
+        <div className="bn-scope h-app flex w-full overflow-hidden bg-bg">
           {isSmallSize || isMediumSize ? <MobileHeader /> : <Sidebar />}
 
-          <div className="flex h-full min-w-0 flex-1 flex-col pl-0 pt-16 md:pl-62 md:pt-0">
+          <div className="pt-header-offset flex h-full min-w-0 flex-1 flex-col pl-0 md:pl-62">
             {pageTitle && (
               <div className="flex shrink-0 flex-col gap-3 px-6 pb-4 pt-8 sm:flex-row sm:items-center sm:justify-between md:px-7 md:pt-10">
                 <div className="flex items-center gap-2.5">

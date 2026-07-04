@@ -9,7 +9,7 @@ export function MobileHeader({ ...rest }) {
 
   return (
     <div
-      className="bn-scope fixed top-0 z-9995 flex w-full flex-col border-b border-line bg-s1 px-6 py-4 sm:px-8 sm:py-5"
+      className="bn-scope pt-header-bar fixed top-0 z-9995 flex w-full flex-col border-b border-line bg-s1 px-6 pb-4 sm:px-8 sm:pb-5"
       {...rest}
     >
       <header className="flex w-full items-center justify-between">
@@ -32,7 +32,7 @@ export function MobileHeader({ ...rest }) {
           <Dialog.Trigger asChild>
             <button
               onClick={() => setIsLateralMenuOpen(!isLateralMenuOpen)}
-              className="flex items-center justify-center border-none bg-transparent text-fg transition-colors hover:text-fg2"
+              className="-mr-2 flex h-11 w-11 items-center justify-center border-none bg-transparent text-fg transition-colors hover:text-fg2"
               aria-label="Open menu"
             >
               <FontAwesomeIcon icon={faBars} style={{ fontSize: 22 }} />

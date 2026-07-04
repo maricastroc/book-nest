@@ -62,7 +62,7 @@ export function SignInModal({ onClose, context = 'default' }: Props) {
         />
       </Dialog.Overlay>
 
-      <div className="pointer-events-none fixed inset-0 z-9998 flex items-center justify-center p-4">
+      <div className="pointer-events-none fixed inset-0 z-9998 flex items-center justify-center overflow-y-auto p-4">
         <Dialog.Content asChild onEscapeKeyDown={onClose}>
           <motion.div
             initial={{ opacity: 0, y: 12, scale: 0.97 }}
@@ -73,7 +73,7 @@ export function SignInModal({ onClose, context = 'default' }: Props) {
             <Dialog.Close
               onClick={onClose}
               aria-label="Close modal"
-              className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-md text-fg3 transition-colors hover:text-fg"
+              className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-md text-fg3 transition-colors hover:text-fg sm:right-4 sm:top-4 sm:h-8 sm:w-8"
             >
               <FontAwesomeIcon icon={faXmark} style={{ fontSize: 17 }} />
             </Dialog.Close>
@@ -101,7 +101,7 @@ export function SignInModal({ onClose, context = 'default' }: Props) {
               <button
                 type="button"
                 onClick={onClose}
-                className="text-[13px] font-medium text-fg3 transition-colors hover:text-fg2"
+                className="px-3 py-1.5 text-[13px] font-medium text-fg3 transition-colors hover:text-fg2"
               >
                 Maybe later
               </button>

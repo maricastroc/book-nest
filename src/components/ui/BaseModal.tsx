@@ -44,10 +44,16 @@ export function BaseModal({
         <Dialog.Content
           onEscapeKeyDown={onClose}
           aria-describedby={undefined}
-          className={`bn-scope fixed left-1/2 top-1/2 z-9998 flex max-h-[88vh] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-feature border border-line bg-s2 shadow-[0_24px_60px_rgba(0,0,0,0.6)] outline-none ${widthClass}`}
+          className={`bn-scope animate-sheet-up fixed inset-x-0 bottom-0 z-9998 flex max-h-[90dvh] w-full flex-col rounded-t-feature border border-b-0 border-line bg-s2 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] outline-none sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-h-[88vh] sm:w-[calc(100vw-2rem)] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-feature sm:border-b sm:shadow-[0_24px_60px_rgba(0,0,0,0.6)] ${widthClass}`}
         >
+          {/* Grab handle — bottom-sheet affordance on mobile only */}
+          <div
+            aria-hidden
+            className="mx-auto mt-3 h-1 w-9 shrink-0 rounded-full bg-line-strong sm:hidden"
+          />
+
           {title && (
-            <div className="flex shrink-0 items-start justify-between gap-4 px-7 pt-7 md:px-9 md:pt-8">
+            <div className="flex shrink-0 items-start justify-between gap-4 px-7 pt-5 md:px-9 md:pt-8 sm:pt-7">
               <div
                 className={hasAlignMiddleContent ? 'w-full text-center' : ''}
               >
@@ -63,7 +69,7 @@ export function BaseModal({
               {showCloseButton && (
                 <Dialog.Close
                   onClick={onClose}
-                  className="-mr-1.5 -mt-1.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg3 transition-colors hover:bg-el hover:text-fg"
+                  className="-mr-2 -mt-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-fg3 transition-colors hover:bg-el hover:text-fg sm:-mr-1.5 sm:-mt-1.5 sm:h-8 sm:w-8"
                   aria-label="Close modal"
                 >
                   <FontAwesomeIcon icon={faXmark} style={{ fontSize: 18 }} />
@@ -73,15 +79,15 @@ export function BaseModal({
           )}
 
           <div
-            className={`lateral-menu-scroll flex-1 overflow-y-auto px-7 py-6 md:px-9 ${
-              hasAlignMiddleContent ? 'flex flex-col items-center' : ''
-            }`}
+            className={`lateral-menu-scroll flex-1 overflow-y-auto overscroll-contain px-7 pt-6 md:px-9 ${
+              footer ? 'pb-6' : 'pb-safe-6'
+            } ${hasAlignMiddleContent ? 'flex flex-col items-center' : ''}`}
           >
             {children}
           </div>
 
           {footer && (
-            <div className="shrink-0 border-t border-line px-7 py-4 md:px-9">
+            <div className="pb-safe-4 shrink-0 border-t border-line px-7 pt-4 md:px-9">
               {footer}
             </div>
           )}

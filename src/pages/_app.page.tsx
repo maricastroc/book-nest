@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app'
+import Head from 'next/head'
 import '../styles/tailwind.css'
 import { SessionProvider } from 'next-auth/react'
 import { AppProvider } from '@/contexts/AppContext'
@@ -11,6 +12,12 @@ export default function App({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+      </Head>
       <Toaster
         position="bottom-right"
         toastOptions={{

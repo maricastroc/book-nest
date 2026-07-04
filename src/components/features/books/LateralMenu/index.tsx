@@ -40,7 +40,7 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
 
         <Dialog.Content
           aria-describedby={undefined}
-          className="bn-scope animate-slide-in-right lateral-menu-scroll fixed right-0 top-0 z-9996 flex h-full w-full max-w-full flex-col items-start justify-start overflow-y-auto border-l border-line bg-s1 px-6 pb-10 pt-8 focus:outline-none sm:max-w-140 sm:px-12 sm:pt-18 md:max-w-166"
+          className="bn-scope animate-slide-in-right lateral-menu-scroll h-app pt-lateral pb-safe-10 fixed right-0 top-0 z-9996 flex w-full max-w-full flex-col items-start justify-start overflow-y-auto overscroll-contain border-l border-line bg-s1 px-6 focus:outline-none sm:max-w-140 sm:px-12 md:max-w-166"
         >
           <Dialog.Title className="sr-only">
             {bookData.book?.name ?? 'Book details'}
@@ -49,7 +49,7 @@ export function LateralMenu({ onClose }: LateralMenuProps) {
           <Dialog.Close asChild>
             <button
               aria-label="Close"
-              className="bn-scope fixed right-4 top-4 z-10 flex cursor-pointer items-center justify-center rounded-lg border border-line bg-s2 p-1.5 transition-colors hover:border-line-strong sm:right-6 sm:top-6"
+              className="bn-scope top-safe-panel fixed right-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-line bg-s2 transition-colors hover:border-line-strong sm:right-6 sm:h-9 sm:w-9"
             >
               <FontAwesomeIcon
                 icon={faXmark}

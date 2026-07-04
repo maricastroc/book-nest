@@ -111,7 +111,7 @@ export function MobileSidebar({ onClose }: Props) {
         className="fixed inset-0 z-9997 bg-black/70"
         onClick={onClose}
       />
-      <Dialog.Content className="bn-scope fixed left-0 top-0 z-9998 flex h-full w-[min(100vw,320px)] flex-col border-r border-line bg-s1 p-5">
+      <Dialog.Content className="bn-scope h-app pt-safe-5 pb-safe-5 fixed left-0 top-0 z-9998 flex w-[min(100vw,320px)] flex-col border-r border-line bg-s1 px-5">
         {/* Logo */}
         <div className="mb-8 flex items-center gap-3 px-1">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] bg-ac text-ac-ink">
@@ -132,7 +132,7 @@ export function MobileSidebar({ onClose }: Props) {
             <button
               key={label}
               onClick={onClick}
-              className={`group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13.5px] font-medium transition-colors ${
+              className={`group relative flex items-center gap-3 rounded-[10px] px-3 py-3 text-[13.5px] font-medium transition-colors ${
                 active
                   ? 'bg-s2 text-fg'
                   : 'text-fg3 hover:bg-s2/60 hover:text-fg2'
@@ -178,7 +178,8 @@ export function MobileSidebar({ onClose }: Props) {
                 }
                 onClose()
               }}
-              className="shrink-0 text-fg3 transition-colors hover:text-fg"
+              className="-mr-2 flex h-10 w-10 shrink-0 items-center justify-center text-fg3 transition-colors hover:text-fg"
+              aria-label={loggedUser ? 'Sign out' : 'Sign in'}
             >
               {!isValidatingLoggedUser &&
                 (loggedUser ? (
