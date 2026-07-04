@@ -27,7 +27,7 @@ export const customStyles: StylesConfig<CategoryOption, true> = {
   }),
   menuList: (provided) => ({
     ...provided,
-    maxHeight: '180px',
+    maxHeight: '200px',
     overflowY: 'auto',
     padding: '4px',
   }),
@@ -41,7 +41,8 @@ export const customStyles: StylesConfig<CategoryOption, true> = {
     color: state.isSelected ? 'var(--color-ac)' : 'var(--color-fg2)',
     borderRadius: 6,
     cursor: 'pointer',
-    fontSize: '0.875rem',
+    fontSize: '0.9rem',
+    padding: '0.625rem 0.75rem',
     '&:active': {
       backgroundColor: 'rgba(232,177,76,0.2)',
     },
@@ -70,7 +71,7 @@ export const customStyles: StylesConfig<CategoryOption, true> = {
   placeholder: (provided) => ({
     ...provided,
     color: 'var(--color-fg3)',
-    fontSize: '0.875rem',
+    fontSize: '0.9rem',
   }),
   input: (provided) => ({
     ...provided,

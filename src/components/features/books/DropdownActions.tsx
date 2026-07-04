@@ -68,23 +68,23 @@ export const DropdownActions = ({
       <button
         ref={buttonRef}
         onClick={() => onToggleDropdown(!isDropdownOpen)}
-        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-0 bg-white/6 text-fg3 transition-colors hover:bg-white/12 hover:text-fg focus:outline-none"
+        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/6 text-fg3 transition-colors hover:bg-white/12 hover:text-fg focus:outline-none"
       >
-        <FontAwesomeIcon icon={faEllipsisVertical} className="text-[0.9rem]" />
+        <FontAwesomeIcon icon={faEllipsisVertical} className="text-[1rem]" />
       </button>
 
       {isDropdownOpen && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 top-[calc(100%+8px)] z-9997 min-w-46 overflow-hidden rounded-xl border border-line bg-el p-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.55)]"
+          className="absolute right-0 top-[calc(100%+8px)] z-9997 min-w-48 overflow-hidden rounded-xl border border-line bg-el p-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.55)]"
         >
           <button
             onClick={handleEditClick}
-            className="flex w-full cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-lg border-0 bg-transparent px-3 py-2 text-left text-[0.85rem] font-medium text-fg2 transition-colors hover:bg-white/6 hover:text-fg"
+            className="flex w-full cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-lg border-0 bg-transparent px-3.5 py-2.5 text-left text-[0.9rem] font-medium text-fg2 transition-colors hover:bg-white/6 hover:text-fg"
           >
             <FontAwesomeIcon
               icon={faPenToSquare}
-              className="w-[0.95rem] text-[0.85rem] text-ac"
+              className="w-[1rem] text-[0.9rem] text-ac"
             />
             <span>{isSubmission ? 'Edit Submission' : 'Edit Review'}</span>
           </button>
@@ -98,11 +98,11 @@ export const DropdownActions = ({
             <Dialog.Trigger asChild>
               <button
                 onClick={handleDeleteClick}
-                className="flex w-full cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-lg border-0 bg-transparent px-3 py-2 text-left text-[0.85rem] font-medium transition-colors hover:bg-white/6"
+                className="flex w-full cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-lg border-0 bg-transparent px-3.5 py-2.5 text-left text-[0.9rem] font-medium transition-colors hover:bg-white/6"
               >
                 <FontAwesomeIcon
                   icon={faTrashCan}
-                  className="w-[0.95rem] text-[0.85rem] text-danger"
+                  className="w-[1rem] text-[0.9rem] text-danger"
                 />
                 <span>
                   {isSubmission ? 'Delete Submission' : 'Delete Review'}

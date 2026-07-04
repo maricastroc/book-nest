@@ -127,26 +127,26 @@ export function MobileSidebar({ onClose }: Props) {
           </div>
         </div>
 
-        <nav className="flex flex-col gap-0.5">
+        <nav className="flex flex-col gap-1">
           {items.map(({ label, icon: Icon, active, onClick }) => (
             <button
               key={label}
               onClick={onClick}
-              className={`group relative flex items-center gap-3 rounded-[10px] px-3 py-3 text-[13.5px] font-medium transition-colors ${
+              className={`group relative flex items-center gap-3.5 rounded-[10px] px-3 py-3.5 text-[15px] font-medium transition-colors ${
                 active
                   ? 'bg-s2 text-fg'
                   : 'text-fg3 hover:bg-s2/60 hover:text-fg2'
               }`}
             >
               <span
-                className={`absolute left-0 top-1/2 h-4.5 w-0.75 -translate-y-1/2 rounded-r-full transition-opacity ${
+                className={`absolute left-0 top-1/2 h-5 w-0.75 -translate-y-1/2 rounded-r-full transition-opacity ${
                   active ? 'bg-ac opacity-100' : 'opacity-0'
                 }`}
               />
               <FontAwesomeIcon
                 icon={Icon}
-                className="w-5"
-                style={{ fontSize: 17 }}
+                className="w-6"
+                style={{ fontSize: 19 }}
               />
               {label}
             </button>
@@ -160,11 +160,11 @@ export function MobileSidebar({ onClose }: Props) {
               avatarUrl={loggedUser?.avatarUrl}
             />
             <div className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-[12.5px] font-medium text-fg">
+              <span className="truncate text-[14px] font-medium text-fg">
                 {userLabel}
               </span>
               {loggedUser && (
-                <span className="truncate text-[10.5px] text-fg3">
+                <span className="truncate text-[12px] text-fg3">
                   {loggedUser.email}
                 </span>
               )}
@@ -185,12 +185,12 @@ export function MobileSidebar({ onClose }: Props) {
                 (loggedUser ? (
                   <FontAwesomeIcon
                     icon={faRightFromBracket}
-                    style={{ fontSize: 16 }}
+                    style={{ fontSize: 18 }}
                   />
                 ) : (
                   <FontAwesomeIcon
                     icon={faRightToBracket}
-                    style={{ fontSize: 16 }}
+                    style={{ fontSize: 18 }}
                   />
                 ))}
             </button>

@@ -85,7 +85,7 @@ export const DropdownMenu = ({
       {statuses?.map((status, i) => (
         <div key={status.value}>
           <button
-            className={`flex h-10 w-full cursor-pointer items-center gap-2.5 border-none bg-transparent px-4 text-[0.875rem] font-medium transition-colors ${
+            className={`flex h-11 w-full cursor-pointer items-center gap-2.5 border-none bg-transparent px-4 text-[0.9rem] font-medium transition-colors ${
               activeStatus === status.value
                 ? 'text-fg'
                 : 'text-fg2 hover:bg-white/5 hover:text-fg'
@@ -110,7 +110,7 @@ export const DropdownMenu = ({
           <span className="mx-4 mt-1 block h-px bg-white/6" />
           <button
             onClick={handleRemoveFromLibrary}
-            className="flex h-10 w-full items-center gap-2.5 border-none bg-transparent px-4 text-[0.875rem] font-medium text-red-400/70 transition-colors hover:bg-red-500/8 hover:text-red-400"
+            className="flex h-11 w-full items-center gap-2.5 border-none bg-transparent px-4 text-[0.9rem] font-medium text-red-400/70 transition-colors hover:bg-red-500/8 hover:text-red-400"
           >
             <FontAwesomeIcon icon={faTrash} className="text-[0.8rem]" />
             Remove from library

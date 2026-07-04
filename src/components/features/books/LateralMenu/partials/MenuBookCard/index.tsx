@@ -101,7 +101,7 @@ export function MenuBookCard({
                         ? setIsSignInModalOpen(true)
                         : setIsAddToLibraryDropdownOpen(true)
                     }
-                    className="relative flex w-full cursor-pointer items-center gap-3 overflow-hidden rounded-lg border border-line bg-white/4 px-4 py-2 text-[0.875rem] font-medium text-fg transition-colors hover:bg-white/[0.07]"
+                    className="relative flex w-full cursor-pointer items-center gap-3 overflow-hidden rounded-lg border border-line bg-white/4 px-4 py-2.5 text-[0.9rem] font-medium text-fg transition-colors hover:bg-white/[0.07]"
                   >
                     {updatedBook?.readingStatus ? (
                       <>

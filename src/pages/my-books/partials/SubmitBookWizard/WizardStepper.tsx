@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 type WizardStep = 1 | 2 | 3
@@ -19,38 +20,39 @@ export function WizardStepper({ wizardStep }: Props) {
   }
 
   const labelClass = (n: WizardStep) => {
-    if (wizardStep > n) return 'text-[0.8rem] font-medium text-[#4a9e6e]'
-    if (wizardStep === n) return 'text-[0.8rem] font-semibold text-fg'
-    return 'text-[0.8rem] text-fg3'
+    if (wizardStep > n)
+      return 'text-[0.72rem] font-medium text-[#4a9e6e] sm:text-[0.8rem]'
+    if (wizardStep === n)
+      return 'text-[0.72rem] font-semibold text-fg sm:text-[0.8rem]'
+    return 'text-[0.72rem] text-fg3 sm:text-[0.8rem]'
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="mx-auto flex w-full max-w-md items-start">
       {([1, 2, 3] as WizardStep[]).map((n, i) => (
-        <div key={n} className="flex items-center gap-3">
-          <div className="flex flex-col items-center gap-1.5">
+        <Fragment key={n}>
+          <div className="flex flex-1 flex-col items-center gap-1.5">
             <div className={dotClass(n)}>
               {wizardStep > n ? (
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  style={{ fontSize: 16 }}
-                />
+                <FontAwesomeIcon icon={faCircleCheck} style={{ fontSize: 16 }} />
               ) : (
                 n
               )}
             </div>
-            <span className={`w-16 text-center sm:w-24 ${labelClass(n)}`}>
+            <span
+              className={`px-0.5 text-center leading-tight ${labelClass(n)}`}
+            >
               {STEP_DISPLAY[i]}
             </span>
           </div>
           {i < 2 && (
             <div
-              className={`mb-5 h-px w-16 rounded transition-colors duration-300 sm:w-24 ${
+              className={`mt-[1.0625rem] h-px flex-1 rounded transition-colors duration-300 ${
                 wizardStep > n ? 'bg-st-read' : 'bg-line-strong'
               }`}
             />
           )}
-        </div>
+        </Fragment>
       ))}
     </div>
   )

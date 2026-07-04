@@ -183,7 +183,7 @@ export function RatingCardForm({
             disabled={isSubmitting}
             onClick={() => onClose()}
             aria-label="Cancel"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-fg2 transition-colors hover:border-line-strong hover:text-fg disabled:opacity-50"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-fg2 transition-colors hover:border-line-strong hover:text-fg disabled:opacity-50"
           >
             <FontAwesomeIcon icon={faXmark} />
           </button>
@@ -191,7 +191,7 @@ export function RatingCardForm({
             type="submit"
             disabled={isSubmitting}
             aria-label="Save review"
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-ac text-ac-ink transition-[filter] hover:brightness-110 disabled:opacity-50"
+            className="flex h-10 w-10 items-center justify-center rounded-lg bg-ac text-ac-ink transition-[filter] hover:brightness-110 disabled:opacity-50"
           >
             <FontAwesomeIcon icon={faCheck} />
           </button>
