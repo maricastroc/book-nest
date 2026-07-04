@@ -6,6 +6,14 @@ function getIssueNumber() {
   )
 }
 
+// Uses the visitor's local clock, so the greeting matches their timezone.
+function getGreeting() {
+  const hour = new Date().getHours()
+  if (hour >= 5 && hour < 12) return 'Good morning'
+  if (hour >= 12 && hour < 18) return 'Good afternoon'
+  return 'Good evening'
+}
+
 interface HomeHeaderProps {
   userId?: string
   firstName: string
@@ -31,7 +39,7 @@ export function HomeHeader({ userId, firstName }: HomeHeaderProps) {
         </span>
       </div>
       <h1 className="font-serif text-[2.4rem] font-semibold leading-[1.08] tracking-tight text-fg">
-        {userId ? `Good evening, ${firstName}.` : 'Your reading journal.'}
+        {userId ? `${getGreeting()}, ${firstName}.` : 'Your reading journal.'}
       </h1>
       <p className="mt-1.5 text-[13px] text-fg2">
         {userId
