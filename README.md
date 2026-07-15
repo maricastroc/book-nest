@@ -1,12 +1,45 @@
-# Book Nest
+<h1 align="center">
+  <br>
+  <img src="public/assets/favicon.svg" alt="Book Nest" width="40">
+  <br>
+  Book Nest
+  <br>
+</h1>
 
-**Book Nest** is a fullstack book tracking and rating platform — discover books, track what you're reading, rate and review, follow other readers, and get **explainable, evaluated recommendations** tailored to your taste.
+<h4 align="center">A fullstack book tracking platform with explainable, evaluated recommendations.</h4>
 
-This repository is a **fullstack Next.js app** (Pages Router): the UI, the REST API routes, the database layer (Prisma + PostgreSQL) and authentication all live in a single deployment.
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License" />
+</p>
 
-🔗 **Live demo:** [book-nest.marianacastro.dev](https://book-nest.marianacastro.dev)
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-recommendation-engine">Recommendation Engine</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-testing">Testing</a> •
+  <a href="#-license">License</a>
+</p>
 
----
+<p align="center">
+  Discover books, track what you're reading, rate and review, follow other readers, and get <strong>explainable, evaluated recommendations</strong> tailored to your taste. A single fullstack Next.js app (Pages Router) — UI, REST API routes, the database layer (Prisma + PostgreSQL) and authentication all in one deployment.
+</p>
+
+<p align="center">
+  🔗 <strong>Live demo:</strong> <a href="https://book-nest.marianacastro.dev">book-nest.marianacastro.dev</a>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/home-desktop.png" alt="Book Nest" width="800" />
+</p>
+
+<br/>
 
 ## ✨ Features
 
