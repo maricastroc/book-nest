@@ -70,7 +70,7 @@ export default function Home() {
             )}
 
             {isGuest && (
-              <GuestSignInCallout onSignIn={() => router.push('/login')} />
+              <GuestSignInCallout onSignIn={() => router.push('/')} />
             )}
 
             {userId && (
