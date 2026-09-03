@@ -21,7 +21,7 @@ describe('GET /api/books', () => {
   })
 
   it('returns book details when found by ISBN', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.book.findFirst as jest.Mock).mockResolvedValue({
@@ -66,7 +66,7 @@ describe('GET /api/books', () => {
   })
 
   it('returns book details when found by title (case insensitive)', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.book.findFirst as jest.Mock).mockResolvedValue({

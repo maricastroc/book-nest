@@ -41,7 +41,7 @@ describe('POST /api/ratings', () => {
   })
 
   it('returns 401 if no session', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
 
     const req = mockReq({
       method: 'POST',
@@ -61,7 +61,7 @@ describe('POST /api/ratings', () => {
   })
 
   it('returns 400 if book does not exist', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user123' },
     })
     ;(prisma.book.findUnique as jest.Mock).mockResolvedValue(null)
@@ -84,7 +84,7 @@ describe('POST /api/ratings', () => {
   })
 
   it('creates rating and updates reading status', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user123' },
     })
     ;(prisma.book.findUnique as jest.Mock).mockResolvedValue({

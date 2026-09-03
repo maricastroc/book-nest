@@ -25,7 +25,7 @@ describe('GET /api/books', () => {
   })
 
   it('returns list of books with pagination and rating data', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.book.findMany as jest.Mock).mockResolvedValue([

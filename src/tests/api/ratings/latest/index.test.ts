@@ -97,7 +97,7 @@ describe('GET /api/ratings', () => {
   })
 
   it('handles missing session gracefully and returns ratings without user exclusion', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
 
     const fakeRatings = [
       {
@@ -154,7 +154,7 @@ describe('GET /api/ratings', () => {
   })
 
   it('returns 500 on error', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user123' },
     })
     ;(prisma.rating.findMany as jest.Mock).mockRejectedValue(

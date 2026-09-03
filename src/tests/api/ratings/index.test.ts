@@ -120,7 +120,7 @@ describe('API /api/ratings', () => {
 
   describe('DELETE', () => {
     it('deletes a rating by id', async () => {
-      ;(getServerSession as jest.Mock).mockResolvedValue({
+      (getServerSession as jest.Mock).mockResolvedValue({
         user: { id: 'user1' },
       })
       ;(prisma.rating.findUnique as jest.Mock).mockResolvedValue({
@@ -149,7 +149,7 @@ describe('API /api/ratings', () => {
 
   describe('PUT', () => {
     it('returns 400 if missing required fields', async () => {
-      ;(getServerSession as jest.Mock).mockResolvedValue({
+      (getServerSession as jest.Mock).mockResolvedValue({
         user: { id: 'user1' },
       })
       const req = mockReq({ method: 'PUT', body: { id: '1' } })
@@ -164,7 +164,7 @@ describe('API /api/ratings', () => {
     })
 
     it('returns 404 if rating not found', async () => {
-      ;(getServerSession as jest.Mock).mockResolvedValue({
+      (getServerSession as jest.Mock).mockResolvedValue({
         user: { id: 'user1' },
       })
       ;(prisma.rating.findUnique as jest.Mock).mockResolvedValue(null)
@@ -184,7 +184,7 @@ describe('API /api/ratings', () => {
     })
 
     it('updates and returns rating if valid', async () => {
-      ;(getServerSession as jest.Mock).mockResolvedValue({
+      (getServerSession as jest.Mock).mockResolvedValue({
         user: { id: 'user1' },
       })
       const updatedRating = {
@@ -222,7 +222,7 @@ describe('API /api/ratings', () => {
     })
 
     it('returns 500 on update error', async () => {
-      ;(getServerSession as jest.Mock).mockResolvedValue({
+      (getServerSession as jest.Mock).mockResolvedValue({
         user: { id: 'user1' },
       })
       ;(prisma.rating.findUnique as jest.Mock).mockResolvedValue({

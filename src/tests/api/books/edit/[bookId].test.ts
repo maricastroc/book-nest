@@ -41,7 +41,7 @@ describe('PUT /api/books/[bookId]', () => {
 
   /* -------------------- ADMIN SUCCESS -------------------- */
   it('should update a book successfully being an ADMIN', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -116,7 +116,7 @@ describe('PUT /api/books/[bookId]', () => {
   })
 
   it('should return 403 if user is not ADMIN', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -149,7 +149,7 @@ describe('PUT /api/books/[bookId]', () => {
   })
 
   it('should return 404 if book is not found', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -185,7 +185,7 @@ describe('PUT /api/books/[bookId]', () => {
 
   /* -------------------- INVALID DATA -------------------- */
   it('should return 400 for invalid data', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -240,7 +240,7 @@ describe('PUT /api/books/[bookId]', () => {
 
   /* -------------------- INVALID CATEGORIES -------------------- */
   it('should return 400 for invalid categories', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({

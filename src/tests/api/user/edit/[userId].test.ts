@@ -42,7 +42,7 @@ describe('PUT /api/users/edit', () => {
   })
 
   it('should update user basic info successfully', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.update as jest.Mock).mockResolvedValue({
@@ -98,7 +98,7 @@ describe('PUT /api/users/edit', () => {
   })
 
   it('should update user with new avatar successfully', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.update as jest.Mock).mockResolvedValue({
@@ -166,7 +166,7 @@ describe('PUT /api/users/edit', () => {
   })
 
   it('should remove avatar when removeAvatar is true', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.update as jest.Mock).mockResolvedValue({
@@ -230,7 +230,7 @@ describe('PUT /api/users/edit', () => {
   })
 
   it('should update password when provided', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.update as jest.Mock).mockResolvedValue({
@@ -289,7 +289,7 @@ describe('PUT /api/users/edit', () => {
   })
 
   it('should return error 403 if user is not logged in', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
 
     const json = jest.fn()
     const status = jest.fn(() => ({ json }))
@@ -308,7 +308,7 @@ describe('PUT /api/users/edit', () => {
   })
 
   it('should return error if avatar is larger than 2MB', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(fs.promises.readFile as jest.Mock).mockResolvedValue(

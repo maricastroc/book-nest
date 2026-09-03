@@ -23,7 +23,9 @@ export default async function handler(
   }
 
   try {
-    let { isbn, title } = req.query
+    // `isbn` is normalised below; `title` is only read.
+    let { isbn } = req.query
+    const { title } = req.query
 
     if (!isbn && !title) {
       return res.status(400).json({

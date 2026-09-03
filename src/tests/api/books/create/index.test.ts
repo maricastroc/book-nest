@@ -35,7 +35,7 @@ describe('POST /api/books/create', () => {
   })
 
   it('should create a book successfully with cover file upload', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.book.findFirst as jest.Mock).mockResolvedValue(null)
@@ -113,7 +113,7 @@ describe('POST /api/books/create', () => {
   })
 
   it('should return 401 if user is not authenticated', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
 
     const status = jest.fn(() => ({ json: jest.fn() }))
     const res = mockRes({ status })
@@ -135,7 +135,7 @@ describe('POST /api/books/create', () => {
   })
 
   it('should return 400 if ISBN is missing or invalid', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
 

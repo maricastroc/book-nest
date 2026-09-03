@@ -24,7 +24,7 @@ describe('POST /api/books/reject', () => {
   })
 
   it('should return 401 if not authenticated', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
 
     const req = {
       method: 'POST',
@@ -45,7 +45,7 @@ describe('POST /api/books/reject', () => {
   })
 
   it('should return 403 if user is not ADMIN', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -69,7 +69,7 @@ describe('POST /api/books/reject', () => {
   })
 
   it('should return 400 for invalid status', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -135,7 +135,7 @@ describe('POST /api/books/reject', () => {
   })
 
   it('should handle database errors', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -179,7 +179,7 @@ describe('POST /api/books/reject', () => {
   })
 
   it('should return 400 if bookId is missing', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({

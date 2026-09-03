@@ -36,7 +36,7 @@ describe('API readingStatus handler', () => {
     })
 
     it('returns 404 if readingStatus not found', async () => {
-      ;(prisma.readingStatus.findUnique as jest.Mock).mockResolvedValue(null)
+      (prisma.readingStatus.findUnique as jest.Mock).mockResolvedValue(null)
       const req = mockReq({
         method: 'GET',
         query: { userId: 'u1', bookId: 'b1' },

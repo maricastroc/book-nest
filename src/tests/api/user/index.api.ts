@@ -36,7 +36,7 @@ describe('GET /api/user', () => {
   })
 
   it('should return 401 if session is not found', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValueOnce(null)
+    (getServerSession as jest.Mock).mockResolvedValueOnce(null)
 
     const req = createRequest({ method: 'GET' })
     const res = createResponse()
@@ -48,7 +48,7 @@ describe('GET /api/user', () => {
   })
 
   it('should return 404 if user is not found', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValueOnce({
+    (getServerSession as jest.Mock).mockResolvedValueOnce({
       user: { id: '1' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null)
@@ -96,7 +96,7 @@ describe('GET /api/user', () => {
   })
 
   it('should return 500 on database error', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValueOnce({
+    (getServerSession as jest.Mock).mockResolvedValueOnce({
       user: { id: '1' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockRejectedValueOnce(

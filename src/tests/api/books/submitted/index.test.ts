@@ -39,7 +39,7 @@ describe('GET /api/books/submitted', () => {
   })
 
   it('should return 401 if not authenticated', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
 
     const req = { method: 'GET', query: {} } as NextApiRequest
     const res = {
@@ -56,7 +56,7 @@ describe('GET /api/books/submitted', () => {
   })
 
   it('should return 403 if user is not ADMIN', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123', role: 'USER' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -76,7 +76,7 @@ describe('GET /api/books/submitted', () => {
   })
 
   it('should return paginated pending books for ADMIN', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123', role: 'ADMIN' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -127,7 +127,7 @@ describe('GET /api/books/submitted', () => {
   })
 
   it('should handle default pagination values', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123', role: 'ADMIN' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({

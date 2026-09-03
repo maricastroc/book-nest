@@ -42,7 +42,7 @@ describe('POST /api/users/create', () => {
   })
 
   it('should create a user without avatar successfully', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
     ;(prisma.user.create as jest.Mock).mockResolvedValue({
       id: 'user-1',
@@ -95,7 +95,7 @@ describe('POST /api/users/create', () => {
   })
 
   it('should create a user with avatar successfully', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
     ;(prisma.user.create as jest.Mock).mockResolvedValue({
       id: 'user-1',
@@ -159,7 +159,7 @@ describe('POST /api/users/create', () => {
   })
 
   it('should return error 403 if user is already logged in', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'existing-user' },
     })
 
@@ -175,7 +175,7 @@ describe('POST /api/users/create', () => {
   })
 
   it('deve retornar erro se email já estiver em uso', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
       id: 'existing-user',
       email: 'existing@example.com',
@@ -221,7 +221,7 @@ describe('POST /api/users/create', () => {
   })
 
   it('deve retornar erro se avatar for maior que 2MB', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
     ;(prisma.user.create as jest.Mock).mockResolvedValue({
       id: 'user-1',

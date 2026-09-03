@@ -35,7 +35,7 @@ describe('GET /api/ratings/user_latest', () => {
   })
 
   it('returns 401 if no session', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue(null)
+    (getServerSession as jest.Mock).mockResolvedValue(null)
 
     const req = mockReq({ method: 'GET' })
     const status = jest.fn(() => ({ json: jest.fn() }))

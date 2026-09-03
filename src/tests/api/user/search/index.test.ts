@@ -26,7 +26,7 @@ describe('GET /api/users/search', () => {
   })
 
   it('returns list of users with pagination', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findMany as jest.Mock).mockResolvedValue([
@@ -94,7 +94,7 @@ describe('GET /api/users/search', () => {
   })
 
   it('returns filtered users when search query is provided', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findMany as jest.Mock).mockResolvedValue([
@@ -145,7 +145,7 @@ describe('GET /api/users/search', () => {
   })
 
   it('defaults to page 1 and perPage 12 when invalid values are provided', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findMany as jest.Mock).mockResolvedValue([])

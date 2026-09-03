@@ -42,7 +42,7 @@ describe('GET /api/library/submitted_books', () => {
   })
 
   it('returns 404 if user not found', async () => {
-    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
 
     const req = mockReq({ method: 'GET', query: { userId: 'non-existent' } })
     const json = jest.fn()

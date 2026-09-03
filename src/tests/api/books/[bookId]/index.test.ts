@@ -26,7 +26,7 @@ describe('GET /api/books', () => {
   })
 
   it('returns book details with user, ratings and categories', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.book.findUnique as jest.Mock).mockResolvedValue({

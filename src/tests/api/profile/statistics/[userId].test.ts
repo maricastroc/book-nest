@@ -31,7 +31,7 @@ describe('GET /api/profile/statistics/[userId]', () => {
   })
 
   it('returns list of users with pagination', async () => {
-    ;(getServerSession as jest.Mock).mockResolvedValue({
+    (getServerSession as jest.Mock).mockResolvedValue({
       user: { id: 'user-123' },
     })
     ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
@@ -96,7 +96,7 @@ describe('GET /api/profile/statistics/[userId]', () => {
   })
 
   it('returns 404 if user is not found', async () => {
-    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue(null)
 
     const req = mockReq({
       method: 'GET',
@@ -127,7 +127,7 @@ describe('GET /api/profile/statistics/[userId]', () => {
   })
 
   it('returns zero stats when user has no read books', async () => {
-    ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue({
       id: 'user-1',
       name: 'No Books',
       avatarUrl: null,
